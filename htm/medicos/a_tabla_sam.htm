@@ -1,0 +1,101 @@
+<script src="[JS]jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+	var TableMedico;
+	var asInitVals = new Array();
+	
+	$(document).ready(function(){
+		CargarDataTable("[NOMBRE_TABLA]");
+	});
+	
+	function CargarDataTable(nombre){
+		//CargarBotonesUI(); 
+		 
+		TableMedicos = $('#t_'+nombre).dataTable( {
+			"aaSorting": [[0, "asc" ],[1, "asc"]], //argumentos posibles: asc o desc
+			"bAutoWidth": true,
+			"sPaginationType": "full_numbers",
+			"bFilter": true, //OCULTAR BUSQUEDA GRAL
+
+			"iDisplayLength": 10,
+			"iDisplayStart":0,
+			"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+			"oLanguage": {
+				"sSearch": "Buscar en todas las Columnas:"
+			},
+			"fnDrawCallback": function(){
+				  $('table td').bind('mouseenter', function () { $(this).parent().children().each(function(){$(this).addClass('marcado');}); });
+				  $('table td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('marcado');}); });
+},
+			"bLengthChange": true,
+			"aoColumns" : [{ sWidth: '30%' }, 
+					{ sWidth: '30%' }, 
+					{ sWidth: '20%' },
+					{ sWidth: '20%'}]
+		});
+		
+		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
+		$('#t_'+nombre+" tfoot input").keyup( function () {
+			TableMedicos.fnFilter( this.value, $('#t_'+nombre+" tfoot input").index(this) );
+		});
+		$('#t_'+nombre+" tfoot input").each( function (i) {
+			asInitVals[i] = this.value;
+		});
+		$('#t_'+nombre+" tfoot input").focus( function () {
+			if ( this.className == "search_init" ){
+				this.className = "";
+				this.value = "";
+			}
+		});
+		$('#t_'+nombre+" tfoot input").blur( function (i) {
+			if ( this.value == "" ){
+				this.className = "search_init";
+				this.value = asInitVals[$('#t_'+nombre+" tfoot input").index(this)];
+			}
+		});
+		///////////////////////////////////////////////////////
+		
+		
+	}
+</script>
+<table border="0" id="t_[NOMBRE_TABLA]" class="display">
+    <thead> 
+        <tr>
+        	<th>Especialidad</th>
+            <th>Profesional</th>
+            <th>Sector</th>
+            <th>Interno</th>
+        </tr>
+    </thead> 
+    <tfoot>
+        <tr>
+            <th><input type="text" name="tb_especialidades" value="Especialidad" class="search_init" /></th>
+            <th><input type="text" name="tb_profesional" value="Profesional" class="search_init" /></th>
+            <th><input type="text" name="tb_sector" value="Sector" class="search_init" /></th>
+            <th><input type="text" name="tb_interno" value="Interno" class="search_init" /></th>
+        </tr>
+    </tfoot>    
+    <tbody>
+    	[block: block_medicos]
+        <tr>
+        	<td>[especialidad]</td>
+            <td>[apellidos], [nombres]</td>
+            <td>[SECTOR]</td>
+            <td>[interno]</td>
+        </tr>
+        [/block: block_medicos]
+    </tbody>   
+</table>
+<div id="dialog_tabla_medicos_especialidades"></div>
+<div id="dialog"></div>
+
+<div class="botones_resena">
+	<strong>
+	Rese&ntilde;a:
+    </strong>
+	<img src="[IMG]btns/editar.png" border="0"> Editar
+    <img src="[IMG]btns/medicos_especialidades.png" border="0"> Especialidades
+    <img src="[IMG]btns/medicos_obras_sociales.png" border="0"> Obras Sociales
+	<img src="[IMG]btns/medicos_estudios.png" border="0"> Estudios
+</div>
+

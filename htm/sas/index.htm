@@ -1,0 +1,224 @@
+<script src="[JS]/propios/pacientes.js"></script>
+<script src="[JS]/propios/medicos.js"></script>
+<script src="[JS]/propios/obras_sociales.js"></script>
+<script src="[JS]/propios/mensajes.js"></script>
+
+
+<style>
+.ui-autocomplete {
+	max-height: 200px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+}
+/* IE 6 doesn't support max-height
+* we use height instead, but this forces the menu to always be this tall
+*/
+* html .ui-autocomplete {
+	height: 100px;
+}
+
+.panel_medicos{
+	width:70%;
+	float:left	
+}
+
+.panel_paciente{
+	width:30%;
+	float:left	
+}
+
+#panel_menu{
+	position:relative;	
+}
+
+#panel_menu div{
+	display:none
+}
+
+#panel_menu a#btn_mostrar{
+	min-width: 10%;
+	width:20px;
+	padding:5px;
+	position:absolute;
+	bottom:-6px;
+	right:10%;
+	background:#fff	
+}
+
+#form_inhabilitado #desde, #form_inhabilitado #hasta{
+	width:70%	
+}
+</style>
+<script>
+	$(document).ready(function(){
+		
+		//BOTON INHABILITAR
+		$("#inhabilitar").click(function(e){
+			e.preventDefault();
+			
+			if (($("#desde").val().length > 0) && ($("#hasta").val().length > 0) ){
+				var date = $("#agenda").datepicker('getDate');
+				
+				day  = date.getDate(),  
+				month = date.getMonth() + 1,              
+				year =  date.getFullYear();
+				var fecha = year + '-' + month + '-' + day;
+				
+				var variables = $("#form_inhabilitado").serialize();
+				variables += "&medico=" + $("#id_medico").val() + "&especialidad=" + $("#medicos_especialidades").val() + "&fecha=" + fecha;
+				$.ajax({  
+					type: "POST",   
+					url: "[URL]ajax/altas.php",
+					data: {variables: variables, tabla: "horarios_inhabilitados"}, 
+					beforeSend: function() {
+						$("#mje").html("Enviando información...");
+					},
+					success: function(requestData){
+						var rta = requestData;
+						//alert (rta);
+						alert ('Horarios Inhabilitados Correctamente');
+						GrillaInicial(date);
+						
+					},
+					complete: function(requestData, exito){},
+					error: function (){
+						alert ("Ocurri&oacute; un error. Vuelva a Intentarlo.");
+					}
+				});	
+			}else{
+				alert ('Debe ingresar hoarario DESDE y HASTA para inhabilitar turnos.')	
+			}
+			
+		});
+		
+	});
+	
+	
+	$(document).ready(function(){
+		$('#btn_mostrar').click(function(){
+			var $div = $('#panel_menu div');
+			var $boton = $('#btn_mostrar');
+			
+			if ($div.is(':visible')) {
+				$div.slideUp();
+				$boton.html('Mostrar');
+			} else {
+				$div.slideDown();
+				$boton.html('Ocultar');
+			}
+		})
+		
+		$("#medicos").focus(function(){
+			$(this).val('');
+		})
+		
+		$("#dni").focus(function(){
+			$(this).val('');
+		})
+		
+
+				
+	});
+	
+	jQuery(function($){
+	   $("#desde").mask("99:99");
+	   $("#hasta").mask("99:99");
+	});
+
+	//CARGO LA FUNCION DE HORA ACTUAL (mi_script.js)
+  	window.onload = HoraActual
+</script>
+<section class="bg_negro">
+	<div class="container">
+    	<div class="row" id="datos_usr">
+        	<div class="span6">
+        	Bienvenida [USUARIO_APELLIDOS], [USUARIO_NOMBRES]
+            </div>
+            <div id="fecha_hora_actual" class="span6">
+            	<span>[FECHA]</span>  -  <span id="liveclock" ></span>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="panel_menu" class="bg_verde">
+	[MENU_TABLAS]
+    <a id="btn_mostrar" class="btn" href="#">Mostrar Men&uacute;</a>
+</section>
+
+<section id="panel_busqueda" class="bg_azul">
+    <div class="container">
+    	<div class="row">
+            <div class="span4">
+                <input id="medicos" type="text" placeHolder="Medico">
+                <input type="hidden" id="id_medico">
+            </div>
+            <div class="span4">
+                <div id="contenedor_drop_especialidades"></div>
+            </div>
+            <div class="span4">
+                <input id="dni" type="text" onkeypress="return SoloNros(event)" placeHolder="Paciente">
+                <a href="#" id="btn_buscar_paciente" class="btn">Buscar</a>
+                <a href="#" class="btn btn_tabla" data-nombre="pacientes">Nuevo</a>
+            </div>
+            
+        </div>
+   	</div>
+</section>
+
+<section id="panel_cuerpo">
+	<div class="container">
+    	<div class="row">
+            <div class="span3">
+            	
+                <div class="row">
+                	<div id="contenedor_agenda" class="span3 contenedor" style="margin-bottom:10px;">
+                    </div>
+                </div>
+                <div class="row">
+                	<div id="contenedor_paciente" class="span3 contenedor" >
+                    </div>
+                </div>
+                <div id="mensajes_nuevos">
+                	
+                </div>
+            </div>
+            <div class="span9">
+            	<div class="row">
+                    <div id="cont_grilla_turnos" style="display:none">
+                                           
+                    </div>
+                    <div class="span3 contenedor" id="habilitar_inhabilitar" >
+                        <div class="inner">
+                            <h3>Inhabilitar</h3>
+                            <div class="clear"></div>
+                            <form id="form_inhabilitado" name="form_inhabilitado">
+                                <div style="display:inline-block; width:40%; vertical-align:top">
+                                    Desde: <input type="text" id="desde" name="desde" />
+                                </div>
+                                <div style="display:inline-block; width:40%; vertical-align:top">
+                                    Hasta: <input type="text" id="hasta" name="hasta" />
+                                </div>
+                                <div style="display:inline-block; width:18%; vertical-align:top">
+                                    
+                                    <a href='#' id="inhabilitar" class='btn'>Inhabilitar</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="span3 contenedor" id="cont_duplicados" >
+                        <div class="inner">
+                            <h3>Duplicados</h3>
+                            <div id="duplicados"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+	</div>
+</div>
+
+<div id="dialog_eliminar" title="Borrar Registos Seleccionado?">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Se borrar&aacute;n todos los datos vinculados al registro. Desea continuar?</p>
+</div>

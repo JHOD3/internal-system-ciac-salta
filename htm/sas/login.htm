@@ -1,0 +1,73 @@
+<script>
+$(document).ready(function(){
+	//PAGINA A_LOGIN.PHP - A_LOGIN.HTM
+	$("#f_login").validate({
+		rules: {
+			usuario: "required",
+			password: "required"
+		},
+		messages: {
+			usuario: "<p>Ingrese el Nombre</p>",
+			password: "<p>Ingrese la Clave</p>"
+		},
+		success: "valid",
+		submitHandler: function(){
+			var usr = $("#usuario").val();
+			var pass = $("#password").val();
+			$.ajax({   
+				//dataType: "html",
+				type: "POST",   
+				url: "[URL]ajax/valida_login.php",
+				data: {usr: usr, pass: pass, sistema: "sas"}, 
+				beforeSend: function() {
+					$('#mensaje_gral')
+					.fadeOut("fast")   
+					.html("Verificando... Espere ...");
+				},
+				success: function(requestData){
+					var rta = requestData;
+					//alert (rta);
+					if (rta == "1"){
+						location.href = "index.php";
+					}
+					else{
+						$('#mensaje_gral')
+						.html("<span class='error'>Nombre de Usuario y/o Password Incorrectos</span>")
+						.fadeIn("slow");
+					}
+				},
+				error: function(requestData){
+					alert ("error");
+				}
+			});   	
+			return false; 
+		}
+	});
+
+	$("input").keydown(function(){
+		$('#mensaje_gral').fadeOut();
+	});
+});
+</script>
+<form name="f_login" id="f_login" class="jNice">
+	<fieldset>
+		<div class="row" style="text-align:center">
+            <div class="span1"></div>
+            <div class="span4">
+            	<label>Usuario:</label>
+                <input type="text" class="text-long" name="usuario" id="usuario" />
+           	</div>
+            <div class="span4">
+                <label>Contrase&ntilde;a:</label>
+                <input type="password" class="text-long" name="password" id="password" />
+            </div>
+            <div class="span2">
+	            <input type="submit" class="btn" value="Ingresar al Sistema" />
+            </div>
+            <div class="span1"></div>
+            <div id="mensaje_gral"></div>
+        </div>
+	</fieldset>
+</form>
+
+<!-- // #main -->

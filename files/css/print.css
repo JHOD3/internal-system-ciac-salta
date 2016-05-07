@@ -1,0 +1,42 @@
+@media print{
+    body{
+		margin:0;
+		padding:0	
+	}
+	
+	*{
+		margin:0;
+		padding:0
+	}
+	
+	h1{
+		font-size:26pt;
+		text-align:center
+	}
+	h2{
+		font-size:8pt;
+		line-height:9pt;
+		text-align:center
+	}
+	h3{
+		font-size:0.6em	
+	}
+	
+	.centro{
+		text-align:center	
+	}
+	
+   
+}
+@media screen{
+	div{
+		display:none
+	}
+	
+	h1{
+		font-size:14pt
+	}
+	h2{
+		font-size:8pt
+	}
+}

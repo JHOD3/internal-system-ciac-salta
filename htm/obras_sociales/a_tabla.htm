@@ -1,0 +1,98 @@
+<script src="[JS]jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="[CSS]tables.css" />
+
+<script type="text/javascript">
+	var TableObrasSociales;
+	var asInitVals = new Array();
+	
+	$(document).ready(function(){
+		CargarDataTable("[NOMBRE_TABLA]");
+	});
+	
+	function CargarDataTable(nombre){
+		//CargarBotonesUI(); 
+		 
+		TableObrasSociales = $('#t_'+nombre).dataTable( {
+			"aaSorting": [[0, "desc" ]], //argumentos posibles: asc o desc
+			"bAutoWidth": true,
+			"sPaginationType": "full_numbers",
+			"bFilter": true, //OCULTAR BUSQUEDA GRAL
+
+			"bProcessing": true,
+			"bServerSide": true,
+			"iDisplayLength": 10,
+			"iDisplayStart":0,
+			"sAjaxSource": "[URL]ajax/cargar_tablas.php?tabla=[NOMBRE_TABLA]",
+			"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+			"oLanguage": {
+				"sSearch": "Buscar en todas las Columnas:"
+			},
+			"fnDrawCallback": function(){
+				  $('table td').bind('mouseenter', function () { $(this).parent().children().each(function(){$(this).addClass('marcado');}); });
+				  $('table td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('marcado');}); });
+},
+			"bLengthChange": false,
+			"aoColumns" : [{ sWidth: '10%' },
+					{ sWidth: '35%' },
+					{ sWidth: '20%' }, 
+					{ sWidth: '20%', "sClass": "right" },
+					{ sWidth: '20%', "sClass": "right" }]
+		});
+		
+		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
+		$('#t_'+nombre+" tfoot input").keyup( function () {
+			TableObrasSociales.fnFilter( this.value, $('#t_'+nombre+" tfoot input").index(this) );
+		});
+		$('#t_'+nombre+" tfoot input").each( function (i) {
+			asInitVals[i] = this.value;
+		});
+		$('#t_'+nombre+" tfoot input").focus( function () {
+			if ( this.className == "search_init" ){
+				this.className = "";
+				this.value = "";
+			}
+		});
+		$('#t_'+nombre+" tfoot input").blur( function (i) {
+			if ( this.value == "" ){
+				this.className = "search_init";
+				this.value = asInitVals[$('#t_'+nombre+" tfoot input").index(this)];
+			}
+		});
+		///////////////////////////////////////////////////////
+		
+		
+	}
+</script>
+<table border="0" id="t_[NOMBRE_TABLA]" class="display">
+    <thead> 
+        <tr>
+        	<th>ID</th>
+            <th>Nombre</th>
+            <th>Abreviaci&oacute;n</th>
+            <th>Importe Consulta</th>
+            <th>Acci&oacute;n</th>
+        </tr>
+    </thead> 
+    <tfoot>
+        <tr>
+            <th><input type="text" name="tb_id" value="ID" class="search_init" /></th>
+            <th><input type="text" name="tb_nombre" value="Nombre" class="search_init" /></th>
+            <th><input type="text" name="tb_abreviacion" value="Abreviaci&oacute;n" class="search_init" /></th>
+            <th><input type="text" name="tb_importe_consulta" value="Importe Consulta" class="search_init" /></th>
+        </tr>
+    </tfoot>    
+    <tbody>
+`
+    </tbody>   
+</table>
+
+<div id="dialog"></div>
+
+<div class="botones_resena">
+	<strong>
+	Rese&ntilde;a:
+    </strong>
+	<img src="[IMG]btns/editar.png" border="0"> Editar
+    <img src="[IMG]btns/obras_sociales_planes.png" border="0"> Planes
+    <img src="[IMG]btns/obras_sociales_estudios.png" border="0">Estudios
+</div>

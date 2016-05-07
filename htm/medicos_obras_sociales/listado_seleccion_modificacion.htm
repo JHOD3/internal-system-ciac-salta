@@ -1,0 +1,59 @@
+<script src="[JS]chosen.jquery.js" type="text/javascript"></script>
+<link rel="stylesheet" href="[CSS]chosen.css">
+<form id="estudios_seleccion">
+    <div>
+        <p>
+            <div class="oculto">
+            	ID Medico: <input type="text" name="id_medico" id="id_medico" value="[ID_MEDICO]" />
+          	</div>
+            Obras Sociales que atiende: <br />
+            <select id="estudios" name="estudios[]" data-placeholder="Seleccione Obras Sociales" multiple class="chosen-select-width" tabindex="16">
+                <option value=""></option>
+                [block: block_registros]
+                <option value="[id_obras_sociales]-[id_obra_social_plan]" [SELECCIONADO]>[nombre_os] [nombre_plan]</option>
+                [/block: block_registros]
+            </select>
+            <p><i>Solo 10 (diez) Obras Sociales por carga</i></p>
+        </p>
+    </div>
+    <div class="botones">
+        <a href="#" class="btn" id="btn_agregar_obra_social">Actualizar</a>
+        <a href="#" class="btn salir" id="cancelar">Salir</a>
+    </div>
+</form>
+<script type="text/javascript">
+	var config = {
+	  '.chosen-select'           : {},
+	  '.chosen-select-deselect'  : {allow_single_deselect:true},
+	  '.chosen-select-no-single' : {disable_search_threshold:10},
+	  '.chosen-select-no-results': {},
+	  '.chosen-select-width'     : {width:"95%", no_results_text:'No encontramos resultados para: ', max_selected_options:10}
+	}
+	for (var selector in config) {
+	  $(selector).chosen(config[selector]);
+	};
+	
+	var ids_estudios = "";
+		
+	$(".chosen-select-width").chosen().change(function(){
+		var total_particular = 0;
+		var total_os = 0;
+		$(".chosen-choices li.search-choice a").each(function( index ) {
+			var id = $(this).data("option-array-index");
+			var valor_particular = $("select#estudios option:eq("+id+")").data("valor_particular");
+			var valor_os = $("select#estudios option:eq("+id+")").data("valor_obra_social");
+			total_particular += parseInt(valor_particular);
+			total_os += parseInt(valor_os);
+		});
+	});
+	
+	$(document).ready(function(){
+		$("a#cancelar").click(function(){
+			IniciarVentana("ventana_opciones", "cerrar");
+			$(ventana_opciones).dialog('destroy').remove();
+		});
+	});
+	
+	
+</script>	
+

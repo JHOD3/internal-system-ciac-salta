@@ -1,0 +1,142 @@
+<script src="[JS]jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="[CSS]tables.css" />
+
+<script type="text/javascript">
+	var TablePacientes;
+	var asInitVals = new Array();
+	
+	$(document).ready(function(){
+		CargarDataTable("[NOMBRE_TABLA]");
+		
+		
+	});
+	
+	$("#t_pacientes").on("click",".dni_paciente_buscado",function(){
+		$("#dni").val($(this).html());
+		IniciarVentana("ventana_menu", "cerrar");
+		$(ventana_menu).dialog('destroy').remove();
+		$("#btn_buscar_paciente").click();
+		
+	});
+	
+	$("#t_pacientes").on("click",".paciente_buscado",function(){
+		var id_paciente = $(this).data("id");
+		IniciarVentana("ventana_menu", "cerrar");
+		$(ventana_menu).dialog('destroy').remove();
+		$.ajax({  
+			type: "POST",   
+			url: "../ajax/buscar_paciente.php",					
+			data: {id: id_paciente}, 
+			beforeSend: function() {
+			},
+			success: function(requestData){
+				var rta = requestData;
+				$("#contenedor_paciente").html(rta).fadeIn("slow", function(){
+					//VERIFICO  SI ESTA CARGADO EL MEDICO PARA COMPROBAR SI EL MEDICO TRABAJA CON LA OS DEL PACIENTE
+					if ($('#id_medico').val() != ''){
+						var id_medico = $('#id_medico').val();
+						var id_os = $('#panel_paciente #id_obras_sociales').val();
+						var id_plan = $('#panel_paciente #id_obras_sociales_planes').val();
+						
+						TrabajaConOS(id_medico, id_os, id_plan);
+					}
+				});
+			},
+			complete: function(requestData, exito){
+			},
+			error: function (){
+				alert ("error");
+			}
+		});
+	});
+	
+	function CargarDataTable(nombre){
+		//CargarBotonesUI(); 
+		 
+		TablePacientes = $('#t_'+nombre).dataTable( {
+			"aaSorting": [[0, "desc" ]], //argumentos posibles: asc o desc
+			"bAutoWidth": true,
+			"sPaginationType": "full_numbers",
+			"bFilter": true, //OCULTAR BUSQUEDA GRAL
+
+			"bProcessing": true,
+			"bServerSide": true,
+			"iDisplayLength": 10,
+			"iDisplayStart":0,
+			"sAjaxSource": "[URL]ajax/cargar_tablas.php?tabla=[NOMBRE_TABLA]",
+			"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+			"oLanguage": {
+				"sSearch": "Buscar en todas las Columnas:"
+			},
+			"fnDrawCallback": function(){
+				  $('table td').bind('mouseenter', function () { $(this).parent().children().each(function(){$(this).addClass('marcado');}); });
+				  $('table td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('marcado');}); });
+},
+			"bLengthChange": false,
+			"aoColumns" : [{ sWidth: '20px' }, 
+					{ sWidth: '200px' }, 
+					{ sWidth: '200px' },
+					{ sWidth: '300px' },
+					{ sWidth: '120px', "sClass": "center"  }]
+		});
+		
+		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
+		$("tfoot input").keyup( function () {
+			TablePacientes.fnFilter( this.value, $("tfoot input").index(this) );
+		});
+		$("tfoot input").each( function (i) {
+			asInitVals[i] = this.value;
+		});
+		$("tfoot input").focus( function () {
+			if ( this.className == "search_init" ){
+				this.className = "";
+				this.value = "";
+			}
+		});
+		$("tfoot input").blur( function (i) {
+			if ( this.value == "" ){
+				this.className = "search_init";
+				this.value = asInitVals[$("tfoot input").index(this)];
+			}
+		});
+		///////////////////////////////////////////////////////
+		
+		
+	}
+</script>
+<table border="0" id="t_[NOMBRE_TABLA]" class="display">
+    <thead> 
+        <tr>
+            <th>DNI</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Obra Social</th>
+            <th>Acci&oacute;n</th>
+        </tr>
+    </thead> 
+    <tfoot>
+        <tr>
+            <th><input type="text" name="tb_nro_documento" value="DNI" class="search_init" /></th>
+            <th><input type="text" name="tb_nombres" value="Nombres" class="search_init" /></th>
+            <th><input type="text" name="tb_apellidos" value="Apellidos" class="search_init" /></th>
+            <th><input type="text" name="tb_obras_sociales" value="Obra Social" class="search_init" /></th>
+        </tr>
+    </tfoot>    
+    <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td align="right"></td>
+        </tr>
+    </tbody>   
+</table>
+
+<div class="botones_resena">
+	<strong>
+	Rese&ntilde;a:
+    </strong>
+	<img src="[IMG]btns/editar.png" border="0"> Editar
+    <img src="[IMG]btns/cobros.png" border="0">Cobros
+</div>

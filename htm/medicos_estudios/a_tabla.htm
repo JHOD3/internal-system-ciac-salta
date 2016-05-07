@@ -1,0 +1,117 @@
+<script src="files/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="files/css/tables.css" />
+
+<script type="text/javascript">
+	var TableMedicosEstudios;
+	var asInitVals = new Array();
+	
+	$(document).ready(function(){
+		CargarDataTable("[NOMBRE_TABLA]");
+	});
+	
+	function CargarDataTable(nombre){
+		//CargarBotonesUI(); 
+		 
+		TableMedicosEstudios = $('#t_'+nombre).dataTable( {
+			"aaSorting": [[0, "desc" ]], //argumentos posibles: asc o desc
+			"paging": true,
+			"bAutoWidth": true,
+			//"sPaginationType": "full_numbers",
+			"bFilter": true, //OCULTAR BUSQUEDA GRAL
+
+			"bProcessing": true,
+			"bServerSide": true,
+			"iDisplayLength": 10000,
+			"iDisplayStart":0,
+			"sAjaxSource": "[URL]ajax/cargar_tablas.php?[ARGS]",
+			"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+			"oLanguage": {
+				"sSearch": "Buscar en todas las Columnas:"
+			},
+			"fnDrawCallback": function(){
+				  $('table td').bind('mouseenter', function () { $(this).parent().children().each(function(){$(this).addClass('marcado');}); });
+				  $('table td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('marcado');}); });
+},
+			"bLengthChange": false,
+			"aoColumns" : [{ sWidth: '15%' }, 
+					{ sWidth: '65%' },
+					{ sWidth: '20%' },]
+		});
+		
+		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
+		$("tfoot input").keyup( function () {
+			TableMedicosEstudios.fnFilter( this.value, $('#t_'+nombre+" tfoot input").index(this) );
+		});
+		$("tfoot input").each( function (i) {
+			asInitVals[i] = this.value;
+		});
+		$("tfoot input").focus( function () {
+			if ( this.className == "search_init" ){
+				this.className = "";
+				this.value = "";
+			}
+		});
+		$("tfoot input").blur( function (i) {
+			if ( this.value == "" ){
+				this.className = "search_init";
+				this.value = asInitVals[$('#t_'+nombre+" tfoot input").index(this)];
+			}
+		});
+		///////////////////////////////////////////////////////
+		
+		
+	}
+	
+	//ACTUALIZO ARANCELES A MEDIDA QUE LO CAMBIO...
+	$('#t_medicos_estudios').on("change", ".particular", function(){
+		var id_medico_estudio = $(this).prop('id');
+		var particular = $(this).val();
+		var variables = "id="  + id_medico_estudio + "&particular=" + particular; 
+		$.ajax({  
+			type: "POST",   
+			url: "[URL]ajax/modificaciones.php",
+			data: {variables: variables, tabla: "[NOMBRE_TABLA]"}, 
+			beforeSend: function() {
+				$("#mje").html("Enviando información...");
+			},
+			success: function(requestData){
+				var rta = requestData;
+				//alert(rta);
+				//alert ("Obra Social para Medico Editada Correctamente.");
+				IniciarVentana("ventana_opciones", "cerrar");
+				//TableMedicosEstudios.fnDraw();
+				$(ventana_opciones).dialog('destroy').remove();
+			},
+			complete: function(requestData, exito){},
+			error: function (){
+				alert ("Ocurri&oacute; un error. Vuelva a Intentarlo.");
+			}
+		});
+	});
+</script>
+[DATOS_MEDICO]
+<table border="0" id="t_[NOMBRE_TABLA]" class="display">
+    <thead> 
+        <tr>
+            <th>ID</th>
+            <th>Estudios</th>
+            <th>Particular</th>
+        </tr>
+    </thead> 
+    <tfoot>
+        <tr>
+            <th><input type="text" name="tb_id_medicos_especialidades" value="ID" class="search_init" /></th>
+            <th><input type="text" name="tb_id_estudios" value="Estudio" class="search_init" /></th>
+            <th><input type="text" name="tb_particular" value="Particular" class="search_init" /></th>
+        </tr>
+    </tfoot>    
+    <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>   
+</table>
+<div id="dialog_tabla_medicos_horarios"></div>
+<div id="dialog"></div>

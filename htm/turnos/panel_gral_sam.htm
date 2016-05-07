@@ -1,0 +1,140 @@
+<style>
+	#datos_turno{
+		width:49%;
+		display:inline-block;
+		vertical-align:top
+	}
+	
+	#datos_turno p span{
+		font-size:16px;
+	}
+	
+	#cambio_estado{
+		width:49%;
+		display:inline-block;
+		vertical-align:top
+	}
+	select{
+		width:100%;	
+	}
+	
+	.botones{
+		width:100%;	
+	}
+	
+	.activo{
+		background:#CFC	
+	}
+	
+	.con_pedido, .sin_pedido{
+		padding:5px;
+	}
+	
+	#chk_arancel{
+		display:inline-block;	
+	}
+	
+	#estudios h3{
+		font-size:14px;
+		line-height:30px;
+		padding:0;
+		margin:0;
+		border-bottom:1px solid #CCC	
+	}
+	
+</style>
+<script>
+	$(document).ready(function(){
+		
+		$(".btn.salir").click(function(){
+			IniciarVentana("ventana_estado_turno", "cerrar");
+			$(ventana_estado_turno).dialog('destroy').remove();
+		})
+		
+	});
+	
+	$("form#datos_turnos #btn_aceptar").on("click", function() {
+		var id_turno = $("#id_turno").val();
+		var variables = $("#datos_turnos").serialize();
+		var id_turno_estado = $("#turnos_estados_medico").val();
+		var id_turno_estado_actual = $("#turno_estado_actual").val();
+		var id_turno_tipo = $('#turnos_tipos').val();
+		
+		IniciarVentana("ventana_estado_turno", "cerrar");
+		$.ajax({  
+			type: "POST",   
+			url: "[URL]ajax/admin_turno.php",
+			data: {tipo:"cambiar_estado", tabla: "turnos", id_turno: id_turno , variables: variables, tipo_sistema: 'sam'}, 
+			beforeSend: function() {
+				$("#mje").html("Enviando información...");
+			},
+			success: function(requestData){
+				//alert(requestData);
+				//alert('Turno editado correctamente.');
+				var fechacompleta = $("#agenda").datepicker('getDate');
+				GrillaInicial(fechacompleta);
+				IniciarVentana("ventana_estado_turno", "cerrar");
+				$(ventana_estado_turno).dialog('destroy').remove();
+			},
+			complete: function(requestData, exito){},
+			error: function (){
+				alert ("ERROR AL CARGAR. Vuelva a Intentarlo.");
+			}
+		});
+		
+	});
+</script>
+[block: block_registros]
+<form name="datos_turnos" id="datos_turnos">
+    <div id="datos_turno">
+        <h4>Detalle</h4>
+        <div class="oculto">
+        	<p>ID Medico: <input type="text" name="id_medico" id="id_medico" class="id_medico" value="[id_medicos]" />
+            <p>ID Paciente: <input type="text" name="id_paciente" id="id_paciente" class="id_paciente" value="[id_pacientes]" />
+            <p>ID Turno: <input type="text" name="id_turno" id="id_turno" class="id_turno" value="[id_turnos]" />
+            <p>ID Turno Estado Actual: <input type="text" id="turno_estado_actual" name="turno_estado_actual" value="[id_turnos_estados]" /></p>
+            <p>ID Turno Tipo: <input type="text" name="id_turno_tipo" id="id_turno_tipo" class="id_turno_tipo" value="[id_turnos_tipos]" />
+        </div>
+        <p>
+        	M&eacute;dico: <br />
+			<span>[MEDICO]</span>
+       	</p>
+        <p>
+        	Paciente: <br />
+			<span>[PACIENTE]</span>
+       	</p>
+        <p>
+        	Obra Social del Paciente: <br />
+			<span>[OBRA_SOCIAL]</span>
+      	</p>
+        <P>
+        	Plan: <br />
+			<span>[PLAN]</span>
+       	</P>
+        
+    </div>
+    <div id="cambio_estado">
+    	<div class="oculto">
+        	Tipo de Turno<input type="text" id="turnos_tipos" value="[id_turnos_tipos]" />
+        </div>
+        <h4>Cambio de Estado</h4>
+        [DROP_TURNOS_ESTADOS]
+        
+        
+        <div id="estudios" class="[CLASS_ESTUDIO]">
+        	<h4>Estudios</h4>
+            <p>
+	        	[BTN_VER_ESTUDIO]
+           	</p>
+        </div>
+    </div>
+    <div class="clear"></div>
+
+    <div class="botones">
+        <a href="#" class="btn" id="btn_aceptar">Aceptar</a>
+        <a href="#" class="btn salir">Salir</a>
+    </div>
+</form>
+[/block: block_registros]
+<div id="ventana_estudios"></div>
+<div id="ventana_estudios_asociados"></div>

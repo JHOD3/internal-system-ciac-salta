@@ -1,0 +1,126 @@
+<script src="[JS]print.js"></script>
+<script>
+	$(document).ready(function(){
+		$(".printer").bind("click",function(){
+			$("#listado").printArea();
+		});
+	});
+</script>
+
+<div id="listado">
+	<style media="print" type="text/css">
+	
+	table{
+		border-collapse:collapse;
+		width:100%;
+		font-size:10pt;
+		font-family:Arial;
+	} 
+	table tr.fila_cobro {
+		border-bottom:1px solid #000!important; 
+		-webkit-print-color-adjust: exact;
+	}  
+	table tr.encabezado {
+		background-color: #000 !important;  
+		-webkit-print-color-adjust: exact; 
+		color:#ffffff; 
+	} 
+	div.logo{
+		width:35%; display:inline-block
+	}
+	div.logo img{
+		width:100%	
+	}
+	div.datos_medico{
+		width:60%; display:inline-block; text-align:right;font-family:Arial
+	}
+	
+	.printer{
+		display:none	
+	}
+	
+	#totales_entregar{
+		font-family:Arial	
+	}
+	</style>
+    <style media="screen">
+	
+	table{
+		border-collapse:collapse;
+		width:100%;
+		font-size:10pt;
+		font-family:Arial;
+	} 
+	table tr.fila_cobro {
+		border-bottom:1px solid #000!important; 
+		-webkit-print-color-adjust: exact;
+	}  
+	table tr.encabezado {
+		background-color: #000 !important;  
+		-webkit-print-color-adjust: exact; 
+		color:#ffffff; 
+	} 
+	div.logo{
+		display:none
+	}
+	div.logo img{
+		display:none
+	}
+	div.datos_medico{
+		display:none
+	}
+
+	#totales_entregar{
+		font-family:Arial	
+	}
+	</style>
+	<div class="logo">
+    	<img src="[IMG]logo.png" />
+    </div>
+    <div class="datos_medico">
+    	Cobros de [MEDICO]<br />
+		Fecha: [FECHA]        
+    </div>
+    <div style="clear:both"><br />
+    <table border="0" id="t_cobros" class="display">
+        <thead> 
+            <tr class="encabezado">
+                <th>N&ordm;</th>
+                <th>Paciente</th>
+                <th>Concepto</th>
+                <th>Importe</th>
+            </tr>
+        </thead> 
+        <tbody>
+            [block: block_registros]
+            <tr class="fila_cobro">
+                <td>[I]</td>
+                <td>[apellidos], [nombres]</td>
+                <td>[nombre_cobro_concepto]</td>
+                <td>[importe]</td>
+            </tr>
+            [/block: block_registros]
+            [block: block_registros2]
+            <tr class="fila_cobro">
+                <td>[I]</td>
+                <td>[apellidos], [nombres]</td>
+                <td>[nombre_cobro_concepto]</td>
+                <td>[importe]</td>
+            </tr>
+            [/block: block_registros2]
+            <tr class="totales">
+                <td colspan="3"><strong>TOTALES</strong></td>
+                <td><stong>[TOTAL]</strong></td>
+            </tr>
+        </tbody>   
+    </table>
+</div>
+<br />
+<div id="totales_entregar">
+    <div class="contadores">Cantidad de Ordenes: [CONTADOR_ORDENES]</div>
+    <div class="contadores">Cantidad de Pedidos: [CONTADOR_PEDIDOS]</div>
+</div>
+<br />
+
+<p><input type="button" class="printer" value="Imprimir Cobros"></p>
+

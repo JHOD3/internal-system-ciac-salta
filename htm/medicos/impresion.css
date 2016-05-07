@@ -1,0 +1,16 @@
+table{
+display: none;
+font-size: 12px
+}
+table{
+border-collapse:collapse; 
+}
+table tr.fila_estudio {
+border-bottom:1px solid #000!important; 
+-webkit-print-color-adjust: exact;
+} 
+table tr.encabezado {
+background-color: #000 !important; 
+-webkit-print-color-adjust: exact;
+color:#ffffff; 
+} 

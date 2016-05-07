@@ -1,0 +1,129 @@
+<script src="[JS]print.js"></script>
+
+<script>
+	$(document).ready(function(){
+		$(".printer").bind("click",function(){
+			$("#listado").printArea();
+		});
+		
+		$("#horarios").change(function(){
+			var id_especialidad = $("#medicos_especialidades").val();
+			var date = $("#agenda").datepicker('getDate');
+			var horarios = $("#horarios option:selected").text()
+			
+			day  = date.getDate(),  
+			month = date.getMonth() + 1,              
+			year =  date.getFullYear();
+			var fecha = day + '/' + month + '/' + year;
+			
+			$.ajax({  
+				type: "POST",   
+				url: "[URL]ajax/generar_control.php",					
+				data: {tipo: "[TIPO]", tabla: "medicos", valor: $("#id_medico").val(), id_especialidad: id_especialidad, fecha: fecha, horarios:horarios}, 
+				beforeSend: function() {
+				},
+				success: function(requestData){
+					var rta = requestData;
+					$("#contenedor_grilla").html(rta).fadeIn("medium");;
+				},
+				complete: function(requestData, exito){
+				},
+				error: function (){
+					alert ("error");
+				}
+			});	
+		})
+	});
+</script>
+
+<div id="listado">
+	<style media="print" type="text/css">
+	
+	table{
+		border-collapse:collapse;
+		width:100%;
+		font-size:10pt;
+		font-family:Arial;
+	} 
+	table tr.fila_estudio, table tr.fila_turno {
+		border-bottom:1px solid #000 !important; 
+		-webkit-print-color-adjust: exact;
+	}
+	
+	table tr.fila_paciente {
+		background: #ddd !important;
+		-webkit-print-color-adjust: exact;
+	}
+	table tr.encabezado {
+		background-color: #000 !important;  
+		-webkit-print-color-adjust: exact; 
+		color:#ffffff; 
+	} 
+	div.logo{
+		display:inline-block
+	}
+	div.logo img{
+		width:100%	
+	}
+	div.datos_medico{
+		display:inline-block; text-align:right;font-family:Arial
+	}
+	
+	.printer{
+		display:none	
+	}
+	
+	.cont_horarios{
+		display:none;
+	}
+	</style>
+    <style media="screen" type="text/css">
+	
+	table{
+		border-collapse:collapse;
+		width:100%;
+		font-size:10pt;
+		font-family:Arial;
+	} 
+	table tr.fila_paciente {
+		background: #ddd !important;
+		-webkit-print-color-adjust: exact;
+	}
+	
+	table tr.fila_turno {
+		border-bottom:1px solid #ccc!important; 
+		-webkit-print-color-adjust: exact;
+	}  
+	table tr.fila_estudio{
+		border-bottom:1px solid #000!important; 
+		-webkit-print-color-adjust: exact;
+	}  
+	table tr.encabezado {
+		background-color: #000 !important;  
+		-webkit-print-color-adjust: exact; 
+		color:#ffffff; 
+	} 
+	div.logo{
+		display:none
+	}
+	div.logo img{
+		display:none
+	}
+	</style>
+    
+    <div class="logo">
+    	<img src="[IMG]logo_imprimir.png" />
+    </div>
+    <div class="datos_medico">
+    	Turnos de [MEDICO]<br />
+		Fecha: [FECHA]<br />
+    	<span class="cont_horarios">Horarios: [DROP_HORARIOS]</span>
+    </div>
+    <div style="clear:both"><br />
+    
+    <div id="contenedor_grilla"></div>
+    
+</div>
+<br />
+<br />
+<p><input type="button" class="printer" value="Imprimir Turnos"></p>

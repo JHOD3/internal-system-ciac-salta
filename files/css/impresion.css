@@ -1,0 +1,24 @@
+@media screen {
+    table{
+		display: none;
+		font-size:20pt;
+	}
+}
+
+@media print {
+	table{
+		border-collapse:collapse;
+		width:100%;
+		font-size:10pt;
+	} 
+	table tr.fila_estudio {
+		border-bottom:1px solid #000!important; 
+		-webkit-print-color-adjust: exact;
+	}  
+	table tr.encabezado {
+		background-color: #000 !important;  
+		-webkit-print-color-adjust: exact; 
+		color:#ffffff; 
+	} 
+
+}

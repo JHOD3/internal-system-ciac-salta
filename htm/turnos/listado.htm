@@ -1,0 +1,116 @@
+
+			<script type="text/javascript">
+				var oTable;
+				var asInitVals = new Array();
+			
+				$(document).ready(function(){
+					oTable = $("#t_turnos").dataTable( {
+						//"bProcessing": true,
+						//"bServerSide": true,
+						//"sAjaxSource": "[AJAX_SRC]",
+						//"aaSorting": [[1, "desc" ],[0, "desc" ]], //argumentos posibles: asc o desc
+						"aaSorting": [[0, "desc" ]], //argumentos posibles: asc o desc
+						"bAutoWidth": false,
+						"sPaginationType": "full_numbers",
+						"aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
+						"oLanguage": {
+							"sProcessing": "Procesando...",
+							"sSearch": "Buscar en todas las Columnas:",
+							"sLengthMenu": "Mostrar _MENU_ registros por hoja",
+							"sZeroRecords": "No se encontraron registros cargados",
+							"sInfo": "Mostrando _START_ a _END_ registros de un total de _TOTAL_ registros",
+							"sInfoEmpty": "Mostrando 0 registro",
+							"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+							"oPaginate": {
+								"sFirst":    "Primero",
+								"sPrevious": "Anterior",
+								"sNext":     "Siguiente",
+								"sLast":     "&Uacute;ltimo"
+							},
+						}
+					});
+					$("tfoot input").keyup( function () {
+						//CAMBIE ESTO PARA QUE ME TOME LA BUSQUEDA CORRECTAMENTE CON COLUMNAS OCULTAS... AGREGUE A LAS COLUMNAS DEL PIE EL ATRIBUTO ID, ej. id="i-0"  http://datatables.net/forums/discussion/2864/x#Item_3
+						var id = $(this).attr("id").split("-")[1];
+						oTable.fnFilter( this.value, id);
+					});
+					$("tfoot input").each( function (i) {
+						asInitVals[i] = this.value;
+					});
+					$("tfoot input").focus( function () {
+						if ( this.className == "search_init" ){
+							this.className = "";
+							this.value = "";
+						}
+					});
+					$("tfoot input").blur( function (i) {
+						if ( this.value == "" ){
+							this.className = "search_init";
+							this.value = asInitVals[$("tfoot input").index(this)];
+						}
+					});
+				});
+			</script>		
+					
+			<table id="t_turnos" class="display ex_highlight_row">
+    			<thead>
+					<tr>
+						<th>ID</th>
+						<th>Medicos</th>
+						<th>Especialidades</th>
+						<th>Pacientes</th>
+						<th>Turnos Estados</th>
+						<th>Fecha</th>
+						<th>Desde</th>
+						<th>Hasta</th>
+						<th>Trae Orden</th>
+						<th>Trae Pedido</th>
+						<th>Medicos Derivacion</th>
+						<th>Especialidades Derivacion</th>
+						<th>Es Derivacion Externa</th>
+						<th>Tipos Turnos</th>
+						<th>Estado</th>
+					</tr>
+				</thead>
+				<tbody>
+					[block: block_registros]
+					<tr> 
+						<td class="id">[id_turnos]</td> 
+						<td>[MEDICOS]</td> 
+						<td>[ESPECIALIDADES]</td> 
+						<td>[PACIENTES]</td> 
+						<td>[TURNOS_ESTADOS]</td> 
+						<td>[fecha]</td> 
+						<td>[desde]</td> 
+						<td>[hasta]</td> 
+						<td>[trae_orden]</td> 
+						<td>[trae_pedido]</td> 
+						<td>[MEDICOS_DERIVACION]</td> 
+						<td>[ESPECIALIDADES_DERIVACION]</td> 
+						<td>[es_derivacion_externa]</td> 
+						<td>[TIPOS_TURNOS]</td> 
+						<td>[estado]</td>
+					</tr>
+					[/block: block_registros]
+				</tbody>
+				<tfoot>
+					<tr>
+						<th><input type="text" id="i-0" name="tb_id_turnos" value="Buscar ID" class="search_init" /></th>
+						<th><input type="text" id="i-1" name="tb_id_medicos" value="Buscar Medicos" class="search_init" /></th>
+						<th><input type="text" id="i-2" name="tb_id_especialidades" value="Buscar Especialidades" class="search_init" /></th>
+						<th><input type="text" id="i-3" name="tb_id_pacientes" value="Buscar Pacientes" class="search_init" /></th>
+						<th><input type="text" id="i-4" name="tb_id_turnos_estados" value="Buscar Turnos Estados" class="search_init" /></th>
+						<th><input type="text" id="i-5" name="tb_fecha" value="Buscar Fecha" class="search_init" /></th>
+						<th><input type="text" id="i-6" name="tb_desde" value="Buscar Desde" class="search_init" /></th>
+						<th><input type="text" id="i-7" name="tb_hasta" value="Buscar Hasta" class="search_init" /></th>
+						<th><input type="text" id="i-8" name="tb_trae_orden" value="Buscar Trae Orden" class="search_init" /></th>
+						<th><input type="text" id="i-9" name="tb_trae_pedido" value="Buscar Trae Pedido" class="search_init" /></th>
+						<th><input type="text" id="i-10" name="tb_id_medicos_derivacion" value="Buscar Medicos Derivacion" class="search_init" /></th>
+						<th><input type="text" id="i-11" name="tb_id_especialidades_derivacion" value="Buscar Especialidades Derivacion" class="search_init" /></th>
+						<th><input type="text" id="i-12" name="tb_es_derivacion_externa" value="Buscar Es Derivacion Externa" class="search_init" /></th>
+						<th><input type="text" id="i-13" name="tb_id_tipos_turnos" value="Buscar Tipos Turnos" class="search_init" /></th>
+						<th><input type="text" id="i-14" name="tb_estado" value="Buscar Estado" class="search_init" /></th>
+					</tr>
+				</tfoot> 
+			</table>
+			

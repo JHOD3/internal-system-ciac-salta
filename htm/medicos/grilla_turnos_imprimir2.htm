@@ -1,0 +1,62 @@
+<script>
+	$(document).ready(function(){
+		$(".printer").bind("click",function(){
+			PrintDoc();
+		});
+	});
+	
+	function PrintDoc() {
+        /*var toPrint = document.getElementById('listado');
+        var popupWin = window.open('', 'popupwindow', 'width=700,height=500,location=yes,left=200px,modal=yes');
+        popupWin.document.open();
+        popupWin.document.write('<html><title>Imprimir Turnos del Médico</title><link rel="stylesheet" type="text/css" href="[CSS]impresion.css" media="print"/></head><body onload="window.print()">')
+        popupWin.document.write(toPrint.innerHTML);
+        popupWin.document.write('</html>');
+        popupWin.document.close();*/
+		var divToPrint = document.getElementById('listado');
+		var htmlToPrint = divToPrint.outerHTML;
+		newWin = window.open("");
+		newWin.document.write(htmlToPrint);
+		newWin.print();
+		newWin.close();
+    }
+</script>
+
+<body>
+<div id="listado">
+	<link rel="stylesheet" type="text/css" href="../files/css/impresion.css" media="print"/>
+	
+    <table id="t_turnos" class="display" style="font-size:12px;">
+        <thead> 
+            <tr class="encabezado">
+                <th>Nº</th>
+                <th>Hora</th>
+                <th>Paciente</th>
+                <th>Obra Social</th>
+            </tr>
+        </thead> 
+        <tbody>
+            [block: block_registros]
+            <tr >
+                <td>[I]</td>
+                <td>[desde]</td>
+                <td>[apellidos], [nombres]</td>
+                <td>[OBRA_SOCIAL]</td>
+            </tr>
+            [block: block_estudios_[id_turnos]]
+            <tr class="fila_estudio">
+            	<td></td>
+                <td></td>
+                <td colspan="2"><small>[nombre_estudio]</small></td>
+            </tr>
+            [/block: block_estudios_[id_turnos]]
+            [/block: block_registros]
+        </tbody>   
+    </table>
+</div>
+<br />
+<br />
+
+<p><input type="button" class="printer" value="Imprimir Turnos"></p>
+
+</body>

@@ -1,0 +1,90 @@
+<script src="[JS]jquery.validate.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#estudios").focus();
+		
+		$("a#cargar").click(function(e){
+			e.preventDefault();
+			$("#form_obras_sociales_estudios").submit();
+		});
+		
+		$("a#cancelar").click(function(){
+			IniciarVentana("ventana_opciones", "cerrar");
+			$(ventana_opciones).dialog('destroy').remove();
+		});
+		
+		$("#form_obras_sociales_estudios").validate({
+			rules: {
+				estudios: {
+					required: true
+				},
+				importe: {
+					required: true
+				}
+			},
+			messages: {
+				estudios: {
+					required: "Seleccione un Estudio"
+				},
+				importe: {
+					required: "Ingrese un Importe"
+				}
+			},
+			submitHandler: function(){
+				var variables = $("#form_obras_sociales_estudios").serialize();
+				$.ajax({  
+					type: "POST",   
+					url: "[URL]ajax/altas.php",
+					data: {variables: variables, tabla: "[TABLA]"}, 
+					beforeSend: function() {
+						$("#mje").html("Enviando información...");
+					},
+					success: function(requestData){
+						var rta = requestData;
+						//alert(rta);
+						alert ("Especialidad para Medico Cargada Correctamente.");
+						IniciarVentana("ventana_opciones", "cerrar");
+						TableObraSocialEstudios.fnDraw();
+						$(ventana_opciones).dialog('destroy').remove();
+					},
+					complete: function(requestData, exito){},
+					error: function (){
+						alert ("Ocurri&oacute; un error. Vuelva a Intentarlo.");
+					}
+				});
+			}
+		});
+	});
+</script>
+
+<div id="panel_alta">
+	<form name="form_obras_sociales_estudios" id="form_obras_sociales_estudios" class="jNice">					
+		<fieldset>
+			<div class="bloque oculto">
+				<label>ID: </label>
+				<input type="text" class="text-long" name="id_obra_social" id="id_obra_social" value="[ID_OBRA_SOCIAL]" />
+			</div>
+            <div class="bloque">
+				<label>Obra Social: </label>
+				[OBRA_SOCIAL]
+			</div>
+            <div class="bloque">
+				<label>Estudio: </label>
+				[DROP_ESTUDIOS]
+			</div>
+            <div class="bloque">
+				<label>Importe: </label>
+				<input type="text" class="text-long" name="importe" id="importe" />
+			</div>
+            <div class="bloque">
+				<label>Nomenclador: </label>
+				<input type="text" class="text-long" name="nomenclador" id="nomenclador" />
+			</div>
+			<div class="bloque botones">
+				<a href="#" id="cargar" class="boton_gris">Cargar</a>
+				<a href="#" id="cancelar" class="boton_gris">Cancelar</a>
+			</div>
+		</fieldset>
+	</form>
+</div>

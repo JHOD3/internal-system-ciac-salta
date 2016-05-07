@@ -1,0 +1,150 @@
+<script src="[JS]jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+	var TableCobros;
+	var asInitVals = new Array();
+	
+	$(document).ready(function(){
+		CargarDataTable("[NOMBRE_TABLA]");
+		
+		
+	});
+	
+	function CargarDataTable(nombre){
+		//CargarBotonesUI(); 
+		 
+		TableCobros = $('#t_'+nombre).dataTable( {
+			"aaSorting": [[0, "desc" ]], //argumentos posibles: asc o desc
+			"bAutoWidth": true,
+			"sPaginationType": "full_numbers",
+			"bFilter": true, //OCULTAR BUSQUEDA GRAL
+
+			"bProcessing": true,
+			"bServerSide": true,
+			"iDisplayLength": 10,
+			"iDisplayStart":0,
+			"sAjaxSource": "[URL]ajax/cargar_tablas.php?[ARGS]",
+			"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+			"oLanguage": {
+				"sSearch": "Buscar en todas las Columnas:"
+			},
+			"fnDrawCallback": function(){
+				  $('table td').bind('mouseenter', function () { $(this).parent().children().each(function(){$(this).addClass('marcado');}); });
+				  $('table td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('marcado');}); });
+},
+			"bLengthChange": false,
+			"aoColumns" : [{ sWidth: '15%' }, 
+					{ sWidth: '15%' }, 
+					{ sWidth: '40%' },
+					{ sWidth: '10%' },
+					{ sWidth: '10%	' }]
+		});
+		
+		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
+		$('#t_'+nombre+" tfoot input").keyup( function () {
+			TableCobros.fnFilter( this.value, $('#t_'+nombre+" tfoot input").index(this) );
+		});
+		$('#t_'+nombre+" tfoot input").each( function (i) {
+			asInitVals[i] = this.value;
+		});
+		$('#t_'+nombre+" tfoot input").focus( function () {
+			if ( this.className == "search_init" ){
+				this.className = "";
+				this.value = "";
+			}
+		});
+		$('#t_'+nombre+" tfoot input").blur( function (i) {
+			if ( this.value == "" ){
+				this.className = "search_init";
+				this.value = asInitVals[$('#t_'+nombre+" tfoot input").index(this)];
+			}
+		});
+		///////////////////////////////////////////////////////
+		
+		
+	}
+	
+	$(function(){
+		$('#t_cobros').on("click",".btn_reintegro", function(){
+			var seleccion = $(this);
+			$( "#dialog-confirm" ).dialog({
+			  resizable: false,
+			  height:160,
+			  modal: true,
+			  buttons: {
+				"Si": function() {
+					var id = seleccion.data('id');
+					$.ajax({  
+						type: "POST",   
+						url: "[URL]ajax/altas.php",
+						data: {id_cobro: id, tabla: "egresos"}, 
+						beforeSend: function() {
+							$("#mje").html("Enviando información...");
+						},
+						success: function(requestData){
+							var rta = requestData;
+							alert ("Reintegro Efectuado Correctamente.");
+						},
+						complete: function(requestData, exito){},
+						error: function (){
+							alert ("ERROR AL CARGAR. Vuelva a Intentarlo.");
+						}
+					});
+					TableCobros.fnDraw();
+					$( this ).dialog( "close" );
+				},
+				Cancel: function() {
+				  $( this ).dialog( "close" );
+				}
+			  }
+			});
+		});
+	});
+	
+	
+</script>
+[DATOS_MEDICO]
+<table border="0" id="t_[NOMBRE_TABLA]" class="display">
+    <thead> 
+        <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Concepto</th>
+            <th>Importe</th>
+            <th>Acci&oacute;n</th>
+        </tr>
+    </thead> 
+    <tfoot>
+        <tr>
+            <th><input type="text" name="tb_id_cobros" value="ID" class="search_init" /></th>
+            <th><input type="text" name="tb_fecha" value="Fecha" class="search_init" /></th>
+            <th><input type="text" name="tb_importe" value="Importe" class="search_init" /></th>
+        </tr>
+    </tfoot>    
+    <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td align="right"></td>
+        </tr>
+    </tbody>   
+</table>
+<div id="dialog_tabla_medicos_horarios"></div>
+<div id="dialog"></div>
+
+<div class="botones_resena">
+	<strong>
+	Rese&ntilde;a:
+    </strong>
+	<!--<img src="[IMG]btns/editar.png" border="0"> Detalle-->
+    <img src="[IMG]btns/confirmar.png" border="0">Reintegrar
+</div>
+
+<div id="dialog-confirm" title="Reintegro de Dinero">
+  	<p>
+    	<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        Est&aacute; segura de confirmar el Reintegro de Dinero?
+  	</p>
+</div>

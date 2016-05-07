@@ -1,0 +1,87 @@
+<script src="[JS]jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="[CSS]tables.css" />
+
+<script type="text/javascript">
+	var TableObraSocialPlanes;
+	var asInitVals = new Array();
+	
+	$(document).ready(function(){
+		CargarDataTable("[NOMBRE_TABLA]");
+	});
+	
+	function CargarDataTable(nombre){
+		//CargarBotonesUI(); 
+		 
+		TableObraSocialPlanes = $('#t_'+nombre).dataTable( {
+			"aaSorting": [[0, "desc" ]], //argumentos posibles: asc o desc
+			"bAutoWidth": true,
+			"sPaginationType": "full_numbers",
+			"bFilter": true, //OCULTAR BUSQUEDA GRAL
+
+			"bProcessing": true,
+			"bServerSide": true,
+			"iDisplayLength": 10,
+			"iDisplayStart":0,
+			"sAjaxSource": "[URL]ajax/cargar_tablas.php?[ARGS]",
+			"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+			"oLanguage": {
+				"sSearch": "Buscar en todas las Columnas:"
+			},
+			"fnDrawCallback": function(){
+				  $('table td').bind('mouseenter', function () { $(this).parent().children().each(function(){$(this).addClass('marcado');}); });
+				  $('table td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('marcado');}); });
+},
+			"bLengthChange": false,
+			"aoColumns" : [{ sWidth: '15%' }, 
+					{ sWidth: '70%' },
+					{ sWidth: '15%', "sClass": "right" }]
+		});
+		
+		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
+		$('#t_'+nombre+" tfoot input").keyup( function () {
+			TableObraSocialPlanes.fnFilter( this.value, $('#t_'+nombre+" tfoot input").index(this) );
+		});
+		$('#t_'+nombre+" tfoot input").each( function (i) {
+			asInitVals[i] = this.value;
+		});
+		$("tfoot input").focus( function () {
+			if ( this.className == "search_init" ){
+				this.className = "";
+				this.value = "";
+			}
+		});
+		$("tfoot input").blur( function (i) {
+			if ( this.value == "" ){
+				this.className = "search_init";
+				this.value = asInitVals[$("tfoot input").index(this)];
+			}
+		});
+		///////////////////////////////////////////////////////
+		
+		
+	}
+</script>
+[DATOS_OBRA_SOCIAL]
+<table border="0" id="t_[NOMBRE_TABLA]" class="display">
+    <thead> 
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Acci&oacute;n</th>
+        </tr>
+    </thead> 
+    <tfoot>
+        <tr>
+            <th><input type="text" name="tb_id_obras_socilaes_planes" value="ID" class="search_init" /></th>
+            <th><input type="text" name="tb_nombres" value="Nombres" class="search_init" /></th>
+            <th></th>
+        </tr>
+    </tfoot>    
+    <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td align="right"></td>
+        </tr>
+    </tbody>   
+</table>

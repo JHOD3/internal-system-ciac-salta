@@ -1,0 +1,35 @@
+<script src="[JS]print.js"></script>
+<link href="[CSS]impresion.css" type="text/css" media="print" />
+
+<script>
+	$(document).ready(function(){
+		$(".printer").bind("click",function(){
+			$("#detalle").printArea();
+		});
+	});
+</script>
+<style>
+h1, h2{
+	margin:0;
+	padding:0;
+	line-height:30px;	
+}
+
+</style>
+<div id="detalle" >
+[block: block_registros]
+	<img src="[IMG]logo.png" style="width:80%; margin:auto; text-align:center; display: inherit;" />
+    <h2 style="font-size:12px; font-family:Arial; text-align:center">Santiago del Estero 449 &shy; A4400BKI - Salta - Argentina<br />
+Tel: 4214738 – 4213251<br />
+administracion@ciacsalta.com.ar<br />
+Lunes a viernes de 7.30 a 21 hs</h2>
+    <p>M&eacute;dico:</p>
+	<p class="centro">[MEDICO]</p>
+    <p>Turno:</p>
+	<p class="centro">[FECHA] - [desde]</p><br />
+<!--	<p>Requisitos:</p>
+    <p>Nada de sexo 24 hs antes del estudio</p>
+-->[/block: block_registros]
+</div>
+
+<p><input type="button" class="printer" value="Imprimir"></p>

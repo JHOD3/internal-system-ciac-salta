@@ -1,0 +1,26 @@
+<script>
+	$(document).delegate(".reservar", "click", function(){
+		var inicio = $(this).data("inicio");
+		var fin = $(this).data("fin");
+		var fecha = $(this).data("fecha");
+		var id_medico = $("#medicos_id").val();
+		var id_paciente = $("#pacientes_id").val();
+
+	});
+</script>
+
+
+
+<div class="span6 contenedor" id="grilla_turnos" >
+    <div class="inner">
+        <h3>[FECHA]</h3>
+        [block: block_registros]
+            <div class="bloque">
+                [desde] - [hasta]: <span style="color:#[color]">[PACIENTE] ([ESTADO])<br />
+										[USUARIO]
+                                    </span>
+            </div>
+        [/block: block_registros]
+        [MJE]
+    </div>                    	
+</div>

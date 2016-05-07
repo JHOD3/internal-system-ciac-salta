@@ -1,0 +1,146 @@
+<script src="[JS]jquery.validate.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		$("a#modificar").click(function(){
+			$("#form_medicos").submit();
+		});
+		
+		$("a#cancelar").click(function(){
+			IniciarVentana("ventana_opciones", "cerrar");
+			$(ventana_opciones).dialog('destroy').remove();
+		});
+		
+		$("#form_medicos").validate({
+			rules: {
+				apellidos: {
+					required: true
+				},
+				nombres: {
+					required: true
+				},
+				tipos_documentos: {
+					required: true
+				},
+				nro_documento: {
+					required: true
+				},
+				telefonos: {
+					required: true
+				},
+				domicilio: {
+					required: true
+				},
+				email: {
+					required: true
+				}			},
+			messages: {
+				apellidos: {
+					required: "Ingrese Apellido/s"
+				},
+				nombres: {
+					required: "Ingrese Nombre/s"
+				},
+				tipos_documentos: {
+					required: "Seleccione Tipo de Documento"
+				},
+				nro_documento: {
+					required: "Ingrese Nro. Documento"
+				},
+				domicilio: {
+					required: "Ingrese Domicilio"
+				},
+				telefonos: {
+					required: "Ingrese Telefono"
+				},
+				email: {
+					required: "Ingrese Email"
+				}
+			},
+			submitHandler: function(){
+				var variables = $("#form_medicos").serialize();
+				$.ajax({  
+					type: "POST",   
+					url: "[URL]ajax/modificaciones.php",
+					data: {variables: variables, tabla: "[TABLA]"}, 
+					beforeSend: function() {
+						$("#mje").html("Enviando información...");
+					},
+					success: function(requestData){
+						var rta = requestData;
+						alert ("Registro Modificado Correctamente.");
+						IniciarVentana("ventana_opciones", "cerrar");
+						TableMedicos.fnDraw();
+						$(ventana_opciones).dialog('destroy').remove();
+						
+					},
+					complete: function(requestData, exito){},
+					error: function (){
+						alert ("Ocurri&oacute; un error. Vuelva a Intentarlo.");
+					}
+				});
+			}
+		});
+	});
+</script>
+[block: block_registros]		
+<div id="panel_alta">
+    <form name="form_medicos" id="form_medicos" class="jNice">					
+        <fieldset>
+        	<div class="bloque oculto">
+                <label>ID: </label>
+                <input type="text" class="text-long" name="id" value="[id_medicos]" />
+            </div>
+            <div class="bloque">
+				<label>Tipos Documentos: </label>
+				[DROP_TIPOS_DOCUMENTOS]
+			</div>
+            <div class="bloque">
+                <label>Nro. de Documento: </label>
+                <input type="text" class="text-long" name="nro_documento" value="[nro_documento]" />
+            </div>
+            <div class="bloque">
+                <label>Apellidos: </label>
+                <input type="text" class="text-long" name="apellidos" value="[apellidos]" />
+            </div>
+            <div class="bloque">
+                <label>Nombres: </label>
+                <input type="text" class="text-long" name="nombres" value="[nombres]" />
+            </div>
+            <div class="bloque">
+                <label>Telefonos: </label>
+                <input type="text" class="text-long" name="telefonos" value="[telefonos]" />
+            </div>
+            <div class="bloque">
+                <label>Domicilio: </label>
+                <input type="text" class="text-long" name="domicilio" value="[domicilio]" />
+            </div>
+            <div class="bloque">
+                <label>Email: </label>
+                <input type="text" class="text-long" name="email" value="[email]" />
+            </div>
+            <div class="bloque">
+                <label>Particular Consulta: </label>
+                <input type="text" class="text-long" name="particular_consulta" value="[particular_consulta]" />
+            </div>
+            <div class="bloque">
+                <label>Tipo Sector: </label>
+                [DROP_SECTORES]
+            </div>
+            <div class="bloque">
+                <label>Nro. Sector: </label>
+                <input type="text" class="text-long" name="nro_sector" value="[nro_sector]" />
+            </div>
+            <div class="bloque">
+                <label>Interno: </label>
+                <input type="text" class="text-long" name="interno" value="[interno]" />
+            </div>
+            <div class="bloque botones">
+                <a href="#" id="modificar" class="boton_gris">Modificar</a>
+                <a href="#" id="cancelar" class="boton_gris">Cancelar</a>
+            </div>
+        </fieldset>
+    </form>
+</div>
+[/block: block_registros]

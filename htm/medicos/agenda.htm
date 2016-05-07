@@ -1,0 +1,90 @@
+<style>
+.ui-datepicker {
+	width: 98%;
+	margin:auto;
+	background: transparent;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+	text-align: center;
+	padding: 10px;
+}
+
+
+
+.ui-state-default, .ui-widget-content .highlight .ui-state-default{
+	background:#008a47;
+	color:#fff	
+}
+</style>
+<script>
+	$(document).ready(function() {
+		
+		$( "#agenda" ).datepicker({
+			beforeShowDay: noExcursion,
+			onSelect: elegir,
+			changeMonth: true,
+			changeYear: true,
+		});
+	});
+	
+	
+
+	function elegir(date){
+		var id_medico = $("#id_medico").val();
+		var date = $(this).datepicker('getDate');
+		var id_especialidad = $("#medicos_especialidades").val();
+		
+		day  = date.getDate(),  
+        month = date.getMonth() + 1,              
+        year =  date.getFullYear();
+        var fecha = year + '-' + month + '-' + day;
+		
+     	var dia = date.getDay();
+		
+		$.ajax({  
+			type: "POST",   
+			url: "[URL]ajax/grilla_turnos.php",					
+			data: {dia: dia, fecha: fecha,  id_medico: id_medico, id_especialidad: id_especialidad}, 
+			beforeSend: function() {
+			},
+			success: function(requestData){
+				var rta = requestData;
+					$("#cont_grilla_turnos").html(rta).show();
+			},
+			complete: function(requestData, exito){
+			},
+			error: function (){
+				alert ("error1");
+			}
+		});
+		
+		Duplicados(id_medico, id_especialidad, fecha);
+	}
+	
+	function noExcursion(date){ 
+		
+		var day = date.getDay();
+		return [([DIAS_TRABAJO]),'dias_trabajo'];
+	};
+	
+	
+	
+	
+	
+</script>
+<style>
+	
+	.ui-datepicker-unselectable.dias_trabajo .ui-state-default{
+		background:#999;	
+	}
+	.dias_trabajo .ui-state-default{
+		background:#008a47;
+		color:#fff
+	}
+</style>
+<div class="inner">
+	<h3>[MEDICO]</h3>
+	<div id="agenda"></div>
+</div>
+

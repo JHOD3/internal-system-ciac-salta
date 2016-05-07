@@ -1,0 +1,39 @@
+<style>
+	.izq{
+		float:left;
+		padding:5px;
+		background:#FFC;
+				margin:2px 0;
+	}
+	
+	.der{
+		float:right;
+		padding:5px;
+		background:#CFF;
+		margin:2px 0;	
+	}
+	#panel_mensaje{
+		margin:5px 0;
+		height: 430px;
+		overflow-y:scroll;
+		padding:5px	
+	}
+	
+	.ui-dialog .ui-dialog-content{
+		padding:0	
+	}
+</style>
+
+<form id="mensajes">
+	<div class="oculto">
+        <input type="text" name="id_emisor" id="id_emisor" value="[ID_EMISOR]" />
+        <input type="text" name="id_receptor" id="id_receptor" value="[ID_RECEPTOR]" />
+    </div>
+    <div id="panel_mensaje">
+        [LISTADO_MENSAJES]
+    </div>
+    <div class="botones">
+    	<textarea id="mensaje_chat" name="mensaje_chat"></textarea>
+	    <a href="#" id="btn_enviar" class="btn">Enviar</a>	
+    </div>
+</form>

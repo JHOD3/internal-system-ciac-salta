@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="[CSS]/smoothness/jquery-ui.css">
+<script src="[JS]/jquery-1.9.1.js"></script>
+<script src="[JS]/jquery-ui-1.10.3.js"></script>
+<script>
+	$(function() {
+			
+		$(".btn_tabla").click(function() {
+			var tabla = $(this).data("nombre");
+			var nombre = $(this).find('span').html();
+
+			if (tabla != "mensajes"){
+				IniciarVentana("ventana_menu", "abrir", tabla);
+				
+				$.ajax({  
+					type: "POST",   
+					url: "[URL]ajax/admin_tabla.php",					
+					data: {tabla: tabla}, 
+					beforeSend: function() {
+						$(ventana_menu).html("");
+					},
+					success: function(requestData){
+						var rta = requestData;
+						$(ventana_menu).html(rta);
+					},
+					complete: function(requestData, exito){
+					},
+					error: function (){
+						alert ("error");
+					}
+				});
+				
+				$(ventana_menu).dialog('option', 'title', 'Administraci\u00f3n de '+nombre);
+				$(ventana_menu).dialog( "open" );
+				
+				$(ventana_menu).focus();
+			}else{
+				alert('M\u00f3dulo Inhabilitado.<br /> Temporalmente en Construcci\u00f3n.','ATENCI\u00d3N')	
+			}
+		});
+	});
+</script>
+<a href="#" class="btn btn_tabla" data-nombre="mensajes">
+	<img src="[IMG]btns/mensajes.png" width="60" />
+    <span>Mensajes</span>
+</a>
+
+<a href="#" class="btn btn_tabla" data-nombre="medicos">
+	<img src="[IMG]btns/medicos.png" width="60" />
+    <span>Internos</span>
+</a>

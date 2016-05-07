@@ -1,0 +1,27 @@
+<table id="t_turnos" class="display">
+    <thead> 
+        <tr class="encabezado">
+            <th>N&ordm;</th>
+            <th>Hora</th>
+            <th>Paciente</th>
+            <th>Obra Social</th>
+        </tr>
+    </thead> 
+    <tbody>
+        [block: block_registros]
+        <tr class="fila_turno">
+            <td>[I]</td>
+            <td>[desde]</td>
+            <td>[apellidos], [nombres]</td>
+            <td>[OBRA_SOCIAL]</td>
+        </tr>
+        [block: block_estudios_[id_turnos]]
+        <tr class="fila_estudio">
+            <td></td>
+            <td></td>
+            <td colspan="2"><small>[nombre_estudio]</small></td>
+        </tr>
+        [/block: block_estudios_[id_turnos]]
+        [/block: block_registros]
+    </tbody>   
+</table>

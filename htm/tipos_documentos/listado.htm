@@ -1,0 +1,80 @@
+
+			<script type="text/javascript">
+				var oTable;
+				var asInitVals = new Array();
+			
+				$(document).ready(function(){
+					oTable = $("#t_tipos_documentos").dataTable( {
+						//"bProcessing": true,
+						//"bServerSide": true,
+						//"sAjaxSource": "[AJAX_SRC]",
+						//"aaSorting": [[1, "desc" ],[0, "desc" ]], //argumentos posibles: asc o desc
+						"aaSorting": [[0, "desc" ]], //argumentos posibles: asc o desc
+						"bAutoWidth": false,
+						"sPaginationType": "full_numbers",
+						"aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
+						"oLanguage": {
+							"sProcessing": "Procesando...",
+							"sSearch": "Buscar en todas las Columnas:",
+							"sLengthMenu": "Mostrar _MENU_ registros por hoja",
+							"sZeroRecords": "No se encontraron registros cargados",
+							"sInfo": "Mostrando _START_ a _END_ registros de un total de _TOTAL_ registros",
+							"sInfoEmpty": "Mostrando 0 registro",
+							"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+							"oPaginate": {
+								"sFirst":    "Primero",
+								"sPrevious": "Anterior",
+								"sNext":     "Siguiente",
+								"sLast":     "&Uacute;ltimo"
+							},
+						}
+					});
+					$("tfoot input").keyup( function () {
+						//CAMBIE ESTO PARA QUE ME TOME LA BUSQUEDA CORRECTAMENTE CON COLUMNAS OCULTAS... AGREGUE A LAS COLUMNAS DEL PIE EL ATRIBUTO ID, ej. id="i-0"  http://datatables.net/forums/discussion/2864/x#Item_3
+						var id = $(this).attr("id").split("-")[1];
+						oTable.fnFilter( this.value, id);
+					});
+					$("tfoot input").each( function (i) {
+						asInitVals[i] = this.value;
+					});
+					$("tfoot input").focus( function () {
+						if ( this.className == "search_init" ){
+							this.className = "";
+							this.value = "";
+						}
+					});
+					$("tfoot input").blur( function (i) {
+						if ( this.value == "" ){
+							this.className = "search_init";
+							this.value = asInitVals[$("tfoot input").index(this)];
+						}
+					});
+				});
+			</script>		
+					
+			<table id="t_tipos_documentos" class="display ex_highlight_row">
+    			<thead>
+					<tr>
+						<th>ID</th>
+						<th>Nombre</th>
+						<th>Estado</th>
+					</tr>
+				</thead>
+				<tbody>
+					[block: block_registros]
+					<tr> 
+						<td class="id">[id_tipos_documentos]</td> 
+						<td>[nombre]</td> 
+						<td>[estado]</td>
+					</tr>
+					[/block: block_registros]
+				</tbody>
+				<tfoot>
+					<tr>
+						<th><input type="text" id="i-0" name="tb_id_tipos_documentos" value="Buscar ID" class="search_init" /></th>
+						<th><input type="text" id="i-1" name="tb_nombre" value="Buscar Nombre" class="search_init" /></th>
+						<th><input type="text" id="i-2" name="tb_estado" value="Buscar Estado" class="search_init" /></th>
+					</tr>
+				</tfoot> 
+			</table>
+			

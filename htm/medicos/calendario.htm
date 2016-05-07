@@ -1,0 +1,78 @@
+<style>
+.ui-datepicker {
+	width: 100%;
+	margin:auto
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+	text-align: center;
+	padding: 10px;
+}
+
+
+
+.ui-state-default, .ui-widget-content .highlight .ui-state-default{
+	background:#F00	
+}
+</style>
+<script>
+	$(document).ready(function() {
+		$( "#agenda" ).datepicker({
+			beforeShowDay: noExcursion,
+			onSelect: elegir,
+			changeMonth: true,
+				      changeYear: true
+		});
+	});
+	
+	
+
+	function elegir(date){
+		var id_medico = $("#medicos_id").val();
+		var date = $(this).datepicker('getDate');
+		
+		day  = date.getDate(),  
+        month = date.getMonth() + 1,              
+        year =  date.getFullYear();
+        var fecha = year + '-' + month + '-' + day;
+		
+     	var dia = date.getDay();
+		
+		$.ajax({  
+			type: "POST",   
+			url: "ajax/grilla_turnos.php",					
+			data: {dia: dia, fecha: fecha,  id_medico: id_medico}, 
+			beforeSend: function() {
+			},
+			success: function(requestData){
+				var rta = requestData;
+					$("#cont_grilla_turnos").html(rta).show();
+			},
+			complete: function(requestData, exito){
+			},
+			error: function (){
+				alert ("error");
+			}
+		});
+	}
+	
+	function noExcursion(date){ 
+		
+		var holydays = ['10/17/2013', '10/18/2013', '11/2/2013'];
+		
+		//FUNCTION HIGHLIGHT -> MARCO LOS FERIADOS
+		for (var i = 0; i < holydays.length; i++) {
+			if (new Date(holydays[i]).toString() == date.toString()) {
+				return [true, 'highlight'];
+			}
+		}
+		
+		
+		var day = date.getDay();
+		// aqui indicamos el numero correspondiente a los dias que ha de bloquearse (el 0 es Domingo, 1 Lunes, etc...) en el ejemplo bloqueo todos menos los lunes y jueves.
+		return [([DIAS_TRABAJO]), ''];
+	};
+</script>
+  
+<div id="agenda"></div>
+

@@ -1,0 +1,184 @@
+<script>
+	$(function() {
+		$( "#medicos" ).autocomplete({
+			source: "ajax/buscar.php",
+			focus: function( event, ui ) {
+				//$( "#medicos" ).val( ui.item.label );
+				return false;
+			},
+			select: function( event, ui ) {
+				$( "#medicos" ).val( ui.item.nombres + " " + ui.item.apellidos);
+				$( "#medicos_id" ).val( ui.item.id );
+				$( "#medicos_especialidad" ).html( ui.item.especialidad );
+				
+				var id_medico = $("#medicos_id").val();
+				
+				$.ajax({  
+					type: "POST",   
+					url: "[URL]ajax/generar_control.php",					
+					data: {tipo: "drop", tabla: "medicos_especialidades", valor: id_medico}, 
+					beforeSend: function() {
+					},
+					success: function(requestData){
+						var rta = requestData;
+						$("#contenedor_drop_especialidades").html(rta);
+						
+						var id_especialidad = $("#medicos_especialidades").val();
+						
+						if (id_especialidad != null){
+							CrearAgenda();	
+						}else{
+							$("#contenedor_agenda").html("");
+						}
+						
+					},
+					complete: function(requestData, exito){
+					},
+					error: function (){
+						alert ("error");
+					}
+				});
+		
+				return false;
+			}
+		})
+		.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+			return $( "<li>" )
+			.append( "<a>" + item.nombres + " " + item.apellidos + "<br><small>" + item.especialidad + "</small></a>" )
+			.appendTo( ul );
+    	};
+		
+		
+		
+		$("#btn_buscar_paciente").click(function(){
+			var dni = $("#dni").val(); 
+			//alert (dni);
+			$.ajax({  
+				type: "POST",   
+				url: "[URL]ajax/buscar_paciente.php",					
+				data: {dni: dni}, 
+				beforeSend: function() {
+				},
+				success: function(requestData){
+					var rta = requestData;
+					$("#contenedor_paciente").html(rta).fadeIn("slow");
+				},
+				complete: function(requestData, exito){
+				},
+				error: function (){
+					alert ("error");
+				}
+			});
+			
+		})
+		
+  });
+  
+	$(document).on("change", "#medicos_especialidades", function(){
+		CrearAgenda();
+	});
+  
+	function CrearAgenda(){
+		
+		var id_medico = $("#medicos_id").val();
+		var id_especialidad = $("#medicos_especialidades").val();
+		
+		$.ajax({  
+			type: "POST",   
+			url: "[URL]ajax/crear_agenda.php",					
+			data: {id_medico: id_medico, id_especialidad: id_especialidad}, 
+			beforeSend: function() {
+			},
+			success: function(requestData){
+				var rta = requestData;
+				$("#contenedor_agenda").html(rta).fadeIn("slow");
+				
+			},
+			complete: function(requestData, exito){
+			},
+			error: function (){
+				alert ("error");
+			}
+		});
+		
+		return false;
+	};
+  
+	
+</script>
+<style>
+.ui-autocomplete {
+	max-height: 200px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+}
+/* IE 6 doesn't support max-height
+* we use height instead, but this forces the menu to always be this tall
+*/
+* html .ui-autocomplete {
+	height: 100px;
+}
+
+.panel_medicos{
+	width:70%;
+	float:left	
+}
+
+.panel_paciente{
+	width:30%;
+	float:left	
+}
+</style>
+<section id="panel_menu" class="bg_gris">
+	[MENU_TABLAS]
+</section>
+<section id="panel_busqueda" class="bg_gris_oscuro">
+    <div class="container">
+    	<div class="row">
+        	<div class="span6">
+            	<div class="row">
+                	<div class="span3">
+                        <label for="medicos">M&eacute;dicos: </label>
+                        <input id="medicos">
+                        <input type="hidden" id="medicos_id">
+                    </div>
+                    <div class="span3">
+                        <label for="especialidad">Especialidad:</label>
+                        <div id="contenedor_drop_especialidades"></div>
+                    </div>
+              	</div>
+            </div>
+            <div class="span6">
+                <label for="dni">Paciente: </label>
+                <input id="dni">
+                <a href="#" id="btn_buscar_paciente" class="btn">Buscar</a>
+                <a href="#" id="btn_alta_paciente" class="btn btn_opciones" data-titulo='Alta' data-tipo='alta' data-tabla="pacientes">Nuevo</a><br />
+            </div>
+            
+        </div>
+   	</div>
+</section>
+<section id="panel_cuerpo" class="bg_negro">
+    <div class="container">
+    	<div class="row">
+            <div class="span6">
+                <div class="row">
+                	<div id="contenedor_paciente" class="span6 contenedor">
+                    </div>
+                </div>
+                <div class="row">
+                	<div id="contenedor_agenda" class="span6">
+                    </div>
+                </div>
+            </div>
+            <div class="span6">
+                <div class="row">
+                	<div id="grilla_turnos" class="span6 contenedor">
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

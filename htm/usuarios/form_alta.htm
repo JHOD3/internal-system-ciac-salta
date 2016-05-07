@@ -1,0 +1,102 @@
+
+		<script type="text/javascript">
+		$(document).ready(function(){
+			
+			$("a#cargar").click(function(){
+				$("#form_usuarios").submit();
+			});
+			
+			$("a#cancelar").click(function(){
+				location.href = "";
+			});
+			
+			$("#form_usuarios").validate({
+				rules: {
+					usuario: {
+						required: true
+					},
+					nombres_apellidos: {
+						required: true
+					},
+					fecha_alta: {
+						required: true
+					},
+					fecha_baja: {
+						required: true
+					},
+					estado: {
+						required: true
+					}
+				},
+				messages: {
+					usuario: {
+						required: " "
+					},
+					nombres_apellidos: {
+						required: " "
+					},
+					fecha_alta: {
+						required: " "
+					},
+					fecha_baja: {
+						required: " "
+					},
+					estado: {
+						required: " "
+					}
+				},
+				submitHandler: function(){
+					var variables = $("#form_usuarios").serialize();
+					$.ajax({  
+						type: "POST",   
+						url: "ajax/altas.php",
+						data: {variables: variables, tabla: "[TABLA]"}, 
+						beforeSend: function() {
+							$("#mje").html("Enviando información...");
+						},
+						success: function(requestData){
+							var rta = requestData;
+							alert ("Registro Cargado Correctamente.");
+							alert (rta);
+							location.href = "";
+						},
+						complete: function(requestData, exito){},
+						error: function (){
+							alert ("Ocurri&oacute; un error. Vuelva a Intentarlo.");
+						}
+					});
+				}
+			});
+		});
+		</script>
+		
+		<div id="panel_alta">
+			<form name="form_usuarios" id="form_usuarios" class="jNice">					
+				<fieldset>
+							<div class="bloque">
+								<label>Usuario: </label>
+								<input type="text" class="text-long" name="usuario" />
+							</div>
+							<div class="bloque">
+								<label>Nombres Apellidos: </label>
+								<input type="text" class="text-long" name="nombres_apellidos" />
+							</div>
+							<div class="bloque">
+								<label>Fecha Alta: </label>
+								<input type="text" class="datepicker text-long" name="fecha_alta" />
+							</div>
+							<div class="bloque">
+								<label>Fecha Baja: </label>
+								<input type="text" class="datepicker text-long" name="fecha_baja" />
+							</div>
+							<div class="bloque">
+								<label>Estado: </label>
+								<input type="text" class="text-long" name="estado" />
+							</div>
+					<div class="bloque botones">
+						<a href="#" id="cargar" class="btn">Cargar</a>
+						<a href="#" id="cancelar" class="btn">Cancelar</a>
+					</div>
+				</fieldset>
+			</form>
+		</div>

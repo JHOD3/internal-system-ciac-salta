@@ -1,0 +1,59 @@
+<script>
+$(document).on("click", "ul li a", function(e){
+	e.preventDefault();
+	var id_receptor = $(this).data("id_receptor");
+	var nombre = $(this).html();
+
+	IniciarVentana("ventana_mensaje", "abrir");
+	
+	$.ajax({  
+		type: "POST",   
+		url: "[URL]ajax/admin_mensajes.php",					
+		data: {id_receptor: id_receptor, tipo: "panel_mensajes"}, 
+		beforeSend: function() {
+			$(ventana_mensaje).html("");
+		},
+		success: function(requestData){
+			var rta = requestData;
+			$(ventana_mensaje).html(rta);
+		},
+		complete: function(requestData, exito){
+		},
+		error: function (){
+			alert ("error");
+		}
+	});
+	
+	$(ventana_mensaje).dialog('option', 'title', 'Mensajes con ' + nombre);
+	$(ventana_mensaje).dialog( "open" );
+	$(ventana_mensaje).focus();
+
+})
+
+window.setInterval(function(){
+	if ($('#mensajes').length){
+		var variables = $("#mensajes").serialize();
+		
+		$.ajax({  
+			type: "POST",   
+			url: "[URL]ajax/generar_control.php",
+			data: {variables: variables, tipo:'listado', tabla: "[TABLA]"}, 
+			beforeSend: function() {
+				
+			},
+			success: function(requestData){
+				var rta = requestData;
+				$('#panel_mensaje').html(rta);
+			},
+			complete: function(requestData, exito){},
+			error: function (){
+				alert ("Ocurri&oacute; un error. Vuelva a Intentarlo.");
+			}
+		});
+	}
+},3000);
+
+</script>
+<div id="contenedor_ventana">
+
+</div>

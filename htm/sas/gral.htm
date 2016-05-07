@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:fb="http://www.facebook.com/2008/fbml"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>[TITULO_SITIO]</title>
+    
+     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+     
+    <link href="[CSS]smoothness/jquery-ui-1.10.1.custom.css" rel="stylesheet" media="screen" />
+    <link href="[CSS]reset.css" rel="stylesheet" media="screen" />
+    <link href="[CSS]style.css" rel="stylesheet" media="screen" />
+    
+    <link href="[CSS]bootstrap.css" rel="stylesheet">
+    <link href="[CSS]bootstrap-responsive.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="[CSS]tables.css" />
+    <!-- CSS -->
+     <!--<link href="files/css/transdmin.css" rel="stylesheet" type="text/css" media="screen" />
+     <link href="files/css/jquery-impromptu.css" rel="stylesheet" type="text/css" media="screen" />
+     <link href="files/css/jquery.pnotify.default.icons.css" rel="stylesheet" type="text/css" media="screen" />
+     <link href="files/css/jquery.pnotify.default.css" rel="stylesheet" type="text/css" media="screen" />
+     
+     <link href="files/css/transdmin.css" rel="stylesheet" type="text/css" media="print" /> -->
+
+    <!--[if IE 6]><link rel="stylesheet" type="text/css" media="screen" href="files/css/ie6.css" /><![endif]-->
+    <!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="files/css/ie7.css" /><![endif]-->
+    
+    <!-- JavaScripts-->
+    
+    <script src="[JS]jquery-1.10.2.js"></script>
+    <script src="[JS]jquery-ui-1.10.1.custom.min.js"></script>
+    <script src="[JS]jquery.ui.datepicker-es.js"></script>
+	
+    
+    <script src="[JS]jquery-impromptu.3.2.js" ></script>
+    <script src="[JS]simpla.jquery.configuration.js" ></script>
+    
+    <script src="[JS]bootstrap-transition.js"></script>
+    <script src="[JS]bootstrap-alert.js"></script>
+    <script src="[JS]bootstrap-modal.js"></script>
+    <script src="[JS]bootstrap-dropdown.js"></script>
+    <script src="[JS]bootstrap-scrollspy.js"></script>
+    <script src="[JS]bootstrap-tab.js"></script>
+    <script src="[JS]bootstrap-tooltip.js"></script>
+    <script src="[JS]bootstrap-popover.js"></script>
+    <script src="[JS]bootstrap-button.js"></script>
+    <script src="[JS]bootstrap-collapse.js"></script>
+    <script src="[JS]bootstrap-carousel.js"></script>
+    <script src="[JS]bootstrap-typeahead.js"></script>
+    <script src="[JS]script_gral.js"></script>
+    <script src="[JS]mi_script_sas.js"></script>
+    <script src="[JS]jquery.validate.js"></script>
+    
+    <script src="[JS]jquery.maskedinput.min.js"></script>
+    
+
+   <!-- <script src="files/js/jquery.pnotify.js"></script>
+
+	
+    <link rel="stylesheet" href="[CSS]supersized.core.css" type="text/css" media="screen" />
+	<script type="text/javascript" src="[JS]supersized.core.3.2.1.js"></script>
+    
+    
+	<style type="text/css" title="currentStyle">
+        @import "files/css/demo_page.css"; 
+        @import "files/css/demo_table.css";
+    </style>-->
+    <script type="text/javascript">
+        
+        /*jQuery(function($){
+            
+            $.supersized({
+                slides  :  	[ {image : '[IMG]bg.jpg', title : 'Image Credit: Maria Kazvan'} ]
+            });
+
+		});*/
+		
+	
+		$(document).ready(function(){
+			
+			$(".eliminar_elto").each(function(){
+				$(this).remove();	
+			})
+				
+			/*//DESACTIVA LA PRIMERA OPCION DE LOS DROPS
+			$('select').livequery(function(){
+				  $(this).find("option[value='']").attr("disabled", "disabled").siblings().removeAttr("disabled");
+			});*/
+			
+			
+			// ************************** DATEPICKER GRAL DE LA PAG ****************************
+			function noExcursion(date){ 
+				var day = date.getDay();
+				// aqui indicamos el numero correspondiente a los dias que ha de bloquearse (el 0 es Domingo, 1 Lunes, etc...) en el ejemplo bloqueo todos menos los lunes y jueves.
+				return [(day != 0 && day != 2 && day != 3 && day != 5 && day != 6), ''];
+			};
+			
+			function showStartDate(dateText, inst){
+				alert (dateText);	
+			}
+			
+			function Validar(){
+				//VALIDO EL ELEMENTO FECHA
+				$(this).valid()
+			}
+			
+			
+	
+			$(function(){
+				// Datepicker
+				$(".datepicker").datepicker({
+					changeMonth: true,
+					changeYear: true,
+					dateFormat: 'dd/mm/yy',
+					//PARA EXCLUIR DIAS Y PARA COMENZAR EN UN DIA DETERMINADO
+					//beforeShowDay: noExcursion,
+					onSelect : Validar
+					
+				});
+				
+				$.datepicker.regional['es'] = {
+					closeText: 'Cerrar',
+					prevText: '&#x3c;Ant',
+					nextText: 'Sig&#x3e;',
+					currentText: 'Hoy',
+					monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					'Jul','Ago','Sep','Oct','Nov','Dic'],
+					dayNames: ['Domingo','Lunes','Martes','Mi&eacute;rcoles','Jueves','Viernes','S&aacute;bado'],
+					dayNamesShort: ['Dom','Lun','Mar','Mi&eacute;','Juv','Vie','S&aacute;b'],
+					dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','S&aacute;'],
+					weekHeader: 'Sm',
+					dateFormat: 'dd/mm/yy',
+					firstDay: 1,
+					isRTL: false,
+					showMonthAfterYear: false,
+					yearSuffix: ''
+				};
+				
+				$.datepicker.setDefaults($.datepicker.regional['es']);
+			});
+			// ******************************************************************************
+			
+			
+			$("#seleccionar_todo").click( function(){
+			   if( $(this).is(':checked') ){
+				 $(".seleccion").each (function(){
+					 $(this).prop('checked',true);
+				 });
+				 
+				 $("#btn_eliminar_seleccion").fadeIn();
+			   }else{
+				 $(".seleccion").each (function(){
+					 $(this).prop('checked',false);
+				 }); 
+				
+				 $("#btn_eliminar_seleccion").fadeOut(); 
+			   }
+			});
+			
+			/*$(".seleccion").click( function(){
+				if( $(this).is(':checked') ){
+					 $("#btn_eliminar_seleccion").fadeIn();
+				}else{
+					//VERIFICO SI HAY UNA OPCION TILDADA
+					var band = 0;
+					$(".seleccion").each (function(){
+						if( $(this).is(':checked') ){
+							band = 1;
+						}
+					});
+					
+					if (band == 0)  
+						$("#btn_eliminar_seleccion").fadeOut(); 
+				}
+				
+				//VERIFICO CUANTAS OPCIONES ESTAN TILDADAS
+				var cant_checked = 0;
+				$(".seleccion").each (function(){
+					if( $(this).is(':checked') ){
+						cant_checked++;
+					}
+				});
+				
+				//CANTIDAD TOTAL DE OPCIONES
+				var cant_opciones = $(".seleccion").size();
+				
+				//VERIFICO SI LA CANTIDAD TOTAL DE OPCIONES ES IGUAL A LAS CHECKEADAS PARA TILDAR O DESTILDAR EL CHECKBOX DEL ENCABEZADO
+				if (cant_opciones == cant_checked){
+					$("#seleccionar_todo").prop('checked',true);
+				}else{
+					$("#seleccionar_todo").prop('checked',false);
+				}
+				
+				
+	
+	
+			});*/
+		});
+
+		function imprimir(){
+		  if (parseInt(navigator.appVersion)>4){
+			document.URL = "";  	
+			window.print();
+		  }
+		}
+		
+		$(function() {
+			$( "input[type=submit], input[type=button]" ).button();
+			$( "a#btn_alta" ).button({icons: {primary:'ui-icon-plusthick',secondary:''}});
+			$( "a.button" ).button({ text: false });
+			$( "a#btn_eliminar_seleccion" ).button({icons: {primary:'ui-icon-cancel',secondary:''}});
+			$( "a#btn_reportes_gestiones" ).button({icons: {primary:'ui-icon-bullet',secondary:''}});
+			$( "a.btn_conf").button({icons: {primary:'ui-icon-bullet',secondary:''}});
+			$( "a.btn_imprimir").button({icons: {primary:'ui-icon-print',secondary:''}});
+			
+			$( "a.btn_cargar").button({icons: {primary:'ui-icon-check',secondary:''}});
+			
+			
+		 });
+		
+			
+  
+			
+		
+		
+		
+		
+		
+		
+		
+	</script>
+    
+</head>
+
+<body>
+	<div id="mensaje_gral" class="oculto">
+    	<img src="[IMG]loader.gif"><br>
+        Cargando...
+  	</div>
+    <div class="row oculto">
+        <h1>[TITULO_SITIO]</h1>
+    </div>
+   [CUERPO]
+</body>
+</html>

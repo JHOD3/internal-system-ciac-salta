@@ -1,0 +1,47 @@
+<style>
+h2{
+	padding:5px;
+	text-align:center;
+	font-size:1.2em;
+	background:#eee;	
+}
+.col_25{
+	width:25%;
+	display:inline-block;
+	vertical-align:top
+}
+
+.col_75{
+	width:74%;
+	display:inline-block;
+	vertical-align:top
+}
+
+#listado_medicos ul li{
+	width:33%;
+	display:inline-block	
+}
+
+</style>
+<div id="listado_administradores" class="col_25">
+    <h2>Administrador</h2>
+    <ul>
+        [block: block_administradores]
+        <li><a href="#" data-id_receptor="A-[id_administradores]">[apellidos], [nombres]</a></li>
+        [/block: block_administradores]
+    </ul>
+    <h2>Secretarias</h2>
+    <ul>
+        [block: block_usuarios]
+        <li><a href="#" data-id_receptor="U-[id_usuarios]">[apellidos], [nombres]</a></li>
+        [/block: block_usuarios]
+    </ul>
+</div>
+<div id="listado_medicos" class="col_75">
+    <h2>M&eacute;dicos</h2>
+    <ul>
+        [block: block_medicos]
+        <li><a href="#" data-id_receptor="M-[id_medicos]">[apellidos], [nombres]</a></li>
+        [/block: block_medicos]
+    </ul>
+</div>

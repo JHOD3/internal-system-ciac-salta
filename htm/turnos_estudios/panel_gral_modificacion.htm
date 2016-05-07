@@ -1,0 +1,23 @@
+[SELECCION_ESTUDIO]
+<div class="botones">
+    <a href="#" class="btn" id="btn_modificar_estudio">Aceptar</a>
+    <a href="#" class="btn salir">Cancelar</a>
+</div>
+
+<style>
+	.total{
+		width:49%;
+		display:inline-block	
+	}
+	
+	.valor{
+		font-size:200%;
+		color:#007fa6	
+	}
+</style>
+<script>
+	$("a.salir").click(function(){
+		IniciarVentana("ventana_estudios_modificacion", "cerrar");
+		$(ventana_estudios_modificacion).dialog('destroy').remove();
+	});
+</script>

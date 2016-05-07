@@ -1,0 +1,82 @@
+
+		<script type="text/javascript">
+		$(document).ready(function(){
+			
+			$("a#cargar").click(function(){
+				$("#form_turnos_estados").submit();
+			});
+			
+			$("a#cancelar").click(function(){
+				location.href = "";
+			});
+			
+			$("#form_turnos_estados").validate({
+				rules: {
+					nombre: {
+						required: true
+					},
+					color: {
+						required: true
+					},
+					estado: {
+						required: true
+					}
+				},
+				messages: {
+					nombre: {
+						required: " "
+					},
+					color: {
+						required: " "
+					},
+					estado: {
+						required: " "
+					}
+				},
+				submitHandler: function(){
+					var variables = $("#form_turnos_estados").serialize();
+					$.ajax({  
+						type: "POST",   
+						url: "ajax/altas.php",
+						data: {variables: variables, tabla: "[SECCION]"}, 
+						beforeSend: function() {
+							$("#mje").html("Enviando información...");
+						},
+						success: function(requestData){
+							var rta = requestData;
+							alert ("Registro Cargado Correctamente.");
+							alert (rta);
+							location.href = "";
+						},
+						complete: function(requestData, exito){},
+						error: function (){
+							alert ("Ocurri&oacute; un error. Vuelva a Intentarlo.");
+						}
+					});
+				}
+			});
+		});
+		</script>
+		
+		<div id="panel_alta">
+			<form name="form_turnos_estados" id="form_turnos_estados" class="jNice">					
+				<fieldset>
+					<div class="bloque">
+						<label>Nombre: </label>
+						<input type="text" class="text-long" name="nombre" value="[nombre]" />
+					</div>
+					<div class="bloque">
+						<label>Color: </label>
+						<input type="text" class="text-long" name="color" value="[color]" />
+					</div>
+					<div class="bloque">
+						<label>Estado: </label>
+						<input type="text" class="text-long" name="estado" value="[estado]" />
+					</div>
+					<div class="bloque botones">
+						<a href="#" id="cargar" class="boton_gris">Cargar</a>
+						<a href="#" id="cancelar" class="boton_gris">Cancelar</a>
+					</div>
+				</fieldset>
+			</form>
+		</div>
