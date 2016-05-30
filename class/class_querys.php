@@ -148,6 +148,12 @@ class Querys implements iQuerys{
 		//echo $query;
 		return $query;
 	}
+
+	function Inhabilitar($tabla, $id){
+		$query = "UPDATE ".$tabla." SET estado = 0 WHERE id_".$tabla." = ".$id;
+		//echo $query;
+		return $query;
+	}
 	
 	function BajaCobrosxMedicos($id_turno){
 		$query = 'DELETE FROM cobros WHERE id_turnos = '.$id_turno;

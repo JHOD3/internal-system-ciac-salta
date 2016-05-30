@@ -867,6 +867,9 @@
 						$row[2] = utf8_encode($aRow["apellidos"]);
 						$row[3] = utf8_encode($aRow["telefonos"]);
 						$row[4] = $editar.''.$especialidades.''.$obras_sociales_planes.''.$estudios;
+                        if ($_SESSION['ID_USUARIO'] === '0') {
+                            $row[4].= ''.$eliminar;
+                        }
 						
 					break;	
 					case "especialidades":
@@ -875,6 +878,9 @@
 						$row[0] = $aRow["id_especialidades"];
 						$row[1] = utf8_encode($aRow["nombre"]);
 						$row[2] = $editar;
+                        if ($_SESSION['ID_USUARIO'] === '0') {
+                            $row[2].= ''.$eliminar;
+                        }
 						
 					break;
 					case "estudios":
@@ -882,6 +888,9 @@
 						$row[1] = utf8_encode($aRow["nombre"]);
 						$row[2] = utf8_encode($aRow["importe"]);
 						$row[3] = $editar;
+                        if ($_SESSION['ID_USUARIO'] === '0') {
+                            $row[3].= ''.$eliminar;
+                        }
 						
 					break;	
 					case "obras_sociales":

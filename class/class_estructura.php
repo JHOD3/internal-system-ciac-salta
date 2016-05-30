@@ -680,6 +680,21 @@ class Estructura{
 			
 		return $rta;
 	}
+
+	function Inhabilitar($id = ""){
+		
+		if ($id == ""){
+			$id = $this->id;	
+		}
+		
+		$query_string = $this->querys->Inhabilitar($this->nombre_tabla, $id);
+		if ($this->db->consulta($query_string))
+			$rta = "Inhabilitaci&oacute;n Exitosa";
+		else
+			$rta = "No se pudo inhabilitar el registro. Intente de nuevo";
+			
+		return $rta;
+	}
 	
 	function Modificacion($datos, $columnas, $tipo = ""){
 		$query_string = $this->querys->Modificacion($this->nombre_tabla, $datos, $columnas, $tipo);

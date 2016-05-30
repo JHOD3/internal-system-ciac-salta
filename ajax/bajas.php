@@ -10,8 +10,15 @@ requerir_class($tabla);
 $clase = ucwords($tabla);
 $obj = new $clase($id);
 
-$rta = $obj->Baja();
+switch ($tabla) {
+    case "especialidades":
+    case "estudios":
+    case "medicos":
+        $rta = $obj->Inhabilitar();
+        break;
+    default:
+        $rta = $obj->Baja();
+        break;
+}
 
 echo $rta;
-
-?>
