@@ -700,8 +700,9 @@ $(document).on("click",".btn_eliminar",function(){
 								TableMedicosObrasSociales.fnDraw();
 							break;		
 						};
-						//alert(requestData);
-						
+						alert(requestData);
+                        console.log(id);
+                        $('.btn_eliminar[data-id="' + id + '"]').parent().parent().find('td').attr('style', 'color:#A66;font-weight:bold;');
 					},
 					complete: function(requestData, exito){},
 					error: function (){
