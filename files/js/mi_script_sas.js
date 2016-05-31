@@ -702,7 +702,7 @@ $(document).on("click",".btn_eliminar",function(){
 						};
 						alert(requestData);
                         console.log(id);
-                        $('.btn_eliminar[data-id="' + id + '"]').parent().parent().find('td').attr('style', 'color:#A66;font-weight:bold;');
+                        $('.btn_eliminar[data-id="' + id + '"]').parent().parent().find('td').attr('style', 'color:#900;font-weight:bold;text-decoration:line-through;');
                         $('.btn_eliminar[data-id="' + id + '"]').parent().parent().find('td a').remove();
 					},
 					complete: function(requestData, exito){},
