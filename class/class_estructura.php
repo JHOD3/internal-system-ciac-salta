@@ -124,6 +124,9 @@ class Estructura{
 			case "medicos_especialidades":
 				$query_string = $this->querys->DropMedicosEspecialidades($id_padre);
 			break;
+			case "especialidades":
+				$query_string = $this->querys->Registros($this->nombre_tabla, "estado", "1", $ordenar, "","",$orden);
+			break;
 			default:
 				if($id_padre != "")
 					$query_string = $this->querys->Registros($this->nombre_tabla, "id_".$this->tabla_padre, $id_padre, $ordenar, "","",$orden);

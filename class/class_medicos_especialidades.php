@@ -34,7 +34,7 @@ class Medicos_especialidades extends Estructura implements iMedicos_especialidad
 		
 		CargarVariablesGrales($htm, $tipo = "");
 		
-		return ($htm->Muestra());
+		return utf8_encode($htm->Muestra());
 	}
 	
 	function TablaAdmin($id_padre = ""){
