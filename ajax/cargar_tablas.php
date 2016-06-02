@@ -910,7 +910,7 @@
 						
 						$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
 						
-						$row[0] = utf8_encode($aRow["id_medicos_especialidades"]);
+						$row[0] = $aRow["id_medicos_especialidades"];
 						$row[1] = utf8_encode($especialidad);
 						$row[2] = utf8_encode($aRow["duracion_turno"]);
 						//$row[3] = $mostrar." ".$editar." ".$horarios;
@@ -919,8 +919,8 @@
 					
 					case "medicos_estudios":
 					
-						$row[0] = utf8_encode($aRow["id_medicos_estudios"]);
-						$row[1] = $estudio;
+						$row[0] = $aRow["id_medicos_estudios"];
+						$row[1] = utf8_encode($estudio);
 						$row[2] = '<input type="text" class="particular" id="'.$aRow["id_medicos_estudios"].'" value="'.$aRow["particular"].'" />';
 						//$row[2] = $aRow["particular"];
 						//$row[2] = $mostrar." ".$editar;
@@ -936,14 +936,14 @@
 					break;
 					case 'obras_sociales_planes':
 						$row[0] = $aRow["id_obras_sociales_planes"];
-						$row[1] = $aRow["nombre"];
+						$row[1] = utf8_encode($aRow["nombre"]);
 						$row[2] = $editar;
 					break;
 					case "obras_sociales_estudios":
 					
 						$row[0] = utf8_encode($aRow["nomenclador"]);
-						$row[1] = $estudio;
-						$row[2] = $aRow["importe"];
+						$row[1] = utf8_encode($estudio);
+						$row[2] = utf8_encode($aRow["importe"]);
 						//$row[3] = $mostrar." ".$editar;
 						$row[3] = $editar;
 					break;
@@ -951,8 +951,8 @@
 					case "medicos_horarios":
 						$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
 						
-						$row[0] = utf8_encode($aRow["id_medicos_horarios"]);
-						$row[1] = $dia_semana;
+						$row[0] = $aRow["id_medicos_horarios"];
+						$row[1] = utf8_encode($dia_semana);
 						$row[2] = utf8_encode($aRow["desde"]);
 						$row[3] = utf8_encode($aRow["hasta"]);
 						$row[4] = $editar.$eliminar;
@@ -971,17 +971,17 @@
 						$row[0] = $aRow["fecha"];
 						$row[1] = $aRow["hora"];
 						$row[2] = utf8_encode($cobro_concepto);
-						$row[3] = $aRow["importe"];
+						$row[3] = utf8_encode($aRow["importe"]);
 						//$row[4] = $mostrar.$reintegro;
-						$row[4] = $reintegro;
+						$row[4] = utf8_encode($reintegro);
 					break;
 					case 'turnos':
 						$row[0] = $aRow["id_turnos"];
-						$row[1] = $medico;
-						$row[2] = $fecha;
-						$row[3] = $aRow["desde"];
-						$row[4] = $aRow["hasta"];
-						$row[5] = $aRow["estado"];
+						$row[1] = utf8_encode($medico);
+						$row[2] = utf8_encode($fecha);
+						$row[3] = utf8_encode($aRow["desde"]);
+						$row[4] = utf8_encode($aRow["hasta"]);
+						$row[5] = utf8_encode($aRow["estado"]);
 					break;
 					
 				}
