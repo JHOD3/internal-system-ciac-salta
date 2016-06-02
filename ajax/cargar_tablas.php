@@ -911,7 +911,7 @@
 						$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
 						
 						$row[0] = utf8_encode($aRow["id_medicos_especialidades"]);
-						$row[1] = $especialidad;
+						$row[1] = utf8_encode($especialidad);
 						$row[2] = utf8_encode($aRow["duracion_turno"]);
 						//$row[3] = $mostrar." ".$editar." ".$horarios;
 						$row[3] = $horarios.$eliminar;
@@ -990,6 +990,6 @@
 	}else{
 		$output['aaData'] = "";
 	}
-	
+
 	echo json_encode( $output );
 ?>
