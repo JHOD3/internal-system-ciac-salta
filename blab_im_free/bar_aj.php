@@ -11,7 +11,10 @@ session_start();
 if (strlen($_SESSION['NOMBRES']) > 1 and strlen($_SESSION['APELLIDOS']) > 1) {
     $_SESSION['bmf_name'] = utf8_encode($_SESSION['NOMBRES'].', '.$_SESSION['APELLIDOS']);
 } else {
-    $_SESSION['bmf_name'] = "DOC. ".utf8_encode($_SESSION['USUARIO']);
+    $_SESSION['bmf_name'] = utf8_encode($_SESSION['USUARIO']);
+}
+if ($_SESSION['TIPO_USR'] == 'M') {
+    $_SESSION['bmf_name'] = 'DOC. '.$_SESSION['bmf_name'];
 }
 
 if(isset($_SESSION['bmf_cche']) && isset($_SESSION['bmf_updt']) && isset($_SESSION['bmf_last']) && (time()-$_SESSION['bmf_last'])<$_SESSION['bmf_updt']){
