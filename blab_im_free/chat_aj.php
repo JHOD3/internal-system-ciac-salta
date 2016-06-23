@@ -13,6 +13,17 @@ if(isset($_POST['u'])){$u=(int)$_POST['u'];}else{$u=0;} if($u<1){die();}
 if(isset($_POST['l'])){$l=(int)$_POST['l'];}else{$l=0;}
 if(isset($_POST['c'])){$c=(int)$_POST['c'];}else{$c=0;}
 
+if (strlen($_SESSION['NOMBRES']) > 1 and strlen($_SESSION['APELLIDOS']) > 1) {
+    $_SESSION['bmf_name'] = utf8_encode($_SESSION['NOMBRES'].', '.$_SESSION['APELLIDOS']);
+} else {
+    $_SESSION['bmf_name'] = utf8_encode($_SESSION['USUARIO']);
+}
+if ($_SESSION['TIPO_USR'] == 'M') {
+    $_SESSION['bmf_name'] = 'DOC. '.$_SESSION['bmf_name'];
+} elseif ($_SESSION['TIPO_USR'] == 'U') {
+    $_SESSION['bmf_name'] = 'Op. '.$_SESSION['bmf_name'];
+}
+
 $bim_id=(int)$_SESSION['bmf_id']; $lid=0;
 $bim_name=neutral_escape($_SESSION['bmf_name'],64,'str');
 $keep_time=$settings['chat_refresh']*$settings['main_ofactor'];
