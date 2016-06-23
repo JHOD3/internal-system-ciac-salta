@@ -30,5 +30,5 @@ document.writeln('<div style="<?php print $bar_style;?>" id="blabimbar"></div>')
 <?php if(!isset($_COOKIE['bmf_disable'])){?>
 document.writeln('<script type="text/javascript" src="'+bim_path+'incl/bar.js"></script>');
 <?php }else{?>
-document.getElementById('blabimbar').innerHTML='<input type="button" style="font-weight:bold;background-color:#fff;color:#000;border-width:0px" value="&nbsp;<?php print $bim_disable;?>&nbsp;" onclick="window.location=enable_url" />';
+document.getElementById('blabimbar').innerHTML='<input type="button" class="btn" style="font-weight:bold;background-color:#fff;color:#000;border-width:0px" value="&nbsp;<?php print $bim_disable;?>&nbsp;" onclick="window.location=enable_url" />';
 <?php }?>

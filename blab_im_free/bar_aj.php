@@ -3,7 +3,7 @@
 require_once 'config.php';
 
 if(isset($_COOKIE['bmf_disable'])){
-print '<input type="button" style="font-weight:bold;background-color:#fff;color:#000;border-width:0px" value="&nbsp;'.$bim_disable.'&nbsp;" onclick="window.location=enable_url" />';
+print '<input type="button" class="btn" style="font-weight:bold;background-color:#fff;color:#000;border-width:0px" value="&nbsp;'.$bim_disable.'&nbsp;" onclick="window.location=enable_url" />';
 die();}
 
 session_start();
@@ -117,5 +117,3 @@ $elements=str_replace('{SKIN_DIR}',$site_to_bim.$skin_dir,$elements);
 $_SESSION['bmf_cche']=$elements;
 $_SESSION['bmf_chat']=0;
 print $elements;
-
-?> 
