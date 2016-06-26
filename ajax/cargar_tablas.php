@@ -3,7 +3,17 @@
 	require_once("../engine/config.php");
 	requerir_class("tpl","querys","mysql","estructura");
 
-	requerir_class('medicos', 'obras_sociales', 'obras_sociales_planes', 'especialidades', 'estudios', 'dias_semana','cobros_conceptos','estructura');
+	requerir_class(
+        'medicos',
+        'obras_sociales',
+        'obras_sociales_planes',
+        'especialidades',
+        'estudios',
+        'dias_semana',
+        'cobros_conceptos',
+        'estructura',
+        'sectores'
+    );
 
 	$tabla = $_GET["tabla"];
 
@@ -23,10 +33,10 @@
 	 */
 	switch ($tabla){
 		case "pacientes":
-			$aColumns = array('id_pacientes', 'nro_documento', 'nombres', 'apellidos',  'id_obras_sociales', 'id_obras_sociales_planes');
+			$aColumns = array('id_pacientes', 'email', 'nombres', 'apellidos',  'id_obras_sociales', 'id_obras_sociales_planes');
 		break;	
 		case "medicos":
-			$aColumns = array('id_medicos','nombres', 'apellidos', 'telefonos');
+			$aColumns = array('id_medicos','domicilio','nombres', 'apellidos', 'telefonos', 'id_sectores', 'interno');
 		break;
 		case "especialidades":
 			$aColumns = array('id_especialidades', 'nombre');
@@ -360,6 +370,38 @@
 								$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string( utf8_decode($_GET['sSearch']) )."%' OR ";
 						}
 					break;
+					case "medicos":
+						switch($aColumns[$i]){
+							case "id_sectores":
+								$obj = new Sectores();
+								$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
+								
+								$cant = $obj->db->num_rows($query);
+								
+								if ($cant > 0){
+									$ids = "(";
+									$band = 0;
+									while ($row = $obj->db->fetch_array($query)){
+										$ids .= $row["id_".$obj->nombre_tabla].", ";		
+										$band = 1;
+									}
+									$ids = rtrim($ids, ", ");
+									$ids = $ids.")";
+									
+									if ($band == 1){
+										$buscar = $ids;
+										$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+									}else{
+										$buscar = 0;
+										$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+									}
+								}
+							break;
+							default:
+								$buscar = utf8_decode($_GET['sSearch']);
+								$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' OR ";
+						}
+					break;
 					case 'turnos':
 						switch($aColumns[$i]){
 							case "id_medicos":
@@ -558,14 +600,6 @@
 					
 				break;
 				case 'medicos_horarios':
-					/*ob_start();
-					var_dump($aColumns);
-					$contents = ob_get_contents();
-					ob_end_clean();
-					error_log(count($aColumns));*/
-					//error_log ('VALOR '.$_GET['sSearch_'.$i]);
-					//error_log ('COLUMNA '.$aColumns[$i + 3]);
-
 					switch($aColumns[$i + 3]){
 
 						case "id_dias_semana":
@@ -723,7 +757,7 @@
 			$sOrder
 			$sLimit
 	";
-	
+	#var_dump($sQuery);
 	//error_log($sQuery);
 
 	$rResult = mysql_query( $sQuery, $link ) or die(mysql_error());
@@ -803,6 +837,11 @@
 						$obj_dias_semana = new Dias_semana($aRow[$aColumns[$i]]);
 						$dia_semana = $obj_dias_semana->nombre;
 					}
+
+					if ($aColumns[$i] == "id_sectores"){
+						$obj_sectores = new Sectores($aRow[$aColumns[$i]]);
+						$sector = $obj_sectores->nombre;
+					}
 					
 					if ($aColumns[$i] == "id_cobros_conceptos"){
 						$obj_cobro_concepto = new Cobros_conceptos($aRow[$aColumns[$i]]);
@@ -863,16 +902,19 @@
 						$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
 						
 						$row[0] = $aRow["id_medicos"];
-						$row[1] = utf8_encode($aRow["nombres"]);
-						$row[2] = utf8_encode($aRow["apellidos"]);
-						$row[3] = utf8_encode($aRow["telefonos"]);
-                        $row[4] = '';
+						$row[1] = utf8_encode('');
+						$row[2] = utf8_encode($aRow["nombres"]);
+						$row[3] = utf8_encode($aRow["apellidos"]);
+						$row[4] = utf8_encode($aRow["telefonos"]);
+						$row[5] = utf8_encode($sector);
+						$row[6] = utf8_encode($aRow["interno"]);
+                        $row[7] = '';
                         if ($_SESSION['ID_USUARIO'] === '0') {
-    						$row[4] = $editar.'';
+    						$row[7] = $editar.'';
                         }
-                        $row[4].= $especialidades.''.$obras_sociales_planes.''.$estudios;
+                        $row[7].= $especialidades.''.$obras_sociales_planes.''.$estudios;
                         if ($_SESSION['ID_USUARIO'] === '0') {
-                            $row[4].= ''.$eliminar;
+                            $row[7].= ''.$eliminar;
                         }
 						
 					break;	

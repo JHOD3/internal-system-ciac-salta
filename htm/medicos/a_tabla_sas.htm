@@ -31,11 +31,16 @@
 				  $('table td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('marcado');}); });
 },
 			"bLengthChange": false,
-			"aoColumns" : [{ sWidth: '5%' }, 
-					{ sWidth: '25%' }, 
-					{ sWidth: '25%' },
-					{ sWidth: '30%'},
-					{ sWidth: '15%'}]
+			"aoColumns" : [ 
+				{ sWidth: '5%' },
+                { sWidth: '15%'}, 
+				{ sWidth: '15%'}, 
+				{ sWidth: '15%'},
+				{ sWidth: '15%'},
+				{ sWidth: '10%'},
+				{ sWidth: '10%'},
+				{ sWidth: '15%'}
+            ]
 		});
 		
 		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
@@ -66,22 +71,30 @@
     <thead> 
         <tr>
             <th>ID</th>
+        	<th>Especialidad</th>
             <th>Nombres</th>
             <th>Apellidos</th>
             <th>Tel&eacute;fonos</th>
+            <th>Sector</th>
+            <th>Interno</th>
             <th>Acci&oacute;n</th>
         </tr>
     </thead> 
     <tfoot>
         <tr>
             <th><input type="text" name="tb_id_medicos" value="ID" class="search_init" /></th>
+            <th><input type="text" name="tb_especialidades" value="Especialidad" class="search_init" /></th>
             <th><input type="text" name="tb_nombres" value="Nombres" class="search_init" /></th>
             <th><input type="text" name="tb_apellidos" value="Apellidos" class="search_init" /></th>
             <th><input type="text" name="tb_telefonos" value="Telefonos" class="search_init" /></th>
+            <th><input type="text" name="tb_sector" value="Sector" class="search_init" style="display:none;" /></th>
+            <th><input type="text" name="tb_interno" value="Interno" class="search_init" style="display:none;" /></th>
         </tr>
     </tfoot>    
     <tbody>
         <tr>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
