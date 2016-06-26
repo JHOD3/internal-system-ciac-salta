@@ -49,6 +49,24 @@
 #form_inhabilitado #desde, #form_inhabilitado #hasta{
 	width:70%	
 }
+
+#myChat{
+    max-width:20%;
+    position:absolute;
+}
+#myChat,
+#myChat *{
+    font-size:16px;
+}
+#myChat h2{
+    margin:0;
+    padding:0;
+    color:#007FA6;
+    font-size:20px;
+}
+#myChat strong{
+    color:#008A47;
+}
 </style>
 <script>
 	$(document).ready(function(){
@@ -117,7 +135,14 @@
 			$(this).val('');
 		})
 		
-
+        setInterval(function(){
+            $.ajax({
+                url: "../blab_im_free/my_chat.php",
+                context: document.body
+            }).done(function(data) {
+                $('#myChat').html(data);
+            });
+        }, 2000);
 				
 	});
 	
@@ -166,6 +191,8 @@
         </div>
    	</div>
 </section>
+
+<div id="myChat"></div>
 
 <section id="panel_cuerpo">
 	<div class="container">
