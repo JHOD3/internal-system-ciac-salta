@@ -140,16 +140,20 @@
 			$(this).val('');
 		})
 		
-        function doMyChat(){
+        setInterval(function doMyChat(){
             $.ajax({
                 url: "../blab_im_free/my_chat.php",
                 context: document.body
             }).done(function(data) {
                 $('#myChat').html(data);
             });
-        }
-        setInterval(doMyChat(), 10000);
-        doMyChat();
+        }, 10000);
+        $.ajax({
+            url: "../blab_im_free/my_chat.php",
+            context: document.body
+        }).done(function(data) {
+            $('#myChat').html(data);
+        });
 				
 	});
 	
