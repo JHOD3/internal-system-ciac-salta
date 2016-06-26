@@ -61,11 +61,16 @@
 #myChat h2{
     margin:0;
     padding:0;
-    color:#007FA6;
+    color:#008A47;
     font-size:20px;
 }
 #myChat strong{
-    color:#008A47;
+    color:#007FA6;
+}
+#myChat b{
+    color:#CCCCCC;
+    font-weight:lighter;
+    font-size:12px;
 }
 </style>
 <script>
@@ -135,14 +140,16 @@
 			$(this).val('');
 		})
 		
-        setInterval(function(){
+        function doMyChat(){
             $.ajax({
                 url: "../blab_im_free/my_chat.php",
                 context: document.body
             }).done(function(data) {
                 $('#myChat').html(data);
             });
-        }, 2000);
+        }
+        setInterval(doMyChat(), 10000);
+        doMyChat();
 				
 	});
 	

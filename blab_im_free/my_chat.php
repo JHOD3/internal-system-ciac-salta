@@ -27,7 +27,9 @@ $u = $_SESSION['bmf_id'];
 $timestamp = time();
 
 $query="
-    SELECT *
+    SELECT
+        *,
+        FROM_UNIXTIME(`timestamp`, '%d/%m/%Y %H:%i') AS `datetime`
     FROM `{$dbss['prfx']}_lines`
     WHERE
         `chatto` = '{$u}'
@@ -45,7 +47,9 @@ if(neutral_num_rows($result)>0){
             htmlspecialchars($row['usr_name']).
             ":</strong> ".
             htmlspecialchars($row['line_txt']).
-            "<br />\n".
+            " <b>".
+            $row['datetime'].
+            "hs</b><br />\n".
             $chats
         ;
     }
