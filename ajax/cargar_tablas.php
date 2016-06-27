@@ -36,7 +36,7 @@
 			$aColumns = array('id_pacientes', 'nro_documento', 'nombres', 'apellidos',  'id_obras_sociales');
 		break;	
 		case "medicos":
-			$aColumns = array('id_medicos','domicilio','nombres', 'apellidos', 'telefonos', 'id_sectores', 'interno');
+			$aColumns = array('id_medicos','nombres', 'apellidos', 'telefonos', 'id_sectores', 'interno');
 		break;
 		case "especialidades":
 			$aColumns = array('id_especialidades', 'nombre');
@@ -902,19 +902,18 @@
 						$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
 						
 						$row[0] = $aRow["id_medicos"];
-						$row[1] = utf8_encode('');
-						$row[2] = utf8_encode($aRow["nombres"]);
-						$row[3] = utf8_encode($aRow["apellidos"]);
-						$row[4] = utf8_encode($aRow["telefonos"]);
-						$row[5] = utf8_encode($sector);
-						$row[6] = utf8_encode($aRow["interno"]);
-                        $row[7] = '';
+						$row[1] = utf8_encode($aRow["nombres"]);
+						$row[2] = utf8_encode($aRow["apellidos"]);
+						$row[3] = utf8_encode($aRow["telefonos"]);
+						$row[4] = utf8_encode($sector);
+						$row[5] = utf8_encode($aRow["interno"]);
+                        $row[6] = '';
                         if ($_SESSION['ID_USUARIO'] === '0') {
-    						$row[7] = $editar.'';
+    						$row[6] = $editar.'';
                         }
-                        $row[7].= $especialidades.''.$obras_sociales_planes.''.$estudios;
+                        $row[6].= $especialidades.''.$obras_sociales_planes.''.$estudios;
                         if ($_SESSION['ID_USUARIO'] === '0') {
-                            $row[7].= ''.$eliminar;
+                            $row[6].= ''.$eliminar;
                         }
 						
 					break;	
