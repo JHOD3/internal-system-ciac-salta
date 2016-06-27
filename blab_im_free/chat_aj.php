@@ -48,7 +48,9 @@ $uname=neutral_fetch_array($result);
 $uname=htmrem($uname['usr_name']);
 }else{$uname='00';}
 
-$history=(int)$settings['latest_mssg'];$history=($history*60)+1;
+$history = (int)$settings['latest_mssg'];
+$history = ($history * 60) + 1;
+$history = (5 * 24 * 60 * 60) + 1;
 if($l==-1){$where_clause="($timestamp-timestamp)<$history";}else{$where_clause="line_id>$l";}
 
 $query='SELECT * FROM '.$dbss['prfx']."_lines WHERE $where_clause AND ((usr_id=$bim_id AND chatto=$u) OR (usr_id=$u AND chatto=$bim_id)) ORDER BY line_id ASC";

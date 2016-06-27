@@ -25,6 +25,7 @@ dbconnect(); $settings=get_settings(); $options=get_options(); $lang=get_languag
 
 $u = $_SESSION['ID_USUARIO'];
 $timestamp = time();
+$history = (12 * 60 * 60) + 1;
 
 $query="
     SELECT
@@ -32,7 +33,8 @@ $query="
         FROM_UNIXTIME(`timestamp`, '%d/%m/%Y %H:%i') AS `datetime`
     FROM `{$dbss['prfx']}_lines`
     WHERE
-        `chatto` = '{$u}'
+        `chatto` = '{$u}' AND
+        ({$timestamp} - `timestamp`) < {$history}
     ORDER BY `line_id` DESC
     LIMIT 10
 ";
@@ -43,16 +45,15 @@ if(neutral_num_rows($result)>0){
     $chats = '';
     while($row=neutral_fetch_array($result)){
         $chats =
-            "<strong>".
-            htmlspecialchars($row['usr_name']).
-            ":</strong> ".
-            htmlspecialchars($row['line_txt']).
-            " <b>".
+            "<b>".
             $row['datetime'].
-            "hs</b><br />\n".
+            "hs</b><strong>".
+            htmlspecialchars($row['usr_name']).
+            ":</strong><span>".
+            htmlspecialchars($row['line_txt']).
+            "</span>\n".
             $chats
         ;
     }
-    print "<h2>ULTIMOS CHATS</h2>";
-    print $chats;
+    print "<h2>ULTIMOS CHATS</h2>{$chats}";
 }

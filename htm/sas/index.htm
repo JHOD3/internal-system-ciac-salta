@@ -51,12 +51,13 @@
 }
 
 #myChat{
-    max-width:20%;
     position:absolute;
+    z-index:-999;
 }
 #myChat,
 #myChat *{
     font-size:16px;
+    display:block;
 }
 #myChat h2{
     margin:0;
@@ -64,13 +65,18 @@
     color:#008A47;
     font-size:20px;
 }
-#myChat strong{
-    color:#007FA6;
-}
 #myChat b{
-    color:#CCCCCC;
+    color:#999999;
     font-weight:lighter;
     font-size:12px;
+}
+#myChat strong{
+    color:#007FA6;
+    margin-top:-6px;
+    height:14px;
+}
+#myChat span{
+    margin-left:12px;
 }
 </style>
 <script>
@@ -131,7 +137,7 @@
 				$boton.html('Ocultar');
 			}
 		})
-		
+
 		$("#medicos").focus(function(){
 			$(this).val('');
 		})
@@ -139,8 +145,8 @@
 		$("#dni").focus(function(){
 			$(this).val('');
 		})
-		
-        /* *
+
+        /** CHAT **/
         setInterval(function doMyChat(){
             $.ajax({
                 url: "../blab_im_free/my_chat.php",
@@ -155,8 +161,8 @@
         }).done(function(data) {
             $('#myChat').html(data);
         });
-        /* */
-				
+        /** **** **/
+
 	});
 	
 	jQuery(function($){
