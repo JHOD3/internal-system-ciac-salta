@@ -125,13 +125,13 @@
 	
 	
 	$(document).ready(function(){
-		$('#btn_mostrar').click(function(){
+		$('#btn_mostrar').click(function(event){
+            event.preventDefault();
 			var $div = $('#panel_menu div');
 			var $boton = $('#btn_mostrar');
 			
 			if ($div.is(':visible')) {
-				$div.slideUp();
-				$boton.html('Mostrar');
+                window.location = 'index.php';
 			} else {
 				$div.slideDown();
 				$boton.html('Ocultar');
