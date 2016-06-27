@@ -33,7 +33,7 @@
 	 */
 	switch ($tabla){
 		case "pacientes":
-			$aColumns = array('id_pacientes', 'email', 'nombres', 'apellidos',  'id_obras_sociales', 'id_obras_sociales_planes');
+			$aColumns = array('id_pacientes', 'nro_documento', 'email', 'nombres', 'apellidos',  'id_obras_sociales', 'id_obras_sociales_planes');
 		break;	
 		case "medicos":
 			$aColumns = array('id_medicos','domicilio','nombres', 'apellidos', 'telefonos', 'id_sectores', 'interno');
