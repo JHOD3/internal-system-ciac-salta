@@ -7,16 +7,56 @@
 		CrearAgenda();
 		var fecha=new Date();
 		GrillaInicial(fecha,'sam');
+
+        /** CHAT **/
+        setInterval(function doMyChat(){
+            $.ajax({
+                url: "../blab_im_free/my_chat.php",
+                context: document.body
+            }).done(function(data) {
+                $('#myChat').html(data);
+            });
+        }, 11111);
+        $.ajax({
+            url: "../blab_im_free/my_chat.php",
+            context: document.body
+        }).done(function(data) {
+            $('#myChat').html(data);
+        });
+        /** **** **/
 	});
 </script>
-
+<style>
+#myChat,
+#myChat *{
+    font-size:16px;
+    margin:0;
+    padding:0;
+}
+#myChat h3{
+    font-size:19.2px;
+    line-height:19.2px;
+}
+#myChat b{
+    color:#999999;
+    font-weight:lighter;
+    font-size:12px;
+    display:block;
+    height:13px;
+}
+#myChat strong{
+    color:#007FA6;
+}
+</style>
 [DETALLE_MEDICO]
 <section id='cuerpo'>
     <div class="container">
     	<div class="row">
         	<div class="span5">
                 <div id="contenedor_agenda" class="contenedor" style="margin-top:10px"> 
-    
+                </div>
+                <div id="mensajes_nuevos">
+                    <div id="myChat"></div>
                 </div>
             </div>
             <div class="span7">

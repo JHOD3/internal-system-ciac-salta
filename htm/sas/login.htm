@@ -4,36 +4,50 @@ $(document).ready(function(){
 	$("#f_login").validate({
 		rules: {
 			usuario: "required",
-			password: "required"
+			password: "required",
+			captcha: "required"
 		},
 		messages: {
 			usuario: "<p>Ingrese el Nombre</p>",
-			password: "<p>Ingrese la Clave</p>"
+			password: "<p>Ingrese la Clave</p>",
+			captcha: "<p>Ingrese el Codigo que ve en la Imagen</p>"
 		},
 		success: "valid",
 		submitHandler: function(){
 			var usr = $("#usuario").val();
 			var pass = $("#password").val();
+			var captcha = $("#captcha").val();
 			$.ajax({   
 				//dataType: "html",
 				type: "POST",   
 				url: "[URL]ajax/valida_login.php",
-				data: {usr: usr, pass: pass, sistema: "sas"}, 
+				data: {usr: usr, pass: pass, captcha: captcha, sistema: "sas"}, 
 				beforeSend: function() {
-					$('#mensaje_gral')
+					$('#mje_login')
 					.fadeOut("fast")   
 					.html("Verificando... Espere ...");
 				},
 				success: function(requestData){
 					var rta = requestData;
 					//alert (rta);
-					if (rta == "1"){
+					if (rta.trim() == "1"){
 						location.href = "index.php";
-					}
-					else{
-						$('#mensaje_gral')
-						.html("<span class='error'>Nombre de Usuario y/o Password Incorrectos</span>")
-						.fadeIn("slow");
+					} else {
+                        if (rta.trim() == "3") {
+    						$('#mje_login')
+        						.html("<span class='error'>El Codigo de la Imagen es Incorrecto</span>")
+        						.fadeIn("slow")
+                            ;
+                            $('#captcha').focus();
+                        } else {
+    						$('#mje_login')
+        						.html("<span class='error'>Nombre de Usuario y/o Password Incorrectos</span>")
+        						.fadeIn("slow")
+                            ;
+                            $('#password').focus();
+                        }
+                        document.getElementById('img-captcha').src='../captcha.php?'+Math.random();
+                        $('#captcha').val('');
 					}
 				},
 				error: function(requestData){
@@ -45,29 +59,78 @@ $(document).ready(function(){
 	});
 
 	$("input").keydown(function(){
-		$('#mensaje_gral').fadeOut();
+		$('#mje_login').fadeOut();
 	});
+    $('#change-image').click(function(event){
+        event.preventDefault();
+        document.getElementById('img-captcha').src='../captcha.php?'+Math.random();
+        $('#captcha').focus();
+    });
+    $('#usuario').focus();
 });
 </script>
+<style>
+.clearfloat{
+    float:none;
+    clear:both;
+}
+.clearfloat10{
+    float:none;
+    clear:both;
+    height:10px;
+    width:1px;
+}
+form a,
+form a:hover,
+form a:link,
+form a:visited,
+form a:active{
+    color:white;
+    text-decoration:underline;
+}
+form table tr td{
+    vertical-align:top;
+    padding:0 0 10px 10px;
+}
+form table tr td:first-child{
+    text-align:right;
+    vertical-align:middle;
+}
+</style>
 <form name="f_login" id="f_login" class="jNice">
-	<fieldset>
-		<div class="row" style="text-align:center">
-            <div class="span1"></div>
-            <div class="span4">
-            	<label>Usuario:</label>
-                <input type="text" class="text-long" name="usuario" id="usuario" />
-           	</div>
-            <div class="span4">
-                <label>Contrase&ntilde;a:</label>
-                <input type="password" class="text-long" name="password" id="password" />
-            </div>
-            <div class="span2">
-	            <input type="submit" class="btn" value="Ingresar al Sistema" />
-            </div>
-            <div class="span1"></div>
-            <div id="mensaje_gral"></div>
-        </div>
-	</fieldset>
-</form>
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td></td>
+            <td><h4>IDENTIFICARSE</h4></td>
+        </tr>
+        <tr>
+            <td><label>Usuario:</label></td>
+            <td><input tabindex="1" type="text" class="text-long" name="usuario" id="usuario" /></td>
+        </tr>
+        <tr>
+            <td><label>Contrase&ntilde;a:</label></td>
+            <td><input tabindex="2" type="password" class="text-long" name="password" id="password" /></td>
+        </tr>
+        <tr>
+            <td rowspan="3" style="text-align:center;vertical-align:top;">
+                <img src="../captcha.php" id="img-captcha" />
+                <div class="clearfloat"></div>
+                <a href="#" id="change-image">Cambiar Texto</a>
+            </td>
+            <td>
+                <input tabindex="3" type="text" name="captcha" id="captcha" autocomplete="off" />
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:left;">
+                <div id="mje_login"></div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:left;">
+                <input tabindex="4" type="submit" id="submit" class="btn" value="Ingresar al Sistema" />
+            </td>
+        </tr>
+    </table>
 
-<!-- // #main -->
+</form>

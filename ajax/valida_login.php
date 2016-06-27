@@ -2,7 +2,13 @@
 require_once("../engine/config.php");
 requerir_class("estructura","mysql","querys","tpl");
 
-
+if (
+    !isset($_POST['captcha']) or
+    !isset($_SESSION['tmptxt']) or
+    $_SESSION['tmptxt'] != $_POST['captcha']
+) {
+    die('3');
+}
 
 $usuario = $_POST["usr"];
 //$password = base64_encode($_POST["pass"]);

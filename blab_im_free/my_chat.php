@@ -25,7 +25,7 @@ dbconnect(); $settings=get_settings(); $options=get_options(); $lang=get_languag
 
 $u = $_SESSION['ID_USUARIO'];
 $timestamp = time();
-$history = (12 * 60 * 60) + 1;
+$history = (15 * 60 * 60) + 1;
 
 $query="
     SELECT
@@ -49,11 +49,11 @@ if(neutral_num_rows($result)>0){
             $row['datetime'].
             "hs</b><strong>".
             htmlspecialchars($row['usr_name']).
-            ":</strong><span>".
+            ":</strong> <span>".
             htmlspecialchars($row['line_txt']).
-            "</span>\n".
+            "</span><br />\n".
             $chats
         ;
     }
-    print "<h2>ULTIMOS CHATS</h2>{$chats}";
+    print "<h3>ULTIMOS CHATS</h3>{$chats}";
 }

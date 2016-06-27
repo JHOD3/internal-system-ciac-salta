@@ -50,33 +50,25 @@
 	width:70%	
 }
 
-#myChat{
-    position:absolute;
-    z-index:-999;
-}
 #myChat,
 #myChat *{
     font-size:16px;
-    display:block;
-}
-#myChat h2{
     margin:0;
     padding:0;
-    color:#008A47;
-    font-size:20px;
+}
+#myChat h3{
+    font-size:19.2px;
+    line-height:19.2px;
 }
 #myChat b{
     color:#999999;
     font-weight:lighter;
     font-size:12px;
+    display:block;
+    height:13px;
 }
 #myChat strong{
     color:#007FA6;
-    margin-top:-6px;
-    height:14px;
-}
-#myChat span{
-    margin-left:12px;
 }
 </style>
 <script>
@@ -212,8 +204,6 @@
    	</div>
 </section>
 
-<div id="myChat"></div>
-
 <section id="panel_cuerpo">
 	<div class="container">
     	<div class="row">
@@ -228,7 +218,7 @@
                     </div>
                 </div>
                 <div id="mensajes_nuevos">
-                	
+                    <div id="myChat"></div>
                 </div>
             </div>
             <div class="span9">
