@@ -21,4 +21,3 @@ $htm_gral->Asigna("CUERPO", $htm_index->Muestra());
 CargarVariablesGrales($htm_gral, $tipo = "");
 
 echo utf8_decode($htm_gral->Muestra());
-?>

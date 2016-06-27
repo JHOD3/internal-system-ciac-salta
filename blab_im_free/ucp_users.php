@@ -6,7 +6,7 @@ require_once 'incl/main.inc';
 dbconnect(); session_start();
 $settings=get_settings(); get_user(); $status=get_status(); $options=get_options(); $lang=get_language();
 
-if(!isset($_SESSION['bmf_id'])){die();}
+if(!isset($_SESSION['ID_USUARIO'])){die();}
 
 $displ_ls=0;
 if(isset($_POST['order_az'])){$order_az=(int)$_POST['order_az'];}else{$order_az=0;}

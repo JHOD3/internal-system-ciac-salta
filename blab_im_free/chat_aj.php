@@ -6,7 +6,7 @@ require_once 'incl/main.inc';
 dbconnect(); session_start();
 $settings=get_settings(); $options=get_options(); $lang=get_language();
 
-if(!isset($_SESSION['bmf_id']) || !isset($_SESSION['bmf_name'])){
+if(!isset($_SESSION['ID_USUARIO']) || !isset($_SESSION['bmf_name'])){
 if($settings['no_session_err']=='1'){print $lang['cookies_r'];}die();}
 
 if(isset($_POST['u'])){$u=(int)$_POST['u'];}else{$u=0;} if($u<1){die();}
@@ -24,7 +24,7 @@ if ($_SESSION['TIPO_USR'] == 'M') {
     $_SESSION['bmf_name'] = 'Op. '.$_SESSION['bmf_name'];
 }
 
-$bim_id=(int)$_SESSION['bmf_id']; $lid=0;
+$bim_id=(int)$_SESSION['ID_USUARIO']; $lid=0;
 $bim_name=neutral_escape($_SESSION['bmf_name'],64,'str');
 $keep_time=$settings['chat_refresh']*$settings['main_ofactor'];
 
@@ -80,4 +80,3 @@ $messages.='<div class="tx0">'.$tmm.' <b>'.$usr.'</b>: <span class="tx'.$tx.'"">
 }
 
 print $uname.'|:|'.$lid.'|:|'.$c.'|:|'.$messages;
-?>

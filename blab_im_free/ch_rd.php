@@ -10,7 +10,7 @@ require_once 'incl/main.inc';
 dbconnect(); session_start();
 $settings=get_settings(); $options=get_options(); $lang=get_language();
 
-if(!isset($_SESSION['bmf_id']) || !isset($_SESSION['bmf_name'])){die();}
+if(!isset($_SESSION['ID_USUARIO']) || !isset($_SESSION['bmf_name'])){die();}
 
 if (strlen($_SESSION['NOMBRES']) > 1 and strlen($_SESSION['APELLIDOS']) > 1) {
     $_SESSION['bmf_name'] = utf8_encode($_SESSION['NOMBRES'].', '.$_SESSION['APELLIDOS']);
@@ -24,7 +24,7 @@ if ($_SESSION['TIPO_USR'] == 'M') {
 }
 
 $chatto=(int)$_GET['u'];
-$bim_id=(int)$_SESSION['bmf_id'];
+$bim_id=(int)$_SESSION['ID_USUARIO'];
 $bim_name=neutral_escape($_SESSION['bmf_name'],64,'str');
 $cto_name=neutral_escape($cto_name,64,'str');
 

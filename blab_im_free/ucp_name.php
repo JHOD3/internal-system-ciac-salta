@@ -6,7 +6,7 @@ require_once 'incl/main.inc';
 dbconnect(); session_start();
 $settings=get_settings(); get_user(); $status=get_status(); $options=get_options(); $lang=get_language();
 
-if(!isset($_SESSION['bmf_id'])){die();}
+if(!isset($_SESSION['ID_USUARIO'])){die();}
 
 $_SESSION['bmf_last']=0;
 
@@ -15,7 +15,7 @@ $title=htmrem($settings['html_title']).' '.$lang['screen_name'];
 if(isset($_POST['guest_name'])){
 $guest=trim($_POST['guest_name']);
 $guest=neutral_escape($guest,32,'str');
-$uid=(int)$_SESSION['bmf_id'];
+$uid=(int)$_SESSION['ID_USUARIO'];
 
 $query='SELECT * FROM '.$dbss['prfx']."_users WHERE usr_name='$guest'";
 $result=neutral_query($query);

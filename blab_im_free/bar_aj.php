@@ -31,10 +31,10 @@ require_once 'incl/main.inc';
 
 dbconnect(); $settings=get_settings(); $options=get_options(); $lang=get_language();
 
-if(!isset($_SESSION['bmf_id']) || !isset($_SESSION['bmf_name'])){
+if(!isset($_SESSION['ID_USUARIO']) || !isset($_SESSION['bmf_name'])){
 if($settings['no_session_err']=='1'){print $lang['cookies_r'];}die();}
 
-$bim_id=(int)$_SESSION['bmf_id'];
+$bim_id=(int)$_SESSION['ID_USUARIO'];
 $bim_name=neutral_escape($_SESSION['bmf_name'],64,'str');
 $pnt_name=htmrem($_SESSION['bmf_name']);
 

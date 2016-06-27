@@ -96,6 +96,7 @@ class Medicos extends Estructura implements iMedicos{
 				//variable para controlar tiempo que esta conectado
 				$ultimo_acceso = date("Y-n-j H:i:s");
 
+				$_SESSION['ID_USUARIO'] = (1000000 + $usr[0]);
 				$_SESSION['ID_MEDICO'] = $usr[0];
 				$_SESSION['TIPO_USR'] = "M";
 				$_SESSION['APELLIDOS'] = $usr[1];
@@ -1053,4 +1054,3 @@ class Medicos extends Estructura implements iMedicos{
 
 	}
 }
-?>

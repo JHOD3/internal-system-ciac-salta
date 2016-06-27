@@ -6,7 +6,7 @@ require_once 'incl/main.inc';
 dbconnect(); session_start();
 $settings=get_settings(); get_user(); $options=get_options(); 
 
-if(!isset($_SESSION['bmf_id'])){die();}
+if(!isset($_SESSION['ID_USUARIO'])){die();}
 
 $_SESSION['bmf_last']=0;
 $_SESSION['bmf_chat']=0;

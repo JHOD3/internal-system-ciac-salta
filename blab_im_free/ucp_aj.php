@@ -10,7 +10,7 @@ if(isset($_POST['ajx_sett'])){$ajx_sett=$_POST['ajx_sett'];}else{$ajx_sett='0|0|
 $ajx_sett=explode('|',$ajx_sett);
 dbconnect(); $settings=get_settings(); $options=get_options(); $lang=get_language();
 
-if(!isset($_SESSION['bmf_id']) || !isset($_SESSION['bmf_name'])){
+if(!isset($_SESSION['ID_USUARIO']) || !isset($_SESSION['bmf_name'])){
 print $lang['cookies_r'];die();}
 
 if (strlen($_SESSION['NOMBRES']) > 1 and strlen($_SESSION['APELLIDOS']) > 1) {
@@ -24,7 +24,7 @@ if ($_SESSION['TIPO_USR'] == 'M') {
     $_SESSION['bmf_name'] = 'Op. '.$_SESSION['bmf_name'];
 }
 
-$bim_id=(int)$_SESSION['bmf_id'];
+$bim_id=(int)$_SESSION['ID_USUARIO'];
 $bim_name=neutral_escape($_SESSION['bmf_name'],64,'str');
 $title=$lang['users_onl'];
 

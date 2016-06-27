@@ -119,7 +119,7 @@ return $user;}
 
 function get_user(){
 global $dbss,$intg,$settings;unset($user);
-if(isset($_SESSION['bmf_id'])){$oldsessid=(int)$_SESSION['bmf_id'];unset($_SESSION['bmf_id']);}
+#if(isset($_SESSION['ID_USUARIO'])){$oldsessid=(int)$_SESSION['ID_USUARIO'];unset($_SESSION['ID_USUARIO']);}
 
 if(!isset($user)){$user=get_guest();}
 
@@ -129,7 +129,7 @@ $tmm=time()-($settings['main_refresh']*$settings['main_ofactor']);
 $query='UPDATE '.$dbss['prfx']."_online SET rtime=$tmm WHERE usr_id=$oldsessid";
 neutral_query($query);}
 
-$_SESSION['bmf_id']=(int)$user['id'];
+#$_SESSION['ID_USUARIO']=(int)$user['id'];
 $_SESSION['bmf_name']=$user['name'];
 
 if (strlen($_SESSION['NOMBRES']) > 1 and strlen($_SESSION['APELLIDOS']) > 1) {
@@ -216,5 +216,3 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Content-type: text/html; charset=UTF-8");}
-
-?>

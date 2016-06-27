@@ -23,7 +23,7 @@ require_once 'incl/main.inc';
 
 dbconnect(); $settings=get_settings(); $options=get_options(); $lang=get_language();
 
-$u = $_SESSION['bmf_id'];
+$u = $_SESSION['ID_USUARIO'];
 $timestamp = time();
 
 $query="
