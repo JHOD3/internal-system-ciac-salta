@@ -230,7 +230,7 @@ google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(drawBarChart);
 function drawBarChart() {
     var dataBar = google.visualization.arrayToDataTable([
-        ['', 'Otorgados']
+        ['', 'Otorgados', { role: 'style' }]
         [DATA_TURNOS_OTORGADOS_TOTALES]
     ]);
     var options = {
@@ -243,7 +243,7 @@ function drawBarChart() {
 google.charts.setOnLoadCallback(drawLineChart);
 function drawLineChart() {
     var dataLine = google.visualization.arrayToDataTable([
-        ['', 'Otorgados']
+        ['', 'Otorgados', { role: 'style' }]
         [DATA_TURNOS_OTORGADOS_POR_DIA]
     ]);
     var options = {
@@ -254,8 +254,8 @@ function drawLineChart() {
     chart.draw(dataLine, options);
 }
 </script>
-<div id="barchart" style="width: 870px; height: 400px;"></div>
-<div id="linechart" style="width: 870px; height: 400px;"></div>
+<div id="barchart" style="width: 870px; height: 270px;"></div>
+<div id="linechart" style="width: 870px; height: 270px;"></div>
                     </div>
                     <div class="span3 contenedor" id="habilitar_inhabilitar" >
                         <div class="inner">

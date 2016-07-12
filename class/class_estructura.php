@@ -1634,13 +1634,17 @@ class Estructura{
 		$query_string = $this->querys->dataTurnosOtorgadosTotales($startMonth, $id_usuarios);
 		$query = $this->db->consulta($query_string);
         $data = "";
+        $color = array('#333333', '#008A47', '#007FA6');
+        $i = 0;
         while ($row = $this->db->fetch_array($query)) {
             if ($row['id_usuarios'] == 1) {
                 $nombre = $row['nombres']." ".$row['apellidos'].".";
             } else {
                 $nombre = $row['nombres']." ".$row['apellidos'][0].".";
             }
-            $data.= ",['{$nombre}', {$row['count']}]\n";
+            $style = $color[$i % count($color)];
+            $data.= ",['{$nombre}', {$row['count']}, '{$style}']\n";
+            $i++;
         }
         return utf8_encode($data);
     }	
@@ -1649,9 +1653,13 @@ class Estructura{
 		$query_string = $this->querys->dataTurnosOtorgadosPorDia($startMonth, $id_usuarios);
 		$query = $this->db->consulta($query_string);
         $data = "";
+        $color = array('#333333', '#008A47', '#007FA6');
+        $i = 0;
         while ($row = $this->db->fetch_array($query)) {
             $fecha_alta = implode("/", array_reverse(explode("-", $row['fecha_alta'])));
-            $data.= ",['{$fecha_alta}', {$row['count']}]\n";
+            $style = $color[$i % count($color)];
+            $data.= ",['{$fecha_alta}', {$row['count']}, '{$style}']\n";
+            $i++;
         }
         return utf8_encode($data);
     }	
