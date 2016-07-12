@@ -1630,8 +1630,8 @@ class Estructura{
 		return $array;
 	}
 	
-    function dataTurnosOtorgados($startMonth, $id_usuarios){
-		$query_string = $this->querys->dataTurnosOtorgados($startMonth, $id_usuarios);
+    function obtTurnosOtorgadosTotales($startMonth, $id_usuarios){
+		$query_string = $this->querys->dataTurnosOtorgadosTotales($startMonth, $id_usuarios);
 		$query = $this->db->consulta($query_string);
         $data = "";
         while ($row = $this->db->fetch_array($query)) {
@@ -1645,5 +1645,15 @@ class Estructura{
         return utf8_encode($data);
     }	
 	
+    function obtTurnosOtorgadosPorDia($startMonth, $id_usuarios){
+		$query_string = $this->querys->dataTurnosOtorgadosPorDia($startMonth, $id_usuarios);
+		$query = $this->db->consulta($query_string);
+        $data = "";
+        while ($row = $this->db->fetch_array($query)) {
+            $fecha_alta = implode("/", array_reverse(explode("-", $row['fecha_alta'])));
+            $data.= ",['{$fecha_alta}', {$row['count']}]\n";
+        }
+        return utf8_encode($data);
+    }	
+	
 }
-?>

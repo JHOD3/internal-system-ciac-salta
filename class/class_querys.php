@@ -681,7 +681,7 @@ class Querys implements iQuerys{
 		return $query;	
 	}
 
-    function dataTurnosOtorgados($startMonth, $id_usuarios){
+    function dataTurnosOtorgadosTotales($startMonth, $id_usuarios){
         if ($id_usuarios > 0) {
             $where = "
                 (
@@ -705,11 +705,27 @@ class Querys implements iQuerys{
                 ON t.id_usuarios = u.id_usuarios
             WHERE
                 {$where}
-                fecha > '{$startMonth}'
+                t.fecha_alta > '{$startMonth}'
             GROUP BY
                 t.id_usuarios
             ORDER BY
                 COUNT(t.id_turnos) DESC
+        ";
+		return $query;	
+    }
+
+    function dataTurnosOtorgadosPorDia($startMonth, $id_usuarios){
+		$query = "
+            SELECT
+                t.fecha_alta,
+                COUNT(t.id_turnos) AS `count`
+            FROM
+                turnos AS t
+            WHERE
+                t.id_usuarios = {$id_usuarios} AND
+                t.fecha_alta > '{$startMonth}'
+            GROUP BY
+                t.fecha_alta
         ";
 		return $query;	
     }

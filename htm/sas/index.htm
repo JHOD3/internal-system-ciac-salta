@@ -226,26 +226,36 @@
                     <div id="cont_grilla_turnos">
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-  google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(drawChart);
-  function drawChart() {
-
-    var data = google.visualization.arrayToDataTable([
-      ['', 'Otorgados']
-      [DATA_TURNOS_OTORGADOS]
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawBarChart);
+function drawBarChart() {
+    var dataBar = google.visualization.arrayToDataTable([
+        ['', 'Otorgados']
+        [DATA_TURNOS_OTORGADOS_TOTALES]
     ]);
-
     var options = {
-      title: 'TURNOS OTORGADOS\nDesde [START_MONTH]',
-      legend: {position: 'none'},
+        title: 'TURNOS OTORGADOS TOTALES\nDesde [START_MONTH]',
+        legend: {position: 'none'},
     };
-
-    var chart = new google.visualization.BarChart(document.getElementById('piechart'));
-
-    chart.draw(data, options);
-  }
+    var chart = new google.visualization.BarChart(document.getElementById('barchart'));
+    chart.draw(dataBar, options);
+}
+google.charts.setOnLoadCallback(drawLineChart);
+function drawLineChart() {
+    var dataLine = google.visualization.arrayToDataTable([
+        ['', 'Otorgados']
+        [DATA_TURNOS_OTORGADOS_POR_DIA]
+    ]);
+    var options = {
+        title: 'TURNOS OTORGADOS POR DÍA\nDesde [START_MONTH]',
+        legend: {position: 'none'},
+    };
+    var chart = new google.visualization.LineChart(document.getElementById('linechart'));
+    chart.draw(dataLine, options);
+}
 </script>
-<div id="piechart" style="width: 900px; height: 500px;"></div>
+<div id="barchart" style="width: 900px; height: 500px;"></div>
+<div id="linechart" style="width: 900px; height: 500px;"></div>
                     </div>
                     <div class="span3 contenedor" id="habilitar_inhabilitar" >
                         <div class="inner">

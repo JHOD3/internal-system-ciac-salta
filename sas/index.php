@@ -16,9 +16,11 @@ $htm_menu_tablas = $obj_estructura->html("menu/tablas_sas");
 
 $startMonth = date("Y-m-01");
 $start_month = date("01/m/Y")."\\n"."Hasta ".date("d/m/Y");
-$data_turnos_otorgados = $obj_estructura->dataTurnosOtorgados($startMonth, $_SESSION['ID_USUARIO']);
+$dataTOT = $obj_estructura->obtTurnosOtorgadosTotales($startMonth, $_SESSION['ID_USUARIO']);
+$dataTOPD = $obj_estructura->obtTurnosOtorgadosPorDia($startMonth, $_SESSION['ID_USUARIO']);
 $htm_index->Asigna("START_MONTH", $start_month);
-$htm_index->Asigna("DATA_TURNOS_OTORGADOS", $data_turnos_otorgados);
+$htm_index->Asigna("DATA_TURNOS_OTORGADOS_TOTALES", $dataTOT);
+$htm_index->Asigna("DATA_TURNOS_OTORGADOS_POR_DIA", $dataTOPD);
 
 $htm_index->Asigna("FECHA", utf8_encode(strftime("%A %d de %B del %Y")));
 $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));
