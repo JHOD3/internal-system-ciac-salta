@@ -257,7 +257,7 @@ class Querys implements iQuerys{
 	function Buscar($tabla, $termino){
 		switch ($tabla){
 			case "pacientes":
-				$query = "SELECT * FROM ".$tabla." WHERE nro_documento = ".$termino;
+				$query = "SELECT * FROM ".$tabla." WHERE estado = 1 AND nro_documento = '".$termino."'";
 			break;
 			case "medicos":
 				$query = "SELECT * FROM ".$tabla." WHERE (nombres LIKE '%".$termino."%' OR apellidos LIKE '%".$termino."%') AND estado = 1";
