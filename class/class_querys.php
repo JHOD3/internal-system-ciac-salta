@@ -715,6 +715,13 @@ class Querys implements iQuerys{
     }
 
     function dataTurnosOtorgadosPorDia($startMonth, $id_usuarios){
+        if ($id_usuarios == 0) {
+            $where = "";
+        } else {
+            $where = "
+                t.id_usuarios = {$id_usuarios} AND
+            ";
+        }
 		$query = "
             SELECT
                 t.fecha_alta,
@@ -722,7 +729,7 @@ class Querys implements iQuerys{
             FROM
                 turnos AS t
             WHERE
-                t.id_usuarios = {$id_usuarios} AND
+                {$where}
                 t.fecha_alta > '{$startMonth}'
             GROUP BY
                 t.fecha_alta
