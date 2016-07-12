@@ -301,15 +301,37 @@ class Querys implements iQuerys{
 	}
 	
 	function GrillaTurnosPasados($id_medico, $id_especialidad, $fecha){
-		$query = "SELECT *, OS.nombre AS nombre_os 
-				FROM turnos T 
-				INNER JOIN turnos_estados TE
-				ON T.id_turnos_estados = TE.id_turnos_estados
-				INNER JOIN pacientes P
-				ON T.id_pacientes = P.id_pacientes
-				INNER JOIN obras_sociales OS
-				ON P.id_obras_sociales = OS.id_obras_sociales
-				WHERE T.id_medicos = $id_medico AND T.id_especialidades = $id_especialidad AND T.fecha = '".$fecha."' AND T.estado = 1 ORDER BY T.desde ASC";
+		$query = "
+            SELECT
+                P.*,
+                T.*,
+                TE.*,
+                OS.*,
+                OS.nombre AS nombre_os,
+                U.apellidos AS uApellidos,
+                U.nombres AS uNombres
+            FROM
+                turnos T 
+            INNER JOIN
+                turnos_estados TE
+                ON T.id_turnos_estados = TE.id_turnos_estados
+            INNER JOIN
+                pacientes P
+                ON T.id_pacientes = P.id_pacientes
+            INNER JOIN
+                obras_sociales OS
+                ON P.id_obras_sociales = OS.id_obras_sociales
+            LEFT JOIN
+                usuarios AS U
+                ON T.id_usuarios = U.id_usuarios
+            WHERE
+                T.id_medicos = {$id_medico} AND
+                T.id_especialidades = {$id_especialidad} AND
+                T.fecha = '{$fecha}' AND
+                T.estado = 1
+            ORDER BY
+                T.desde ASC
+        ";
 	
 		return $query;
 		

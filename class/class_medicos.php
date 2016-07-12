@@ -471,8 +471,9 @@ class Medicos extends Estructura implements iMedicos{
 			$cant = $this->db->num_rows($query);
 			if ($cant != 0){
 				while ($row = $this->db->fetch_array($query)){
-					$row["PACIENTE"] =$row ["apellidos"].", ".$row['nombres'];
-
+					$row["PACIENTE"] = $row["apellidos"].", ".$row['nombres'];
+                    $row["USUARIO"] = $row["uApellidos"].", ".$row['uNombres'];
+                    $row["USUARIO"] = '<span style="color:#b0b0b0;">'.$row['USUARIO'].'</span>';
 					$obj_turno_estado = new Turnos_estados($row["id_turnos_estados"]);
 					$row["ESTADO"] = $obj_turno_estado->nombre;
 					$htm->AsignaBloque('block_registros',$row);
