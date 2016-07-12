@@ -680,5 +680,37 @@ class Querys implements iQuerys{
 				WHERE M.estado = 1 AND ME.estado = 1";
 		return $query;	
 	}
+
+    function dataTurnosOtorgados($startMonth, $id_usuarios){
+        if ($id_usuarios > 0) {
+            $where = "
+                (
+                    t.id_usuarios = '{$id_usuarios}' OR
+                    t.id_usuarios = '1'
+                ) AND
+            ";
+        } else {
+            $where = "";
+        }
+		$query = "
+            SELECT
+                t.id_usuarios,
+                u.apellidos,
+                u.nombres,
+                COUNT(t.id_turnos) AS `count`
+            FROM
+                turnos AS t
+            INNER JOIN
+                usuarios AS u
+                ON t.id_usuarios = u.id_usuarios
+            WHERE
+                {$where}
+                fecha > '{$startMonth}'
+            GROUP BY
+                t.id_usuarios
+            ORDER BY
+                COUNT(t.id_turnos) DESC
+        ";
+		return $query;	
+    }
 }
-?>

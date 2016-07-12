@@ -1630,7 +1630,20 @@ class Estructura{
 		return $array;
 	}
 	
-	
+    function dataTurnosOtorgados($startMonth, $id_usuarios){
+		$query_string = $this->querys->dataTurnosOtorgados($startMonth, $id_usuarios);
+		$query = $this->db->consulta($query_string);
+        $data = "";
+        while ($row = $this->db->fetch_array($query)) {
+            if ($row['id_usuarios'] == 1) {
+                $nombre = $row['nombres']." ".$row['apellidos'].".";
+            } else {
+                $nombre = $row['nombres']." ".$row['apellidos'][0].".";
+            }
+            $data.= ",['{$nombre}', {$row['count']}]\n";
+        }
+        return utf8_encode($data);
+    }	
 	
 }
 ?>
