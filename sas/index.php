@@ -35,11 +35,11 @@ $htm_index->Asigna("DATE_DESDE_TEXT", implode("/", array_reverse(explode("-", $d
 $htm_index->Asigna("DATE_HASTA", $hasta);
 $htm_index->Asigna("DATE_HASTA_TEXT", implode("/", array_reverse(explode("-", $hasta))));
 $htm_index->Asigna("TOT", $dataTOT[0]);
-$htm_index->Asigna("TOT_NUMROWS", ($dataTOT[1] * 60));
+$htm_index->Asigna("TOT_NUMROWS", ($dataTOT[1] * 40));
 $htm_index->Asigna("TPM", $dataTPM[0]);
 $htm_index->Asigna("TPM_NUMROWS", 240);
 $htm_index->Asigna("TPD", $dataTPD[0]);
-$htm_index->Asigna("TPD_NUMROWS", ($dataTPD[1] * 100));
+$htm_index->Asigna("TPD_NUMROWS", 100 + ($dataTPD[1] * 100));
 
 $htm_index->Asigna("FECHA", utf8_encode(strftime("%A %d de %B del %Y")));
 $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));
