@@ -1646,11 +1646,11 @@ class Estructura{
             $data.= ",['{$nombre}', {$row['count']}, '{$style}']\n";
             $i++;
         }
-        return utf8_encode($data);
+        return array(utf8_encode($data), $this->db->num_rows($query));
     }	
 	
-    function obtTurnosPorMedicos($desde, $hasta){
-		$query_string = $this->querys->dataTurnosPorMedicos($desde, $hasta);
+    function obtTurnosPorMedicos($desde, $hasta, $id_usuarios){
+		$query_string = $this->querys->dataTurnosPorMedicos($desde, $hasta, $id_usuarios);
 		$query = $this->db->consulta($query_string);
         $data = "";
         $color = array('#007FA6');
@@ -1661,7 +1661,7 @@ class Estructura{
             $data.= ",['{$nombre}', {$row['count']}, '{$style}']\n";
             $i++;
         }
-        return utf8_encode($data);
+        return array(utf8_encode($data), $this->db->num_rows($query));
     }	
 	
     function obtTurnosOtorgadosPorDia($desde, $hasta, $id_usuarios){
@@ -1676,7 +1676,7 @@ class Estructura{
             $data.= ",['{$fecha_alta}', {$row['count']}, '{$style}']\n";
             $i++;
         }
-        return utf8_encode($data);
+        return array(utf8_encode($data), $this->db->num_rows($query));
     }	
 	
 }

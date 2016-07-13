@@ -27,15 +27,19 @@ if (!$d or $d->format($format) != $date or strlen($hasta) != 10) {
 }
 
 $dataTOT = $obj_estructura->obtTurnosOtorgadosTotales($desde, $hasta, $_SESSION['ID_USUARIO']);
-$dataTPM = $obj_estructura->obtTurnosPorMedicos($desde, $hasta);
-$dataTOPD = $obj_estructura->obtTurnosOtorgadosPorDia($desde, $hasta, $_SESSION['ID_USUARIO']);
+$dataTPM = $obj_estructura->obtTurnosPorMedicos($desde, $hasta, $_SESSION['ID_USUARIO']);
+$dataTPD = $obj_estructura->obtTurnosOtorgadosPorDia($desde, $hasta, $_SESSION['ID_USUARIO']);
+
 $htm_index->Asigna("DATE_DESDE", $desde);
 $htm_index->Asigna("DATE_DESDE_TEXT", implode("/", array_reverse(explode("-", $desde))));
 $htm_index->Asigna("DATE_HASTA", $hasta);
 $htm_index->Asigna("DATE_HASTA_TEXT", implode("/", array_reverse(explode("-", $hasta))));
-$htm_index->Asigna("DATA_TURNOS_OTORGADOS_TOTALES", $dataTOT);
-$htm_index->Asigna("DATA_TURNOS_POR_MEDICOS", $dataTPM);
-$htm_index->Asigna("DATA_TURNOS_OTORGADOS_POR_DIA", $dataTOPD);
+$htm_index->Asigna("TOT", $dataTOT[0]);
+$htm_index->Asigna("TOT_NUMROWS", ($dataTOT[1] * 60));
+$htm_index->Asigna("TPM", $dataTPM[0]);
+$htm_index->Asigna("TPM_NUMROWS", 240);
+$htm_index->Asigna("TPD", $dataTPD[0]);
+$htm_index->Asigna("TPD_NUMROWS", ($dataTPD[1] * 100));
 
 $htm_index->Asigna("FECHA", utf8_encode(strftime("%A %d de %B del %Y")));
 $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));

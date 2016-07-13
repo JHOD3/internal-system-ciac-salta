@@ -237,7 +237,7 @@ google.charts.setOnLoadCallback(drawBar1Chart);
 function drawBar1Chart() {
     var dataBar1 = google.visualization.arrayToDataTable([
         ['', 'Otorgados', { role: 'style' }]
-        [DATA_TURNOS_OTORGADOS_TOTALES]
+        [TOT]
     ]);
     var options = {
         title: 'TURNOS OTORGADOS TOTALES\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
@@ -251,7 +251,7 @@ google.charts.setOnLoadCallback(drawBar2Chart);
 function drawBar2Chart() {
     var dataBar2 = google.visualization.arrayToDataTable([
         ['', 'Otorgados', { role: 'style' }]
-        [DATA_TURNOS_POR_MEDICOS]
+        [TPM]
     ]);
     var options = {
         title: 'TURNOS POR MEDICOS\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
@@ -265,7 +265,7 @@ google.charts.setOnLoadCallback(drawLineChart);
 function drawLineChart() {
     var dataLine = google.visualization.arrayToDataTable([
         ['', 'Otorgados', { role: 'style' }]
-        [DATA_TURNOS_OTORGADOS_POR_DIA]
+        [TPD]
     ]);
     var options = {
         title: 'TURNOS OTORGADOS POR DÍA\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
@@ -275,9 +275,9 @@ function drawLineChart() {
     chart.draw(dataLine, options);
 }
 </script>
-<div id="bar1chart" style="width: 100%; height: 340px;"></div>
-<div id="linechart" style="width: 100%; height: 340px;"></div>
-<div id="bar2chart" style="width: 100%; height: 2400px;"></div>
+<div id="bar1chart" style="width: 100%; height: [TOT_NUMROWS]px;"></div>
+<div id="linechart" style="width: 100%; height: [TPM_NUMROWS]px;"></div>
+<div id="bar2chart" style="width: 100%; height: [TPD_NUMROWS]px;"></div>
                     </div>
                     <div class="span3 contenedor" id="habilitar_inhabilitar" >
                         <div class="inner">

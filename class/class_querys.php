@@ -714,7 +714,17 @@ class Querys implements iQuerys{
 		return $query;	
     }
 
-    function dataTurnosPorMedicos($desde, $hasta){
+    function dataTurnosPorMedicos($desde, $hasta, $id_usuarios){
+        if ($id_usuarios > 0) {
+            $where = "
+                (
+                    t.id_usuarios = '{$id_usuarios}' OR
+                    t.id_usuarios = '1'
+                ) AND
+            ";
+        } else {
+            $where = "";
+        }
 		$query = "
             SELECT
                 t.id_medicos,
@@ -727,6 +737,7 @@ class Querys implements iQuerys{
                 medicos AS m
                 ON t.id_medicos = m.id_medicos
             WHERE
+                {$where}
                 t.fecha_alta BETWEEN '{$desde}' AND '{$hasta}'
             GROUP BY
                 t.id_medicos
