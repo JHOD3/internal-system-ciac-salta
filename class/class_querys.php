@@ -56,7 +56,11 @@ class Querys implements iQuerys{
 	
 	function RegistroXAtributo($tabla, $atributo, $valor, $tipo){
 		if ($tipo == ""){
-			$query = "SELECT * FROM ".$tabla." WHERE ".$atributo." = '".mysql_real_escape_string(utf8_decode($valor))."'";
+            if ($tabla == "pacientes" and $atributo == "nro_documento") {
+                $query = "SELECT * FROM ".$tabla." WHERE ".$atributo." LIKE '%".mysql_real_escape_string(utf8_decode($valor))."%' AND estado = '1'";
+            } else {
+    			$query = "SELECT * FROM ".$tabla." WHERE ".$atributo." = '".mysql_real_escape_string(utf8_decode($valor))."'";
+            }
 		}else{
 			$query = "SELECT * FROM ".$tabla." WHERE ".$atributo." LIKE '%".mysql_real_escape_string(utf8_decode($valor))."%'";
 		}
