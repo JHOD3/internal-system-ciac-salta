@@ -14,11 +14,22 @@ $htm_menu_tablas = $obj_estructura->html("menu/tablas_sas");
 
 /*$htm_index->Asigna("FORM_HORARIOS", $obj_dias_semana->FormHorarios());*/
 
-$startMonth = date('Y-m-d', strtotime('-1 month +1 day'));
-$start_month = date('d/m/Y', strtotime('-1 month +1 day'))." - Hasta ".date("d/m/Y");
-$dataTOT = $obj_estructura->obtTurnosOtorgadosTotales($startMonth, $_SESSION['ID_USUARIO']);
-$dataTOPD = $obj_estructura->obtTurnosOtorgadosPorDia($startMonth, $_SESSION['ID_USUARIO']);
-$htm_index->Asigna("START_MONTH", $start_month);
+$desde = $_POST['desde'];
+$d = DateTime::createFromFormat('d/m/Y', $desde);
+if (!$d or $d->format($format) != $date) {
+    $desde = date('d/m/Y', strtotime('-1 month +1 day'));
+}
+
+$hasta = $_POST['hasta'];
+$d = DateTime::createFromFormat('d/m/Y', $hasta);
+if (!$d or $d->format($format) != $date) {
+    $hasta = date('d/m/Y');
+}
+
+$dataTOT = $obj_estructura->obtTurnosOtorgadosTotales($desde, $hasta, $_SESSION['ID_USUARIO']);
+$dataTOPD = $obj_estructura->obtTurnosOtorgadosPorDia($desde, $hasta, $_SESSION['ID_USUARIO']);
+$htm_index->Asigna("DATE_DESDE", $desde);
+$htm_index->Asigna("DATE_HASTA", $hasta);
 $htm_index->Asigna("DATA_TURNOS_OTORGADOS_TOTALES", $dataTOT);
 $htm_index->Asigna("DATA_TURNOS_OTORGADOS_POR_DIA", $dataTOPD);
 

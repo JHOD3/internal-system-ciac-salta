@@ -224,6 +224,11 @@
             <div class="span9">
             	<div class="row">
                     <div id="cont_grilla_turnos">
+                        <form action="index.php" method="post">
+                            Desde: <input type="date" name="desde" value="[DATE_DESDE]" style="width:74px;" />
+                            Hasta: <input type="date" name="hasta" value="[DATE_HASTA]" style="width:74px;" />
+                            <input type="submit" value="ok"/>
+                        </form>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
 google.charts.load('current', {'packages':['corechart']});
@@ -234,7 +239,7 @@ function drawBarChart() {
         [DATA_TURNOS_OTORGADOS_TOTALES]
     ]);
     var options = {
-        title: 'TURNOS OTORGADOS TOTALES\nDesde [START_MONTH]',
+        title: 'TURNOS OTORGADOS TOTALES\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
         legend: {position: 'none'},
     };
     var chart = new google.visualization.BarChart(document.getElementById('barchart'));
@@ -247,7 +252,7 @@ function drawLineChart() {
         [DATA_TURNOS_OTORGADOS_POR_DIA]
     ]);
     var options = {
-        title: 'TURNOS OTORGADOS POR DÍA\nDesde [START_MONTH]',
+        title: 'TURNOS OTORGADOS POR DÍA\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
         legend: {position: 'none'},
     };
     var chart = new google.visualization.LineChart(document.getElementById('linechart'));

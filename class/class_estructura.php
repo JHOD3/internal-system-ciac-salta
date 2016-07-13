@@ -1630,11 +1630,11 @@ class Estructura{
 		return $array;
 	}
 	
-    function obtTurnosOtorgadosTotales($startMonth, $id_usuarios){
-		$query_string = $this->querys->dataTurnosOtorgadosTotales($startMonth, $id_usuarios);
+    function obtTurnosOtorgadosTotales($desde, $hasta, $id_usuarios){
+		$query_string = $this->querys->dataTurnosOtorgadosTotales($desde, $hasta, $id_usuarios);
 		$query = $this->db->consulta($query_string);
         $data = "";
-        $color = array('#333333', '#008A47', '#007FA6');
+        $color = array('#007FA6');
         $i = 0;
         while ($row = $this->db->fetch_array($query)) {
             if ($row['id_usuarios'] == 1) {
@@ -1649,8 +1649,8 @@ class Estructura{
         return utf8_encode($data);
     }	
 	
-    function obtTurnosOtorgadosPorDia($startMonth, $id_usuarios){
-		$query_string = $this->querys->dataTurnosOtorgadosPorDia($startMonth, $id_usuarios);
+    function obtTurnosOtorgadosPorDia($desde, $hasta, $id_usuarios){
+		$query_string = $this->querys->dataTurnosOtorgadosPorDia($desde, $hasta, $id_usuarios);
 		$query = $this->db->consulta($query_string);
         $data = "";
         $color = array('#333333', '#008A47', '#007FA6');

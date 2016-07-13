@@ -681,7 +681,14 @@ class Querys implements iQuerys{
 		return $query;	
 	}
 
-    function dataTurnosOtorgadosTotales($startMonth, $id_usuarios){
+    function dataTurnosOtorgadosTotales($desde, $hasta, $id_usuarios){
+        $between =
+            "'".
+            implode("-", array_reverse(explode("/", $desde))).
+            "' AND '".
+            implode("-", array_reverse(explode("/", $hasta))).
+            "'"
+        ;
         if ($id_usuarios > 0) {
             $where = "
                 (
@@ -705,7 +712,7 @@ class Querys implements iQuerys{
                 ON t.id_usuarios = u.id_usuarios
             WHERE
                 {$where}
-                t.fecha_alta > '{$startMonth}'
+                t.fecha_alta BETWEEN {$between}
             GROUP BY
                 t.id_usuarios
             ORDER BY
@@ -714,7 +721,14 @@ class Querys implements iQuerys{
 		return $query;	
     }
 
-    function dataTurnosOtorgadosPorDia($startMonth, $id_usuarios){
+    function dataTurnosOtorgadosPorDia($desde, $hasta, $id_usuarios){
+        $between =
+            "'".
+            implode("-", array_reverse(explode("/", $desde))).
+            "' AND '".
+            implode("-", array_reverse(explode("/", $hasta))).
+            "'"
+        ;
         if ($id_usuarios == 0) {
             $where = "";
         } else {
@@ -730,7 +744,7 @@ class Querys implements iQuerys{
                 turnos AS t
             WHERE
                 {$where}
-                t.fecha_alta > '{$startMonth}'
+                t.fecha_alta BETWEEN {$between}
             GROUP BY
                 t.fecha_alta
         ";
