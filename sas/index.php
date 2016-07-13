@@ -35,7 +35,7 @@ $htm_index->Asigna("DATE_DESDE_TEXT", implode("/", array_reverse(explode("-", $d
 $htm_index->Asigna("DATE_HASTA", $hasta);
 $htm_index->Asigna("DATE_HASTA_TEXT", implode("/", array_reverse(explode("-", $hasta))));
 $htm_index->Asigna("TOT", $dataTOT[0]);
-$htm_index->Asigna("TOT_NUMROWS", ($dataTOT[1] * 40));
+$htm_index->Asigna("TOT_NUMROWS", 100 + ($dataTOT[1] * 40));
 $htm_index->Asigna("TPM", $dataTPM[0]);
 $htm_index->Asigna("TPM_NUMROWS", 240);
 $htm_index->Asigna("TPD", $dataTPD[0]);
