@@ -1646,7 +1646,7 @@ class Estructura{
             $data.= ",['{$nombre}', {$row['count']}, '{$style}']\n";
             $i++;
         }
-        return array(utf8_encode($data), $this->db->num_rows($query));
+        return array(utf8_encode($data), $i);
     }	
 	
     function obtTurnosPorMedicos($desde, $hasta, $id_usuarios){
@@ -1661,14 +1661,14 @@ class Estructura{
             $data.= ",['{$nombre}', {$row['count']}, '{$style}']\n";
             $i++;
         }
-        return array(utf8_encode($data), $this->db->num_rows($query));
+        return array(utf8_encode($data), $i);
     }	
 	
     function obtTurnosOtorgadosPorDia($desde, $hasta, $id_usuarios){
 		$query_string = $this->querys->dataTurnosOtorgadosPorDia($desde, $hasta, $id_usuarios);
 		$query = $this->db->consulta($query_string);
         $data = "";
-        $color = array('#333333', '#008A47', '#007FA6');
+        $color = array('#007FA6');
         $i = 0;
         while ($row = $this->db->fetch_array($query)) {
             $fecha_alta = implode("/", array_reverse(explode("-", $row['fecha_alta'])));
@@ -1676,7 +1676,7 @@ class Estructura{
             $data.= ",['{$fecha_alta}', {$row['count']}, '{$style}']\n";
             $i++;
         }
-        return array(utf8_encode($data), $this->db->num_rows($query));
+        return array(utf8_encode($data), $i);
     }	
 	
 }

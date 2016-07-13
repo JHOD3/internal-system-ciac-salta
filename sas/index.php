@@ -39,7 +39,7 @@ $htm_index->Asigna("TOT_NUMROWS", 100 + ($dataTOT[1] * 40));
 $htm_index->Asigna("TPM", $dataTPM[0]);
 $htm_index->Asigna("TPM_NUMROWS", 240);
 $htm_index->Asigna("TPD", $dataTPD[0]);
-$htm_index->Asigna("TPD_NUMROWS", 100 + ($dataTPD[1] * 100));
+$htm_index->Asigna("TPD_NUMROWS", 400 + ($dataTPD[1] * 100));
 
 $htm_index->Asigna("FECHA", utf8_encode(strftime("%A %d de %B del %Y")));
 $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));
