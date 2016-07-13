@@ -225,16 +225,17 @@
             	<div class="row">
                     <div id="cont_grilla_turnos">
                         <form action="index.php" method="post">
-                            Desde: <input type="date" name="desde" value="[DATE_DESDE]" style="width:74px;" />
-                            Hasta: <input type="date" name="hasta" value="[DATE_HASTA]" style="width:74px;" />
-                            <input type="submit" value="ok"/>
+                            Desde: <input type="text" name="desde" value="[DATE_DESDE]" style="width:74px;" />                        
+                            Hasta: <input type="text" name="hasta" value="[DATE_HASTA]" style="width:74px;" />
+                            <input type="submit" value="ok"/>                            
                         </form>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
 google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawBarChart);
-function drawBarChart() {
-    var dataBar = google.visualization.arrayToDataTable([
+
+google.charts.setOnLoadCallback(drawBar1Chart);
+function drawBar1Chart() {
+    var dataBar1 = google.visualization.arrayToDataTable([
         ['', 'Otorgados', { role: 'style' }]
         [DATA_TURNOS_OTORGADOS_TOTALES]
     ]);
@@ -242,9 +243,24 @@ function drawBarChart() {
         title: 'TURNOS OTORGADOS TOTALES\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
         legend: {position: 'none'},
     };
-    var chart = new google.visualization.BarChart(document.getElementById('barchart'));
-    chart.draw(dataBar, options);
+    var chart = new google.visualization.BarChart(document.getElementById('bar1chart'));
+    chart.draw(dataBar1, options);
 }
+
+google.charts.setOnLoadCallback(drawBar2Chart);
+function drawBar2Chart() {
+    var dataBar2 = google.visualization.arrayToDataTable([
+        ['', 'Otorgados', { role: 'style' }]
+        [DATA_TURNOS_POR_MEDICOS]
+    ]);
+    var options = {
+        title: 'TURNOS OTORGADOS TOTALES\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+        legend: {position: 'none'},
+    };
+    var chart = new google.visualization.BarChart(document.getElementById('bar2chart'));
+    chart.draw(dataBar2, options);
+}
+
 google.charts.setOnLoadCallback(drawLineChart);
 function drawLineChart() {
     var dataLine = google.visualization.arrayToDataTable([
@@ -259,7 +275,8 @@ function drawLineChart() {
     chart.draw(dataLine, options);
 }
 </script>
-<div id="barchart" style="width: 100%; height: 270px;"></div>
+<div id="bar1chart" style="width: 100%; height: 270px;"></div>
+<div id="bar2chart" style="width: 100%; height: 270px;"></div>
 <div id="linechart" style="width: 100%; height: 270px;"></div>
                     </div>
                     <div class="span3 contenedor" id="habilitar_inhabilitar" >

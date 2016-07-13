@@ -721,6 +721,35 @@ class Querys implements iQuerys{
 		return $query;	
     }
 
+    function dataTurnosPorMedicos($desde, $hasta){
+        $between =
+            "'".
+            implode("-", array_reverse(explode("/", $desde))).
+            "' AND '".
+            implode("-", array_reverse(explode("/", $hasta))).
+            "'"
+        ;
+		$query = "
+            SELECT
+                t.id_usuarios,
+                m.apellidos,
+                m.nombres,
+                COUNT(t.id_turnos) AS `count`
+            FROM
+                turnos AS t
+            INNER JOIN
+                medicos AS m
+                ON t.id_medicos = m.id_medicos
+            WHERE
+                t.fecha_alta BETWEEN {$between}
+            GROUP BY
+                t.id_usuarios
+            ORDER BY
+                COUNT(t.id_turnos) DESC
+        ";
+		return $query;	
+    }
+
     function dataTurnosOtorgadosPorDia($desde, $hasta, $id_usuarios){
         $between =
             "'".

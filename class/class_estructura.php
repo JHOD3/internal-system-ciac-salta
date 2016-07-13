@@ -1638,10 +1638,25 @@ class Estructura{
         $i = 0;
         while ($row = $this->db->fetch_array($query)) {
             if ($row['id_usuarios'] == 1) {
-                $nombre = $row['nombres']." ".$row['apellidos'].".";
+                $nombre = $row['nombres']." ".$row['apellidos'];
             } else {
                 $nombre = $row['nombres']." ".$row['apellidos'][0].".";
             }
+            $style = $color[$i % count($color)];
+            $data.= ",['{$nombre}', {$row['count']}, '{$style}']\n";
+            $i++;
+        }
+        return utf8_encode($data);
+    }	
+	
+    function obtTurnosPorMedicos($desde, $hasta){
+		$query_string = $this->querys->dataTurnosPorMedicos($desde, $hasta);
+		$query = $this->db->consulta($query_string);
+        $data = "";
+        $color = array('#007FA6');
+        $i = 0;
+        while ($row = $this->db->fetch_array($query)) {
+            $nombre = $row['nombres']." ".$row['apellidos'];
             $style = $color[$i % count($color)];
             $data.= ",['{$nombre}', {$row['count']}, '{$style}']\n";
             $i++;
