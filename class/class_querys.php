@@ -682,13 +682,6 @@ class Querys implements iQuerys{
 	}
 
     function dataTurnosOtorgadosTotales($desde, $hasta, $id_usuarios){
-        $between =
-            "'".
-            implode("-", array_reverse(explode("/", $desde))).
-            "' AND '".
-            implode("-", array_reverse(explode("/", $hasta))).
-            "'"
-        ;
         if ($id_usuarios > 0) {
             $where = "
                 (
@@ -712,7 +705,7 @@ class Querys implements iQuerys{
                 ON t.id_usuarios = u.id_usuarios
             WHERE
                 {$where}
-                t.fecha_alta BETWEEN {$between}
+                t.fecha_alta BETWEEN '{$desde}' AND '{$hasta}'
             GROUP BY
                 t.id_usuarios
             ORDER BY
@@ -722,13 +715,6 @@ class Querys implements iQuerys{
     }
 
     function dataTurnosPorMedicos($desde, $hasta){
-        $between =
-            "'".
-            implode("-", array_reverse(explode("/", $desde))).
-            "' AND '".
-            implode("-", array_reverse(explode("/", $hasta))).
-            "'"
-        ;
 		$query = "
             SELECT
                 t.id_usuarios,
@@ -741,7 +727,7 @@ class Querys implements iQuerys{
                 medicos AS m
                 ON t.id_medicos = m.id_medicos
             WHERE
-                t.fecha_alta BETWEEN {$between}
+                t.fecha_alta BETWEEN '{$desde}' AND '{$hasta}'
             GROUP BY
                 t.id_usuarios
             ORDER BY
@@ -751,13 +737,6 @@ class Querys implements iQuerys{
     }
 
     function dataTurnosOtorgadosPorDia($desde, $hasta, $id_usuarios){
-        $between =
-            "'".
-            implode("-", array_reverse(explode("/", $desde))).
-            "' AND '".
-            implode("-", array_reverse(explode("/", $hasta))).
-            "'"
-        ;
         if ($id_usuarios == 0) {
             $where = "";
         } else {
@@ -773,7 +752,7 @@ class Querys implements iQuerys{
                 turnos AS t
             WHERE
                 {$where}
-                t.fecha_alta BETWEEN {$between}
+                t.fecha_alta BETWEEN '{$desde}' AND '{$hasta}'
             GROUP BY
                 t.fecha_alta
         ";

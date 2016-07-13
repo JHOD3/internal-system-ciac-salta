@@ -225,8 +225,8 @@
             	<div class="row">
                     <div id="cont_grilla_turnos">
                         <form action="index.php" method="post">
-                            Desde: <input type="text" name="desde" value="[DATE_DESDE]" style="width:74px;" />                        
-                            Hasta: <input type="text" name="hasta" value="[DATE_HASTA]" style="width:74px;" />
+                            Desde: <input type="date" name="desde" value="[DATE_DESDE]" style="width:150px;" />                        
+                            Hasta: <input type="date" name="hasta" value="[DATE_HASTA]" style="width:150px;" />
                             <input type="submit" value="ok"/>                            
                         </form>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -240,7 +240,7 @@ function drawBar1Chart() {
         [DATA_TURNOS_OTORGADOS_TOTALES]
     ]);
     var options = {
-        title: 'TURNOS OTORGADOS TOTALES\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+        title: 'TURNOS OTORGADOS TOTALES\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
         legend: {position: 'none'},
     };
     var chart = new google.visualization.BarChart(document.getElementById('bar1chart'));
@@ -254,7 +254,7 @@ function drawBar2Chart() {
         [DATA_TURNOS_POR_MEDICOS]
     ]);
     var options = {
-        title: 'TURNOS OTORGADOS TOTALES\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+        title: 'TURNOS OTORGADOS TOTALES\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
         legend: {position: 'none'},
     };
     var chart = new google.visualization.BarChart(document.getElementById('bar2chart'));
@@ -268,7 +268,7 @@ function drawLineChart() {
         [DATA_TURNOS_OTORGADOS_POR_DIA]
     ]);
     var options = {
-        title: 'TURNOS OTORGADOS POR DÍA\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+        title: 'TURNOS OTORGADOS POR DÍA\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
         legend: {position: 'none'},
     };
     var chart = new google.visualization.LineChart(document.getElementById('linechart'));
