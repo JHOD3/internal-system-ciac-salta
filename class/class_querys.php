@@ -717,7 +717,7 @@ class Querys implements iQuerys{
     function dataTurnosPorMedicos($desde, $hasta){
 		$query = "
             SELECT
-                t.id_usuarios,
+                t.id_medicos,
                 m.apellidos,
                 m.nombres,
                 COUNT(t.id_turnos) AS `count`
@@ -729,7 +729,7 @@ class Querys implements iQuerys{
             WHERE
                 t.fecha_alta BETWEEN '{$desde}' AND '{$hasta}'
             GROUP BY
-                t.id_usuarios
+                t.id_medicos
             ORDER BY
                 COUNT(t.id_turnos) DESC
         ";
