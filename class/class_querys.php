@@ -738,6 +738,7 @@ class Querys implements iQuerys{
                 ON t.id_medicos = m.id_medicos
             WHERE
                 {$where}
+                m.estado = 1 AND
                 t.fecha_alta BETWEEN '{$desde}' AND '{$hasta}'
             GROUP BY
                 t.id_medicos
