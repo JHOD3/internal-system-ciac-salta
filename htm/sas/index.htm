@@ -236,7 +236,7 @@ google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(drawBar1Chart);
 function drawBar1Chart() {
     var dataBar1 = google.visualization.arrayToDataTable([
-        ['', 'Otorgados', { role: 'style' }]
+        ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
         [TOT]
     ]);
     var options = {
@@ -247,24 +247,10 @@ function drawBar1Chart() {
     chart.draw(dataBar1, options);
 }
 
-google.charts.setOnLoadCallback(drawBar2Chart);
-function drawBar2Chart() {
-    var dataBar2 = google.visualization.arrayToDataTable([
-        ['', 'Otorgados', { role: 'style' }]
-        [TPM]
-    ]);
-    var options = {
-        title: 'TURNOS POR MEDICOS\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
-        legend: {position: 'none'},
-    };
-    var chart = new google.visualization.BarChart(document.getElementById('bar2chart'));
-    chart.draw(dataBar2, options);
-}
-
 google.charts.setOnLoadCallback(drawLineChart);
 function drawLineChart() {
     var dataLine = google.visualization.arrayToDataTable([
-        ['', 'Otorgados', { role: 'style' }]
+        ['', 'Otorgados', { role: 'style' }, {role: 'annotation'}]
         [TPD]
     ]);
     var options = {
@@ -273,6 +259,20 @@ function drawLineChart() {
     };
     var chart = new google.visualization.LineChart(document.getElementById('linechart'));
     chart.draw(dataLine, options);
+}
+
+google.charts.setOnLoadCallback(drawBar2Chart);
+function drawBar2Chart() {
+    var dataBar2 = google.visualization.arrayToDataTable([
+        ['', 'Otorgados', { role: 'style' }, {role: 'annotation'}]
+        [TPM]
+    ]);
+    var options = {
+        title: 'TURNOS POR MEDICOS\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
+        legend: {position: 'none'},
+    };
+    var chart = new google.visualization.BarChart(document.getElementById('bar2chart'));
+    chart.draw(dataBar2, options);
 }
 </script>
 <div style="position:absolute;left:0;width:100%;">
