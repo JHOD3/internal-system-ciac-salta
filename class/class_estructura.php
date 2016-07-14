@@ -1675,13 +1675,6 @@ class Estructura{
 	
     function obtTurnosPorMedicos($desde, $hasta, $id_usuarios){
 		$query_string = $this->querys->dataTurnosPorMedicos($desde, $hasta, $id_usuarios);
-
-		$query = $this->db->consulta($query_string);
-        $tot = 0;
-        while ($row = $this->db->fetch_array($query)) {
-            $tot+= $row['count'];
-        }
-
 		$query = $this->db->consulta($query_string);
         $data = "";
         $color = array('#007FA6');
@@ -1689,8 +1682,7 @@ class Estructura{
         while ($row = $this->db->fetch_array($query)) {
             $nombre = $row['apellidos']." ".$row['nombres'][0].".";
             $style = $color[$i % count($color)];
-            $percent = round($row['count'] * 10000 / $tot) / 100;
-            $data.= ",['{$nombre}', {$row['count']}, '{$style}', '{$row['count']} ({$percent}%)']\n";
+            $data.= ",['{$nombre}', {$row['count']}, '{$style}']\n";
             $i++;
         }
         return array(utf8_encode($data), $i);
