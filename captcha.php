@@ -7,18 +7,18 @@
 
 // archivo: captcha.php
 function randomText($length) {
-  $pattern = "1234567890abcdefghijklmnopqrstuvwxyz";
-  for($i=0;$i<$length;$i++) {
-	@$key .= $pattern{rand(0,35)};
-  }
-  return $key;
+    $pattern = "23456789abcdefghijkmnpqrstuvwxyz";
+    for ($i = 0; $i < 4; $i++) {
+        @$key .= $pattern{rand(0,strlen($pattern))};
+    }
+    return $key;
 }
 session_start();
-$_SESSION['tmptxt'] = randomText(8);
+$_SESSION['tmptxt'] = randomText(4);
 $captcha = imagecreatefromgif("files/img/bgcaptcha.gif");
 $colText = imagecolorallocate($captcha, 0, 0, 0);
 
-imagestring($captcha, 15, 16, 7, $_SESSION['tmptxt'], $colText);
+imagestring($captcha, 15, 32, 10, $_SESSION['tmptxt'], $colText);
 header("Content-type: image/gif");
 imagegif($captcha);
 
