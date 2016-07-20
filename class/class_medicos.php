@@ -329,7 +329,7 @@ class Medicos extends Estructura implements iMedicos{
 							case 'sas':
 								$linea = " <span style='color:#".$row["color"]."' class='btn_estado_turno' data-id='".$row["id_turnos"]."' data-id_turnos_tipos='".$row["id_turnos_tipos"]."' data-id_turnos_estados='".$row["id_turnos_estados"]."' data-tipo='turno'>
 									<div class='bloque'>
-										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".$row["desde"].":</span>
+										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 										<div class='dat_paciente'>".
 											$row["apellidos"]. ", ".$row["nombres"]."
 											(".$row["nombre_estado"].")<br />
@@ -346,7 +346,7 @@ class Medicos extends Estructura implements iMedicos{
 
 								$linea = " <a href='#' style='color:#".$row["color"]."' class='btn_estado_turno' data-id='".$row["id_turnos"]."' data-id_turnos_tipos='".$row["id_turnos_tipos"]."' data-id_turnos_estados='".$row["id_turnos_estados"]."'>
 									<div class='bloque'>
-											<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".$row["desde"].":</span>
+											<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 											<div class='dat_paciente'>".
 												$row["apellidos"]. ", ".$row["nombres"]."
 												(".$row["nombre_estado"].")<br />
@@ -414,7 +414,7 @@ class Medicos extends Estructura implements iMedicos{
 							if ($es_inhabilitado){
 								$linea = "<span class='c_rojo inhabilitado' data-desde='".$inicio."' data-hasta='".$fin."' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
 											<div class='bloque'>
-												<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><strong>".$inicio.": Inhabilitado</strong>
+												<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><strong>".substr($inicio, 0, 5)." &raquo; Inhabilitado</strong>
 											</div>
 
 										</span>";
@@ -423,7 +423,7 @@ class Medicos extends Estructura implements iMedicos{
 									case 'sas':
 										$linea = "<span class='reservar libre' data-desde='".$inicio."' data-hasta='".$fin."' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
 											<div class='bloque'>
-												<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".$inicio.": <strong>Libre</strong>
+												<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".substr($inicio, 0, 5)." &raquo; <strong>Libre</strong>
 											</div>
 
 										</span>";
@@ -431,7 +431,7 @@ class Medicos extends Estructura implements iMedicos{
 									case 'sam':
 										$linea = "<span href='#' class='reservar libre' data-desde='".$inicio."' data-hasta='".$fin."' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
 											<div class='bloque'>
-												<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".$inicio.": <strong>Libre</strong>
+												<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".substr($inicio, 0, 5)." &raquo; <strong>Libre</strong>
 											</div>
 
 										</span>";
@@ -476,6 +476,8 @@ class Medicos extends Estructura implements iMedicos{
                     $row["USUARIO"] = '<span style="color:#b0b0b0;">'.$row['USUARIO'].'</span>';
 					$obj_turno_estado = new Turnos_estados($row["id_turnos_estados"]);
 					$row["ESTADO"] = $obj_turno_estado->nombre;
+                    $row["desde"] = substr($row["desde"], 0, 5);
+                    $row["hasta"] = substr($row["hasta"], 0, 5);
 					$htm->AsignaBloque('block_registros',$row);
 				}
 				$htm->Asigna('MJE',"");
@@ -654,7 +656,7 @@ class Medicos extends Estructura implements iMedicos{
 							if ($es_inhabilitado){
 								$linea = "<span class='c_rojo inhabilitado' data-desde='".$inicio."' data-hasta='".$fin."' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
 											<div class='bloque'>
-												<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><strong>".$inicio.": Inhabilitado</strong>
+												<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><strong>".substr($inicio, 0, 5)." &raquo; Inhabilitado</strong>
 											</div>
 
 										</span>";
@@ -665,7 +667,7 @@ class Medicos extends Estructura implements iMedicos{
 										for ($i =0; $i< 3 - $cantidad; $i++){
 											$linea_aux .= "<span class='reservar libre' data-desde='".$inicio."' data-hasta='".$fin."' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
 												<div class='bloque'>
-													<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".$inicio.": <strong>Libre</strong>
+													<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".substr($inicio, 0, 5)." &raquo; <strong>Libre</strong>
 												</div>
 
 											</span>";
@@ -676,7 +678,7 @@ class Medicos extends Estructura implements iMedicos{
 									case 'sam':
 										$linea = "<span href='#' class='reservar libre' data-desde='".$inicio."' data-hasta='".$fin."' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
 											<div class='bloque'>
-												<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".$inicio.": <strong>Libre</strong>
+												<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".substr($inicio, 0, 5)." &raquo; <strong>Libre</strong>
 											</div>
 
 										</span>";
