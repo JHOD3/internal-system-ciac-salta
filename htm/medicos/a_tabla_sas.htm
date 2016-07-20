@@ -32,14 +32,17 @@
 },
 			"bLengthChange": false,
 			"aoColumns" : [ 
-				{ sWidth: '5%' },
-				{ sWidth: '5%' },
-				{ sWidth: '15%'}, 
-				{ sWidth: '15%'},
-				{ sWidth: '15%'},
-				{ sWidth: '15%'},
-				{ sWidth: '15%'},
-				{ sWidth: '15%'}
+				{ sWidth: '1px' },
+				{ sWidth: '1px' },
+				{ sWidth: ''}, 
+				{ sWidth: ''},
+				{ sWidth: '1px'},
+				{ sWidth: ''},
+				{ sWidth: ''},
+				{ sWidth: ''},
+				{ sWidth: '1px'},
+				{ sWidth: '1px'},
+				{ sWidth: '170px'}
             ]
 		});
 		
@@ -72,8 +75,11 @@
         <tr>
             <th>ID</th>
             <th>Saludo</th>
-            <th>Nombres</th>
             <th>Apellidos</th>
+            <th>Nombres</th>
+            <th>DNI</th>
+            <th>Domicilio</th>
+            <th>E-mail</th>
             <th>Tel&eacute;fonos</th>
             <th>Sector</th>
             <th>Interno</th>
@@ -84,8 +90,11 @@
         <tr>
             <th><input type="text" name="tb_id_medicos" value="ID" class="search_init" /></th>
             <th><input type="text" name="tb_saludo" value="Saludo" class="search_init" /></th>
-            <th><input type="text" name="tb_nombres" value="Nombres" class="search_init" /></th>
             <th><input type="text" name="tb_apellidos" value="Apellidos" class="search_init" /></th>
+            <th><input type="text" name="tb_nombres" value="Nombres" class="search_init" /></th>
+            <th><input type="text" name="tb_nro_documento" value="Documento" class="search_init" /></th>
+            <th><input type="text" name="tb_domicilio" value="Domicilio" class="search_init" /></th>
+            <th><input type="text" name="tb_email" value="E-mail" class="search_init" /></th>
             <th><input type="text" name="tb_telefonos" value="Telefonos" class="search_init" /></th>
             <th><input type="text" name="tb_sector" value="Sector" class="search_init" style="display:none;" /></th>
             <th><input type="text" name="tb_interno" value="Interno" class="search_init" style="display:none;" /></th>
@@ -93,6 +102,10 @@
     </tfoot>    
     <tbody>
         <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

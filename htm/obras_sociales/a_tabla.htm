@@ -32,11 +32,12 @@
 				  $('table td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('marcado');}); });
 },
 			"bLengthChange": false,
-			"aoColumns" : [{ sWidth: '10%' },
-					{ sWidth: '35%' },
-					{ sWidth: '20%' }, 
-					{ sWidth: '20%', "sClass": "right" },
-					{ sWidth: '20%', "sClass": "right" }]
+			"aoColumns" : [
+					{ sWidth: '1px' },
+                    { sWidth: '' },
+					{ sWidth: '' }, 
+					{ sWidth: '', "sClass": "right" },
+					{ sWidth: '110px', "sClass": "right" }]
 		});
 		
 		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
@@ -67,8 +68,8 @@
     <thead> 
         <tr>
         	<th>ID</th>
-            <th>Nombre</th>
             <th>Abreviaci&oacute;n</th>
+            <th>Nombre</th>
             <th>Importe Consulta</th>
             <th>Acci&oacute;n</th>
         </tr>
@@ -76,8 +77,8 @@
     <tfoot>
         <tr>
             <th><input type="text" name="tb_id" value="ID" class="search_init" /></th>
-            <th><input type="text" name="tb_nombre" value="Nombre" class="search_init" /></th>
             <th><input type="text" name="tb_abreviacion" value="Abreviaci&oacute;n" class="search_init" /></th>
+            <th><input type="text" name="tb_nombre" value="Nombre" class="search_init" /></th>
             <th><input type="text" name="tb_importe_consulta" value="Importe Consulta" class="search_init" /></th>
         </tr>
     </tfoot>    

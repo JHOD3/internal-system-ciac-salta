@@ -36,7 +36,7 @@
 			$aColumns = array('id_pacientes', 'nro_documento', 'nombres', 'apellidos',  'id_obras_sociales');
 		break;	
 		case "medicos":
-			$aColumns = array('id_medicos', 'saludo', 'nombres', 'apellidos', 'telefonos', 'id_sectores', 'interno');
+			$aColumns = array('id_medicos', 'saludo', 'apellidos', 'nombres', 'nro_documento', 'domicilio', 'email', 'telefonos', 'id_sectores', 'interno');
 		break;
 		case "especialidades":
 			$aColumns = array('id_especialidades', 'nombre');
@@ -45,7 +45,7 @@
 			$aColumns = array('id_estudios', 'nombre', 'importe');
 		break;
 		case "obras_sociales":
-			$aColumns = array('id_obras_sociales', 'nombre', 'abreviacion', 'importe_consulta');
+			$aColumns = array('id_obras_sociales', 'abreviacion', 'nombre', 'importe_consulta');
 		break;
 		case "obras_sociales_planes":
 			$aColumns = array('id_obras_sociales_planes', 'nombre');
@@ -903,18 +903,24 @@
 						
 						$row[0] = $aRow["id_medicos"];
 						$row[1] = utf8_encode($aRow["saludo"]);
-						$row[2] = utf8_encode($aRow["nombres"]);
-						$row[3] = utf8_encode($aRow["apellidos"]);
-						$row[4] = utf8_encode($aRow["telefonos"]);
-						$row[5] = utf8_encode($sector);
-						$row[6] = utf8_encode($aRow["interno"]);
-                        $row[7] = '';
+						$row[2] = utf8_encode($aRow["apellidos"]);
+						$row[3] = utf8_encode($aRow["nombres"]);
+						$row[4] = number_format(utf8_encode($aRow["nro_documento"]), 0, ",", ".");
+						$row[5] = utf8_encode($aRow["domicilio"]);
+						$row[6] = strtolower(utf8_encode($aRow["email"]));
+						$row[7] = utf8_encode($aRow["telefonos"]);
+						$row[8] = utf8_encode($sector);
+						$row[9] = utf8_encode($aRow["interno"]);
                         if ($_SESSION['ID_USUARIO'] === '0') {
-    						$row[7] = $editar.'';
-                        }
-                        $row[7].= $especialidades.''.$obras_sociales_planes.''.$estudios;
-                        if ($_SESSION['ID_USUARIO'] === '0') {
-                            $row[7].= ''.$eliminar;
+                            $row[10] =
+                                $editar.''.
+                                $especialidades.''.
+                                $obras_sociales_planes.''.
+                                $estudios.''.
+                                $eliminar
+                            ;
+                        } else {
+                            $row[10] = '';
                         }
 						
 					break;	
@@ -945,8 +951,8 @@
 						$estudios = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='obras_sociales_estudios' data-nombre='Estudios por Obra Social'><img src='".URL."files/img/btns/obras_sociales_estudios.png' border='0'></a>";
 						
 						$row[0] = $aRow["id_obras_sociales"];
-						$row[1] = utf8_encode($aRow["nombre"]);
-						$row[2] = utf8_encode($aRow["abreviacion"]);
+						$row[1] = utf8_encode($aRow["abreviacion"]);
+						$row[2] = utf8_encode($aRow["nombre"]);
 						$row[3] = utf8_encode($aRow["importe_consulta"]);
 						$row[4] = $editar.$planes.$estudios;
 					break;

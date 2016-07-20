@@ -675,13 +675,31 @@ class Querys implements iQuerys{
 	}
 	
 	function MedicosSAM(){
-		$query = "SELECT  DISTINCT M.id_medicos, M.nombres, M.apellidos, E.nombre as especialidad, M.interno, M.id_sectores, M.nro_sector 
-				FROM medicos M
-				INNER JOIN medicos_especialidades ME 
-				ON M.id_medicos = ME.id_medicos
-				INNER JOIN especialidades E
-				ON ME.id_especialidades = E.id_especialidades
-				WHERE M.estado = 1 AND ME.estado = 1";
+		$query = "
+            SELECT
+                DISTINCT
+                M.id_medicos,
+                M.nombres,
+                M.apellidos,
+                E.nombre as especialidad,
+                M.interno,
+                M.id_sectores,
+                M.nro_sector,
+                M.telefonos,
+                M.domicilio,
+                M.email
+            FROM
+                medicos M
+            INNER JOIN
+                medicos_especialidades ME 
+                ON M.id_medicos = ME.id_medicos
+            INNER JOIN
+                especialidades E
+                ON ME.id_especialidades = E.id_especialidades
+            WHERE
+                M.estado = 1 AND
+                ME.estado = 1
+        ";
 		return $query;	
 	}
 

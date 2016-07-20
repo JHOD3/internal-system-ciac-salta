@@ -17,7 +17,7 @@
 			"sPaginationType": "full_numbers",
 			"bFilter": true, //OCULTAR BUSQUEDA GRAL
 
-			"iDisplayLength": 10,
+			"iDisplayLength": 1000,
 			"iDisplayStart":0,
 			"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
 			"oLanguage": {
@@ -28,10 +28,14 @@
 				  $('table td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('marcado');}); });
 },
 			"bLengthChange": true,
-			"aoColumns" : [{ sWidth: '30%' }, 
-					{ sWidth: '30%' }, 
-					{ sWidth: '20%' },
-					{ sWidth: '20%'}]
+			"aoColumns" : [ 
+					{ sWidth: '' },
+                    { sWidth: '' }, 
+                    { sWidth: '' }, 
+                    { sWidth: '' }, 
+                    { sWidth: '' }, 
+					{ sWidth: '80px' },
+					{ sWidth: '1px'}]
 		});
 		
 		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
@@ -63,6 +67,9 @@
         <tr>
         	<th>Especialidad</th>
             <th>Profesional</th>
+            <th>Tel&eacute;fono</th>
+            <th>Domicilio</th>
+            <th>Email</th>
             <th>Sector</th>
             <th>Interno</th>
         </tr>
@@ -71,6 +78,9 @@
         <tr>
             <th><input type="text" name="tb_especialidades" value="Especialidad" class="search_init" /></th>
             <th><input type="text" name="tb_profesional" value="Profesional" class="search_init" /></th>
+            <th><input type="text" name="tb_telefonos" value="Tel&eacute;fono" class="search_init" /></th>
+            <th><input type="text" name="tb_domicilio" value="Domicilio" class="search_init" /></th>
+            <th><input type="text" name="tb_email" value="E-mail" class="search_init" /></th>
             <th><input type="text" name="tb_sector" value="Sector" class="search_init" /></th>
             <th><input type="text" name="tb_interno" value="Interno" class="search_init" /></th>
         </tr>
@@ -80,6 +90,9 @@
         <tr>
         	<td>[especialidad]</td>
             <td>[apellidos], [nombres]</td>
+        	<td>[telefonos]</td>
+        	<td>[domicilio]</td>
+        	<td>[email]</td>
             <td>[SECTOR]</td>
             <td>[interno]</td>
         </tr>

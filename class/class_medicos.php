@@ -70,6 +70,7 @@ class Medicos extends Estructura implements iMedicos{
 
 					$obj_sectores = new Sectores($row['id_sectores']);
 					$row['SECTOR'] = $obj_sectores->nombre." ".$row['nro_sector'];
+					$row['email'] = strtolower($row['email']);
 
 					$tabla->AsignaBloque("block_".$this->nombre_tabla, $row);
 				}
