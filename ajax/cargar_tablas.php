@@ -940,7 +940,7 @@
 						$row[1] = utf8_encode($aRow["abreviacion"]);
 						$row[2] = utf8_encode($aRow["nombre"]);
 						$row[3] = utf8_encode($aRow["importe_consulta"]);
-						$row[4] = $editar.$planes.$estudios;
+						$row[4] = $editar.$planes.$estudios.$eliminar;
 					break;
 
 					case "medicos_especialidades":
