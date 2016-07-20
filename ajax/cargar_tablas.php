@@ -912,9 +912,9 @@
                         if ($_SESSION['ID_USUARIO'] === '0') {
     						$row[7] = $editar.'';
                         }
-                        $row[8].= $especialidades.''.$obras_sociales_planes.''.$estudios;
+                        $row[7].= $especialidades.''.$obras_sociales_planes.''.$estudios;
                         if ($_SESSION['ID_USUARIO'] === '0') {
-                            $row[8].= ''.$eliminar;
+                            $row[7].= ''.$eliminar;
                         }
 						
 					break;	
