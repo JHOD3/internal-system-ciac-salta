@@ -69,7 +69,8 @@ switch ($tabla){
 					particular_consulta = '".$particular_consulta."',
 					id_sectores = ".$sectores.",
 					nro_sector = '".strtoupper(utf8_decode($nro_sector))."',
-					interno = ".$interno."
+					interno = ".$interno.",
+                    saludo = '".$saludo."'
 					";
 		
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);

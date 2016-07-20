@@ -77,7 +77,8 @@ switch ($tabla){
 					particular_consulta,
 					id_sectores,
 					nro_sector,
-					interno
+					interno,
+                    saludo
 					)";
 		
 		if (!isset($particular_consulta) || $particular_consulta == "")
@@ -107,7 +108,8 @@ switch ($tabla){
 					'".$particular_consulta."',
 					".$sectores.",
 					'".strtoupper(utf8_decode($nro_sector))."',
-					".$interno."
+					".$interno.",
+                    '".$saludo."'
 					)";
 		
 		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
