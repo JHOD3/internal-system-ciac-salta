@@ -54,7 +54,7 @@
 		//CargarBotonesUI(); 
 		 
 		TablePacientes = $('#t_'+nombre).dataTable( {
-			"aaSorting": [[1, "asc" ]], //argumentos posibles: asc o desc
+			"aaSorting": [[2, "asc" ]], //argumentos posibles: asc o desc
 			"bAutoWidth": true,
 			"sPaginationType": "full_numbers",
 			"bFilter": true, //OCULTAR BUSQUEDA GRAL
@@ -76,6 +76,7 @@
 			"aoColumns" : [ 
 					{ sWidth: '1px' },
                     { sWidth: '' }, 
+					{ sWidth: '' },
 					{ sWidth: '' },
 					{ sWidth: '' },
 					{ sWidth: '110px', "sClass": "center"  }]
@@ -108,23 +109,26 @@
 <table border="0" id="t_[NOMBRE_TABLA]" class="display">
     <thead> 
         <tr>
+            <th>ID</th>
             <th>DNI</th>
-            <th>Nombres</th>
             <th>Apellidos</th>
+            <th>Nombres</th>
             <th>Obra Social</th>
             <th>Acci&oacute;n</th>
         </tr>
     </thead> 
     <tfoot>
         <tr>
+            <th></th>
             <th><input type="text" name="tb_nro_documento" value="DNI" class="search_init" /></th>
-            <th><input type="text" name="tb_nombres" value="Nombres" class="search_init" /></th>
             <th><input type="text" name="tb_apellidos" value="Apellidos" class="search_init" /></th>
+            <th><input type="text" name="tb_nombres" value="Nombres" class="search_init" /></th>
             <th><input type="text" name="tb_obras_sociales" value="Obra Social" class="search_init" /></th>
         </tr>
     </tfoot>    
     <tbody>
         <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

@@ -869,29 +869,15 @@
 				switch ($tabla){
 					case "pacientes":
 						$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
-						
 						$cobros = "<a class='btn_opciones' href='#' data-id='".$aRow["id_pacientes"]."' data-tipo_btn='tabla_hija' data-hija='cobros' data-nombre='Pagos Realizados'><img src='".URL."files/img/btns/cobros.png' border='0'></a>";
-						
 						$turnos = "<a class='btn_opciones' href='#' data-id='".$aRow["id_pacientes"]."' data-tipo_btn='tabla_hija' data-hija='turnos' data-nombre='Turnos Reservados'><img src='".URL."files/img/btns/turnos.png' border='0'></a>";
 						
-						$row[0] = "<span class='paciente_buscado' data-id='".$aRow["id_pacientes"]."'>".$aRow["nro_documento"]."</span>";
-						$row[1] = utf8_encode($aRow["nombres"]);
-						$row[2] = "<span class='paciente_buscado' data-id='".$aRow["id_pacientes"]."'>".utf8_encode($aRow["apellidos"])."</span>";
-						$row[3] = utf8_encode($obra_social);
-						//$row[4] = utf8_encode($obra_social_plan);
-						//$row[5] = $mostrar." ".$editar;
-						$row[4] = $editar.$turnos.$cobros;
-						
-						/*switch ($_SESSION['TIPO_ACCESO']){
-							case 1: //ADMINISTRADOR
-								
-							break;
-							case 2: //COMUN
-								
-							break;	
-						}*/
-						
-						
+						$row[0] = utf8_encode($aRow["id_pacientes"]);
+						$row[1] = "<span class='paciente_buscado' data-id='".$aRow["id_pacientes"]."'>".$aRow["nro_documento"]."</span>";
+						$row[2] = utf8_encode($aRow["nombres"]);
+						$row[3] = "<span class='paciente_buscado' data-id='".$aRow["id_pacientes"]."'>".utf8_encode($aRow["apellidos"])."</span>";
+						$row[4] = utf8_encode($obra_social);
+						$row[5] = $editar.$turnos.$cobros;
 						
 					break;	
 					case "medicos":
