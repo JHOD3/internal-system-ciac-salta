@@ -906,7 +906,11 @@
                                 $eliminar
                             ;
                         } else {
-                            $row[10] = '';
+                            $row[10] =
+                                $especialidades.''.
+                                $obras_sociales_planes.''.
+                                $estudios.''
+                            ;
                         }
 						
 					break;	
@@ -915,9 +919,10 @@
 						
 						$row[0] = $aRow["id_especialidades"];
 						$row[1] = utf8_encode($aRow["nombre"]);
-                        $row[2] = '';
                         if ($_SESSION['ID_USUARIO'] === '0') {
                             $row[2] = $editar.''.$eliminar;
+                        } else {
+                            $row[2] = '';
                         }
 						
 					break;
@@ -925,9 +930,10 @@
 						$row[0] = $aRow["id_estudios"];
 						$row[1] = utf8_encode($aRow["nombre"]);
 						$row[2] = utf8_encode($aRow["importe"]);
-						$row[3] = $editar;
                         if ($_SESSION['ID_USUARIO'] === '0') {
-                            $row[3].= ''.$eliminar;
+                            $row[3] = $editar.''.$eliminar;
+                        } else {
+                            $row[3] = '';
                         }
 						
 					break;	
@@ -940,7 +946,11 @@
 						$row[1] = utf8_encode($aRow["abreviacion"]);
 						$row[2] = utf8_encode($aRow["nombre"]);
 						$row[3] = utf8_encode($aRow["importe_consulta"]);
-						$row[4] = $editar.$planes.$estudios.$eliminar;
+                        if ($_SESSION['ID_USUARIO'] === '0') {
+    						$row[4] = $editar.$planes.$estudios.$eliminar;
+                        } else {
+    						$row[4] = $planes.$estudios;
+                        }
 					break;
 
 					case "medicos_especialidades":
@@ -952,7 +962,11 @@
 						$row[1] = utf8_encode($especialidad);
 						$row[2] = utf8_encode($aRow["duracion_turno"]);
 						//$row[3] = $mostrar." ".$editar." ".$horarios;
-						$row[3] = $horarios.$eliminar;
+                        if ($_SESSION['ID_USUARIO'] === '0') {
+    						$row[3] = $horarios.$eliminar;
+                        } else {
+    						$row[3] = $horarios;
+                        }
 					break;
 					
 					case "medicos_estudios":
@@ -962,7 +976,11 @@
 						$row[2] = '<input type="text" class="particular" id="'.$aRow["id_medicos_estudios"].'" value="'.$aRow["particular"].'" />';
 						//$row[2] = $aRow["particular"];
 						//$row[2] = $mostrar." ".$editar;
-						$row[3] = $editar;
+                        if ($_SESSION['ID_USUARIO'] === '0') {
+                            $row[3] = $editar;
+                        } else {
+                            $row[3] = '';
+                        }
 					break;
 					
 					case "medicos_obras_sociales":
@@ -970,12 +988,20 @@
 						$row[0] = $aRow["id_medicos_obras_sociales"];
 						$row[1] = utf8_encode($obra_social);
 						$row[2] = '<input type="text" class="arancel" id="'.$aRow["id_medicos_obras_sociales"].'" value="'.$aRow["arancel"].'" />';
-						$row[3] = $eliminar;
+                        if ($_SESSION['ID_USUARIO'] === '0') {
+                            $row[3] = $eliminar;
+                        } else {
+                            $row[3] = '';
+                        }
 					break;
 					case 'obras_sociales_planes':
 						$row[0] = $aRow["id_obras_sociales_planes"];
 						$row[1] = utf8_encode($aRow["nombre"]);
-						$row[2] = $editar;
+                        if ($_SESSION['ID_USUARIO'] === '0') {
+                            $row[2] = $editar;
+                        } else {
+                            $row[2] = '';
+                        }
 					break;
 					case "obras_sociales_estudios":
 					
@@ -983,7 +1009,11 @@
 						$row[1] = utf8_encode($estudio);
 						$row[2] = utf8_encode($aRow["importe"]);
 						//$row[3] = $mostrar." ".$editar;
-						$row[3] = $editar;
+                        if ($_SESSION['ID_USUARIO'] === '0') {
+                            $row[3] = $editar;
+                        } else {
+                            $row[3] = '';
+                        }
 					break;
 					
 					case "medicos_horarios":
@@ -993,7 +1023,11 @@
 						$row[1] = utf8_encode($dia_semana);
 						$row[2] = utf8_encode($aRow["desde"]);
 						$row[3] = utf8_encode($aRow["hasta"]);
-						$row[4] = $editar.$eliminar;
+                        if ($_SESSION['ID_USUARIO'] === '0') {
+                            $row[4] = $editar.$eliminar;
+                        } else {
+                            $row[4] = '';
+                        }
 					break;
 					case "cobros":
 						$hoy = date("Y-m-d");
