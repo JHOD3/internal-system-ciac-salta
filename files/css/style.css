@@ -1273,3 +1273,6 @@ input[type=text].arancel, input[type=text].particular{
 	display:none	
 }
 
+tr.odd td:last-child{
+    white-space:nowrap!important;
+}

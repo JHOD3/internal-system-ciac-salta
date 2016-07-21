@@ -859,10 +859,10 @@
 				$mostrar = "<a href='#' class='btn_opciones' data-titulo='Detalle' data-tipo_btn='detalle' data-id='".$aRow["id_".$tabla]."' data-tipo='detalle' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
 				
 				if (!isset($id_padre)){
-					$editar = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
+					$editar = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."' alt='Editar' title='Editar'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
 					$eliminar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-tabla='".$tabla."' class='btn_eliminar' title='Eliminar'><img src='".URL."files/img/btns/eliminar.png' border='0' ></a>";	
 				}else{
-					$editar = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."' data-id_padre='".$id_padre."'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
+					$editar = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."' data-id_padre='".$id_padre."' alt='Editar' title='Editar'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
 					$eliminar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-tabla='".$tabla."' class='btn_eliminar' title='Eliminar' data-id_padre='".$id_padre."'><img src='".URL."files/img/btns/eliminar.png' border='0'></a>";	
 				}
 					
