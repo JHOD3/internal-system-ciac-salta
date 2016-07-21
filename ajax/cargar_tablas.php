@@ -812,7 +812,7 @@ if ($cant_registros != 0){
 				
 				if ( $aColumns[$i] == "id_obras_sociales" ){
 					$obj_obra_social = new Obras_sociales($aRow[$aColumns[$i]]);
-					$obra_social = $obj_obra_social->nombre;
+					$obra_social = $obj_obra_social->abreviacion;
 				}
 				
 				if ( $aColumns[$i] == "id_obras_sociales_planes" ){
