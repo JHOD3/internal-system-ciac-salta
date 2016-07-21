@@ -33,7 +33,7 @@
 	 */
 	switch ($tabla){
 		case "pacientes":
-			$aColumns = array('id_pacientes', 'nro_documento', 'nombres', 'apellidos',  'id_obras_sociales');
+			$aColumns = array('id_pacientes', 'nro_documento', 'apellidos', 'nombres', 'id_obras_sociales');
 		break;	
 		case "medicos":
 			$aColumns = array('id_medicos', 'saludo', 'apellidos', 'nombres', 'nro_documento', 'domicilio', 'email', 'telefonos', 'id_sectores', 'interno');
@@ -874,8 +874,8 @@
 						
 						$row[0] = utf8_encode($aRow["id_pacientes"]);
 						$row[1] = "<span class='paciente_buscado' data-id='".$aRow["id_pacientes"]."'>".$aRow["nro_documento"]."</span>";
-						$row[2] = utf8_encode($aRow["nombres"]);
-						$row[3] = "<span class='paciente_buscado' data-id='".$aRow["id_pacientes"]."'>".utf8_encode($aRow["apellidos"])."</span>";
+						$row[2] = "<span class='paciente_buscado' data-id='".$aRow["id_pacientes"]."'>".utf8_encode($aRow["apellidos"])."</span>";
+						$row[3] = utf8_encode($aRow["nombres"]);
 						$row[4] = utf8_encode($obra_social);
 						$row[5] = $editar.$turnos.$cobros;
 						
