@@ -3,7 +3,8 @@
 
 $(function(){
 	//FUNCION PARA BUSCAR PACIENTES ANTES DE ASIGNAR UN TURNO
-	$("#btn_buscar_paciente").on("click", function(){
+	$("#btn_buscar_paciente").on("click", function(event){
+        event.preventDefault();
 		var dni = $("#dni").val();
 		if (dni != ""){
 			$.ajax({  
@@ -22,6 +23,8 @@ $(function(){
 							var id_plan = $('#panel_paciente #id_obras_sociales_planes').val();
 							
 							TrabajaConOS(id_medico, id_os, id_plan);
+						} else {
+                            $('#cont_grilla_turnos').html('');
 						}
 					});
 				},
@@ -34,5 +37,11 @@ $(function(){
 		}else{
 			alert("Debe ingresar DNI del paciente", 'ATENCIÓN');	
 		}
-	})
+	});
+    $('#myMenuJQ a').click(function(event){
+        event.preventDefault();
+		if ($('#id_medico').val() == ''){
+            $('#cont_grilla_turnos').html('');
+        }
+    });
 });
