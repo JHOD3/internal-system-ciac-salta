@@ -36,7 +36,7 @@ switch ($tabla){
 		$aColumns = array('id_pacientes', 'nro_documento', 'apellidos', 'nombres', 'id_obras_sociales');
 	break;	
 	case "medicos":
-		$aColumns = array('id_medicos', 'saludo', 'apellidos', 'nombres', 'nro_documento', 'domicilio', 'email', 'telefonos', 'id_sectores', 'interno');
+		$aColumns = array('id_medicos', 'saludo', 'apellidos', 'nombres', 'nro_documento', 'email', 'telefonos', 'id_sectores', 'interno');
 	break;
 	case "especialidades":
 		$aColumns = array('id_especialidades', 'nombre');
@@ -896,13 +896,12 @@ if ($cant_registros != 0){
 					$row[2] = utf8_encode($aRow["apellidos"]);
 					$row[3] = utf8_encode($aRow["nombres"]);
 					$row[4] = number_format(utf8_encode($aRow["nro_documento"]), 0, ",", ".");
-					$row[5] = utf8_encode($aRow["domicilio"]);
-					$row[6] = strtolower(utf8_encode($aRow["email"]));
-					$row[7] = utf8_encode($aRow["telefonos"]);
-					$row[8] = utf8_encode($sector);
-					$row[9] = utf8_encode($aRow["interno"]);
+					$row[5] = strtolower(utf8_encode($aRow["email"]));
+					$row[6] = utf8_encode($aRow["telefonos"]);
+					$row[7] = utf8_encode($sector);
+					$row[8] = utf8_encode($aRow["interno"]);
                     if ($_SESSION['ID_USUARIO'] === '0') {
-                        $row[10] =
+                        $row[9] =
                             $editar.''.
                             $especialidades.''.
                             $obras_sociales_planes.''.
@@ -910,7 +909,7 @@ if ($cant_registros != 0){
                             $eliminar.''
                         ;
                     } else {
-                        $row[10] =
+                        $row[9] =
                             $especialidades.''.
                             $obras_sociales_planes.''.
                             $estudios.''
