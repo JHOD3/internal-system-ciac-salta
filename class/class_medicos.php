@@ -161,6 +161,7 @@ class Medicos extends Estructura implements iMedicos{
 			while ($row = $this->db->fetch_array($query)){
 				$elto = Array(
 					"id" => utf8_encode($row["id_medicos"]),
+					"saludo" => utf8_encode($row["saludo"]),
 					"nombres" => utf8_encode($row["nombres"]),
 					"apellidos" => utf8_encode($row["apellidos"]),
 					"icon" => utf8_encode($row["email"])
@@ -992,7 +993,7 @@ class Medicos extends Estructura implements iMedicos{
 
 		$htm->Asigna(
 			"MEDICO",
-			utf8_encode($this->apellidos).", ".utf8_encode($this->nombres)
+			utf8_encode($this->saludo)." ".utf8_encode($this->apellidos).", ".utf8_encode($this->nombres)
 		);
 		$htm->Asigna("DIAS_TRABAJO", $dias);
 

@@ -2,15 +2,17 @@
     <div class="container">
     	[block: block_registros]
         <div class="row">
-        	<div class="span12">
-                <a href="login.php">[Cerrar Sesi&oacute;n]</a>
-                <h1>[apellidos], [nombres]</h1>
-            </div>
-      	</div>
-        <div class="row">
             <div class="span12">
-                <label>Especialidad:</label> [DROP_ESPECIALIDADES]
-                
+                <div class="float margin"><label>Especialidad:</label></div>
+                <div class="float">[DROP_ESPECIALIDADES]</div>
+                <div class="right">
+                    <a href="#" class="btn btn_tabla" data-nombre="medicos" style="float:left!important;">
+                    	<img src="[IMG]btns/medicos.png" width="30" />
+                        <span>Internos</span>
+                    </a>
+                </div>
+                <div class="right margin"><a href="login.php">[Cerrar Sesi&oacute;n]</a></div>
+                <div class="fn"></div>
             </div>
             <div class="oculto">
             	ID Medico: <input type="text" name="id_medico" id="id_medico" value="[id_medicos]" />

@@ -643,7 +643,7 @@ $(function() {
 	.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 		return $( "<li>" )
 		//.append( "<a>" + item.nombres + " " + item.apellidos + "<br><small>" + item.especialidad + "</small></a>" )
-		.append( "<a>" + item.nombres + " " + item.apellidos + "</a>" )
+		.append( "<a>" + item.saludo + " " + item.nombres + " " + item.apellidos + "</a>" )
 		.appendTo( ul );
 	};
 });
