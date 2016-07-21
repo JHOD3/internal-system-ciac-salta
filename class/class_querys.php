@@ -472,7 +472,7 @@ class Querys implements iQuerys{
 				ON ME.id_especialidades = E.id_especialidades
 				WHERE ME.id_medicos = $id_medico AND ME.estado = 1 
 				GROUP BY ME.id_especialidades
-				ORDER BY ME.id_medicos_especialidades ASC";
+				ORDER BY E.nombre ASC";
 		return $query;
 	}
 	

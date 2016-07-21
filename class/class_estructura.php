@@ -120,13 +120,18 @@ class Estructura{
 			$drop->Asigna("NOMBRE_SELECT", $nombre);
 			
 		
-		switch ($this->nombre_tabla){
+        switch ($this->nombre_tabla){
 			case "medicos_especialidades":
 				$query_string = $this->querys->DropMedicosEspecialidades($id_padre);
 			break;
 			case "especialidades":
-				$query_string = $this->querys->Registros($this->nombre_tabla, "estado", "1", $ordenar, "","",$orden);
+				$query_string = $this->querys->Registros($this->nombre_tabla, "estado", "1", "nombre", "", "", "ASC");
 			break;
+            case "dias_semana":
+        		print $this->nombre_tabla;
+				$query_string = $this->querys->Registros($this->nombre_tabla, "estado", "1", "id_dias_semana", "", "", "ASC");
+        		print $query;
+            break;
 			default:
 				if($id_padre != "")
 					$query_string = $this->querys->Registros($this->nombre_tabla, "id_".$this->tabla_padre, $id_padre, $ordenar, "","",$orden);
