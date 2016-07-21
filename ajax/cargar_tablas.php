@@ -877,7 +877,11 @@
 						$row[2] = "<span class='paciente_buscado' data-id='".$aRow["id_pacientes"]."'>".utf8_encode($aRow["apellidos"])."</span>";
 						$row[3] = utf8_encode($aRow["nombres"]);
 						$row[4] = utf8_encode($obra_social);
-						$row[5] = $editar.$turnos.$cobros;
+                        if ($_SESSION['ID_USUARIO'] === '0') {
+                            $row[5] = $editar.''.$turnos.''.$cobros.''.$eliminar.'';
+                        } else {
+                            $row[5] = $editar.''.$turnos.''.$cobros.'';
+                        }
 						
 					break;	
 					case "medicos":
