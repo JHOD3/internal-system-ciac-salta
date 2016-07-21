@@ -32,10 +32,6 @@
 	position:relative;	
 }
 
-#panel_menu div{
-	display:none
-}
-
 #panel_menu a#btn_mostrar{
 	min-width: 10%;
 	width:20px;
@@ -117,20 +113,6 @@
 	
 	
 	$(document).ready(function(){
-		$('#btn_mostrar').click(function(event){
-            event.preventDefault();		  
-			var $div = $('#panel_menu div');
-			var $boton = $('#btn_mostrar');
-			
-			if ($div.is(':visible')) {
-				$div.slideUp();
-				$boton.html('Mostrar');
-			} else {
-				$div.slideDown();
-				$boton.html('Ocultar');
-			}
-		})
-
 		$("#medicos").focus(function(){
 			$(this).val('');
 		})
@@ -181,7 +163,6 @@
 </section>
 <section id="panel_menu" class="bg_verde">
 	[MENU_TABLAS]
-    <a id="btn_mostrar" class="btn" href="#">Mostrar Men&uacute;</a>
 </section>
 
 <section id="panel_busqueda" class="bg_azul">

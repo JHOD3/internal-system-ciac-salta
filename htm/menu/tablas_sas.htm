@@ -8,33 +8,39 @@
 			var tabla = $(this).data("nombre");
 			var nombre = $(this).find('span').html();
 
-			if (tabla != "mensajes"){
-				IniciarVentana("ventana_menu", "abrir", tabla);
-				
-				$.ajax({  
-					type: "POST",   
-					url: "[URL]ajax/admin_tabla.php",					
-					data: {tabla: tabla}, 
-					beforeSend: function() {
-						$(ventana_menu).html("");
-					},
-					success: function(requestData){
-						var rta = requestData;
-						$(ventana_menu).html(rta);
-					},
-					complete: function(requestData, exito){
-					},
-					error: function (){
-						alert ("error");
-					}
-				});
-
-				$(ventana_menu).dialog('option', 'title', 'Administraci\u00f3n de '+nombre);
-				$(ventana_menu).dialog( "open" );
-				
-				$(ventana_menu).focus();
-			}else{
-				alert('M\u00f3dulo Inhabilitado.<br /> Temporalmente en Construcci\u00f3n.','ATENCI\u00d3N')	
+			switch (tabla){
+                case "mensajes":
+                    alert('M\u00f3dulo Inhabilitado.<br /> Temporalmente en Construcci\u00f3n.','ATENCI\u00d3N')	
+                    break;
+                case "estadisticas":
+                    window.location = 'index.php';
+                    break;
+                default:
+    				IniciarVentana("ventana_menu", "abrir", tabla);
+    				
+    				$.ajax({  
+    					type: "POST",   
+    					url: "[URL]ajax/admin_tabla.php",					
+    					data: {tabla: tabla}, 
+    					beforeSend: function() {
+    						$(ventana_menu).html("");
+    					},
+    					success: function(requestData){
+    						var rta = requestData;
+    						$(ventana_menu).html(rta);
+    					},
+    					complete: function(requestData, exito){
+    					},
+    					error: function (){
+    						alert ("error");
+    					}
+    				});
+    
+    				$(ventana_menu).dialog('option', 'title', 'Administraci\u00f3n de '+nombre);
+    				$(ventana_menu).dialog( "open" );
+    				
+    				$(ventana_menu).focus();
+                    break;
 			}
 			
 			
@@ -46,27 +52,31 @@
 <div id="myMenuJQ">
     <!--<a href="form_alta.php?tbl=pacientes" id="create-user" class="btn">Pacientes</a>-->
     <a href="#" class="btn btn_tabla" data-nombre="pacientes">
-        <img src="[IMG]btns/pacientes.png" width="60" /><br />
+        <img src="[IMG]btns/pacientes.png" width="30" />
         <span>Pacientes</span>
     </a>
     <a href="#" class="btn btn_tabla" data-nombre="medicos">
-        <img src="[IMG]btns/medicos.png" width="60" /><br />
+        <img src="[IMG]btns/medicos.png" width="30" />
         <span>M&eacute;dicos</span>
     </a>
     <a href="#" class="btn btn_tabla" data-nombre="especialidades">
-        <img src="[IMG]btns/especialidades.png" width="60" /><br />
+        <img src="[IMG]btns/especialidades.png" width="30" />
         <span>Especialidades</span>
     </a>
     <a href="#" class="btn btn_tabla" data-nombre="obras_sociales">
-        <img src="[IMG]btns/obras_sociales.png" width="60" /><br />
+        <img src="[IMG]btns/obras_sociales.png" width="30" />
         <span>Obras Sociales</span>
     </a>
     <a href="#" class="btn btn_tabla" data-nombre="estudios">
-        <img src="[IMG]btns/estudios.png" width="60" /><br />
+        <img src="[IMG]btns/estudios.png" width="30" />
         <span>Estudios</span>
     </a>
+    <a href="#" class="btn btn_tabla" data-nombre="estadisticas">
+        <img src="[IMG]btns/mensajes.png" width="30" />
+        <span>Estadísticas</span>
+    </a>
     <!--a href="#" class="btn btn_tabla" data-nombre="mensajes">
-        <img src="[IMG]btns/mensajes.png" width="60" /><br />
+        <img src="[IMG]btns/mensajes.png" width="30" />
         <span>Mensajes</span>
     </a//-->
 </div>
