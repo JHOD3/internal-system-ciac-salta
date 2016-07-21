@@ -1273,6 +1273,31 @@ input[type=text].arancel, input[type=text].particular{
 	display:none	
 }
 
-tr.odd td:last-child{
+tr.odd td:last-child,
+tr.even td:last-child{
     white-space:nowrap!important;
+}
+
+#contenedor_listado tbody tr td:last-child a:hover{
+  color: red;
+  position: relative;
+}
+
+#contenedor_listado tbody tr td:last-child a[title]:hover:after{
+  content: attr(title);
+  padding: 4px 8px;
+  background:#606062;
+  color: #ffffff;
+  position: absolute;
+  left: -60px;
+  top: 30px;
+  z-index: 20;
+  white-space: nowrap;
+
+  border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }

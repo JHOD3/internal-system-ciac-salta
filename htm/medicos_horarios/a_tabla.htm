@@ -29,7 +29,8 @@
 			"fnDrawCallback": function(){
 				  $('table td').bind('mouseenter', function () { $(this).parent().children().each(function(){$(this).addClass('marcado');}); });
 				  $('table td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('marcado');}); });
-},
+                  $('#contenedor_listado tbody tr td:last-child a').each(function(index){if ($(this).attr('data-titulo')) {$(this).attr('title', $(this).attr('data-titulo'));} else {$(this).attr('title', $(this).attr('data-nombre'));}});
+            },
 			"bLengthChange": false,
 			"aoColumns" : [{ sWidth: '15%' }, 
 					{ sWidth: '40%' }, 
