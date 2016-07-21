@@ -128,9 +128,7 @@ class Estructura{
 				$query_string = $this->querys->Registros($this->nombre_tabla, "estado", "1", "nombre", "", "", "ASC");
 			break;
             case "dias_semana":
-        		print $this->nombre_tabla;
 				$query_string = $this->querys->Registros($this->nombre_tabla, "estado", "1", "id_dias_semana", "", "", "ASC");
-        		print $query;
             break;
 			default:
 				if($id_padre != "")
