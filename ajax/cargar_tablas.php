@@ -963,7 +963,10 @@ if ($cant_registros != 0){
 					
 					$row[0] = $aRow["id_medicos_especialidades"];
 					$row[1] = utf8_encode($especialidad);
-					$row[2] = utf8_encode($aRow["duracion_turno"]);
+					$row[2] = utf8_encode(
+                        substr($aRow["duracion_turno"], 0, 2) * 60 +
+                        substr($aRow["duracion_turno"], 3, 2)
+                    )." min";
 					//$row[3] = $mostrar." ".$editar." ".$horarios;
                     if ($_SESSION['ID_USUARIO'] === '0') {
 						$row[3] = $horarios.''.$eliminar.'';
@@ -1024,8 +1027,8 @@ if ($cant_registros != 0){
 					
 					$row[0] = $aRow["id_medicos_horarios"];
 					$row[1] = utf8_encode($dia_semana);
-					$row[2] = utf8_encode($aRow["desde"]);
-					$row[3] = utf8_encode($aRow["hasta"]);
+					$row[2] = utf8_encode(substr($aRow["desde"], 0, 5));
+					$row[3] = utf8_encode(substr($aRow["hasta"], 0, 5));
                     if ($_SESSION['ID_USUARIO'] === '0') {
                         $row[4] = $editar.''.$eliminar.'';
                     } else {
