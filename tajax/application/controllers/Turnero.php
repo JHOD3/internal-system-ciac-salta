@@ -93,7 +93,7 @@ class Turnero extends CI_Controller {
         $prefsCalendar = array (
             #'start_day' => 'monday',
             'show_next_prev'  => TRUE,
-            'next_prev_url'   => base_url()."turnero/calendar/{$id_especialidades}/{$id_medicos}"
+            'next_prev_url'   => base_url()."index.php/turnero/calendar/{$id_especialidades}/{$id_medicos}"
         );
         $this->load->library('calendar', $prefsCalendar);
 
