@@ -102,6 +102,7 @@ class Turnero extends CI_Controller {
             "<td></td>",
             $aData['calendar']
         );
+        header('Access-Control-Allow-Origin:*');
         $this->load->view('calendar_view', $aData);
     }
 
