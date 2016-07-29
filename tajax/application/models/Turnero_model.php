@@ -182,7 +182,7 @@ class Turnero_model extends CI_model
                 in_array($id_dias_semana, $dias_semana) and
                 $proximoTurnoDisponible <= $year."-".$month."-".($i<10?'0':'').$i
             ){
-                $result[$i] = base_url()."turnero/calendar/{$id_especialidades}/{$id_medicos}/{$year}/{$month}/".($i<10?'0':'')."{$i}/";
+                $result[$i] = base_url()."index.php/turnero/calendar/{$id_especialidades}/{$id_medicos}/{$year}/{$month}/".($i<10?'0':'')."{$i}/";
             }
         }
         return $result;        
