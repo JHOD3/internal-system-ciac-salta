@@ -112,6 +112,13 @@ $(document).ready(function(){
         }).done(function(data) {
             $('#calendar').html(data);
             $('#divLoading').html('');
+        }).fail(function(jqXHR, textStatus, errorThrown ){
+            if (textStatus == 'abort'){
+                $('#calendar').html('<div style="width:100%;text-align:center;">esperes unos segundos por favor...</div>');
+            } else {
+                $('#calendar').html('<div style="width:100%;text-align:center;">Hubo un problema de conexión. por favor reintente mas tarde.</div>');
+                $('#divLoading').html('');
+            }
         });
     });
     $('#calendar .detail a').click(function(event){
