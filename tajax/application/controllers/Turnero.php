@@ -6,6 +6,7 @@ class Turnero extends CI_Controller {
     function __construct()
     {
         parent::__construct();
+        $this->output->set_header('Access-Control-Allow-Origin: www.ciacsalta.com.ar');
     }
 
 	public function index()
@@ -102,7 +103,6 @@ class Turnero extends CI_Controller {
             "<td></td>",
             $aData['calendar']
         );
-        header('Access-Control-Allow-Origin:*');
         $this->load->view('calendar_view', $aData);
     }
 
