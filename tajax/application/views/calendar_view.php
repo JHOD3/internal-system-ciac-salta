@@ -114,7 +114,7 @@ $(document).ready(function(){
             $('#divLoading').html('');
         }).fail(function(jqXHR, textStatus, errorThrown ){
             if (textStatus == 'abort'){
-                $('#calendar').html('<div style="width:100%;text-align:center;">esperes unos segundos por favor...</div>');
+                $('#calendar').html('<div style="width:100%;text-align:center;">Espere unos segundos por favor...</div>');
             } else {
                 $('#calendar').html('<div style="width:100%;text-align:center;">Hubo un problema de conexión. Por favor reintente mas tarde.</div>');
                 $('#divLoading').html('');
