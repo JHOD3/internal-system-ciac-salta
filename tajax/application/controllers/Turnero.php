@@ -6,7 +6,7 @@ class Turnero extends CI_Controller {
     function __construct()
     {
         parent::__construct();
-        $this->output->set_header('Access-Control-Allow-Origin: http://www.ciacsalta.com.ar');
+        $this->output->set_header('Access-Control-Allow-Origin: *');
     }
 
 	public function index()
