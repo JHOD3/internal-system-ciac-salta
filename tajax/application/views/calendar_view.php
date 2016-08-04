@@ -39,7 +39,7 @@
                         $Tx = "";
                     }
                     ?>
-                    <?php for ($h = $rsH['desde']; $h < $rsH['hasta']; $h = horaMM($h, $vcDuracionTurno)): ?>
+                    <?php for ($h = $rsH['desde']; $h <= $rsH['hasta']; $h = horaMM($h, $vcDuracionTurno)): ?>
                         <?php if (in_array($h, $aTurnosReservados)): ?>
                             <div><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
                         <?php else: ?>
@@ -51,7 +51,7 @@
                                     $aHorariosInhabilitados[$hi]['desde'] and
                                     isset($aHorariosInhabilitados[$hi]['hasta']) and
                                     $aHorariosInhabilitados[$hi]['hasta'] and
-                                    $h >= $aHorariosInhabilitados[$hi]['desde'] and
+                                    $h > $aHorariosInhabilitados[$hi]['desde'] and
                                     $h < $aHorariosInhabilitados[$hi]['hasta']
                                 ) {
                                     $boHI = true;
