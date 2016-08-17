@@ -30,6 +30,30 @@
  * DataTables features
  */
 
+/* BEGIN AUTOAJUSTAR TABLAS */
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable{
+    left: 5%!important;
+    max-width: 90%!important;
+    min-width: 215px!important;
+}
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable,
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable div,
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable table,
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable thead,
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable tbody,
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable tfoot,
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable th,
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable tr,
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable td{
+    width: auto!important;
+}
+.dataTables_info, .dataTables_paginate.dataTables_numbers{
+    display:block!important;
+    float:none!important;
+    clear:both!important;
+}
+/* END AUTOAJUSTAR TABLAS */
+
 .dataTables_wrapper {
 	position: relative;
 	min-height: 302px;

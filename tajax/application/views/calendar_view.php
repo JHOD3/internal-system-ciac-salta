@@ -83,6 +83,7 @@
 </div>
 <div class="clearfloat"></div>
 <div>
+    <?php /*
     <div class="osTitle">Obras Sociales que recibe este Profesional:</div>
     <div class="osList">
         <?php $aOSrec_ids = array(); ?>
@@ -95,6 +96,7 @@
             Atención sin obra social
         <?php endif; ?>
     </div>
+    */ ?>
     <div id="osrec">
         <div class="osTitle">Elige la Obra Social</div>
         <span class="custom-dropdown custom-dropdown--white">
