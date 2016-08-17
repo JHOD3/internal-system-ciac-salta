@@ -85,18 +85,52 @@
 <div>
     <div class="osTitle">Obras Sociales que recibe este Profesional:</div>
     <div class="osList">
+        <?php $aOSrec_ids = array(); ?>
         <?php if (count($rsObrasSocialesDeMedico) > 0): ?>
             <?php foreach ($rsObrasSocialesDeMedico AS $rsOSM): ?>
+                <?php $aOSrec_ids[] = $rsOSM['id_obras_sociales']; ?>
                 <span title="<?=$rsOSM['nombre']?>"><?=$rsOSM['abreviacion']?>,&nbsp;</span>
             <?php endforeach; ?>
         <?php else: ?>
             Atención sin obra social
         <?php endif; ?>
     </div>
+    <div id="osrec">
+        <div class="osTitle">Elige la Obra Social</div>
+        <span class="custom-dropdown custom-dropdown--white">
+            <select class="custom-dropdown__select custom-dropdown__select--white" id="id_obras_sociales" name="id_obras_sociales">
+                <option value="">-- Seleccione una Obra Social --</option>
+                <?php foreach ($aObrasSociales AS $rsOS): ?>
+                    <option id="opt<?=$rsOS['id_obras_sociales']?>" class="rec<?=in_array($rsOS['id_obras_sociales'], $aOSrec_ids)?>" value="<?=$rsOS['id_obras_sociales']?>"><?=$rsOS['abreviacion']?> - <?=ucwords(lower($rsOS['nombre']))?></option>
+                <?php endforeach; ?>
+            </select>
+        </span>
+        <div id="id_obras_sociales_div"></div>
+    </div>
+    <div class="clearfloat10"></div>
 </div>
 
 <script>
 $(document).ready(function(){
+    $('#id_obras_sociales').bind('change click', function() {
+        $('#id_obras_sociales_div').hide();
+        if ($('#osrec #opt'+$(this).val()).attr('class') == 'rec') {
+            var os = $('#osrec #opt'+$(this).val()).html().split('-');
+            os.shift();
+            os = os.join('-').trim();
+            $('#id_obras_sociales_div')
+                .html(
+                    '<b>ATENCIÓN</b><br /><strong>'+
+                    '<?=ucwords(doSaludo($rsMedico))?>'+
+                    '</strong> no trabaja con la Obra Social <strong>'+
+                    os+
+                    '</strong>.<br />'+
+                    'Aún así puede asistir a la consulta de forma particular.'
+                )
+                .show()
+            ;
+        }
+    });
     $('#calendar tr td strong').parent().html($('#calendar tr td strong').html());
     $('#calendar tr td a').each(function(){
         if ($(this).text() == <?=(integer)$day?>) {
