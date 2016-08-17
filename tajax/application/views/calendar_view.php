@@ -83,6 +83,14 @@
 </div>
 <div class="clearfloat"></div>
 <div>
+    <?php
+    $aOSrec_ids = array();
+    if (count($rsObrasSocialesDeMedico) > 0):
+        foreach ($rsObrasSocialesDeMedico AS $rsOSM):
+            $aOSrec_ids[] = $rsOSM['id_obras_sociales'];
+        endforeach;
+    endif;
+    ?>
     <?php /*
     <div class="osTitle">Obras Sociales que recibe este Profesional:</div>
     <div class="osList">
@@ -97,6 +105,7 @@
         <?php endif; ?>
     </div>
     */ ?>
+    <?php if (isset($aObrasSociales) and count($aObrasSociales) > 0): ?>
     <div id="osrec">
         <div class="osTitle">Elige la Obra Social</div>
         <span class="custom-dropdown custom-dropdown--white">
@@ -109,6 +118,7 @@
         </span>
         <div id="id_obras_sociales_div"></div>
     </div>
+    <?php endif; ?>
     <div class="clearfloat10"></div>
 </div>
 
