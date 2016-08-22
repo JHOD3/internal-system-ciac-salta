@@ -43,7 +43,7 @@ class Turnos extends Estructura implements iTurnos{
 		$row["MEDICO"] =  $obj_medico->apellidos.", ".$obj_medico->nombres;
 		
 		$obj_paciente = new Pacientes($row["id_pacientes"]);
-		$row["PACIENTE"] =  $obj_paciente->apellidos.", ".$obj_paciente->nombres;
+		$row["PACIENTE"] =  number_format($obj_paciente->nro_documento, 0, ",", ".")." - ".$obj_paciente->apellidos.", ".$obj_paciente->nombres;
 		
 		$obj_obra_social = new Obras_sociales($obj_paciente->id_obras_sociales);
 		$row["OBRA_SOCIAL"] =  $obj_obra_social->nombre;
