@@ -255,11 +255,27 @@ function drawBar2Chart() {
     var chart = new google.visualization.BarChart(document.getElementById('bar2chart'));
     chart.draw(dataBar2, options);
 }
+
+google.charts.setOnLoadCallback(drawBar3Chart);
+function drawBar3Chart() {
+    var dataBar3 = google.visualization.arrayToDataTable([
+        ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
+        [OST]
+    ]);
+    var options = {
+        title: 'TURNOS OTORGADOS POR OBRA SOCIAL\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
+        legend: {position: 'none'},
+    };
+    var chart = new google.visualization.BarChart(document.getElementById('bar3chart'));
+    chart.draw(dataBar3, options);
+}
+
 </script>
 <div style="position:absolute;left:0;width:100%;">
 <div id="bar1chart" style="width: 100%; height: [TOT_NUMROWS]px;"></div>
 <div id="linechart" style="width: 100%; height: [TPM_NUMROWS]px;"></div>
 <div id="bar2chart" style="width: 100%; height: 2800px;"></div>
+<div id="bar3chart" style="width: 100%; height: [OST_NUMROWS]px;"></div>
 </div>
                     </div>
                     <div class="span3 contenedor" id="habilitar_inhabilitar" >

@@ -792,4 +792,35 @@ class Querys implements iQuerys{
         ";
 		return $query;	
     }
+
+    function dataTurnosOtorgadosPorOS($desde, $hasta, $id_usuarios){
+        if ($id_usuarios == 0) {
+            $where = "";
+        } else {
+            $where = "
+                t.id_usuarios = {$id_usuarios} AND
+            ";
+        }
+		$query = "
+            SELECT
+                os.abreviacion,
+                COUNT(t.id_turnos) AS `count`
+            FROM
+                turnos AS t
+            INNER JOIN
+                pacientes AS p
+                ON t.id_pacientes = p.id_pacientes
+            INNER JOIN
+                obras_sociales AS os
+                ON p.id_obras_sociales = os.id_obras_sociales
+            WHERE
+                {$where}
+                t.fecha_alta BETWEEN '{$desde}' AND '{$hasta}'
+            GROUP BY
+                p.id_obras_sociales
+            ORDER BY
+                COUNT(t.id_turnos) DESC
+        ";
+		return $query;	
+    }
 }
