@@ -1283,8 +1283,8 @@ tr.even td:last-child{
   position: relative;
 }
 
-#contenedor_listado tbody tr td:last-child a[title]:hover:after{
-  content: attr(title);
+#contenedor_listado tbody tr td:last-child a[alt]:hover:after{
+  content: attr(alt);
   padding: 4px 8px;
   background:#606062;
   color: #ffffff;

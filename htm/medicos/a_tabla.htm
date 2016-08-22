@@ -29,7 +29,7 @@
 			"fnDrawCallback": function(){
 				  $('table td').bind('mouseenter', function () { $(this).parent().children().each(function(){$(this).addClass('marcado');}); });
 				  $('table td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('marcado');}); });
-                  $('#contenedor_listado tbody tr td:last-child a').each(function(index){if ($(this).attr('data-titulo')) {$(this).attr('title', $(this).attr('data-titulo'));} else {$(this).attr('title', $(this).attr('data-nombre'));}});
+                  $('#contenedor_listado tbody tr td:last-child a').each(function(index){if ($(this).attr('data-titulo')) {$(this).attr('alt', $(this).attr('data-titulo'));} else if ($(this).attr('data-nombre')) {$(this).attr('alt', $(this).attr('data-nombre'));} else if ($(this).attr('title')) {$(this).attr('alt', $(this).attr('title'));}});
             },
 			"bLengthChange": false,
 			"aoColumns" : [{ sWidth: '5%' }, 
