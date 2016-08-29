@@ -386,7 +386,7 @@ switch ($tabla){
 					".$id_turno_tipo.",
 					1,
 					'".$_SESSION['TIPO_USR']."',
-					".$_SESSION['ID_USUARIO'].",
+					'-1',
 					'".$fecha_actual."',
 					'".$hora_actual."',
 					".$consultorio."
