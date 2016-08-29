@@ -182,6 +182,36 @@ $(document).on("click", "#btn_estudios_asociados", function(e){
 	$(ventana_estudios_modificacion).dialog( "open" );
 })
 
+$(document).on("click", "#btn_agregar_estudio", function(){
+	var ids_estudios = "";
+	$(".chosen-choices li.search-choice a").each(function( index ) {
+		var id = $(this).data("option-array-index");
+		id_estudio = $("select#estudios option:eq("+id+")").val();
+		ids_estudios = ids_estudios + id_estudio + ", ";
+	});
+	//alert(ids_estudios, 'ID DE ESTUDIOS A DAR DE ALTA');
+	
+	var variables = $("form").serialize();
+	$.ajax({ 
+		dataType: "html",
+		type: "POST",   
+		url: "../ajax/altas.php",
+		data: {variables: variables, tabla: "turnos_estudios", ids_estudios: ids_estudios},
+		beforeSend: function(data){},						
+		success: function(requestData){
+			var rta = requestData;
+			//alert(rta, 'ULTIMO ID REGISTRADO');
+		},
+		complete: function(requestData, exito){
+		},
+		error: function(requestData){
+			alert (requestData);	
+		}
+	});	
+	IniciarVentana("ventana_estudios", "cerrar");
+	$(ventana_estudios).dialog('destroy').remove();	
+});
+
 $(document).on("click", "#btn_modificar_estudio", function(){
 	var ids_estudios = "";
 	$(".chosen-choices li.search-choice a").each(function( index ) {
@@ -210,4 +240,37 @@ $(document).on("click", "#btn_modificar_estudio", function(){
 	});	
 	IniciarVentana("ventana_estudios_modificacion", "cerrar");
 	$(ventana_estudios_modificacion).dialog('destroy').remove();	
+});
+
+$(document).on("click", "#btn_agregar_estudio_medico", function(){
+	var ids_estudios = "";
+	$(".chosen-choices li.search-choice a").each(function( index ) {
+		var id = $(this).data("option-array-index");
+		id_estudio = $("select#estudios option:eq("+id+")").val();
+		ids_estudios = ids_estudios + id_estudio + ", ";
+	});
+	//alert(ids_obras_sociales);
+	
+	
+	var variables = $("form").serialize();
+	$.ajax({ 
+		dataType: "html",
+		type: "POST",   
+		url: "../ajax/altas.php",
+		data: {variables: variables, tabla: "medicos_estudios", ids_estudios: ids_estudios},
+		beforeSend: function(data){},						
+		success: function(requestData){
+			var rta = requestData;
+			//alert(rta);
+			TableMedicosEstudios.fnDraw();
+		},
+		complete: function(requestData, exito){
+		},
+		error: function(requestData){
+			alert (requestData);	
+		}
+	});	
+	
+	IniciarVentana("ventana_opciones", "abrir");
+	$(ventana_opciones).dialog('destroy').remove();	
 });
