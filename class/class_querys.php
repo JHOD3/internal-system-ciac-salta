@@ -340,24 +340,43 @@ class Querys implements iQuerys{
 		return $query;
 		
 	}
-	
+
 	function GrillaTurnosImprimir($id_medico, $id_especialidad, $fecha, $horarios){
 		$horariosv = explode("-",$horarios);
 		
-		$query = "SELECT DISTINCT T.desde,P.nombres, P.apellidos, T.id_turnos, OS.nombre AS nombre_os , OS.abreviacion
-				FROM turnos T 
-				INNER JOIN turnos_estados TE
-				ON T.id_turnos_estados = TE.id_turnos_estados
-				INNER JOIN pacientes P
-				ON T.id_pacientes = P.id_pacientes
-				INNER JOIN obras_sociales OS
-				ON P.id_obras_sociales = OS.id_obras_sociales
-				WHERE T.id_medicos = $id_medico AND T.id_especialidades = $id_especialidad AND T.fecha = '".$fecha."' AND T.estado = 1 AND (T.id_turnos_estados = 1 OR T.id_turnos_estados = 2 OR T.id_turnos_estados = 3) AND T.desde >= '".$horariosv[0]."' AND T.desde <= '".$horariosv[1]."' ORDER BY T.desde ASC";
+		$query = "
+            SELECT
+                DISTINCT T.desde,P.nombres, P.apellidos, T.id_turnos, OS.nombre AS nombre_os , OS.abreviacion
+            FROM
+                turnos T 
+            INNER JOIN
+                turnos_estados TE
+                ON T.id_turnos_estados = TE.id_turnos_estados
+            INNER JOIN
+                pacientes P
+                ON T.id_pacientes = P.id_pacientes
+            LEFT JOIN
+                obras_sociales OS
+                ON P.id_obras_sociales = OS.id_obras_sociales
+            WHERE
+                T.id_medicos = $id_medico AND
+                T.id_especialidades = $id_especialidad AND
+                T.fecha = '".$fecha."' AND
+                T.estado = 1 AND (
+                    T.id_turnos_estados = 1 OR
+                    T.id_turnos_estados = 2 OR
+                    T.id_turnos_estados = 3
+                ) AND
+                T.desde >= '".$horariosv[0]."' AND
+                T.desde <= '".$horariosv[1]."'
+            ORDER BY
+                T.desde ASC
+        ";
 
 		return $query;
 		
 	}
-	
+
 	function GrillaCobrosImprimir($id_medico, $id_especialidad, $fecha, $horarios){
 		$horariosv = explode("-",$horarios);
 		
