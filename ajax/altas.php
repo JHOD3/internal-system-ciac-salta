@@ -385,13 +385,16 @@ switch ($tabla){
 					0,
 					".$id_turno_tipo.",
 					1,
-					'".$_SESSION['TIPO_USR']."',
-					'-1',
-					'".$fecha_actual."',
+					'".$_SESSION['TIPO_USR']."',".
+                    (
+                        ($_SESSION['TIPO_USR'] == 'M') ?
+                            "'-1'," :
+                            $_SESSION['ID_USUARIO'].","
+                    ).
+                    "'".$fecha_actual."',
 					'".$hora_actual."',
 					".$consultorio."
 					)";
-				
 				$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
 					
 				if ($obj->db->consulta($query_string))
@@ -425,13 +428,16 @@ switch ($tabla){
 						0,
 						".$id_turno_tipo.",
 						1,
-						'".$_SESSION['TIPO_USR']."',
-						".$_SESSION['ID_USUARIO'].",
-						'".$fecha_actual."',
+    					'".$_SESSION['TIPO_USR']."',".
+                        (
+                            ($_SESSION['TIPO_USR'] == 'M') ?
+                                "'-1'," :
+                                $_SESSION['ID_USUARIO'].","
+                        ).
+                        "'".$fecha_actual."',
 						'".$hora_actual."',
 						".$consultorio."
 						)";
-					
 					$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
 						
 					if ($obj->db->consulta($query_string))
