@@ -28,7 +28,7 @@ class Medicos_horarios extends Estructura implements iMedicos_horarios{
 		$htm->Asigna("DROP_TURNOS_TIPOS",$obj_turnos_tipos->Drop());
 		
 		$obj_dias_semana = new Dias_semana();
-		$htm->Asigna("DROP_DIAS_SEMANA",$obj_dias_semana->Drop());	
+		$htm->Asigna("DROP_DIAS_SEMANA", utf8_encode($obj_dias_semana->Drop()));	
 		
 		$idsv = explode("-", $id_padre);
 		$id_medico = $idsv[0];
@@ -54,7 +54,7 @@ class Medicos_horarios extends Estructura implements iMedicos_horarios{
 		$htm->Asigna("DROP_TURNOS_TIPOS",$obj_turnos_tipos->Drop("DESC",$row['id_turnos_tipos']));
 		
 		$obj_dias_semana = new Dias_semana();
-		$htm->Asigna("DROP_DIAS_SEMANA",$obj_dias_semana->Drop("DESC",$row['id_dias_semana']));
+		$htm->Asigna("DROP_DIAS_SEMANA", utf8_encode($obj_dias_semana->Drop("DESC",$row['id_dias_semana'])));
 		
 		$htm->Asigna("TABLA",$this->nombre_tabla);
 		

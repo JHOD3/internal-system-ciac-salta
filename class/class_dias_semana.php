@@ -10,7 +10,7 @@ class Dias_semana extends Estructura implements iDias_semana{
 		$this->titulo_tabla = "Dias de la Semana";
 		$this->tabla_padre = "";
 		
-		$this->drop_label_elija = "Elija un día";
+		$this->drop_label_elija = "Elija un d&iacute;a";
 		
 		parent::__construct($id);
 	} 
