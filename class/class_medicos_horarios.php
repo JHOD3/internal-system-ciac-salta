@@ -57,7 +57,10 @@ class Medicos_horarios extends Estructura implements iMedicos_horarios{
 		$htm->Asigna("DROP_DIAS_SEMANA", utf8_encode($obj_dias_semana->Drop("DESC",$row['id_dias_semana'])));
 		
 		$htm->Asigna("TABLA",$this->nombre_tabla);
-		
+
+        $row['desde'] = substr($row['desde'], 0, 5);
+        $row['hasta'] = substr($row['hasta'], 0, 5);
+
 		$htm->AsignaBloque('block_registros',$row);
 		
 		CargarVariablesGrales($htm, $tipo = "");
