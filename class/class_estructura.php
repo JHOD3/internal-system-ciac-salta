@@ -161,6 +161,19 @@ class Estructura{
 				switch($this->nombre_tabla){
 					case "medicos_especialidades":
 						$valor = $row["id_especialidades"];
+						$texto = utf8_encode($row["nombre"]);
+                        $texto = str_replace("á", "&aacute;", $texto);
+                        $texto = str_replace("Á", "&Aacute;", $texto);
+                        $texto = str_replace("é", "&eacute;", $texto);
+                        $texto = str_replace("É", "&Eacute;", $texto);
+                        $texto = str_replace("í", "&iacute;", $texto);
+                        $texto = str_replace("Í", "&Iacute;", $texto);
+                        $texto = str_replace("ó", "&oacute;", $texto);
+                        $texto = str_replace("Ó", "&Oacute;", $texto);
+                        $texto = str_replace("ú", "&uacute;", $texto);
+                        $texto = str_replace("Ú", "&Uacute;", $texto);
+                        $texto = str_replace("ñ", "&ntilde;", $texto);
+                        $texto = str_replace("Ñ", "&Ntilde;", $texto);
 					break;
 					case "localidades_zonas":
 						$valor = $row["id_localidades"];
