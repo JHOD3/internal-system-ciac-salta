@@ -13,7 +13,7 @@
                 <option value="[id_obras_sociales]-[id_obra_social_plan]" [SELECCIONADO]>[nombre_os] [nombre_plan]</option>
                 [/block: block_registros]
             </select>
-            <p><i>Solo 10 (diez) Obras Sociales por carga</i></p>
+            <p><i>Solo 50 (cincuenta) Obras Sociales por carga</i></p>
         </p>
     </div>
     <div class="botones">
@@ -27,7 +27,7 @@
 	  '.chosen-select-deselect'  : {allow_single_deselect:true},
 	  '.chosen-select-no-single' : {disable_search_threshold:10},
 	  '.chosen-select-no-results': {},
-	  '.chosen-select-width'     : {width:"95%", no_results_text:'No encontramos resultados para: ', max_selected_options:10}
+	  '.chosen-select-width'     : {width:"95%", no_results_text:'No encontramos resultados para: ', max_selected_options:50}
 	}
 	for (var selector in config) {
 	  $(selector).chosen(config[selector]);

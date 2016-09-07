@@ -63,7 +63,7 @@ switch ($tabla){
 		$aColumns = array('id_medicos_estudios', 'id_medicos','id_estudios', 'particular');
 	break;
 	case 'medicos_obras_sociales':
-		$aColumns = array('id_medicos_obras_sociales', 'id_medicos', 'id_obras_sociales','arancel');
+		$aColumns = array('id_medicos_obras_sociales', 'id_medicos', 'nombre','arancel');
 	break;
 	case "cobros":
 		$aColumns = array('id_cobros','fecha', 'hora','id_cobros_conceptos','id_pacientes', 'importe', 'reintegro');
@@ -123,6 +123,13 @@ if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
 $sOrder = "";
 if ( isset( $_GET['iSortCol_0'] ) )
 {
+    if ($tabla == "medicos_obras_sociales") {
+        $sTableFrom.= "
+            LEFT JOIN obras_sociales AS os
+                ON M.id_obras_sociales = os.id_obras_sociales
+        ";
+        $sOrder = "ORDER BY nombre";
+    } else {
 		$sOrder = "ORDER BY  ";
 		for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
 		{
@@ -132,12 +139,12 @@ if ( isset( $_GET['iSortCol_0'] ) )
 								".mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
 				}
 		}
-		
 		$sOrder = substr_replace( $sOrder, "", -2 );
 		if ( $sOrder == "ORDER BY" )
 		{
 				$sOrder = "";
 		}
+    }
 }
 
 
@@ -992,7 +999,7 @@ if ($cant_registros != 0){
 				case "medicos_obras_sociales":
 				
 					$row[0] = $aRow["id_medicos_obras_sociales"];
-					$row[1] = utf8_encode($obra_social);
+					$row[1] =  $aRow["nombre"];
 					$row[2] = '<input type="text" class="arancel" id="'.$aRow["id_medicos_obras_sociales"].'" value="'.$aRow["arancel"].'" />';
                     if ($_SESSION['ID_USUARIO'] === '0') {
                         $row[3] = $eliminar.'';
