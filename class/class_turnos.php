@@ -40,16 +40,62 @@ class Turnos extends Estructura implements iTurnos{
 		$row = $this->vector;
 		
 		$obj_medico = new Medicos($row["id_medicos"]);
-		$row["MEDICO"] =  $obj_medico->apellidos.", ".$obj_medico->nombres;
+		$row["MEDICO"] =
+            '<strong style="color:#007FA6">'.
+            $obj_medico->apellidos.
+            ", ".
+            $obj_medico->nombres.
+            "</strong>"
+        ;
 		
 		$obj_paciente = new Pacientes($row["id_pacientes"]);
-		$row["PACIENTE"] =  number_format($obj_paciente->nro_documento, 0, ",", ".")." - ".$obj_paciente->apellidos.", ".$obj_paciente->nombres;
+		$row["PACIENTE"] =
+            '<strong style="color:#008A47">'.
+            trim($obj_paciente->apellidos).
+            ", ".
+            trim($obj_paciente->nombres).
+            "</strong><br />"
+        ;
+        $row["PACIENTE"].=
+            '<span style="font-size:0.9em;"><strong>DNI:</strong> '.
+            number_format(trim($obj_paciente->nro_documento), 0, ",", ".").
+            "</span><br />"
+        ;
+        if (trim($obj_paciente->telefonos)) {
+            $row["PACIENTE"].=
+                '<span style="font-size:0.9em;"><strong>Tel.:</strong> '.
+                trim($obj_paciente->telefonos).
+                "</span><br />"
+            ;
+        }
+        if (trim($obj_paciente->domicilio)) {
+            $row["PACIENTE"].=
+                '<span style="font-size:0.9em;"><strong>Domicilio:</strong> '.
+                number_format(trim($obj_paciente->domicilio), 0, ",", ".").
+                "</span><br />"
+            ;
+        }
+        if (trim($obj_paciente->email)) {
+            $row["PACIENTE"].=
+                '<span style="font-size:0.9em;"><strong>Email:</strong> '.
+                number_format(trim($obj_paciente->email), 0, ",", ".").
+                "</span>"
+            ;
+        }
 		
 		$obj_obra_social = new Obras_sociales($obj_paciente->id_obras_sociales);
-		$row["OBRA_SOCIAL"] =  $obj_obra_social->nombre;
+		$row["OBRA_SOCIAL"] =
+            '<strong style="color:#007FA6;">'.
+            $obj_obra_social->nombre.
+            "</strong>"
+        ;
 		
 		$obj_obra_social_plan = new Obras_sociales_planes($obj_paciente->id_obras_sociales_planes);
-		$row["PLAN"] =  $obj_obra_social_plan->nombre;
+		$row["PLAN"] =
+            '<strong style="color:#008A47;">'.
+            $obj_obra_social_plan->nombre.
+            "</strong>"
+        ;
 		
 		
 		

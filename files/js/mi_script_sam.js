@@ -1,4 +1,5 @@
 //ESTADO DEL TURNO - CLICK EN EL ESTADO DEL TURNO
+/*
 $(document).on("click", ".btn_estado_turno", function(e){
 	e.preventDefault();
 	var id_turno = $(this).data("id");
@@ -30,6 +31,7 @@ $(document).on("click", ".btn_estado_turno", function(e){
 	}
 	
 })
+*/
 
 function Duplicados(id_medico, id_especialidad, fecha){
 	return true;
@@ -116,7 +118,8 @@ $(document).on("dblclick", ".reservar", function(e, date){
 });
 
 //ESTADO DEL TURNO - CLICK EN EL ESTADO DEL TURNO
-$(document).on("dblclick", ".btn_estado_turno", function(e){
+// antes era dblclick
+$(document).on("click", ".btn_estado_turno", function(e){
 	e.preventDefault();
 	var id_turno = $(this).data("id");
 	var id_turno_estado = $(this).data("id_turnos_estados");
