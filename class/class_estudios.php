@@ -90,7 +90,7 @@ class Estudios extends Estructura implements iEstudios{
 		$htm = $this->Html($this->nombre_tabla."/listado_".$tipo);
 		switch ($tipo){
 			case "todos":
-				$query_string = $this->querys->TodosRegistros($this->nombre_tabla, "DESC");	
+				$query_string = $this->querys->TodosRegistros($this->nombre_tabla, "ASC");	
 			break;
 			case "seleccion_modificacion":
 				$id_estudios_seleccionadosv = $this->EstudiosSeleccionados($id_turno, $id_medico);
@@ -99,7 +99,7 @@ class Estudios extends Estructura implements iEstudios{
 				$query_string = $this->querys->EstudiosSeleccionMedicosOS($id_medico, $id_obra_social);
 			break;*/
 			case "seleccion_medicos_os":	
-				$query_string = $this->querys->TodosRegistros($this->nombre_tabla, "DESC");	
+				$query_string = $this->querys->TodosRegistros($this->nombre_tabla, "ASC");	
 		}
 		
 		$query = $this->db->consulta($query_string);
