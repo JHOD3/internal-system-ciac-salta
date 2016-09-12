@@ -50,6 +50,10 @@
 #myChat strong{
     color:#007FA6;
 }
+#dialog-confirm, #dialog_eliminar{
+	display:none;
+	overflow:hidden !important	
+}
 </style>
 [DETALLE_MEDICO]
 <section id='cuerpo'>
@@ -77,3 +81,6 @@
 	[MENU_TABLAS]
 </section>
 
+<div id="dialog_eliminar" title="Borrar Registos Seleccionado?">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Se borrar&aacute;n todos los datos vinculados al registro. Desea continuar?</p>
+</div>

@@ -237,10 +237,50 @@
 
 				$(ventana).focus();
 
+			}else if(tipo_btn == "tabla_sas"){
+				var tabla = $(this).data("tabla");
+				var tipo = $(this).data("tipo");
+				var titulo = $(this).data("titulo");
+                var id_padre = $(this).data("id_padre");
+
+				IniciarVentana("ventana_menu", "abrir", tabla);
+				$(ventana_menu).html('');
+				$(ventana_menu).dialog('option', 'title', 'Administraci\u00f3n de Obras Sociales');
+				$(ventana_menu).dialog( "open" );
+				$(ventana_menu).focus();
+
+				$(ventana_menu).dialog({
+				  autoOpen: false,
+				  height: 500,
+				  width: "50%",
+				  modal: true,
+				  close: function() {  }
+				});
+
+				$.ajax({
+					type: "POST",
+					url: "../ajax/admin_tabla.php",
+					data: {tabla: tabla, id_padre: id_padre, tipo: tipo},
+					beforeSend: function() {
+					},
+					success: function(requestData){
+						var rta = requestData;
+						$(ventana_menu).html(rta);
+					},
+					complete: function(requestData, exito){
+					},
+					error: function (){
+						alert ("error");
+					}
+				});
+
+				$(ventana_menu).dialog('option', 'title', titulo);
+				$(ventana_menu).dialog( "open" );
 			}else{
 				var tabla = $(this).data("tabla");
 				var tipo = $(this).data("tipo");
 				var titulo = $(this).data("titulo");
+				var id_padre = $(this).data("id_padre");
 				var ventana = "#dialog";
 
 				$(ventana).dialog({
@@ -253,8 +293,8 @@
 
 				$.ajax({
 					type: "POST",
-					url: "ajax/admin_form.php",
-					data: {tabla: tabla, id: id, tipo: tipo},
+					url: "../ajax/admin_form.php",
+					data: {tabla: tabla, id: id, tipo: tipo, id_padre: id_padre},
 					beforeSend: function() {
 					},
 					success: function(requestData){
@@ -274,6 +314,54 @@
 
 		})
 
+        $(document).on("click",".btn_eliminar",function(){
+        	if (console && console.log) console.log('click eliminar');
+        	var id = $(this).data("id");
+        	var tabla = $(this).data("tabla");
+        	
+        	$("#dialog_eliminar").dialog({
+        		resizable: false,
+        		height:200,
+        		modal: true,
+        		buttons: {
+        			"Aceptar": function() {
+        				$.ajax({  
+        					type: "POST",   
+        					url: "../ajax/bajas.php",
+        					data: {tabla:tabla, id: id}, 
+        					beforeSend: function() {
+        						$("#mje").html("Enviando información...");
+        					},
+        					success: function(requestData){
+        						switch (tabla){
+        							case 'medicos_horarios':
+        								TableMedicosHorarios.fnDraw();
+        							break;
+        							case 'medicos_especialidades':
+        								TableMedicosEspecialidades.fnDraw();
+        							break;
+        							case 'medicos_obras_sociales':
+        								TableMedicosObrasSociales.fnDraw();
+        							break;		
+        						};
+        						alert(requestData);
+                                $('.btn_eliminar[data-id="' + id + '"]').parent().parent().find('td').attr('style', 'color:#900;font-weight:bold;text-decoration:line-through;');
+                                $('.btn_eliminar[data-id="' + id + '"]').parent().parent().find('td a').remove();
+        					},
+        					complete: function(requestData, exito){},
+        					error: function (){
+        						alert ("ERROR AL CARGAR. Vuelva a Intentarlo.");
+        					}
+        				});
+        				$( this ).dialog( "close" );
+        			},
+        			Cancel: function() {
+        			  $( this ).dialog( "close" );
+        			  return;
+        			}
+        		}
+        	});
+        });
 
 	</script>
 </head>

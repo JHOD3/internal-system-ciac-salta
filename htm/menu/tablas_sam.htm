@@ -5,16 +5,16 @@
 	$(function() {
 			
 		$(".btn_tabla").click(function() {
-			var tabla = $(this).data("nombre");
+        	var id_padre = $(this).data("id_padre");
+            var tabla = $(this).data("nombre");
 			var nombre = $(this).find('span').html();
 
 			if (tabla != "mensajes"){
 				IniciarVentana("ventana_menu", "abrir", tabla);
-				
 				$.ajax({  
 					type: "POST",   
 					url: "[URL]ajax/admin_tabla.php",					
-					data: {tabla: tabla}, 
+					data: {tabla: tabla, id_padre: id_padre}, 
 					beforeSend: function() {
 						$(ventana_menu).html("");
 					},

@@ -135,7 +135,6 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 				}
 			break;
 		}
-		
 		$("#"+nombre).dialog({
 			autoOpen: false,
 			height: Height,

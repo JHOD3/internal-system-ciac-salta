@@ -1001,7 +1001,10 @@ if ($cant_registros != 0){
 					$row[0] = $aRow["id_medicos_obras_sociales"];
 					$row[1] =  $aRow["nombre"];
 					$row[2] = '<input type="text" class="arancel" id="'.$aRow["id_medicos_obras_sociales"].'" value="'.$aRow["arancel"].'" />';
-                    if ($_SESSION['ID_USUARIO'] === '0') {
+                    if (
+                        $_SESSION['ID_USUARIO'] === '0' OR
+                        isset($_SESSION['ID_MEDICO'])
+                    ) {
                         $row[3] = $eliminar.'';
                     } else {
                         $row[3] = '';

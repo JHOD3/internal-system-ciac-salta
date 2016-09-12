@@ -245,6 +245,39 @@ $(document).on("click", "#btn_modificar_estudio", function(){
 	$(ventana_estudios_modificacion).dialog('destroy').remove();	
 });
 
+$(document).on("click", "#btn_agregar_obra_social", function(){
+	var ids_obras_sociales = "";
+	$(".chosen-choices li.search-choice a").each(function( index ) {
+		var id = $(this).data("option-array-index");
+		id_obra_social = $("select#estudios option:eq("+id+")").val();
+		ids_obras_sociales = ids_obras_sociales + id_obra_social + ", ";
+	});
+	//alert(ids_obras_sociales);
+	
+	
+	var variables = $("form").serialize();
+	$.ajax({ 
+		dataType: "html",
+		type: "POST",   
+		url: "../ajax/altas.php",
+		data: {variables: variables, tabla: "medicos_obras_sociales", ids_obras_sociales: ids_obras_sociales},
+		beforeSend: function(data){},						
+		success: function(requestData){
+			var rta = requestData;
+			TableMedicosObrasSociales.fnDraw();
+		},
+		complete: function(requestData, exito){
+		},
+		error: function(requestData){
+			alert (requestData);	
+		}
+	});	
+
+    $('#dialog').html('');
+	IniciarVentana("ventana_opciones", "abrir");
+	$(ventana_opciones).dialog('destroy').remove();
+});
+
 $(document).on("click", "#btn_agregar_estudio_medico", function(){
 	var ids_estudios = "";
 	$(".chosen-choices li.search-choice a").each(function( index ) {

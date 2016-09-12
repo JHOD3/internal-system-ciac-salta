@@ -49,6 +49,7 @@
 	
 	$(document).ready(function(){
 		$("a#cancelar").click(function(){
+            $('#dialog').html('');
 			IniciarVentana("ventana_opciones", "cerrar");
 			$(ventana_opciones).dialog('destroy').remove();
 		});
