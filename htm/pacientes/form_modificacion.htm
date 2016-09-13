@@ -8,8 +8,15 @@
 		});
 		
 		$("a#cancelar").click(function(){
-			IniciarVentana("ventana_opciones", "cerrar");
-			$(ventana_opciones).dialog('destroy').remove();
+            try { 
+            	IniciarVentana("ventana_opciones", "cerrar");
+            	$(ventana_opciones).dialog('destroy').remove();
+            } catch( err ) { 
+				if ($('input[type="text"]#medicos').length == 0) {
+            		IniciarVentana("ventana_menu", "cerrar");
+            		$(ventana_menu).dialog('destroy').remove();
+				}
+            }
 		});
 		
 		$("#form_pacientes").validate({
@@ -91,8 +98,16 @@
 					success: function(requestData){
 						var rta = requestData;
 						alert ("Registro Modificado Correctamente.");
-						IniciarVentana("ventana_opciones", "cerrar");
-						$(ventana_opciones).dialog('destroy').remove();
+                        try { 
+                        	IniciarVentana("ventana_opciones", "cerrar");
+                        	$(ventana_opciones).dialog('destroy').remove();
+                        } catch( err ) {
+							if ($('input[type="text"]#medicos').length == 0) {
+	                        	IniciarVentana("ventana_menu", "cerrar");
+                        		$(ventana_menu).dialog('destroy').remove();
+                            	$('#btn_buscar_paciente').click();
+							}
+                        }
 						TablePacientes.fnDraw();
 					},
 					complete: function(requestData, exito){},

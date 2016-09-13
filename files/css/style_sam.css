@@ -1142,7 +1142,9 @@ input[type=text], textarea{
 .notrabajaos{
 	padding:5px;
 	text-align:center;
-	background:#FCC;
+	background:#C00;
+    color:#fff;
+    font-weight:bold;
 	display:none;
 	-moz-border-radius: 15px 15px 15px 15px;
 	-webkit-border-radius: 15px 15px 15px 15px;
@@ -1152,7 +1154,9 @@ input[type=text], textarea{
 .trabajaos{
 	padding:5px;
 	text-align:center;
-	background:#CFC;
+	background:#008A47;
+    color:#fff;
+    font-weight: bold;
 	display:none;
 	-moz-border-radius: 15px 15px 15px 15px;
 	-webkit-border-radius: 15px 15px 15px 15px;

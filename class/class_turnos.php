@@ -63,14 +63,14 @@ class Turnos extends Estructura implements iTurnos{
         ;
         if (trim($obj_paciente->telefonos)) {
             $row["PACIENTE"].=
-                '<span style="font-size:0.9em;"><strong>Tel.:</strong> '.
+                '<span style="font-size:0.9em;"><strong>Tel&eacute;f.:</strong> '.
                 trim($obj_paciente->telefonos).
                 "</span><br />"
             ;
         }
         if (trim($obj_paciente->domicilio)) {
             $row["PACIENTE"].=
-                '<span style="font-size:0.9em;"><strong>Domicilio:</strong> '.
+                '<span style="font-size:0.9em;"><strong>Domic.:</strong> '.
                 number_format(trim($obj_paciente->domicilio), 0, ",", ".").
                 "</span><br />"
             ;

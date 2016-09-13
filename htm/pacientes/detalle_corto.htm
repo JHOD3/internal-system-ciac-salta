@@ -1,15 +1,34 @@
 [block: block_registros]
 <div id="panel_paciente" class="inner">
-	<h3>PACIENTE</h3><br />
-
-	<p><strong>[nombres] [apellidos]</strong></p>
     <div class="oculto">
         <input id="id_pacientes" type="hidden" value="[id_pacientes]">
         <input id="id_obras_sociales" type="text" value="[id_obras_sociales]">
         <input id="id_obras_sociales_planes" type="text" value="[id_obras_sociales_planes]">   
     </div>
-    <p><span>[telefonos]</span></p>
-    <p><span>[OBRA_SOCIAL]</span></p>
+
+	<h3>PACIENTE</h3>
+    <a style="float: right;" data-tipo_btn="tabla_eme" data-tabla="pacientes" data-id="[id_pacientes]" data-tipo="editar" data-titulo="Editar Paciente" class="btn_opciones" href="#" alt="Editar Paciente"><img border="0" src="http://localhost/dgadmin/dgadmin2016/ciac/sistema/files/img/btns/editar.png"></a>
+
+	<p><strong style="color:#008A47">[apellidos], [nombres]</strong></p>
+    <p><strong style="color:#007FA6;">[OBRA_SOCIAL]</strong></p>
+    <table>
+        <tr>
+            <td><b>DNI:</b>&nbsp;</td>
+            <td>[nro_documento]</td>
+        </tr>
+        <tr>
+            <td><b>Tel&eacute;f.:</b>&nbsp;</td>
+            <td>[telefonos]</td>
+        </tr>
+        <tr>
+            <td><b>Domic.:</b>&nbsp;</td>
+            <td>[domicilio]</td>
+        </tr>
+        <tr>
+            <td><b>Email:</b>&nbsp;</td>
+            <td>[email]</td>
+        </tr>
+    </table>
     <!--<p><span>[OBRA_SOCIAL_PLAN]</span></p>-->
     <div class="notrabajaos">El m&eacute;dico no trabaja con la OS del Paciente</div>
     <div class="trabajaos">El m&eacute;dico si trabaja con la OS del Paciente</div>

@@ -212,21 +212,57 @@
 			$( "a#btn_reportes_gestiones" ).button({icons: {primary:'ui-icon-bullet',secondary:''}});
 			$( "a.btn_conf").button({icons: {primary:'ui-icon-bullet',secondary:''}});
 			$( "a.btn_imprimir").button({icons: {primary:'ui-icon-print',secondary:''}});
-
 			$( "a.btn_cargar").button({icons: {primary:'ui-icon-check',secondary:''}});
+		});
 
-
-		 });
-
-
-
-
-
-
-
-
-
-
+        $(document).on("click",".btn_eliminar",function(){
+        	if (console && console.log) console.log('click eliminar');
+        	var id = $(this).data("id");
+        	var tabla = $(this).data("tabla");
+        	
+        	$("#dialog_eliminar").dialog({
+        		resizable: false,
+        		height:200,
+        		modal: true,
+        		buttons: {
+        			"Aceptar": function() {
+        				$.ajax({  
+        					type: "POST",   
+        					url: "../ajax/bajas.php",
+        					data: {tabla:tabla, id: id}, 
+        					beforeSend: function() {
+        						$("#mje").html("Enviando información...");
+        					},
+        					success: function(requestData){
+        						switch (tabla){
+        							case 'medicos_horarios':
+        								TableMedicosHorarios.fnDraw();
+        							break;
+        							case 'medicos_especialidades':
+        								TableMedicosEspecialidades.fnDraw();
+        							break;
+        							case 'medicos_obras_sociales':
+        								TableMedicosObrasSociales.fnDraw();
+        							break;		
+        						};
+        						alert(requestData);
+                                $('.btn_eliminar[data-id="' + id + '"]').parent().parent().find('td').attr('style', 'color:#900;font-weight:bold;text-decoration:line-through;');
+                                $('.btn_eliminar[data-id="' + id + '"]').parent().parent().find('td a').remove();
+        					},
+        					complete: function(requestData, exito){},
+        					error: function (){
+        						alert ("ERROR AL CARGAR. Vuelva a Intentarlo.");
+        					}
+        				});
+        				$( this ).dialog( "close" );
+        			},
+        			Cancel: function() {
+        			  $( this ).dialog( "close" );
+        			  return;
+        			}
+        		}
+        	});
+        });
 
 	</script>
 

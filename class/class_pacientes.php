@@ -73,12 +73,12 @@ class Pacientes extends Estructura implements iPacientes{
 		
 		$obj_obra_social_plan = new Obras_sociales_planes($row['id_obras_sociales_planes']);
 		$row["OBRA_SOCIAL_PLAN"] = $obj_obra_social_plan->nombre;
-		
+        $row['nro_documento'] = number_format($row['nro_documento'], 0, ",", ".");
 		$htm->AsignaBloque('block_registros',$row);
-		
+
 		$rta = $htm->Muestra();
 		
-		return $rta;
+		return utf8_encode($rta);
 	}
 	
 	
@@ -110,7 +110,7 @@ class Pacientes extends Estructura implements iPacientes{
 				
 				$obj_obra_social_plan = new Obras_sociales_planes($row['id_obras_sociales_planes']);
 				$row["OBRA_SOCIAL_PLAN"] = $obj_obra_social_plan->nombre;
-		
+                $row['nro_documento'] = number_format($row['nro_documento'], 0, ",", ".");
 				$htm->AsignaBloque('block_registros',$row);
 			}
 			

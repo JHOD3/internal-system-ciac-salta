@@ -49,7 +49,10 @@
 	
 	$(document).ready(function(){
 		$("a#cancelar").click(function(){
-            $('#dialog').html('');
+			if ($('input[type="text"]#medicos').length == 0) {
+            	$('#dialog').html('');
+            	$('#dialog').parent().remove();
+			}
 			IniciarVentana("ventana_opciones", "cerrar");
 			$(ventana_opciones).dialog('destroy').remove();
 		});

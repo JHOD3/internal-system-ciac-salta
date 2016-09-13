@@ -274,6 +274,7 @@ $(document).on("click", "#btn_agregar_obra_social", function(){
 	});	
 
     $('#dialog').html('');
+    $('#dialog').parent().remove();
 	IniciarVentana("ventana_opciones", "abrir");
 	$(ventana_opciones).dialog('destroy').remove();
 });

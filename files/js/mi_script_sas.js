@@ -37,6 +37,45 @@ $(document).on("click", ".btn_opciones", function(e){
 		
 		$('#ventana_hija_'+tabla_hija).focus();
 			
+	}else if(tipo_btn == "tabla_eme"){
+		var tabla = $(this).data("tabla");
+		var tipo = $(this).data("tipo");
+		var titulo = $(this).data("titulo");
+        var id = $(this).data("id");
+
+		IniciarVentana("ventana_menu", "abrir", tabla);
+		$(ventana_menu).html('');
+		$(ventana_menu).dialog('option', 'title', 'Editar Paciente');
+		$(ventana_menu).dialog( "open" );
+		$(ventana_menu).focus();
+
+		$(ventana_menu).dialog({
+		  autoOpen: false,
+		  height: 670,
+		  width: "90%",
+		  modal: true,
+		  close: function() {  }
+		});
+
+		$.ajax({
+			type: "POST",
+			url: "../ajax/admin_form.php",
+			data: {id: id, tabla: tabla, tipo: tipo},
+			beforeSend: function() {
+			},
+			success: function(requestData){
+				var rta = requestData;
+				$(ventana_menu).html(rta);
+			},
+			complete: function(requestData, exito){
+			},
+			error: function (){
+				alert ("error");
+			}
+		});
+
+		$(ventana_menu).dialog('option', 'title', titulo);
+		$(ventana_menu).dialog( "open" );
 	}else{
 		var tabla = $(this).data("tabla");
 		var tipo = $(this).data("tipo");
