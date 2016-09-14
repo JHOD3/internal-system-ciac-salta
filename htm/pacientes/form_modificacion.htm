@@ -11,12 +11,12 @@
             try { 
             	IniciarVentana("ventana_opciones", "cerrar");
             	$(ventana_opciones).dialog('destroy').remove();
-            } catch( err ) { 
-				if ($('input[type="text"]#medicos').length == 0) {
-            		IniciarVentana("ventana_menu", "cerrar");
-            		$(ventana_menu).dialog('destroy').remove();
-				}
-            }
+            } catch( err ) {}
+			if ($('input[type="hidden"]#input_tipo_btn').val() == 'tabla_eme') {
+            	IniciarVentana("ventana_menu", "cerrar");
+        		$(ventana_menu).dialog('destroy').remove();
+            	$('#btn_buscar_paciente').click();
+			}
 		});
 		
 		$("#form_pacientes").validate({
@@ -101,13 +101,12 @@
                         try { 
                         	IniciarVentana("ventana_opciones", "cerrar");
                         	$(ventana_opciones).dialog('destroy').remove();
-                        } catch( err ) {
-							if ($('input[type="text"]#medicos').length == 0) {
-	                        	IniciarVentana("ventana_menu", "cerrar");
-                        		$(ventana_menu).dialog('destroy').remove();
-                            	$('#btn_buscar_paciente').click();
-							}
-                        }
+                        } catch( err ) {}
+						if ($('input[type="hidden"]#input_tipo_btn').val() == 'tabla_eme') {
+                        	IniciarVentana("ventana_menu", "cerrar");
+                    		$(ventana_menu).dialog('destroy').remove();
+                        	$('#btn_buscar_paciente').click();
+						}
 						TablePacientes.fnDraw();
 					},
 					complete: function(requestData, exito){},

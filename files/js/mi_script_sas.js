@@ -60,7 +60,7 @@ $(document).on("click", ".btn_opciones", function(e){
 		$.ajax({
 			type: "POST",
 			url: "../ajax/admin_form.php",
-			data: {id: id, tabla: tabla, tipo: tipo},
+			data: {id: id, tabla: tabla, tipo: tipo, tipo_btn: tipo_btn},
 			beforeSend: function() {
 			},
 			success: function(requestData){

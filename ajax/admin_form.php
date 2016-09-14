@@ -4,6 +4,9 @@
 	
 	$tabla = $_POST["tabla"];
 	$tipo = $_POST["tipo"];
+    if (isset($_POST['tipo_btn']) and $_POST['tipo_btn'] == 'tabla_eme') {
+        print '<input type="hidden" id="input_tipo_btn" value="tabla_eme" />'."\n";
+    }
 	
 	requerir_class($tabla);
 	$clase = ucwords($tabla);
