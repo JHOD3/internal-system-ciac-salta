@@ -29,7 +29,7 @@ class Querys implements iQuerys{
 			break;
 			case 'obras_sociales':
 			case 'estudios':
-				$query = "SELECT * FROM ".$tabla." ORDER BY nombre ".$orden;
+				$query = "SELECT * FROM ".$tabla." WHERE estado = 1 ORDER BY nombre ".$orden;
 			break;
 			default:
 				$query = "SELECT * FROM ".$tabla." ORDER BY id_".$tabla." ".$orden;
