@@ -23,7 +23,11 @@
             <?php if (in_array($aHorarios[0]['id_turnos_tipos'], array(3, 4, 5, 6, 7, 8))): ?>
                 <div>
                     <span>
-                        Horario de atención de <?=doSaludo($rsMedico)?>:<br />
+                        Horario de atención
+                        <?=
+                        (substr(doSaludo($rsMedico), 0, 2) == 'el' ? 'd' : 'de ').
+                        doSaludo($rsMedico)
+                        ?>:<br />
                         <?=$vcDiasHorarios?>
                     </span>
                 </div>
