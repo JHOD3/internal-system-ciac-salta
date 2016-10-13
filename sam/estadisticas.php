@@ -5,7 +5,7 @@ if ($_GET['show'] != 'estadisticas') {
 
     $html_button = <<<EOT
 <a id="btnEst" href="index.php?show=estadisticas" class="btn" data-nombre="estadisticas" style="float:left!important;">
-	<img src="../files/img/btns/detalle.png" width="30" />
+	<img src="../files/img/btns/estadisticas.png" width="30" />
     <span>Mostrar Estad&iacute;sticas</span>
 </a>
 EOT;
@@ -16,7 +16,7 @@ EOT;
 
     $html_button = <<<EOT
 <a id="btnEst" href="index.php" class="btn" data-nombre="estadisticas" style="float:left!important;">
-	<img src="../files/img/btns/detalle.png" width="30" />
+	<img src="../files/img/btns/estadisticas.png" width="30" />
     <span>Ocultar Estad&iacute;sticas</span>
 </a>
 EOT;

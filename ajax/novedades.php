@@ -287,7 +287,7 @@ $novedades = $this_db->consulta($sql);
                         <div><?=utf8_encode($nov['contenido'])?></div>
                     </td>
                     <?php if ($isAdmin): ?>
-                        <td style="width:50%;">
+                        <td style="width:25%;">
                             <div style="overflow:auto;max-height:200px;">
                                 <table>
                                     <tbody>
@@ -327,10 +327,11 @@ $novedades = $this_db->consulta($sql);
                                             ORDER BY
                                                 confirmacion DESC
                                         ";
-                                        $visto = $this_db->consulta($sql);
+                                        $visto1 = $this_db->consulta($sql);
+                                        $visto2 = $this_db->consulta($sql);
                                         ?>
-                                        <?php $i = 1; $j = 1; ?>
-                                        <?php while ($vis = $this_db->fetch_array($visto)): ?>
+                                        <?php $i = 1; ?>
+                                        <?php while ($vis = $this_db->fetch_array($visto1)): ?>
                                             <?php if (isset($vis['confirmacion']) and $vis['confirmacion']): ?>
                                                 <?php if ($i == 1): ?>
                                                     <tr valign="top">
@@ -345,10 +346,22 @@ $novedades = $this_db->consulta($sql);
                                                     <td style="color:#008A47;">Le&iacute;do el <?=date("d/m/Y H:i", strtotime($vis['confirmacion']))?>hs</td>
                                                 </tr>
                                                 <?php $i++; ?>
-                                            <?php else: ?>
+                                            <?php endif; ?>
+                                        <?php endwhile; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                        <td style="width:25%;">
+                            <div style="overflow:auto;max-height:200px;">
+                                <table>
+                                    <tbody>
+                                        <?php $j = 1; ?>
+                                        <?php while ($vis = $this_db->fetch_array($visto2)): ?>
+                                            <?php if (!isset($vis['confirmacion']) or !$vis['confirmacion']): ?>
                                                 <?php if ($j == 1): ?>
                                                     <tr valign="top">
-                                                        <td colspan="5"><?=($i > 1 ? '<br />' : '')?><strong style="color:#007FA6;">PENDIENTES DE LECTURA</strong></td>
+                                                        <td colspan="5"><strong style="color:#007FA6;">PENDIENTES DE LECTURA</strong></td>
                                                     </tr>
                                                 <?php endif; ?>
                                                 <tr valign="top">
