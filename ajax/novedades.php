@@ -282,12 +282,12 @@ $novedades = $this_db->consulta($sql);
         <table style="width:100%;">
             <tbody>
                 <tr valign="top">
-                    <td<?=$isAdmin ? ' style="width:50%;"' : ''?>>
+                    <td<?=$isAdmin ? ' style="width:40%;"' : ''?>>
                         <div><strong><?=utf8_encode($nov['titulo'])?></strong> - <?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</div>
                         <div><?=utf8_encode($nov['contenido'])?></div>
                     </td>
                     <?php if ($isAdmin): ?>
-                        <td style="width:25%;">
+                        <td style="width:35%;">
                             <div style="overflow:auto;max-height:200px;">
                                 <table>
                                     <tbody>
