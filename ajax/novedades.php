@@ -325,7 +325,8 @@ $novedades = $this_db->consulta($sql);
                                                 WHERE
                                                     nu.id_novedades = '{$nov['id_novedades']}'
                                             ORDER BY
-                                                confirmacion DESC
+                                                confirmacion ASC,
+                                                nombre ASC
                                         ";
                                         $visto1 = $this_db->consulta($sql);
                                         $visto2 = $this_db->consulta($sql);
