@@ -1035,7 +1035,6 @@ div#detalle_corto span{
 	text-align:center
 }
 #panel_menu a{
-	min-width: 13%;
 	display:inline-block;
 	margin: 5px 0;
 	font-weight:bold;

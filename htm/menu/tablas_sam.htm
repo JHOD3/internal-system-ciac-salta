@@ -37,6 +37,12 @@
 				alert('M\u00f3dulo Inhabilitado.<br /> Temporalmente en Construcci\u00f3n.','ATENCI\u00d3N')	
 			}
 		});
+        $.ajax({
+            url: "../ajax/novedades.php?get=-1",
+            context: document.body
+        }).done(function(data) {
+            $('#dieAjaxNovedadesDiv').html(data);
+        });
 	});
 </script>
 <!--a href="#" class="btn btn_tabla" data-nombre="mensajes">

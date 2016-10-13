@@ -46,9 +46,14 @@
 			
 			
 		});
+        $.ajax({
+            url: "../ajax/novedades.php?get=-1",
+            context: document.body
+        }).done(function(data) {
+            $('#dieAjaxNovedadesDiv').html(data);
+        });
 	});
 </script>
-
 <div id="myMenuJQ">
     <!--<a href="form_alta.php?tbl=pacientes" id="create-user" class="btn">Pacientes</a>-->
     <a href="#" class="btn btn_tabla" data-nombre="pacientes">
@@ -74,6 +79,10 @@
     <a href="#" class="btn btn_tabla" data-nombre="estadisticas">
         <img src="[IMG]btns/mensajes.png" width="30" />
         <span>Estadísticas</span>
+    </a>
+    <a href="#" class="btn btn_tabla" data-nombre="novedades">
+        <img src="[IMG]btns/mensajes.png" width="30" />
+        <span>Novedades</span>
     </a>
     <!--a href="#" class="btn btn_tabla" data-nombre="mensajes">
         <img src="[IMG]btns/mensajes.png" width="30" />
