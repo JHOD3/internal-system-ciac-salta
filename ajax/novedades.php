@@ -361,14 +361,13 @@ $novedades = $this_db->consulta($sql);
                                             <?php if (!isset($vis['confirmacion']) or !$vis['confirmacion']): ?>
                                                 <?php if ($j == 1): ?>
                                                     <tr valign="top">
-                                                        <td colspan="5"><strong style="color:#007FA6;">PENDIENTES DE LECTURA</strong></td>
+                                                        <td colspan="3"><strong style="color:#007FA6;">PENDIENTES DE LECTURA</strong></td>
                                                     </tr>
                                                 <?php endif; ?>
                                                 <tr valign="top">
                                                     <td style="color:#007FA6;"><?=$j?>.-</td>
                                                     <td>&nbsp;&nbsp;</td>
                                                     <td style="color:#007FA6;"><?=utf8_encode($vis['nombre'])?></td>
-                                                    <td colspan="2">&nbsp;&nbsp;</td>
                                                 </tr>
                                                 <?php $j++; ?>
                                             <?php endif; ?>
