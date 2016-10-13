@@ -43,7 +43,7 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
                 nm.id_medicos = '{$_SESSION['ID_MEDICO']}' AND
                 nm.confirmacion IS NULL
             ORDER BY
-                n.fechahora DESC
+                n.fechahora ASC
             LIMIT 1
         ";
     } else {
@@ -58,7 +58,7 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
                 no.id_usuarios = '{$_SESSION['ID_USUARIO']}' AND
                 no.confirmacion IS NULL
             ORDER BY
-                n.fechahora DESC
+                n.fechahora ASC
             LIMIT 1
         ";
     }
@@ -71,7 +71,10 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
             <h4 style="color:#007FA6;"><?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</h4>
             <div style="color:#008A47;font-size:20px;"><?=utf8_encode($nov['contenido'])?></div>
             <br />
-            <div><input id="dieAjaxNovedadesButton" type="button" value="He le&iacute;do" /></div>
+            <div>
+                <input id="dieAjaxNovedadesButton" type="button" value="He le&iacute;do" />
+                <input id="dieAjaxNovedadesCancel" type="button" value="Leer despu&eacute;s" />
+            </div>
         </div>
         <style>
         #dieAjaxNovedadesDiv{
@@ -84,13 +87,17 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
             border:2px solid #CCCCCC;
             padding:30px;
         }
-        #dieAjaxNovedadesDiv input{
+        #dieAjaxNovedadesButton,
+        #dieAjaxNovedadesCancel{
             background-color:#008A47;
             color:white;
             border:none;
             padding:10px 20px;
             border-radius:3px;
             font-size:22px;
+        }
+        #dieAjaxNovedadesCancel{
+            background-color:#999;
         }
         </style>
         <script>
@@ -105,6 +112,10 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
                 }).done(function(data) {
                     $('#dieAjaxNovedadesDiv').html(data);
                 });
+            });
+            $('#dieAjaxNovedadesCancel').click(function(event){
+                event.preventDefault();
+                $('#dieAjaxNovedadesDiv').html('');
             });
         });
         </script>
