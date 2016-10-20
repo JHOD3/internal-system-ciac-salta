@@ -216,15 +216,15 @@ $operadores = $this_db->consulta($sql);
     <?php if ($isAdmin): ?>
         <form action="../ajax/novedades.php" method="post">
             <h3>Agregar Novedad Nueva</h3>
-            <table>
+            <table style="width:100%;">
                 <tbody>
                     <tr valign="top">
-                        <td>
+                        <td style="width:100%;">
                             <strong>T&iacute;tulo de la Novedad</strong><br />
-                            <input id="inpTitulo" name="inpTitulo" style="width:300px;" /><br />
+                            <input id="inpTitulo" name="inpTitulo" style="min-width:300px;width:99%;" /><br />
                             <br />
                             <strong>Contenido de la Novedad</strong><br />
-                            <textarea id="textContenido" name="textContenido" style="width:300px;height:200px;"></textarea><br />
+                            <textarea id="textContenido" name="textContenido" style="min-width:300px;width:98%;height:200px;"></textarea><br />
                             <br />
                             <input id="inpSubmit" type="submit" value="Guardar" />
                         </td>
