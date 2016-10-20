@@ -69,7 +69,7 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
             <input type="hidden" id="dieAjaxNovedadesHidden" name="dieAjaxNovedadesHidden" value="<?=$nov['id_novedades']?>" />
             <h1 style="color:#007FA6;"><?=utf8_encode($nov['titulo'])?></h1>
             <h4 style="color:#007FA6;"><?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</h4>
-            <div style="color:#008A47;font-size:20px;"><?=utf8_encode($nov['contenido'])?></div>
+            <div style="color:#008A47;font-size:20px;"><?=utf8_encode(nl2br($nov['contenido']))?></div>
             <br />
             <div>
                 <input id="dieAjaxNovedadesButton" type="button" value="He le&iacute;do" />
@@ -284,7 +284,7 @@ $novedades = $this_db->consulta($sql);
                 <tr valign="top">
                     <td<?=$isAdmin ? ' style="width:40%;"' : ''?>>
                         <div><strong><?=utf8_encode($nov['titulo'])?></strong> - <?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</div>
-                        <div><?=utf8_encode($nov['contenido'])?></div>
+                        <div><?=utf8_encode(nl2br($nov['contenido']))?></div>
                     </td>
                     <?php if ($isAdmin): ?>
                         <td style="width:35%;">
