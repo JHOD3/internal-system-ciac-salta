@@ -124,64 +124,66 @@ $(document).on("dblclick", ".reservar", function(e, date){
 	var dia = fechacompleta.getDay();
 	
 	if ($("#id_pacientes").length){
-		var id_paciente = $("#id_pacientes").val();
-		var id_obra_social = $("#id_obras_sociales").val();
-		var id_obra_social_plan = $("#id_obras_sociales_planes").val();
+        if ($('#bloqueado').val() == '0') {
+    		var id_paciente = $("#id_pacientes").val();
+    		var id_obra_social = $("#id_obras_sociales").val();
+    		var id_obra_social_plan = $("#id_obras_sociales_planes").val();
 		
-		var variables = "id_medico="+id_medico+"&id_especialidad="+id_especialidad+"&id_paciente="+id_paciente+"&desde="+desde+"&hasta="+hasta+"&fecha="+fecha+"&dia="+dia+"&id_turno_tipo="+id_turno_tipo+"&consultorio="+consultorio;
+    		var variables = "id_medico="+id_medico+"&id_especialidad="+id_especialidad+"&id_paciente="+id_paciente+"&desde="+desde+"&hasta="+hasta+"&fecha="+fecha+"&dia="+dia+"&id_turno_tipo="+id_turno_tipo+"&consultorio="+consultorio;
 		
-		$.ajax({ 
-			dataType: "html",
-			type: "POST",   
-			url: "../ajax/altas.php",
-			data: {variables: variables, tabla: "turnos"},
-			beforeSend: function(data){},						
-			success: function(requestData){
-				//alert (requestData);
-				if (requestData != 'existe_turno'){
-					var id_turno = requestData;
-					
-					//SI ES TURNO DE ESTUDIO ABRO LA PANTALLA QUE CARGA LOS ESTUDIOS		
-					//alert (id_turno_tipo, 'ID TURNO TIPO');
-					
-					if (id_turno_tipo == 'estudios'){
-						IniciarVentana("ventana_estudios", "abrir");
-						$.ajax({ 
-							dataType: "html",
-							type: "POST",   
-							url: "../ajax/admin_turno_estudio.php",
-							data: {tipo:"panelAlta", tabla: "turnos_estudios", id_turno: id_turno, id_medico: id_medico, id_obra_social: id_obra_social},
-							beforeSend: function(data){
-								$(ventana_estudios).html("");	
-							},						
-							success: function(requestData){
-								var rta = requestData;
-								//alert(rta);
-								$(ventana_estudios).html(rta);
-								$(ventana_estudios).dialog('option', 'title', 'Agregar Estudios al Turno');
-								$(ventana_estudios).dialog( "open" );
-							},
-							complete: function(requestData, exito){
-							},
-							error: function(requestData){
-								alert (requestData);	
-							}
-						});
-						
-					}
-				}else{
-					alert ('Ya existe un turno reservado en esa horario.');
-				}
-				GrillaInicial(fechacompleta);
-				
-			},
-			complete: function(requestData, exito){
-			},
-			error: function(requestData){
-				alert ("error");	
-			}
-		});
-	}else{
+    		$.ajax({ 
+    			dataType: "html",
+    			type: "POST",   
+    			url: "../ajax/altas.php",
+    			data: {variables: variables, tabla: "turnos"},
+    			beforeSend: function(data){},						
+    			success: function(requestData){
+    				//alert (requestData);
+    				if (requestData != 'existe_turno'){
+    					var id_turno = requestData;
+    					
+    					//SI ES TURNO DE ESTUDIO ABRO LA PANTALLA QUE CARGA LOS ESTUDIOS		
+    					//alert (id_turno_tipo, 'ID TURNO TIPO');
+    					
+    					if (id_turno_tipo == 'estudios'){
+    						IniciarVentana("ventana_estudios", "abrir");
+    						$.ajax({ 
+    							dataType: "html",
+    							type: "POST",   
+    							url: "../ajax/admin_turno_estudio.php",
+    							data: {tipo:"panelAlta", tabla: "turnos_estudios", id_turno: id_turno, id_medico: id_medico, id_obra_social: id_obra_social},
+    							beforeSend: function(data){
+    								$(ventana_estudios).html("");	
+    							},						
+    							success: function(requestData){
+    								var rta = requestData;
+    								//alert(rta);
+    								$(ventana_estudios).html(rta);
+    								$(ventana_estudios).dialog('option', 'title', 'Agregar Estudios al Turno');
+    								$(ventana_estudios).dialog( "open" );
+    							},
+    							complete: function(requestData, exito){
+    							},
+    							error: function(requestData){
+    								alert (requestData);	
+    							}
+    						});
+    						
+    					}
+    				}else{
+    					alert ('Ya existe un turno reservado en esa horario.');
+    				}
+    				GrillaInicial(fechacompleta);
+    				
+    			},
+    			complete: function(requestData, exito){
+    			},
+    			error: function(requestData){
+    				alert ("error");	
+    			}
+    		});
+        }
+	} else {
 		alert ("Falta seleccionar paciente.", 'ATENCIÓN');	
 	}
 });	

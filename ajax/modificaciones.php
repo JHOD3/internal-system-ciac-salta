@@ -21,17 +21,23 @@ switch ($tabla){
 			$obras_sociales_planes = 0;
 		}
 
-		$asignaciones = "
-					id_tipos_documentos = ".$tipos_documentos.",
-					id_obras_sociales = ".$obras_sociales.",
-					apellidos = '".strtoupper(utf8_decode($apellidos))."',
-					nombres = '".strtoupper(utf8_decode($nombres))."',
-					telefonos = '".$telefonos."',
-					nro_documento = '".$nro_documento."',
-					domicilio = '".strtoupper(utf8_decode($domicilio))."',
-					email = '".strtoupper($email)."',
-					id_obras_sociales_planes = ".$obras_sociales_planes."
-					";
+		$asignaciones = "";
+        if ($_SESSION['ID_USUARIO'] == 0) {
+    		$asignaciones.= "
+                bloqueado = '".$bloqueado."',
+    		";
+        }
+		$asignaciones.= "
+			id_tipos_documentos = ".$tipos_documentos.",
+			id_obras_sociales = ".$obras_sociales.",
+			apellidos = '".strtoupper(utf8_decode($apellidos))."',
+			nombres = '".strtoupper(utf8_decode($nombres))."',
+			telefonos = '".$telefonos."',
+			nro_documento = '".$nro_documento."',
+			domicilio = '".strtoupper(utf8_decode($domicilio))."',
+			email = '".strtoupper($email)."',
+			id_obras_sociales_planes = ".$obras_sociales_planes."
+		";
 		
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
 			

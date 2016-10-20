@@ -52,7 +52,17 @@ class Pacientes extends Estructura implements iPacientes{
 		
 		$obj_obras_sociales_planes = new Obras_sociales_planes();
 		$row["DROP_OBRAS_SOCIALES_PLANES"] = $obj_obras_sociales_planes->Drop("DESC", $row["id_obras_sociales_planes"]);
-		
+
+        if ($_SESSION['ID_USUARIO'] != 0) {
+            $row['bloqueado0'] = ' disabled="disabled"';
+            $row['bloqueado1'] = ' disabled="disabled"';
+            $row['bloqueado'.$row['bloqueado']] = ' checked="checked" disabled="disabled"';
+        } else {                        
+            $row['bloqueado0'] = '';
+            $row['bloqueado1'] = '';
+            $row['bloqueado'.$row['bloqueado']] = ' checked="checked"';
+        }    
+
 		$htm->Asigna("TABLA",$this->nombre_tabla);
 		
 		$htm->AsignaBloque('block_registros',$row);
@@ -111,6 +121,7 @@ class Pacientes extends Estructura implements iPacientes{
 				$obj_obra_social_plan = new Obras_sociales_planes($row['id_obras_sociales_planes']);
 				$row["OBRA_SOCIAL_PLAN"] = $obj_obra_social_plan->nombre;
                 $row['nro_documento'] = number_format($row['nro_documento'], 0, ",", ".");
+
 				$htm->AsignaBloque('block_registros',$row);
 			}
 			
