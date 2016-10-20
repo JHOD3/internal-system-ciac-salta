@@ -79,7 +79,7 @@ class Pacientes extends Estructura implements iPacientes{
 		requerir_class('obras_sociales','obras_sociales_planes');
 			
 		$obj_obra_social = new Obras_sociales($row['id_obras_sociales']);
-		$row["OBRA_SOCIAL"] = $obj_obra_social->nombre;
+		$row["OBRA_SOCIAL"] = $obj_obra_social->abreviacion;
 		
 		$obj_obra_social_plan = new Obras_sociales_planes($row['id_obras_sociales_planes']);
 		$row["OBRA_SOCIAL_PLAN"] = $obj_obra_social_plan->nombre;
@@ -116,7 +116,7 @@ class Pacientes extends Estructura implements iPacientes{
 			
 			while ($row = $this->db->fetch_array($query)){
 				$obj_obra_social = new Obras_sociales($row['id_obras_sociales']);
-				$row["OBRA_SOCIAL"] = $obj_obra_social->nombre;
+				$row["OBRA_SOCIAL"] = $obj_obra_social->abreviacion;
 				
 				$obj_obra_social_plan = new Obras_sociales_planes($row['id_obras_sociales_planes']);
 				$row["OBRA_SOCIAL_PLAN"] = $obj_obra_social_plan->nombre;
