@@ -476,6 +476,14 @@ class Medicos extends Estructura implements iMedicos{
 					$row["PACIENTE"] = $row["apellidos"].", ".$row['nombres'];
                     $row["USUARIO"] = $row["uApellidos"].", ".$row['uNombres'];
                     $row["USUARIO"] = '<span style="color:#b0b0b0;">'.$row['USUARIO'].'</span>';
+                    $row["FECHAHORA"] =
+                        '<span style="color:#b0b0b0;">Otorgado: '.
+                        implode("/", array_reverse(explode("-", $row['fecha_alta']))).
+                        ' '.
+                        substr($row['hora_alta'], 0, 5).
+                        'hs'.
+                        '</span>'
+                    ;
 					$obj_turno_estado = new Turnos_estados($row["id_turnos_estados"]);
 					$row["ESTADO"] = $obj_turno_estado->nombre;
                     $row["desde"] = substr($row["desde"], 0, 5);
