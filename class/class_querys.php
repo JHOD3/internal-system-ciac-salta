@@ -322,7 +322,7 @@ class Querys implements iQuerys{
             INNER JOIN
                 pacientes P
                 ON T.id_pacientes = P.id_pacientes
-            INNER JOIN
+            LEFT JOIN
                 obras_sociales OS
                 ON P.id_obras_sociales = OS.id_obras_sociales
             LEFT JOIN
