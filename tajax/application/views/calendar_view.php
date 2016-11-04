@@ -45,7 +45,7 @@
                     ?>
                     <?php for ($h = $rsH['desde']; $h <= $rsH['hasta']; $h = horaMM($h, $vcDuracionTurno)): ?>
                         <?php if (in_array($h, $aTurnosReservados)): ?>
-                            <div><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
+                            <div data-alt="No disponible"><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
                         <?php else: ?>
                             <?php
                             $boHI = false;
@@ -63,12 +63,12 @@
                             }
                             if ($boHI):
                             ?>
-                                <div><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
+                                <div data-alt="No disponible"><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
                             <?php else: ?>
                                 <?php if (date("Ymd") == $year.$month.$day and $h <= date("H:i:s", strtotime("+2 hours"))): ?>
-                                    <div><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
+                                    <div data-alt="No disponible"><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
                                 <?php else: ?>
-                                    <a href=""><div><?=$Tx ? $Tx : substr($h, 0, 5)?></div></a>
+                                    <a href=""><div data-alt="Disponible"><?=$Tx ? $Tx : substr($h, 0, 5)?></div></a>
                                 <?php endif; ?>
                             <?php endif; ?>
                         <?php endif; ?>
