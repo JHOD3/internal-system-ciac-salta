@@ -34,6 +34,10 @@
             <?php endif; ?>
         </div>
         <?php if (in_array($aHorarios[0]['id_turnos_tipos'], array(1, 2))): ?>
+            <div class="leyendadisp">
+                <div class="ocup">Ocupado&nbsp;</div>
+                <div class="disp">Disponible&nbsp;</div>
+            </div>
             <div class="hours">
                 <?php foreach ($aHorarios AS $rsH): ?>
                     <?php
@@ -45,7 +49,7 @@
                     ?>
                     <?php for ($h = $rsH['desde']; $h <= $rsH['hasta']; $h = horaMM($h, $vcDuracionTurno)): ?>
                         <?php if (in_array($h, $aTurnosReservados)): ?>
-                            <div data-alt="No disponible"><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
+                            <div data-alt="Ocupado"><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
                         <?php else: ?>
                             <?php
                             $boHI = false;
@@ -63,10 +67,10 @@
                             }
                             if ($boHI):
                             ?>
-                                <div data-alt="No disponible"><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
+                                <div data-alt="Ocupado"><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
                             <?php else: ?>
                                 <?php if (date("Ymd") == $year.$month.$day and $h <= date("H:i:s", strtotime("+2 hours"))): ?>
-                                    <div data-alt="No disponible"><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
+                                    <div data-alt="Ocupado"><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
                                 <?php else: ?>
                                     <a href=""><div data-alt="Disponible"><?=$Tx ? $Tx : substr($h, 0, 5)?></div></a>
                                 <?php endif; ?>
