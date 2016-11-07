@@ -224,7 +224,7 @@ $operadores = $this_db->consulta($sql);
                             <input id="inpTitulo" name="inpTitulo" style="min-width:300px;width:99%;" /><br />
                             <br />
                             <strong>Contenido de la Novedad</strong><br />
-                            <textarea id="textContenido" name="textContenido" style="min-width:300px;width:98%;height:200px;"></textarea><br />
+                            <textarea id="textContenido" name="textContenido" style="min-width:300px;width:98%;height:200px;text-transform:none!important;"></textarea><br />
                             <br />
                             <input id="inpSubmit" type="submit" value="Guardar" />
                         </td>
