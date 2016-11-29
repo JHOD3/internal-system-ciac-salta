@@ -180,6 +180,7 @@ class Estructura{
 					break;
 					case "obras_sociales":
 						$texto = $row["abreviacion"];
+						$valor = $row["id_".$this->nombre_tabla];
 					break;
 					default:
 						$valor = $row["id_".$this->nombre_tabla];
