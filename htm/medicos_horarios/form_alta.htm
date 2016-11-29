@@ -68,6 +68,26 @@
 				});
 			}
 		});
+
+        $('#form_medicos_horarios .bloque .formathour').bind('click focusin', function(){
+            $(this).select();
+        });
+        $('#form_medicos_horarios .bloque .formathour').keydown(function(event){
+            if (
+                (event.keyCode < 48 || event.keyCode > 57) &&
+                (event.keyCode < 96 || event.keyCode > 105) &&
+                (event.keyCode < 9  || event.keyCode > 9)
+            ) {
+                if (console && console.log) console.log(event.keyCode);
+                event.preventDefault();
+                return false;
+            }
+        });
+        $('#form_medicos_horarios .bloque .formathour').keyup(function(){
+            if ($(this).val().length == 2) {
+                $(this).val($(this).val() + ':');
+            }
+        });
 	});
 </script>
 
@@ -90,12 +110,12 @@
 			</div>
             <div class="bloque">
                 <label>Desde: </label>
-                <input type="text" class="text-long" name="desde" id="desde" value="" />
+                <input type="text" class="text-long formathour" name="desde" id="desde" value="" placeholder="__:__" />
                 hh:mm - Ej. 15:00
             </div>
             <div class="bloque">
                 <label>Hasta: </label>
-                <input type="text" class="text-long" name="hasta" id="hasta" value="" />
+                <input type="text" class="text-long formathour" name="hasta" id="hasta" value="" placeholder="__:__" />
                 hh:mm - Ej. 19:00
             </div>
 			<div class="bloque botones">
