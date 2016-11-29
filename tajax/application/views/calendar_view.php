@@ -69,7 +69,7 @@
                             ?>
                                 <div data-alt="Ocupado"><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
                             <?php else: ?>
-                                <?php if (date("Ymd") == $year.$month.$day and $h <= date("H:i:s", strtotime("+2 hours"))): ?>
+                                <?php if (date("Ymd") == $year.$month.$day and $h <= date("H:i:s", strtotime("+3 hours"))): ?>
                                     <div data-alt="Ocupado"><?=$Tx ? $Tx : substr($h, 0, 5)?></div>
                                 <?php else: ?>
                                     <a href=""><div data-alt="Disponible"><?=$Tx ? $Tx : substr($h, 0, 5)?></div></a>
