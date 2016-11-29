@@ -630,8 +630,19 @@ function HoraActual(){
 }
 
 $(function() {
+    $("#medicos").keypress(function(event){
+        if (console && console.log) console.log(event.key);
+        letters = ['á','é','í','ó','ú','ñ','ü','Á','É','Í','Ó','Ú','Ñ','Ü'];
+        replace = ['a','e','i','o','u','n','u','A','E','I','O','U','N','U'];
+        POS = $.inArray(event.key, letters);
+        if (POS >= 0) {
+            event.preventDefault();
+            $(this).val($(this).val() + replace[POS]);
+            return false;
+        }
+    });
 	$("#medicos").autocomplete({
-		source: "../ajax/buscar.php",
+        source: "../ajax/buscar.php",
 		focus: function( event, ui ) {
 			//$( "#medicos" ).val( ui.item.label );
 			return false;
