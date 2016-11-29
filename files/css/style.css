@@ -1319,3 +1319,8 @@ tr.even td:last-child{
   -khtml-border-radius: 5px;
   -webkit-border-radius: 5px;
 }
+
+.ui-datepicker-calendar > tbody > tr > td > a,
+.ui-datepicker-calendar > tbody > tr > td > span{
+    padding: 3px 10px!important;
+}
