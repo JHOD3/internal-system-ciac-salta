@@ -178,6 +178,9 @@ class Estructura{
 					case "localidades_zonas":
 						$valor = $row["id_localidades"];
 					break;
+					case "obras_sociales":
+						$texto = $row["abreviacion"];
+					break;
 					default:
 						$valor = $row["id_".$this->nombre_tabla];
 				}
