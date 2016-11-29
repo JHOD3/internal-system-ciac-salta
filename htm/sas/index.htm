@@ -269,12 +269,27 @@ function drawBar3Chart() {
     chart.draw(dataBar3, options);
 }
 
+google.charts.setOnLoadCallback(drawBar4Chart);
+function drawBar4Chart() {
+    var dataBar4 = google.visualization.arrayToDataTable([
+        ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
+        [EST]
+    ]);
+    var options = {
+        title: 'ESTUDIOS REALIZADOS\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
+        legend: {position: 'none'},
+    };
+    var chart = new google.visualization.BarChart(document.getElementById('bar4chart'));
+    chart.draw(dataBar4, options);
+}
+
 </script>
 <div style="position:absolute;left:0;width:100%;">
 <div id="bar1chart" style="width: 100%; height: [TOT_NUMROWS]px;"></div>
 <div id="linechart" style="width: 100%; height: [TPM_NUMROWS]px;"></div>
 <div id="bar2chart" style="width: 100%; height: 2800px;"></div>
 <div id="bar3chart" style="width: 100%; height: [OST_NUMROWS]px;"></div>
+<div id="bar4chart" style="width: 100%; height: [EST_NUMROWS]px;"></div>
 </div>
                     </div>
                     <div class="span3 contenedor" id="habilitar_inhabilitar" >

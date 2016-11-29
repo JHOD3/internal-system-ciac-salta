@@ -30,6 +30,7 @@ $dataTOT = $obj_estructura->obtTurnosOtorgadosTotales($desde, $hasta, $_SESSION[
 $dataTPM = $obj_estructura->obtTurnosPorMedicos($desde, $hasta, $_SESSION['ID_USUARIO']);
 $dataTPD = $obj_estructura->obtTurnosOtorgadosPorDia($desde, $hasta, $_SESSION['ID_USUARIO']);
 $dataOST = $obj_estructura->obtTurnosOtorgadosPorOS($desde, $hasta, $_SESSION['ID_USUARIO']);
+$dataEST = $obj_estructura->obtTurnosOtorgadosPorEST($desde, $hasta, $_SESSION['ID_USUARIO']);
 
 $htm_index->Asigna("DATE_DESDE", $desde);
 $htm_index->Asigna("DATE_DESDE_TEXT", implode("/", array_reverse(explode("-", $desde))));
@@ -43,6 +44,8 @@ $htm_index->Asigna("TPD", $dataTPD[0]);
 $htm_index->Asigna("TPD_NUMROWS", 400 + ($dataTPD[1] * 100));
 $htm_index->Asigna("OST", $dataOST[0]);
 $htm_index->Asigna("OST_NUMROWS", 100 + ($dataOST[1] * 40));
+$htm_index->Asigna("EST", $dataEST[0]);
+$htm_index->Asigna("EST_NUMROWS", 100 + ($dataEST[1] * 40));
 
 $htm_index->Asigna("FECHA", strftime("%A %d de %B del %Y"));
 $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));
