@@ -215,7 +215,7 @@ class Medicos extends Estructura implements iMedicos{
 						$row1["HASTA"] = $suma;
 						$hastav[] = $suma;
 
-						if(isset($row["id_turnos_tipos"]) && $row["id_turnos_tipos"] == 2){
+						if(isset($row["id_turnos_tipos"]) && (2 - ($row["id_turnos_tipos"] % 2)) == 2){
 							$tipo_turno = "estudios";
 						}else{
 							$tipo_turno	= "consultas";
@@ -316,7 +316,7 @@ class Medicos extends Estructura implements iMedicos{
 				if ($cant2 > 0){
 					while ($row = $this->db->fetch_array($query2)){
 						//ES ESTUDIO O CONSULTA
-						if(isset($row["id_turnos_tipos"]) && $row["id_turnos_tipos"] == 2){
+						if(isset($row["id_turnos_tipos"]) && (2 - ($row["id_turnos_tipos"] % 2)) == 2){
 							$tipo_turno = "estudios";
 						}else{
 							$tipo_turno	= "consultas";
@@ -387,7 +387,7 @@ class Medicos extends Estructura implements iMedicos{
 				while ($row2 = $this->db->fetch_array($query)){
 
 					//ES ESTUDIO O CONSULTA
-					if(isset($row2["id_turnos_tipos"]) && $row2["id_turnos_tipos"] == 2){
+					if(isset($row2["id_turnos_tipos"]) && (2 - ($row2["id_turnos_tipos"] % 2)) == 2){
 						$tipo_turno = "estudios";
 					}else{
 						$tipo_turno	= "consultas";
@@ -559,7 +559,7 @@ class Medicos extends Estructura implements iMedicos{
 
 
 						//ES ESTUDIO O CONSULTA
-						if(isset($row["id_turnos_tipos"]) && $row["id_turnos_tipos"] == 2){
+						if(isset($row["id_turnos_tipos"]) && (2 - ($row["id_turnos_tipos"] % 2)) == 2){
 							$tipo_turno = "estudios";
 						}else{
 							$tipo_turno	= "consultas";
@@ -634,7 +634,7 @@ class Medicos extends Estructura implements iMedicos{
 				while ($row2 = $this->db->fetch_array($query)){
 
 					//ES ESTUDIO O CONSULTA
-					if(isset($row2["id_turnos_tipos"]) && $row2["id_turnos_tipos"] == 2){
+					if(isset($row2["id_turnos_tipos"]) && (2 - ($row2["id_turnos_tipos"] % 2)) == 2){
 						$tipo_turno = "estudios";
 					}else{
 						$tipo_turno	= "consultas";
