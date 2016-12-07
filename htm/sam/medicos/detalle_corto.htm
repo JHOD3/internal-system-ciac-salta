@@ -1,17 +1,19 @@
-<section id="panel_busqueda" class="bg_gris_oscuro">
+<section id="panel_busqueda" class="bg_gris_oscuro" style="position:fixed;width:100%;z-index:34958395;">
     <div class="container">
     	[block: block_registros]
         <div class="row">
             <div class="span12">
-                <div class="float margin"><label>Especialidad:</label></div>
+                <div class="float margin"><label>Esp.:</label></div>
                 <div class="float">[DROP_ESPECIALIDADES]</div>
                 <div class="float">
-                    <div class="span4">
-                        <input id="dni" type="text" onkeypress="return SoloNros(event)" placeHolder="Paciente" style="width: 130px!important;min-width:0px!important;">
+                    <div class="span4" style="width:auto!important;">
+                        <input id="dni" type="text" onkeypress="return SoloNros(event)" placeHolder="DNI Paciente" style="width:120px!important;min-width:0px!important;">
                         <a href="#" id="btn_buscar_paciente" class="btn">Buscar</a>
                     </div>
                 </div>
+                <div class="right margin"><a href="login.php">[Salir]</a></div>
                 <div class="right">
+                    [ESTADISTICAS_BUTTON]
                     <a
                         href="#"
                         data-id_padre="[id_medicos]"
@@ -29,7 +31,6 @@
                         <span>Planta M&eacute;dica</span>
                     </a>
                 </div>
-                <div class="right margin"><a href="login.php">[Cerrar Sesi&oacute;n]</a></div>
                 <div class="fn"></div>
             </div>
             <div class="oculto">
@@ -40,3 +41,8 @@
   	</div>
 </section>
 
+<style>
+#cuerpo{
+    padding-top:50px;
+}
+</style>
