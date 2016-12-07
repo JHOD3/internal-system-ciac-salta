@@ -291,7 +291,7 @@ class Querys implements iQuerys{
 	}
 	
 	function TurnosReservados($fecha, $id_medico, $id_especialidad, $id_dia){
-		$query = "SELECT *, TE.nombre AS nombre_estado, OS.nombre AS nombre_os
+		$query = "SELECT *, TE.nombre AS nombre_estado, OS.nombre AS nombre_os, OS.abreviacion
 				FROM turnos T
 				INNER JOIN turnos_estados TE
 				ON T.id_turnos_estados = TE.id_turnos_estados

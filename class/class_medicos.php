@@ -335,7 +335,7 @@ class Medicos extends Estructura implements iMedicos{
 										<div class='dat_paciente'>".
 											$row["apellidos"]. ", ".$row["nombres"]."
 											(".$row["nombre_estado"].")<br />
-											<small style='color:#000'>".$row["nombre_os"]. " - ".$row["telefonos"]."</small>
+											<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>
 										</div>
 									</div>
 								</span>";
@@ -352,7 +352,7 @@ class Medicos extends Estructura implements iMedicos{
 											<div class='dat_paciente'>".
 												$row["apellidos"]. ", ".$row["nombres"]."
 												(".$row["nombre_estado"].")<br />
-												<small style='color:#000'>".$row["nombre_os"]. " - ".$row["telefonos"]."</small>
+												<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>
 											</div>";
 
 								if ($cant_estudios > 0){
@@ -578,7 +578,7 @@ class Medicos extends Estructura implements iMedicos{
 										<div class='dat_paciente'>".
 											$row["apellidos"]. ", ".$row["nombres"]."
 											(".$row["nombre_estado"].")<br />
-											<small style='color:#000'>".$row["nombre_os"]. " - ".$row["telefonos"]."</small>
+											<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>
 										</div>
 									</div>
 								</span>";
@@ -595,7 +595,7 @@ class Medicos extends Estructura implements iMedicos{
 											<div class='dat_paciente'>".
 												$row["apellidos"]. ", ".$row["nombres"]."
 												(".$row["nombre_estado"].")<br />
-												<small style='color:#000'>".$row["nombre_os"]. " - ".$row["telefonos"]."</small>
+												<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>
 											</div>";
 
 								if ($cant_estudios > 0){
