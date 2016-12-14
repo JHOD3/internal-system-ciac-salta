@@ -411,6 +411,7 @@ class Turnos extends Estructura implements iTurnos{
 		if ($cant != 0){
 			while ($row = $this->db->fetch_array($query)){
 				$row["I"] = $i;
+                $row["nombre_estudio"] = utf8_encode($row["nombre_estudio"]);
 				$htm->AsignaBloque('block_registros',$row);
 				$i += 1;		
 			}
