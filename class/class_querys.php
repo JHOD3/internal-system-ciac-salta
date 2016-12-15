@@ -617,7 +617,7 @@ class Querys implements iQuerys{
 	}
 	
 	function EstudiosTurnos($id_turnos){
-		$query = "SELECT DISTINCT E.id_estudios, E.nombre AS nombre_estudio 
+		$query = "SELECT DISTINCT E.id_estudios, E.nombre AS nombre_estudio, E.requisitos
 				FROM turnos_estudios TE 
 				INNER JOIN estudios E
 				ON TE.id_estudios = E.id_estudios
