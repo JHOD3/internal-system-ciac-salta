@@ -143,7 +143,7 @@ if (
         VALUES
             (
                 '".str_replace("'", "\\'", utf8_decode($_POST['inpTitulo']))."',
-                '".str_replace("'", "\\'", utf8_decode(strtoupper($_POST['textContenido'])))."',
+                '".str_replace("'", "\\'", utf8_decode($_POST['textContenido']))."',
                 '".date("Y-m-d H:i:s")."'
             )
     ";
