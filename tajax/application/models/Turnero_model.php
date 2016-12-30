@@ -644,7 +644,7 @@ class Turnero_model extends CI_model
             ->select('id_turnos')
             ->from('turnos_cambios_estados AS tce')
             ->where('id_turnos_estados_viejos', '1')
-            ->where('id_turnos_estados_nuevos', '4')
+            ->where_in('id_turnos_estados_nuevos', array('4', '8'))
             ->where('tce.fecha', date("Y-m-d", strtotime($next)))
             ->where('tce.hora LIKE', date("H", strtotime($next)).":%:%")
             ->where('tce.estado', '1')
