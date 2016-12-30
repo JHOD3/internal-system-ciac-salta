@@ -88,6 +88,18 @@ class Turnero_model extends CI_model
         return $query;
     }
 
+    public function obtObrasSocialesDropDownMedico($id_medicos)
+    {
+        $query = $this->db
+            ->from('obras_sociales')
+            ->where('estado', 1)
+            ->order_by('abreviacion, nombre')
+            ->get()
+            ->result_array()
+        ;
+        return $query;
+    }
+
     public function obtObraSocial($id_obras_sociales)
     {
         $query = $this->db
@@ -277,7 +289,7 @@ class Turnero_model extends CI_model
             ->where('id_especialidades', $id_especialidades)
             ->where('id_medicos', $id_medicos)
             ->where('estado', 1)
-            ->where_in('id_turnos_estados', array(1, 2, 3, 7))
+            ->where_in('id_turnos_estados', array(1, 2, 4, 7))
             ->where('fecha', $year."-".$month."-".$day)
             ->get()
             ->result_array()
@@ -388,7 +400,8 @@ class Turnero_model extends CI_model
                 $this->db->update(
                     'pacientes',
                     array(
-                        'email' => lower($post['email'])
+                        'email' => lower($post['email']),
+                        'id_obras_sociales' => $post['id_obras_sociales']
                     ),
                     'id_pacientes = '.$post['id_pacientes']
                 );
@@ -623,6 +636,52 @@ class Turnero_model extends CI_model
             ->result_array()
         ;
         return $query;
+    }
+
+    public function getTurnosCanceladosPorElMedico($next)
+    {
+        $query = $this->db
+            ->select('id_turnos')
+            ->from('turnos_cambios_estados AS tce')
+            ->where('id_turnos_estados_viejos', '1')
+            ->where('id_turnos_estados_nuevos', '4')
+            ->where('tce.fecha', date("Y-m-d", strtotime($next)))
+            ->where('tce.hora LIKE', date("H", strtotime($next)).":%:%")
+            ->where('tce.estado', '1')
+            ->order_by('tce.id_turnos_cambios_estados', 'DESC')
+            ->get()
+            ->result_array()
+        ;
+        if (count($query)) {
+            $arr_id_turnos = array();
+            foreach ($query AS $itm) {
+                $arr_id_turnos[] = $itm['id_turnos'];
+            }
+            $query = $this->db
+                ->select(
+                    "t.id_turnos, t.fecha, t.desde, ".
+                    "e.id_especialidades, e.nombre AS especialidad, ".
+                    "m.id_medicos, m.saludo, m.nombres AS mednombres, m.apellidos AS medapellidos, ".
+                    "p.id_pacientes, p.apellidos AS pacapellidos, p.nombres AS pacnombres, p.email, p.telefonos, ".
+                    "o.nombre AS obrnombre"
+                )
+                ->from('turnos AS t')
+                ->join('especialidades AS e', 't.id_especialidades = e.id_especialidades')
+                ->join('medicos AS m', 't.id_medicos = m.id_medicos')
+                ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes')
+                ->join('obras_sociales AS o', 'p.id_obras_sociales = o.id_obras_sociales')
+                ->where('t.estado', 1)
+                ->where_in('t.id_turnos', $arr_id_turnos)
+                ->where_not_in('p.email', array('', '-'))
+                ->like('p.email', '@')
+                ->order_by('t.desde')
+                ->get()
+                ->result_array()
+            ;
+            return $query;
+        } else {
+            return array();
+        }
     }
 
 }
