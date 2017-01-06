@@ -61,7 +61,7 @@ class Querys implements iQuerys{
             } else {
     			$query = "SELECT * FROM ".$tabla." WHERE ".$atributo." = '".mysql_real_escape_string(utf8_decode($valor))."'";
             }
-		}else{
+		} else {
 			$query = "SELECT * FROM ".$tabla." WHERE ".$atributo." LIKE '%".mysql_real_escape_string(utf8_decode($valor))."%'";
 		}
 		return $query;		
