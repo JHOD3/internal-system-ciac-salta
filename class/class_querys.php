@@ -67,12 +67,15 @@ class Querys implements iQuerys{
 		return $query;		
 	}
 	
-	function ValidaLogueo($tabla, $usuario, $pass){
-		$query = "SELECT * FROM ".$tabla." 
-				  WHERE usuario ='". mysql_real_escape_string($usuario)."' AND pass = '". mysql_real_escape_string($pass) ."'";
-		////error_log($query);
-		return $query;		
-	} 
+    function ValidaLogueo($tabla, $usuario, $pass){
+            $query = "SELECT * FROM ".$tabla."
+                WHERE
+                    usuario = '". mysql_real_escape_string($usuario)."' AND
+                    usuario LIKE '". mysql_real_escape_string($usuario)."' AND
+                    pass = '". mysql_real_escape_string($pass) ."'";
+            ////error_log($query);
+            return utf8_decode($query);
+    }
 	
 	function CambiarEstado($tabla, $id, $id_estado){
 		$query = "UPDATE ".$tabla." SET id_".$tabla."_estados = $id_estado WHERE id_".$tabla." = $id";
