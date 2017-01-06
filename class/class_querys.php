@@ -69,9 +69,12 @@ class Querys implements iQuerys{
 	
 	function ValidaLogueo($tabla, $usuario, $pass){
 		$query = "SELECT * FROM ".$tabla." 
-				  WHERE usuario ='". mysql_real_escape_string($usuario)."' AND pass = '". mysql_real_escape_string($pass) ."'";
+		    WHERE
+                        usuario = '". mysql_real_escape_string($usuario)."' AND
+                        usuario LIKE '". mysql_real_escape_string($usuario)."' AND
+                        pass = '". mysql_real_escape_string($pass) ."'";
 		////error_log($query);
-		return $query;		
+		return utf8_decode($query);		
 	} 
 	
 	function CambiarEstado($tabla, $id, $id_estado){
