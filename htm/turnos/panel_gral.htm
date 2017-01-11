@@ -197,7 +197,11 @@
 		//alert ("Estado Nuevo: " + id_turno_estado);
 		IniciarVentana("ventana_estado_turno", "cerrar");
 		
-		if (id_turno_estado_actual == 2 && id_turno_estado !=2){
+		if (
+            id_turno_estado_actual == 2 &&
+            id_turno_estado != 2 &&
+            id_turno_estado != 7
+        ){
 			$( "#dialog-confirm" ).dialog({
 			  resizable: false,
 			  height:200,
