@@ -21,9 +21,9 @@ $sql = "
 $result = $this_db->consulta($sql);
 while ($row = $this_db->fetch_array($result)) {
     ?>
-    <div><strong style="color:#008A47;"><?=$row['nombre']?></strong> - <strong style="color:#007FA6;">Importe: $<?=$row['importe']?></strong></div>
+    <div><strong style="color:#008A47;"><?=$row['nombre']?></strong> - <strong style="color:#007FA6;">Particular: $<?=$row['importe']?></strong></div>
     <?php if (trim($row['requisitos'])): ?>
-        <div><strong>Requisitos:</strong> <?=$row['requisitos']?></div>
+        <div><strong>Preparaci&oacute;n:</strong> <?=$row['requisitos']?></div>
     <?php endif; ?>
     <br />
     <?php
