@@ -30,16 +30,25 @@
 	
 	var ids_estudios = "";
 		
+    $('#estudios_chosen').after('<div id="estudios_chosen_result_post">...</div>')
 	$(".chosen-select-width").chosen().change(function(){
 		var total_particular = 0;
 		var total_os = 0;
+        var requisitos = new Array();
 		$(".chosen-choices li.search-choice a").each(function( index ) {
 			var id = $(this).data("option-array-index");
+            requisitos.push($(this).parent().find('span').html());
 			var valor_particular = $("select#estudios option:eq("+id+")").data("valor_particular");
 			var valor_os = $("select#estudios option:eq("+id+")").data("valor_obra_social");
 			total_particular += parseInt(valor_particular);
 			total_os += parseInt(valor_os);
 		});
+        $.post(
+            '../ajax/operaciones_requisitos_estudio.php',
+            {req: requisitos.join('||')}
+        ).done(function(data){
+            $('#estudios_chosen_result_post').html(data);
+        });
 		$(".total #particular").html("$ "+total_particular);
 		$(".total #os").html("$ "+total_os);
 	});
