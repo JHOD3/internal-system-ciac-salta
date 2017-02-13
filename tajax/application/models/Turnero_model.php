@@ -614,7 +614,7 @@ class Turnero_model extends CI_model
     {
         $query = $this->db
             ->select(
-                "t.id_turnos, t.fecha, t.desde, ".
+                "t.id_turnos, t.fecha, t.desde, t.fecha_alta, t.hora_alta, ".
                 "e.id_especialidades, e.nombre AS especialidad, ".
                 "m.id_medicos, m.saludo, m.nombres AS mednombres, m.apellidos AS medapellidos, ".
                 "p.id_pacientes, p.apellidos AS pacapellidos, p.nombres AS pacnombres, p.email, p.telefonos, ".
