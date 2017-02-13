@@ -339,16 +339,16 @@ class Medicos extends Estructura implements iMedicos{
 										<div class='dat_paciente'>".
 											$row["apellidos"]. ", ".$row["nombres"]."
 											(".$row["nombre_estado"].")<br />
-											<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>";
+											<small style='color:#000'>".$row["abreviacion"]."</small>";
 
 								if ($cant_estudios > 0){
 									while ($row_estudios = $this->db->fetch_array($query_estudios)){
 
-										$linea .= "&nbsp;-&nbsp;<div class='estudios'><small>".$row_estudios['nombre_estudio']."</small></div>";
+										$linea .= "&nbsp;-&nbsp;<div class='estudios'><small style='color:#000'>".$row_estudios['nombre_estudio']."</small></div>";
 									}
 								}
 
-                                $linea .= "</div>
+                                $linea .= "<small style='color:#000'> - ".$row["telefonos"]."</small></div>
                                     </div>
 								</span>";
 							break;
