@@ -172,14 +172,14 @@ switch ($tabla){
 		$columnas = "(
 					nombre,
 					abreviacion,
-					importe_consulta,
+					#importe_consulta,
 					estado
 					)";
 					
 		$valores = "(
 					'".strtoupper(utf8_decode($nombre))."',
 					'".strtoupper(utf8_decode($abreviacion))."',
-					".$importe_consulta.",
+					#".$importe_consulta.",
 					1
 					)";
 		

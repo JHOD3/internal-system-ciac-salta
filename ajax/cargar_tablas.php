@@ -45,7 +45,7 @@ switch ($tabla){
 		$aColumns = array('id_estudios', 'nombre', 'importe');
 	break;
 	case "obras_sociales":
-		$aColumns = array('id_obras_sociales', 'abreviacion', 'nombre', 'importe_consulta');
+		$aColumns = array('id_obras_sociales', 'abreviacion', 'nombre'/*, 'importe_consulta'*/);
 	break;
 	case "obras_sociales_planes":
 		$aColumns = array('id_obras_sociales_planes', 'nombre');
@@ -955,11 +955,11 @@ if ($cant_registros != 0){
 					$row[0] = $aRow["id_obras_sociales"];
 					$row[1] = utf8_encode($aRow["abreviacion"]);
 					$row[2] = utf8_encode($aRow["nombre"]);
-					$row[3] = utf8_encode($aRow["importe_consulta"]);
+					//$row[3] = utf8_encode($aRow["importe_consulta"]);
                     if ($_SESSION['ID_USUARIO'] === '0') {
-						$row[4] = $editar.''.$planes.''.$estudios.''.$eliminar.'';
+						$row[3] = $editar.''.$planes.''.$estudios.''.$eliminar.'';
                     } else {
-						$row[4] = $planes.''.$estudios;
+						$row[3] = $planes.''.$estudios;
                     }
 				break;
 
