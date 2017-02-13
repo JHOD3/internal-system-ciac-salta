@@ -884,7 +884,20 @@ if ($cant_registros != 0){
 					$row[2] = "<span class='paciente_buscado' data-id='".$aRow["id_pacientes"]."'>".utf8_encode($aRow["apellidos"])."</span>";
 					$row[3] = utf8_encode($aRow["nombres"]);
 					$row[4] = utf8_encode($obra_social);
-                    if ($_SESSION['ID_USUARIO'] === '0') {
+
+                    $mySql = "
+                        SELECT COUNT(id_turnos) AS `TurnosCant`
+                        FROM turnos
+                        WHERE id_pacientes = '{$row[0]}'
+                        GROUP BY id_turnos
+                    ";
+            		$myResult = $obj->db->consulta($mySql);
+                    $TurnosCant = 0;
+                    if ($myRow = $obj->db->fetch_array($myResult)){
+                        $TurnosCant = $myRow['TurnosCant'];
+                    }
+
+                    if ($_SESSION['ID_USUARIO'] === '0' or $TurnosCant == 0) {
                         $row[5] = $editar.''.$turnos.''.$cobros.''.$eliminar.'';
                     } else {
                         $row[5] = $editar.''.$turnos.''.$cobros.'';
