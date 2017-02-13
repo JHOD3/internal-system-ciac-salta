@@ -329,15 +329,27 @@ class Medicos extends Estructura implements iMedicos{
 						//ARMO EL LISTADO DE TURNOS RESERVADOS
 						switch ($_SESSION['SISTEMA']){
 							case 'sas':
+								$query_string_estudios = $this->querys->EstudiosTurnos($row["id_turnos"]);
+								$query_estudios = $this->db->consulta($query_string_estudios);
+								$cant_estudios = $this->db->num_rows($query_estudios);
+
 								$linea = " <span style='color:#".$row["color"]."' class='btn_estado_turno' data-id='".$row["id_turnos"]."' data-id_turnos_tipos='".$row["id_turnos_tipos"]."' data-id_turnos_estados='".$row["id_turnos_estados"]."' data-tipo='turno'>
 									<div class='bloque'>
 										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 										<div class='dat_paciente'>".
 											$row["apellidos"]. ", ".$row["nombres"]."
 											(".$row["nombre_estado"].")<br />
-											<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>
-										</div>
-									</div>
+											<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>";
+
+								if ($cant_estudios > 0){
+									while ($row_estudios = $this->db->fetch_array($query_estudios)){
+
+										$linea .= "&nbsp;-&nbsp;<div class='estudios'><small>".$row_estudios['nombre_estudio']."</small></div>";
+									}
+								}
+
+                                $linea .= "</div>
+                                    </div>
 								</span>";
 							break;
 							case 'sam':
@@ -473,6 +485,16 @@ class Medicos extends Estructura implements iMedicos{
 			$cant = $this->db->num_rows($query);
 			if ($cant != 0){
 				while ($row = $this->db->fetch_array($query)){
+					$query_string_estudios = $this->querys->EstudiosTurnos($row["id_turnos"]);
+					$query_estudios = $this->db->consulta($query_string_estudios);
+					$cant_estudios = $this->db->num_rows($query_estudios);
+				    $row["ESTUDIOS"] = "";
+					if ($cant_estudios > 0){
+						while ($row_estudios = $this->db->fetch_array($query_estudios)){
+							$row["ESTUDIOS"] .= "<br /><div class='estudios'><small>".$row_estudios['nombre_estudio']."</small></div>";
+						}
+					}
+
 					$row["PACIENTE"] = $row["apellidos"].", ".$row['nombres'];
                     $row["USUARIO"] = $row["uApellidos"].", ".$row['uNombres'];
                     $row["USUARIO"] = '<span style="color:#b0b0b0;">'.$row['USUARIO'].'</span>';
