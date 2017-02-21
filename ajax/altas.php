@@ -147,6 +147,7 @@ switch ($tabla){
 		$columnas = "(
 					nombre,
 					importe,
+                    arancel,
 					estado,
 					requisitos
 					)";
@@ -154,6 +155,7 @@ switch ($tabla){
 		$valores = "(
 					'".strtoupper(utf8_decode($nombre))."',
 					'".$importe."',
+					'".$arancel."',
 					1,
 					'".strtoupper(utf8_decode($requisitos))."'
 					)";

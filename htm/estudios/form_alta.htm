@@ -22,6 +22,9 @@
 				},
 				importe: {
 					required: true
+				},
+				arancel: {
+					required: true
 				}
 			},
 			messages: {
@@ -30,6 +33,9 @@
 				},
 				importe: {
 					required: "Ingrese Importe"
+				},
+				arancel: {
+					required: "Ingrese Arancel"
 				}
 			},
 			submitHandler: function(){
@@ -68,6 +74,10 @@
             <div class="bloque">
                 <label>Importe Particular: </label>
                 <input type="text" class="text-long" name="importe" />
+            </div>
+            <div class="bloque">
+                <label>Arancel: </label>
+                <input type="text" class="text-long" name="arancel" />
             </div>
             <div class="bloque">
                 <label>Preparaci&oacute;n/<br />Recomendaci&oacute;n: </label>
