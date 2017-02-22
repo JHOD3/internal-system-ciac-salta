@@ -370,7 +370,7 @@ class Medicos extends Estructura implements iMedicos{
 								if ($cant_estudios > 0){
 									while ($row_estudios = $this->db->fetch_array($query_estudios)){
 
-										$linea .= "<br /><div class='estudios'><small>".$row_estudios['nombre_estudio']."</small></div>";
+										$linea .= "<br /><div class='estudios' style='color:#b0b0b0;'><small>".$row_estudios['nombre_estudio']."</small></div>";
 									}
 								}
 
@@ -491,7 +491,7 @@ class Medicos extends Estructura implements iMedicos{
 				    $row["ESTUDIOS"] = "";
 					if ($cant_estudios > 0){
 						while ($row_estudios = $this->db->fetch_array($query_estudios)){
-							$row["ESTUDIOS"] .= "<br /><div class='estudios'><small>".$row_estudios['nombre_estudio']."</small></div>";
+							$row["ESTUDIOS"] .= "<br /><div class='estudios' style='color:#b0b0b0;'><small>".$row_estudios['nombre_estudio']."</small></div>";
 						}
 					}
 
@@ -623,7 +623,7 @@ class Medicos extends Estructura implements iMedicos{
 								if ($cant_estudios > 0){
 									while ($row_estudios = $this->db->fetch_array($query_estudios)){
 
-										$linea .= "<br /><div class='estudios'><small>".$row_estudios['nombre_estudio']."</small></div>";
+										$linea .= "<br /><div class='estudios' style='color:#b0b0b0;'><small>".$row_estudios['nombre_estudio']."</small></div>";
 									}
 								}
 
