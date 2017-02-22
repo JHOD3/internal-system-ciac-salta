@@ -126,6 +126,7 @@ switch ($tabla){
 		$asignaciones = "
 					nombre = '".strtoupper(utf8_decode($nombre))."',
 					importe = '".$importe."',
+					arancel = '".$arancel."',
 					requisitos = '".utf8_decode($requisitos)."'
 					";
 		
