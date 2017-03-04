@@ -422,13 +422,15 @@ class Medicos extends Estructura implements iMedicos{
 							foreach ($inhabilitadosv as $clave => $valor){
 								if (($inicio >= $valor['desde']) && ($inicio < $valor['hasta'])){
 									$es_inhabilitado = true;
+                                    $es_inhabilitado_mot = $valor['motivo_descripcion'];
+                                    $es_inhabilitado_txt = $valor['horarios_inhabilitados_motivos'];
 								}
 							}
 
 							if ($es_inhabilitado){
 								$linea = "<span class='c_rojo inhabilitado' data-desde='".$inicio."' data-hasta='".$fin."' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
 											<div class='bloque'>
-												<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><strong>".substr($inicio, 0, 5)." &raquo; Inhabilitado</strong>
+												<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><strong>".substr($inicio, 0, 5)." &raquo; Inhabilitado: ".$es_inhabilitado_mot." ".$es_inhabilitado_txt."</strong>
 											</div>
 
 										</span>";
@@ -682,13 +684,15 @@ class Medicos extends Estructura implements iMedicos{
 							foreach ($inhabilitadosv as $clave => $valor){
 								if (($inicio >= $valor['desde']) && ($inicio < $valor['hasta'])){
 									$es_inhabilitado = true;
+                                    $es_inhabilitado_mot = $valor['motivo_descripcion'];
+                                    $es_inhabilitado_txt = $valor['horarios_inhabilitados_motivos'];
 								}
 							}
 
 							if ($es_inhabilitado){
 								$linea = "<span class='c_rojo inhabilitado' data-desde='".$inicio."' data-hasta='".$fin."' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
 											<div class='bloque'>
-												<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><strong>".substr($inicio, 0, 5)." &raquo; Inhabilitado</strong>
+												<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><strong>".substr($inicio, 0, 5)." &raquo; Inhabilitado: ".$es_inhabilitado_mot." ".$es_inhabilitado_txt."</strong>
 											</div>
 
 										</span>";
@@ -1077,7 +1081,7 @@ class Medicos extends Estructura implements iMedicos{
 			$htm->Asigna('NOMBRE_SELECT', 'horarios_inhabilitados');
 			$htm->Asigna('LABEL_ELIJA', 'Seleccione Horario');
 			while ($row = $this->db->fetch_array($query)){
-				$row['TEXTO_OPTION'] = $row['desde']." - ".$row['hasta'];
+				$row['TEXTO_OPTION'] = $row['desde']." - ".$row['hasta']." | ".$row['motivo_descripcion'].$row['horarios_inhabilitados_motivos'];
 				$row['VALUE'] = $row['id_horarios_inhabilitados'];
 				$htm->AsignaBloque('block_option',$row);
 			}

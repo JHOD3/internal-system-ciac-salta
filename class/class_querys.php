@@ -457,18 +457,42 @@ class Querys implements iQuerys{
 				WHERE fecha = '".$fecha."' AND (desde <= '".$inicio."' AND hasta >= '".$fin."') AND id_medicos = $id_medico AND id_especialidades = $id_especialidad";
 		return $query;
 	}
-	
+
 	function HorariosInhabilitados($fecha, $id_medico, $id_especialidad){
-		$query = "SELECT *
-				FROM horarios_inhabilitados
-				WHERE fecha = '".$fecha."' AND id_medicos = $id_medico AND id_especialidades = $id_especialidad";
+		$query = "
+            SELECT
+                `hi`.*,
+                `him`.motivo_descripcion
+			FROM
+                horarios_inhabilitados AS `hi`
+            LEFT JOIN
+                horarios_inhabilitados_motivos AS `him`
+                ON
+                    `hi`.id_horarios_inhabilitados_motivos = `him`.id_horarios_inhabilitados_motivos
+			WHERE
+                `hi`.fecha = '$fecha' AND
+                `hi`.id_medicos = $id_medico AND
+                `hi`.id_especialidades = $id_especialidad
+        ";
 		return $query;
 	}
-	
+
 	function DropHorariosInhabilitados($id_medico, $id_especialidad, $fecha){
-		$query = "SELECT *
-				FROM horarios_inhabilitados
-				WHERE fecha = '".$fecha."' AND id_medicos = $id_medico AND id_especialidades = $id_especialidad";
+		$query = "
+            SELECT
+                `hi`.*,
+                `him`.motivo_descripcion
+			FROM
+                horarios_inhabilitados AS `hi`
+            LEFT JOIN
+                horarios_inhabilitados_motivos AS `him`
+                ON
+                    `hi`.id_horarios_inhabilitados_motivos = `him`.id_horarios_inhabilitados_motivos
+			WHERE
+                `hi`.fecha = '$fecha' AND
+                `hi`.id_medicos = $id_medico AND
+                `hi`.id_especialidades = $id_especialidad
+        ";
 		return $query;
 	}
 	
@@ -876,4 +900,17 @@ class Querys implements iQuerys{
         ";
 		return $query;	
     }
+
+    function obtMotivosDeInhabilitaciones(){
+        $query = "
+            SELECT
+                *
+            FROM
+                `horarios_inhabilitados_motivos`
+            ORDER BY
+                `motivo_orden`, `motivo_descripcion`
+        ";
+        return $query;
+    }
+
 }

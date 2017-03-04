@@ -616,7 +616,7 @@ switch ($tabla){
 	case "horarios_inhabilitados":
 		parse_str(stripslashes($datos));
 		
-		$columnas = "(id_medicos, id_especialidades, fecha, desde, hasta, estado)";
+		$columnas = "(id_medicos, id_especialidades, fecha, desde, hasta, estado, id_horarios_inhabilitados_motivos, horarios_inhabilitados_motivos)";
 		
 		$valores = "(
 			".$medico.",
@@ -624,8 +624,11 @@ switch ($tabla){
 			'".$fecha."',
 			'".$desde."',
 			'".$hasta."',
-			1)";
-		
+			1,
+			'".$id_horarios_inhabilitados_motivos."',
+			'".utf8_encode($horarios_inhabilitados_motivos)."'
+            )";
+
 		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
 		//error_log($query_string);	
 		if ($obj->db->consulta($query_string)){

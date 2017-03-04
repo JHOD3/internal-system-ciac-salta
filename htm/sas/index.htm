@@ -136,7 +136,15 @@
             $('#myChat').html(data);
         });
         /** **** **/
-
+        $('#id_horarios_inhabilitados_motivos').change(function(){
+            if ($(this).children('option:selected').data('libre') == '0') {
+                $('#div_horarios_inhabilitados_motivos').hide();
+                $('#horarios_inhabilitados_motivos').val('');
+            } else if ($(this).children('option:selected').data('libre') == '1') {
+                if (console && console.log) console.log($(this).children('option:selected').data('libre'));
+                $('#div_horarios_inhabilitados_motivos').show();
+            }
+        });
 	});
 	
 	jQuery(function($){
@@ -303,8 +311,15 @@ function drawBar4Chart() {
                                 <div style="display:inline-block; width:40%; vertical-align:top">
                                     Hasta: <input type="text" id="hasta" name="hasta" />
                                 </div>
-                                <div style="display:inline-block; width:18%; vertical-align:top">
-                                    
+                                <div>
+                                    Motivo:
+                                    <select id="id_horarios_inhabilitados_motivos" name="id_horarios_inhabilitados_motivos">[MOTIVOS]</select>
+                                    <div id="div_horarios_inhabilitados_motivos" style="display:none;">
+                                        Descripci&oacute;n libre de motivo:<br />
+                                        <input id="horarios_inhabilitados_motivos" name="horarios_inhabilitados_motivos" value="" maxlength="100" />
+                                    </div>
+                                </div>
+                                <div style="display:inline-block; width:18%; vertical-align:top; margin-top:6px;">
                                     <a href='#' id="inhabilitar" class='btn'>Inhabilitar</a>
                                 </div>
                             </form>
