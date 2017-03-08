@@ -130,6 +130,9 @@ class Estructura{
             case "dias_semana":
 				$query_string = $this->querys->Registros($this->nombre_tabla, "estado", "1", "id_dias_semana", "", "", "ASC");
             break;
+            case "obras_sociales":
+				$query_string = $this->querys->Registros($this->nombre_tabla, "estado", "1", "abreviacion", "", "", "ASC");
+            break;
 			default:
 				if($id_padre != "")
 					$query_string = $this->querys->Registros($this->nombre_tabla, "id_".$this->tabla_padre, $id_padre, $ordenar, "","",$orden);
