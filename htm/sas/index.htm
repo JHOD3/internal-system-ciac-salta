@@ -145,6 +145,63 @@
                 $('#div_horarios_inhabilitados_motivos').show();
             }
         });
+        $(document).keypress(function(e) {
+            if ($('#estudiosF10').length) {
+                if (
+                    (
+                        (e.charCode >= 65 && e.charCode <= 90) ||
+                        (e.charCode >= 97 && e.charCode <= 122) ||
+                        (e.charCode >= 48 && e.charCode <= 58) ||
+                        (e.charCode == 32) ||
+                        (e.charCode == 45)
+                    ) && (
+                        e.key.length == 1
+                    )
+                ) {
+                    e.preventDefault();
+                    $('.f10focus').val($('.f10focus').val() + e.key);
+                    $('.f10focus').keyup();
+                } else if (e.key == 'Backspace') {
+                    e.preventDefault();
+                    $('.f10focus').val($('.f10focus').val().substr(0, $('.f10focus').val().length - 1));
+                    $('.f10focus').keyup();
+                } else if (e.key == 'Tab') {
+                    e.preventDefault();
+                    if ($('.f10focus').attr('id') == 'tb_f10_estudio') {
+                        $('#tb_f10_estudio').removeClass('f10focus');
+                        $('#tb_f10_obrasocial').addClass('f10focus').focus();
+                    } else {
+                        $('#tb_f10_estudio').addClass('f10focus').focus();
+                        $('#tb_f10_obrasocial').removeClass('f10focus');
+                    }
+                }/* else {
+                    if (console && console.log) console.log(e.charCode + ' > ' + e.key);
+                    if (console && console.log) console.log(e);
+                    e.preventDefault();
+                }/**/
+            }
+            if (e.key == 'F10') {
+                e.preventDefault();
+                if ($('#estudiosF10').length) {
+                    $('#estudiosF10').remove();
+                } else {
+                    $.ajax(
+                        '../ajax/estudios_f10.php'
+                    ).done(function(data){
+                        $('body').before(data);
+                        $('.f10focus').focus();
+                    });
+                }
+            }
+        });
+        $('#tb_f10_obrasocial').click(function(){
+            $('#tb_f10_estudio').removeClass('f10focus');
+            $('#tb_f10_obrasocial').addClass('f10focus').focus();
+        });
+        $('#tb_f10_estudio').click(function(){
+            $('#tb_f10_estudio').addClass('f10focus').focus();
+            $('#tb_f10_obrasocial').removeClass('f10focus');
+        });
 	});
 	
 	jQuery(function($){
