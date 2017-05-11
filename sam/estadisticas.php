@@ -1,6 +1,29 @@
 <?php
+
+$desde = $_POST['desde'];
+$d = DateTime::createFromFormat('Y-m-d', $desde);
+if (!$d or $d->format($format) != $date or strlen($desde) != 10) {
+    $desde = date('Y-m-d', strtotime('-1 month +1 day'));
+}
+$desde_text = date('d/m/Y', strtotime($desde));
+
+$hasta = $_POST['hasta'];
+$d = DateTime::createFromFormat('Y-m-d', $hasta);
+if (!$d or $d->format($format) != $date or strlen($hasta) != 10) {
+    $hasta = date('Y-m-d');
+}
+$hasta_text = date('d/m/Y', strtotime($hasta));
+
+$html_graph = <<<EOT
+    <form style="margin: 0 auto;width:480px;" action="index.php?show=estadisticas" method="post">
+        Desde: <input type="date" name="desde" value="{$desde}" style="width:150px;" />
+        Hasta: <input type="date" name="hasta" value="{$hasta}" style="width:150px;" />
+        <input type="submit" value="ok"/>
+    </form>
+EOT;
+
 $this_db = new MySQL();
-$html_graph = '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>';
+$html_graph.= '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>';
 if ($_GET['show'] != 'estadisticas') {
 
     $html_button = <<<EOT
@@ -22,8 +45,6 @@ EOT;
 EOT;
 
     // graph 1
-    $fecha_desde = date("Y-m-d",  strtotime('-45 days'));
-    $fecha_hoy = date("Y-m-d");
     $sql = "
         SELECT
             DATE_FORMAT(t.fecha, '%d/%m') AS myfecha,
@@ -32,7 +53,7 @@ EOT;
             turnos AS t
         WHERE
             t.id_medicos = '{$_SESSION['ID_MEDICO']}' AND
-            t.fecha BETWEEN '{$fecha_desde}' AND '{$fecha_hoy}'
+            t.fecha BETWEEN '{$desde}' AND '{$hasta}'
         GROUP BY
             t.fecha
     ";
@@ -54,7 +75,7 @@ EOT;
     ]);
 
     var options1 = {
-      title: 'Histórico de Turnos (de los últimos 45 días)',
+      title: 'Histórico de Turnos (Desde {$desde_text} Hasta {$hasta_text})',
       legend: { position: 'none' }
     };
 
@@ -67,8 +88,6 @@ EOT;
 EOT;
 
     // graph 2
-    $fecha_desde = date("Y-m-d",  strtotime('-45 days'));
-    $fecha_hoy = date("Y-m-d");
     $sql = "
         SELECT
             o.abreviacion,
@@ -83,7 +102,7 @@ EOT;
             ON p.id_obras_sociales = o.id_obras_sociales
         WHERE
             t.id_medicos = '{$_SESSION['ID_MEDICO']}' AND
-            t.fecha BETWEEN '{$fecha_desde}' AND '{$fecha_hoy}'
+            t.fecha BETWEEN '{$desde}' AND '{$hasta}'
         GROUP BY
             p.id_obras_sociales
         ORDER BY
@@ -107,7 +126,7 @@ EOT;
     ]);
 
     var options2 = {
-      title: 'Cantidad de Turnos por Obras Sociales (de los últimos 45 días)',
+      title: 'Cantidad de Turnos por Obras Sociales (Desde {$desde_text} Hasta {$hasta_text})',
       legend: { position: 'none' }
     };
 
@@ -120,8 +139,6 @@ EOT;
 EOT;
 
     // graph 3
-    $fecha_desde = date("Y-m-d",  strtotime('-45 days'));
-    $fecha_hoy = date("Y-m-d");
     $sql = "
         SELECT
             e.nombre,
@@ -133,7 +150,7 @@ EOT;
             ON e.id_turnos_estados = t.id_turnos_estados
         WHERE
             t.id_medicos = '{$_SESSION['ID_MEDICO']}' AND
-            t.fecha BETWEEN '{$fecha_desde}' AND '{$fecha_hoy}'
+            t.fecha BETWEEN '{$desde}' AND '{$hasta}'
         GROUP BY
             t.id_turnos_estados
         ORDER BY
@@ -157,7 +174,7 @@ EOT;
     ]);
 
     var options3 = {
-      title: 'Cantidad de Turnos por Estados de Turnos (de los últimos 45 días)',
+      title: 'Cantidad de Turnos por Estados de Turnos (Desde {$desde_text} Hasta {$hasta_text})',
       legend: { position: 'none' }
     };
 
@@ -170,8 +187,6 @@ EOT;
 EOT;
 
     // graph 4
-    $fecha_desde = date("Y-m-d",  strtotime('-45 days'));
-    $fecha_hoy = date("Y-m-d");
     $sql = "
         SELECT
             e.nombre,
@@ -186,7 +201,7 @@ EOT;
             ON r.id_estudios = e.id_estudios
         WHERE
             t.id_medicos = '{$_SESSION['ID_MEDICO']}' AND
-            t.fecha BETWEEN '{$fecha_desde}' AND '{$fecha_hoy}'
+            t.fecha BETWEEN '{$desde}' AND '{$hasta}'
         GROUP BY
             r.id_estudios
         ORDER BY
@@ -210,7 +225,7 @@ EOT;
     ]);
 
     var options4 = {
-      title: 'Cantidad de Estudios realizados (de los últimos 45 días)',
+      title: 'Cantidad de Estudios realizados (Desde {$desde_text} Hasta {$hasta_text})',
       legend: { position: 'none' }
     };
 
@@ -223,8 +238,6 @@ EOT;
 EOT;
 
     // graph 5
-    $fecha_desde = date("Y-m-d",  strtotime('-45 days'));
-    $fecha_hoy = date("Y-m-d");
     $sql = "
         SELECT
             u.nombres,
@@ -236,7 +249,7 @@ EOT;
             ON t.id_usuarios = u.id_usuarios
         WHERE
             t.id_medicos = '{$_SESSION['ID_MEDICO']}' AND
-            t.fecha BETWEEN '{$fecha_desde}' AND '{$fecha_hoy}'
+            t.fecha BETWEEN '{$desde}' AND '{$hasta}'
         GROUP BY
             t.id_usuarios
     ";
@@ -258,7 +271,7 @@ EOT;
     ]);
 
     var options5 = {
-      title: 'Turnos Otorgados por Usuarios (de los últimos 45 días)',
+      title: 'Turnos Otorgados por Usuarios (Desde {$desde_text} Hasta {$hasta_text})',
       legend: { position: 'none' }
     };
 
