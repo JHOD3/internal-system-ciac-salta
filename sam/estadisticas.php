@@ -209,7 +209,8 @@ EOT;
     ";
 	$query = $this_db->consulta($sql);
 
-    $html_graph.= <<<EOT
+    if ($this_db->num_rows() > 0) {
+        $html_graph.= <<<EOT
 <script type="text/javascript">
   google.charts.load('current', {'packages':['corechart']});
   google.charts.setOnLoadCallback(drawChart4);
@@ -218,10 +219,10 @@ EOT;
     var data4 = google.visualization.arrayToDataTable([
       ['Estudio', 'Turnos', {role: 'style'}]
 EOT;
-	while ($row = $this_db->fetch_array($query)){
-      $html_graph.= utf8_encode(",['{$row['nombre']}',  {$row['total']}, '#007FA6']\n");
-    }
-    $html_graph.= <<<EOT
+    	while ($row = $this_db->fetch_array($query)){
+          $html_graph.= utf8_encode(",['{$row['nombre']}',  {$row['total']}, '#007FA6']\n");
+        }
+        $html_graph.= <<<EOT
     ]);
 
     var options4 = {
@@ -236,6 +237,7 @@ EOT;
 </script>
 <div id="curve_chart4" style="width: 100%; height: 500px"></div>
 EOT;
+    }
 
     // graph 5
     $sql = "
