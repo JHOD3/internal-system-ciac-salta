@@ -34,9 +34,9 @@ $obj = new $clase();
 switch ($tabla){
 	case "pacientes":
 		$aColumns = array('id_pacientes', 'nro_documento', 'apellidos', 'nombres', 'id_obras_sociales');
-	break;	
+	break;
 	case "medicos":
-		$aColumns = array('id_medicos', 'saludo', 'apellidos', 'nombres', 'nro_documento', 'email', 'telefonos', 'id_sectores', 'interno');
+		$aColumns = array('id_medicos', 'saludo', 'apellidos', 'nombres', 'nro_documento', 'email', 'telefonos', 'id_sectores', 'interno', 'matricula');
 	break;
 	case "especialidades":
 		$aColumns = array('id_especialidades', 'nombre');
@@ -70,7 +70,7 @@ switch ($tabla){
 	break;
 	case "turnos":
 		$aColumns = array('id_turnos','id_medicos','fecha','desde', 'hasta', 'estado');
-	break;	
+	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
 }
@@ -89,24 +89,24 @@ $gaSql['user']       = BD_USUARIO;
 $gaSql['password']   = BD_PASS;
 $gaSql['db']         = BD_NOMBRE;
 $gaSql['server']     = SERVIDOR;
- 
- 
+
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * If you just want to use the basic configuration for DataTables with PHP server-side, there is
  * no need to edit below this line
  */
- 
-/* 
+
+/*
  * MySQL connection
  */
 $link =  mysql_connect( $gaSql['server'], $gaSql['user'], $gaSql['password']  ) or
     die( 'Could not open connection to server' );
- 
+
 mysql_select_db( $gaSql['db'], $link ) or
     die( 'Could not select database '. $gaSql['db'] );
- 
- 
-/* 
+
+
+/*
  * PAGINADO
  */
 $sLimit = "";
@@ -149,7 +149,7 @@ if ( isset( $_GET['iSortCol_0'] ) )
 
 
 
-/* 
+/*
  * Filtering
  * NOTE this does not match the built-in DataTables filtering which does it
  * word by word on any field. It's possible to do here, but concerned about efficiency
@@ -176,14 +176,14 @@ switch ($tabla){
 	case 'turnos':
 		$id_padre = $_GET["id"];
 		$sWhere = "WHERE ( id_pacientes = ".$id_padre;
-	break;	
+	break;
 	case "medicos_horarios":
 		$id_medico = $_GET["id_medico"];
 		$id_especialidad = $_GET["id_especialidad"];
 		$sWhere = "WHERE ( id_medicos = ".$id_medico." AND id_especialidades = ".$id_especialidad;
-	break;	
+	break;
 	default:
-		$sWhere = "";		
+		$sWhere = "";
 }
 
 if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
@@ -214,14 +214,14 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 				$id_medico = $_GET["id_medico"];
 				$id_especialidad = $_GET["id_especialidad"];
 				$sWhere = "WHERE id_medicos = ".$id_medico." AND id_especialidades = ".$id_especialidad.' AND (';
-			break;	
+			break;
 			default:
-				$sWhere = "WHERE (";	
+				$sWhere = "WHERE (";
 				$parentesis = false;
 		}
 
-		
-		
+
+
 		for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 			switch($tabla){
 				case "pacientes":
@@ -234,17 +234,17 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
 							//error_log($query);
 							$cant = $obj->db->num_rows($query);
-							
+
 							if ($cant > 0){
 								$ids = "(";
 								$band = 0;
 								while ($row = $obj->db->fetch_array($query)){
-									$ids .= $row["id_".$obj->nombre_tabla].", ";		
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
 									$band = 1;
 								}
 								$ids = rtrim($ids, ", ");
 								$ids = $ids.")";
-								
+
 								if ($band == 1){
 									$buscar = $ids;
 									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
@@ -254,23 +254,23 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 								}
 							}
 						break;
-						
+
 						case "id_estudios":
 							$obj = new Estudios();
 							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
-							
+
 							$cant = $obj->db->num_rows($query);
-							
+
 							if ($cant > 0){
 								$ids = "(";
 								$band = 0;
 								while ($row = $obj->db->fetch_array($query)){
-									$ids .= $row["id_".$obj->nombre_tabla].", ";		
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
 									$band = 1;
 								}
 								$ids = rtrim($ids, ", ");
 								$ids = $ids.")";
-								
+
 								if ($band == 1){
 									$buscar = $ids;
 									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
@@ -283,19 +283,19 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 						case "id_obras_sociales":
 							$obj = new Obras_sociales();
 							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
-							
+
 							$cant = $obj->db->num_rows($query);
-							
+
 							//if ($cant > 0){
 								$ids = "(";
 								$band = 0;
 								while ($row = $obj->db->fetch_array($query)){
-									$ids .= $row["id_".$obj->nombre_tabla].", ";		
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
 									$band = 1;
 								}
 								$ids = rtrim($ids, ", ");
 								$ids = $ids.")";
-								
+
 								if ($band == 1){
 									$buscar = $ids;
 									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
@@ -308,19 +308,19 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 						case "id_obras_sociales_planes":
 							$obj = new Obras_sociales_planes();
 							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
-							
+
 							$cant = $obj->db->num_rows($query);
-							
+
 							if ($cant > 0){
 								$ids = "(";
 								$band = 0;
 								while ($row = $obj->db->fetch_array($query)){
-									$ids .= $row["id_".$obj->nombre_tabla].", ";		
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
 									$band = 1;
 								}
 								$ids = rtrim($ids, ", ");
 								$ids = $ids.")";
-								
+
 								if ($band == 1){
 									$buscar = $ids;
 									$sWhere .= $aColumns[$i]." IN ".$buscar;
@@ -337,7 +337,7 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 							$parentesis = false;
 						break;
 						case "id_medicos":
-								$sWhere .= "";	
+								$sWhere .= "";
 						break;
 						default:
 							$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string( utf8_decode($_GET['sSearch']) )."%' OR ";
@@ -348,19 +348,19 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 						case "id_dias_semana":
 							$obj = new Dias_semana();
 							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
-							
+
 							$cant = $obj->db->num_rows($query);
-							
+
 							if ($cant > 0){
 								$ids = "(";
 								$band = 0;
 								while ($row = $obj->db->fetch_array($query)){
-									$ids .= $row["id_".$obj->nombre_tabla].", ";		
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
 									$band = 1;
 								}
 								$ids = rtrim($ids, ", ");
 								$ids = $ids.")";
-								
+
 								if ($band == 1){
 									$buscar = $ids;
 									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
@@ -371,7 +371,7 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 							}
 						break;
 						case "id_medicos":
-								$sWhere .= "";	
+								$sWhere .= "";
 						break;
 						default:
 							$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string( utf8_decode($_GET['sSearch']) )."%' OR ";
@@ -382,19 +382,19 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 						case "id_sectores":
 							$obj = new Sectores();
 							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
-							
+
 							$cant = $obj->db->num_rows($query);
-							
+
 							if ($cant > 0){
 								$ids = "(";
 								$band = 0;
 								while ($row = $obj->db->fetch_array($query)){
-									$ids .= $row["id_".$obj->nombre_tabla].", ";		
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
 									$band = 1;
 								}
 								$ids = rtrim($ids, ", ");
 								$ids = $ids.")";
-								
+
 								if ($band == 1){
 									$buscar = $ids;
 									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
@@ -414,17 +414,17 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 						case "id_medicos":
 							$obj = new Medicos();
 							$query = $obj->RegistroXAtributo("apellidos",$_GET['sSearch'],"like");
-							
+
 							$ids = "(";
 							$band = 0;
 							while ($row = $obj->db->fetch_array($query)){
-								$ids .= $row["id_".$obj->nombre_tabla].", ";		
+								$ids .= $row["id_".$obj->nombre_tabla].", ";
 								$band = 1;
 							}
 							$ids = trim($ids, ", ");
 							$ids .= ")";
-							
-					
+
+
 							if ($band == 1){
 								$buscar = $ids;
 								$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
@@ -442,19 +442,19 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 					case "id_cobros_conceptos":
 							$obj = new Cobros_conceptos();
 							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
-							
+
 							$cant = $obj->db->num_rows($query);
-							
+
 							if ($cant > 0){
 								$ids = "(";
 								$band = 0;
 								while ($row = $obj->db->fetch_array($query)){
-									$ids .= $row["id_".$obj->nombre_tabla].", ";		
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
 									$band = 1;
 								}
 								$ids = rtrim($ids, ", ");
 								$ids = $ids.")";
-								
+
 								if ($band == 1){
 									$buscar = $ids;
 									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
@@ -468,23 +468,23 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 				default:
 					switch($aColumns[$i]){
 						case 'id_especialidades':
-						
+
 						break;
-						default:	
-							$buscar = $_GET['sSearch'];	
+						default:
+							$buscar = $_GET['sSearch'];
 							$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' OR ";
 					}
-					
+
 			}
-				
+
 		}
 
 		$sWhere = trim($sWhere, " OR ");
 		$sWhere = trim($sWhere, " AND ");
-		
-		
+
+
 		if ($parentesis)
-			$sWhere .= ')';		
+			$sWhere .= ')';
 
 }
 
@@ -499,30 +499,30 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 		}else{
 				$sWhere .= " AND ";
 		}
-		
+
 		switch($tabla){
 			case "pacientes":
 			case "medicos_obras_sociales":
 			case 'medicos_estudios':
 			case 'medicos_especialidades':
-			
+
 				//SE OCULTA LA PRIMERA COLUMNA, POR TAL MOTIVO PARA BUSCAR SE SUMA 1 AL NRO DE COLUMNA: $aColumns[$i + 1]
-				
+
 				switch($aColumns[$i + 1]){
 					case "id_estudios":
 						$obj = new Estudios();
 						$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch_'.$i],"like");
-						
+
 						$ids = "(";
 						$band = 0;
 						while ($row = $obj->db->fetch_array($query)){
-							$ids .= $row["id_".$obj->nombre_tabla].", ";		
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
 							$band = 1;
 						}
 						$ids = trim($ids, ", ");
 						$ids .= ")";
-						
-				
+
+
 						if ($band == 1){
 							$buscar = $ids;
 							$sWhere .= $aColumns[$i + 1]." IN ".$buscar;
@@ -534,17 +534,17 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 					case "id_especialidades":
 						$obj = new Especialidades();
 						$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch_'.$i],"like");
-						
+
 						$ids = "(";
 						$band = 0;
 						while ($row = $obj->db->fetch_array($query)){
-							$ids .= $row["id_".$obj->nombre_tabla].", ";		
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
 							$band = 1;
 						}
 						$ids = trim($ids, ", ");
 						$ids .= ")";
-						
-				
+
+
 						if ($band == 1){
 							$buscar = $ids;
 							$sWhere .= $aColumns[$i + 1]." IN ".$buscar;
@@ -556,17 +556,17 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 					case "id_obras_sociales":
 						$obj = new Obras_sociales();
 						$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch_'.$i],"like");
-						
+
 						$ids = "(";
 						$band = 0;
 						while ($row = $obj->db->fetch_array($query)){
-							$ids .= $row["id_".$obj->nombre_tabla].", ";		
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
 							$band = 1;
 						}
 						$ids = trim($ids, ", ");
 						$ids .= ")";
-						
-				
+
+
 						if ($band == 1){
 							$buscar = $ids;
 							$sWhere .= $aColumns[$i + 1]." IN ".$buscar;
@@ -578,17 +578,17 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 					case "id_obras_sociales_planes":
 						$obj = new Obras_sociales_planes();
 						$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch_'.$i],"like");
-						
+
 						$ids = "(";
 						$band = 0;
 						while ($row = $obj->db->fetch_array($query)){
-							$ids .= $row["id_".$obj->nombre_tabla].", ";		
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
 							$band = 1;
 						}
 						$ids = trim($ids, ", ");
 						$ids .= ")";
-						
-				
+
+
 						if ($band == 1){
 							$buscar = $ids;
 							$sWhere .= $aColumns[$i + 1]." IN ".$buscar;
@@ -598,13 +598,13 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 						}
 					break;
 					case "id_medicos":
-						$sWhere .= "";	
+						$sWhere .= "";
 					break;
 					default:
 						$buscar = utf8_decode($_GET['sSearch_'.$i]);
 						$sWhere .= $aColumns[$i + 1]." LIKE '%".$buscar."%' ";
 				}
-				
+
 			break;
 			case 'medicos_horarios':
 				switch($aColumns[$i + 3]){
@@ -613,17 +613,17 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 
 						$obj = new Dias_semana();
 						$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch_'.$i],"like");
-						
+
 						$ids = "(";
 						$band = 0;
 						while ($row = $obj->db->fetch_array($query)){
-							$ids .= $row["id_".$obj->nombre_tabla].", ";		
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
 							$band = 1;
 						}
 						$ids = trim($ids, ", ");
 						$ids .= ")";
-						
-				
+
+
 						if ($band == 1){
 							$buscar = $ids;
 							$sWhere .= $aColumns[$i + 3]." IN ".$buscar;
@@ -634,7 +634,7 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 					break;
 					case 'id_medicos':
 					case 'id_especialidades':
-						$sWhere .= "";	
+						$sWhere .= "";
 					break;
 					default:
 						$buscar = utf8_decode($_GET['sSearch_'.$i]);
@@ -646,17 +646,17 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 					case "id_estudios":
 						$obj = new Estudios();
 						$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch_'.$i],"like");
-						
+
 						$ids = "(";
 						$band = 0;
 						while ($row = $obj->db->fetch_array($query)){
-							$ids .= $row["id_".$obj->nombre_tabla].", ";		
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
 							$band = 1;
 						}
 						$ids = trim($ids, ", ");
 						$ids .= ")";
-						
-				
+
+
 						if ($band == 1){
 							$buscar = $ids;
 							$sWhere .= $aColumns[$i + 2]." IN ".$buscar;
@@ -675,17 +675,17 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 					case "id_medicos":
 						$obj = new Medicos();
 						$query = $obj->RegistroXAtributo("apellidos",$_GET['sSearch_'.$i],"like");
-						
+
 						$ids = "(";
 						$band = 0;
 						while ($row = $obj->db->fetch_array($query)){
-							$ids .= $row["id_".$obj->nombre_tabla].", ";		
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
 							$band = 1;
 						}
 						$ids = trim($ids, ", ");
 						$ids .= ")";
-						
-				
+
+
 						if ($band == 1){
 							$buscar = $ids;
 							$sWhere .= $aColumns[$i + 1]." IN ".$buscar;
@@ -709,19 +709,19 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 					case "id_cobros_conceptos":
 						$obj = new Cobros_conceptos();
 						$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
-						
+
 						$cant = $obj->db->num_rows($query);
-						
+
 						if ($cant > 0){
 							$ids = "(";
 							$band = 0;
 							while ($row = $obj->db->fetch_array($query)){
-								$ids .= $row["id_".$obj->nombre_tabla].", ";		
+								$ids .= $row["id_".$obj->nombre_tabla].", ";
 								$band = 1;
 							}
 							$ids = rtrim($ids, ", ");
 							$ids = $ids.")";
-							
+
 							if ($band == 1){
 								$buscar = $ids;
 								$sWhere .= $aColumns[$i + 1]." IN ".$buscar.' OR ';
@@ -737,7 +737,7 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 				}
 			break;
 			default:
-				$buscar = $_GET['sSearch_'.$i];	
+				$buscar = $_GET['sSearch_'.$i];
 				$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
 		}
 	}
@@ -751,7 +751,7 @@ if ( $sWhere == "" ){
 }else{
 		$sWhere = $sWhere.") AND $pfTable.estado = 1";
 }
-			
+
 
 /*
  * SQL queries
@@ -790,7 +790,7 @@ $iTotal = $aResultTotal[0];
 /*
  * Output
  */
- 
+
 if (isset($_GET['sEcho'])){
 	$sEcho = $_GET['sEcho'];
 }else{
@@ -805,7 +805,7 @@ $output = array(
 );
 
 $cant_registros = $obj->db->num_rows($rResult);
-	
+
 if ($cant_registros != 0){
 
 	while ( $aRow = mysql_fetch_array( $rResult ) )
@@ -816,12 +816,12 @@ if ($cant_registros != 0){
 					$obj_medico = new Medicos($aRow[$aColumns[$i]]);
 					$medico = $obj_medico->apellidos.', '.$obj_medico->nombres;
 				}
-				
+
 				if ( $aColumns[$i] == "id_obras_sociales" ){
 					$obj_obra_social = new Obras_sociales($aRow[$aColumns[$i]]);
 					$obra_social = $obj_obra_social->abreviacion;
 				}
-				
+
 				if ( $aColumns[$i] == "id_obras_sociales_planes" ){
 					$obj_obra_social_plan = new Obras_sociales_planes($aRow[$aColumns[$i]]);
 					if ($obj_obra_social_plan->nombre != 'Sin Definir')
@@ -829,17 +829,17 @@ if ($cant_registros != 0){
 					else
 						$obra_social_plan = '-';
 				}
-				
+
 				if ( $aColumns[$i] == "id_especialidades" ){
 					$obj_especialidades = new Especialidades($aRow[$aColumns[$i]]);
 					$especialidad = $obj_especialidades->nombre;
 				}
-				
+
 				if ( $aColumns[$i] == "id_estudios" ){
 					$obj_estudios = new Estudios($aRow[$aColumns[$i]]);
 					$estudio = $obj_estudios->nombre;
 				}
-				
+
 				if ($aColumns[$i] == "id_dias_semana"){
 					$obj_dias_semana = new Dias_semana($aRow[$aColumns[$i]]);
 					$dia_semana = $obj_dias_semana->nombre;
@@ -849,36 +849,36 @@ if ($cant_registros != 0){
 					$obj_sectores = new Sectores($aRow[$aColumns[$i]]);
 					$sector = $obj_sectores->nombre;
 				}
-				
+
 				if ($aColumns[$i] == "id_cobros_conceptos"){
 					$obj_cobro_concepto = new Cobros_conceptos($aRow[$aColumns[$i]]);
 					$cobro_concepto = $obj_cobro_concepto->nombre;
 				}
-				
+
 				if ($aColumns[$i] == "fecha"){
 					$obj_estructura = new Estructura();
 					$fecha = $obj_estructura->cambiaf_a_normal($aRow[$aColumns[$i]], '/');
 				}
-				
+
 				$row[$i] = $aRow[ $aColumns[$i] ];
 			}
-			
+
 			$mostrar = "<a href='#' class='btn_opciones' data-titulo='Detalle' data-tipo_btn='detalle' data-id='".$aRow["id_".$tabla]."' data-tipo='detalle' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
-			
+
 			if (!isset($id_padre)){
 				$editar = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
-				$eliminar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Eliminar' data-tabla='".$tabla."' class='btn_eliminar'><img src='".URL."files/img/btns/eliminar.png' border='0' ></a>";	
+				$eliminar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Eliminar' data-tabla='".$tabla."' class='btn_eliminar'><img src='".URL."files/img/btns/eliminar.png' border='0' ></a>";
 			}else{
 				$editar = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."' data-id_padre='".$id_padre."'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
-				$eliminar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Eliminar' data-tabla='".$tabla."' class='btn_eliminar' data-id_padre='".$id_padre."'><img src='".URL."files/img/btns/eliminar.png' border='0'></a>";	
+				$eliminar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Eliminar' data-tabla='".$tabla."' class='btn_eliminar' data-id_padre='".$id_padre."'><img src='".URL."files/img/btns/eliminar.png' border='0'></a>";
 			}
-				
+
 			switch ($tabla){
 				case "pacientes":
 					$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
 					$cobros = "<a class='btn_opciones' href='#' data-id='".$aRow["id_pacientes"]."' data-tipo_btn='tabla_hija' data-hija='cobros' data-nombre='Pagos Realizados'><img src='".URL."files/img/btns/cobros.png' border='0'></a>";
 					$turnos = "<a class='btn_opciones' href='#' data-id='".$aRow["id_pacientes"]."' data-tipo_btn='tabla_hija' data-hija='turnos' data-nombre='Turnos Reservados'><img src='".URL."files/img/btns/turnos.png' border='0'></a>";
-					
+
 					$row[0] = utf8_encode($aRow["id_pacientes"]);
 					$row[1] = "<span class='paciente_buscado' data-id='".$aRow["id_pacientes"]."'>".$aRow["nro_documento"]."</span>";
 					$row[2] = "<span class='paciente_buscado' data-id='".$aRow["id_pacientes"]."'>".utf8_encode($aRow["apellidos"])."</span>";
@@ -902,15 +902,15 @@ if ($cant_registros != 0){
                     } else {
                         $row[5] = $editar.''.$turnos.''.$cobros.'';
                     }
-					
-				break;	
+
+				break;
 				case "medicos":
 					$especialidades = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='medicos_especialidades' data-nombre='Especialidades por M&eacute;dicos'><img src='".URL."files/img/btns/medicos_especialidades.png' border='0'></a>";
 					$obras_sociales_planes = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='medicos_obras_sociales' data-nombre='Planes de Obras Sociales por M&eacute;dicos'><img src='".URL."files/img/btns/medicos_obras_sociales.png' border='0'></a>";
 					$estudios = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='medicos_estudios' data-nombre='Estudios por M&eacute;dicos'><img src='".URL."files/img/btns/medicos_estudios.png' border='0'></a>";
-					
+
 					$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
-					
+
 					$row[0] = $aRow["id_medicos"];
 					$row[1] = utf8_encode($aRow["saludo"]);
 					$row[2] = utf8_encode($aRow["apellidos"]);
@@ -920,8 +920,9 @@ if ($cant_registros != 0){
 					$row[6] = utf8_encode($aRow["telefonos"]);
 					$row[7] = utf8_encode($sector);
 					$row[8] = utf8_encode($aRow["interno"]);
+					$row[9] = utf8_encode($aRow["matricula"]);
                     if ($_SESSION['ID_USUARIO'] === '0') {
-                        $row[9] =
+                        $row[10] =
                             $editar.''.
                             $especialidades.''.
                             $obras_sociales_planes.''.
@@ -929,17 +930,17 @@ if ($cant_registros != 0){
                             $eliminar.''
                         ;
                     } else {
-                        $row[9] =
+                        $row[10] =
                             $especialidades.''.
                             $obras_sociales_planes.''.
                             $estudios.''
                         ;
                     }
-					
-				break;	
+
+				break;
 				case "especialidades":
 					$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
-					
+
 					$row[0] = $aRow["id_especialidades"];
 					$row[1] = utf8_encode($aRow["nombre"]);
                     if ($_SESSION['ID_USUARIO'] === '0') {
@@ -947,7 +948,7 @@ if ($cant_registros != 0){
                     } else {
                         $row[2] = '';
                     }
-					
+
 				break;
 				case "estudios":
 					$row[0] = $aRow["id_estudios"];
@@ -960,13 +961,13 @@ if ($cant_registros != 0){
                     } else {
                         $row[5] = '';
                     }
-					
-				break;	
+
+				break;
 				case "obras_sociales":
 					$planes = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='obras_sociales_planes' data-nombre='Planes por Obra Social'><img src='".URL."files/img/btns/obras_sociales_planes.png' border='0'></a>";
-					
+
 					$estudios = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='obras_sociales_estudios' data-nombre='Estudios por Obra Social'><img src='".URL."files/img/btns/obras_sociales_estudios.png' border='0'></a>";
-					
+
 					$row[0] = $aRow["id_obras_sociales"];
 					$row[1] = utf8_encode($aRow["abreviacion"]);
 					$row[2] = utf8_encode($aRow["nombre"]);
@@ -980,9 +981,9 @@ if ($cant_registros != 0){
 
 				case "medicos_especialidades":
 					$horarios = "<a class='btn_opciones' href='#' data-id='".$aRow["id_medicos"]."-".$aRow["id_especialidades"]."' data-tipo_btn='tabla_hija' data-hija='medicos_horarios' data-nombre='Horario de Medicos por Especialidad'><img src='".URL."files/img/btns/medicos_horarios.png' border='0'></a>";
-					
+
 					$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
-					
+
 					$row[0] = $aRow["id_medicos_especialidades"];
 					$row[1] = utf8_encode($especialidad);
 					$row[2] = utf8_encode(
@@ -996,9 +997,9 @@ if ($cant_registros != 0){
 						$row[3] = $horarios.'';
                     }
 				break;
-				
+
 				case "medicos_estudios":
-				
+
 					$row[0] = $aRow["id_medicos_estudios"];
 					$row[1] = utf8_encode($estudio);
 					$row[2] = '<input type="text" class="particular" id="'.$aRow["id_medicos_estudios"].'" value="'.$aRow["particular"].'" />';
@@ -1010,9 +1011,9 @@ if ($cant_registros != 0){
                         $row[3] = '';
                     }
 				break;
-				
+
 				case "medicos_obras_sociales":
-				
+
 					$row[0] = $aRow["id_medicos_obras_sociales"];
 					$row[1] =  $aRow["nombre"];
 					$row[2] = '<input type="text" class="arancel" id="'.$aRow["id_medicos_obras_sociales"].'" value="'.$aRow["arancel"].'" />';
@@ -1035,7 +1036,7 @@ if ($cant_registros != 0){
                     }
 				break;
 				case "obras_sociales_estudios":
-				
+
 					$row[0] = utf8_encode($aRow["nomenclador"]);
 					$row[1] = utf8_encode($estudio);
 					$row[2] = utf8_encode($aRow["importe"]);
@@ -1046,10 +1047,10 @@ if ($cant_registros != 0){
                         $row[3] = '';
                     }
 				break;
-				
+
 				case "medicos_horarios":
 					$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
-					
+
 					$row[0] = $aRow["id_medicos_horarios"];
 					$row[1] = utf8_encode($dia_semana);
 					$row[2] = utf8_encode(substr($aRow["desde"], 0, 5));
@@ -1067,9 +1068,9 @@ if ($cant_registros != 0){
 					if ((($aRow['id_cobros_conceptos'] == 2) || ($aRow['id_cobros_conceptos'] == 4)) && $aRow['reintegro'] == 0){
 						$reintegro = "<a class='btn_reintegro' href='#' data-id='".$aRow[$aColumns[0]]."' data-nombre='Confirmar Reintegro'><img id='rein' src='".URL."files/img/btns/confirmar.png' border='0'></a>";
 					}else{
-						$reintegro = "";	
+						$reintegro = "";
 					}
-					
+
 					//$row[0] = utf8_encode($aRow["id_cobros"]);
 					$row[0] = $aRow["fecha"];
 					$row[1] = $aRow["hora"];
@@ -1086,7 +1087,7 @@ if ($cant_registros != 0){
 					$row[4] = utf8_encode($aRow["hasta"]);
 					$row[5] = utf8_encode($aRow["estado"]);
 				break;
-				
+
 			}
 			$output['aaData'][] = $row;
 	}

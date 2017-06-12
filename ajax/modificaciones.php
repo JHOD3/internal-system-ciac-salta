@@ -12,11 +12,11 @@ $obj = new $clase();
 
 $hora_actual = date("H:i:s");
 $fecha_actual = date('Y-m-d');
-		
+
 switch ($tabla){
 	case "pacientes":
 		parse_str(stripslashes($datos));
-		
+
 		if((!isset($obras_sociales_planes)) || ($obras_sociales_planes == "") ){
 			$obras_sociales_planes = 0;
 		}
@@ -38,30 +38,33 @@ switch ($tabla){
 			email = '".strtoupper($email)."',
 			id_obras_sociales_planes = ".$obras_sociales_planes."
 		";
-		
+
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
-			
+
 		if ($obj->db->consulta($query_string))
 			$rta = true;
 		else
 			$rta = false;
-					
+
 	break;
 	case "medicos":
 		parse_str(stripslashes($datos));
-		
+
 		if (!isset($particular_consulta) || $particular_consulta == "")
 			$particular_consulta = 0;
-			
+
 		if (!isset($sectores) || $sectores == "")
 			$sectores = 0;
-			
+
 		if (!isset($nro_sector) || $nro_sector == "")
 			$nro_sector = "-";
-		
+
 		if (!isset($interno) || $interno == "")
 			$interno = 0;
-				
+
+		if (!isset($matricula) || $matricula == "")
+			$matricula = 0;
+
 		$asignaciones = "
 					id_tipos_documentos = ".$tipos_documentos.",
 					apellidos = '".strtoupper(utf8_decode($apellidos))."',
@@ -76,90 +79,91 @@ switch ($tabla){
 					id_sectores = ".$sectores.",
 					nro_sector = '".strtoupper(utf8_decode($nro_sector))."',
 					interno = ".$interno.",
+					matricula = ".$matricula.",
                     saludo = '".$saludo."'
 					";
-		
+
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
-			
+
 		if ($obj->db->consulta($query_string))
 			$rta = true;
 		else
 			$rta = false;
-					
+
 	break;
 	case "medicos_horarios":
 		parse_str(stripslashes($datos));
-		
+
 		$asignaciones = "
 					desde = '".$desde."',
 					hasta = '".$hasta."',
 					id_turnos_tipos = ".$turnos_tipos."
 					";
-		
+
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
 		//error_log($query_string);
-			
+
 		if ($obj->db->consulta($query_string))
 			$rta = true;
 		else
 			$rta = false;
-					
+
 	break;
 	case "especialidades":
 		parse_str(stripslashes($datos));
-		
+
 		$asignaciones = "
 					nombre = '".strtoupper(utf8_decode($nombre))."'
 					";
-		
+
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
-			
+
 		if ($obj->db->consulta($query_string))
 			$rta = true;
 		else
 			$rta = false;
-					
+
 	break;
 	case "estudios":
 		parse_str(stripslashes($datos));
-		
+
 		$asignaciones = "
 					nombre = '".strtoupper(utf8_decode($nombre))."',
 					importe = '".$importe."',
 					arancel = '".$arancel."',
 					requisitos = '".utf8_decode($requisitos)."'
 					";
-		
+
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
-			
+
 		if ($obj->db->consulta($query_string))
 			$rta = true;
 		else
 			$rta = false;
-					
+
 	break;
 	case "obras_sociales":
 		parse_str(stripslashes($datos));
-		
+
 		$asignaciones = "
 					nombre = '".strtoupper(utf8_decode($nombre))."',
 					abreviacion = '".strtoupper(utf8_decode($abreviacion))."',
 					importe_consulta = '".$importe_consulta."'
 					";
-		
+
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
-			
+
 		if ($obj->db->consulta($query_string))
 			$rta = true;
 		else
 			$rta = false;
-					
+
 	break;
 	case "turnos":
 		/*$columnas = $obj->NombreColumnas();
 		$resp = $obj->Alta($datos,$columnas);*/
 		parse_str(stripslashes($datos));
-		
+
 		if (isset($_POST['tipo'])){
 			$trae_orden = 0;
 			$trae_pedido = 0;
@@ -176,20 +180,20 @@ switch ($tabla){
 				if($orden_estudios == 0){
 					$trae_orden = 1;
 				}
-			}	
-			
+			}
+
 			if (!isset($arancel_diferenciado))
-				$arancel_diferenciado = 0;	
-		
+				$arancel_diferenciado = 0;
+
 			requerir_class("turnos");
 			$obj_turno = new Turnos($id_turno);
-			
+
 			$obj_turno->OrdenesyPedidos($trae_orden, $trae_pedido, $arancel_diferenciado);
-			
+
 			$rta = true;
-		}else{		
+		}else{
 			$columnas = "(id_medicos, id_especialidades, id_pacientes, id_turnos_estados, fecha, desde, hasta, trae_orden, trae_pedido, arancel_diferenciado, id_medicos_derivacion, id_especialidades_derivacion, es_derivacion_externa, id_turnos_tipos, estado)";
-			
+
 			$valores = "(
 				".$id_medico.",
 				".$id_especialidad.",
@@ -206,16 +210,16 @@ switch ($tabla){
 				0,
 				".$id_turno_tipo.",
 				1)";
-			
+
 			$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
-				
+
 			if ($obj->db->consulta($query_string))
 				$rta = $obj->db->ultimo_id_insertado();
 			else
 				$rta = false;
 		}
 	break;
-	
+
 	case "obras_sociales_estudios":
 		parse_str(stripslashes($datos));
 		$asignaciones = "
@@ -224,9 +228,9 @@ switch ($tabla){
 					importe = '".$importe."',
 					nomenclador = '".$nomenclador."'
 					";
-		
+
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
-			
+
 		if ($obj->db->consulta($query_string))
 			$rta = true;
 		else
@@ -237,9 +241,9 @@ switch ($tabla){
 		$asignaciones = "
 					nombre = '".$nombre."'
 					";
-		
+
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
-			
+
 		if ($obj->db->consulta($query_string))
 			$rta = true;
 		else
@@ -250,9 +254,9 @@ switch ($tabla){
 		$asignaciones = "
 					arancel = '".$arancel."'
 					";
-		
+
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
-			
+
 		if ($obj->db->consulta($query_string))
 			$rta = true;
 		else
@@ -263,9 +267,9 @@ switch ($tabla){
 		$asignaciones = "
 					particular = '".$particular."'
 					";
-		
+
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
-			
+
 		if ($obj->db->consulta($query_string))
 			$rta = true;
 		else
@@ -275,31 +279,31 @@ switch ($tabla){
 		parse_str(stripslashes($datos));
 		$columnas = "(id_turnos, id_estudios, estado)";
 		$ids_estudios =  rtrim($_POST["ids_estudios"], ", ");
-		
+
 		$id_estudiov = explode(", ", $ids_estudios);
-		
+
 		$obj->BajaxTurno($id_turno);
-		
+
 		foreach ($id_estudiov as $clave => $valor) {
 			$valores = "(
 					".$id_turno.",
 					".$valor.",
 					1)";
 			$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
-			
-		
+
+
 			if ($obj->db->consulta($query_string))
 				$rta = $obj->db->ultimo_id_insertado();
 			else
 				$rta = false;
 		}
 	break;
-	
+
 	case "mensajes":
 		parse_str(stripslashes($datos));
-		
+
 		$columnas = "(id_emisor, id_receptor, mensaje, hora, fecha, leido, estado)";
-		
+
 		$valores = "(
 			'".$id_emisor."',
 			'".$id_receptor."',
@@ -308,9 +312,9 @@ switch ($tabla){
 			'".$fecha_actual."',
 			0,
 			1)";
-		
+
 		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
-			
+
 		if ($obj->db->consulta($query_string))
 			$rta = $obj->db->ultimo_id_insertado();
 		else
