@@ -154,7 +154,8 @@ switch ($tabla){
 					importe,
                     arancel,
 					estado,
-					requisitos
+					requisitos,
+					codigopractica
 					)";
 
 		$valores = "(
@@ -163,6 +164,7 @@ switch ($tabla){
 					'".$arancel."',
 					1,
 					'".strtoupper(utf8_decode($requisitos))."'
+					'".$codigopractica."'
 					)";
 
 		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);

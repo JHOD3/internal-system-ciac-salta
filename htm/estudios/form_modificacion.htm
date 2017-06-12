@@ -2,19 +2,19 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		
+
 		$("#nombre").focus();
-			
+
 		$("a#modificar").click(function(e){
 			e.preventDefault();
 			$("#form_estudios").submit();
 		});
-		
+
 		$("a#cancelar").click(function(){
 			IniciarVentana("ventana_opciones", "cerrar");
 			$(ventana_opciones).dialog('destroy').remove();
 		});
-		
+
 		$("#form_estudios").validate({
 			rules: {
 				nombre: {
@@ -40,10 +40,10 @@
 			},
 			submitHandler: function(){
 				var variables = $("#form_estudios").serialize();
-				$.ajax({  
-					type: "POST",   
+				$.ajax({
+					type: "POST",
 					url: "[URL]ajax/modificaciones.php",
-					data: {variables: variables, tabla: "[TABLA]"}, 
+					data: {variables: variables, tabla: "[TABLA]"},
 					beforeSend: function() {
 						$("#mje").html("Enviando información...");
 					},
@@ -64,9 +64,9 @@
 	});
 </script>
 
-[block: block_registros]		
+[block: block_registros]
 <div id="panel_alta">
-    <form name="form_estudios" id="form_estudios" class="jNice">					
+    <form name="form_estudios" id="form_estudios" class="jNice">
         <fieldset>
         	<div class="bloque oculto">
                 <label>ID: </label>
@@ -87,6 +87,10 @@
             <div class="bloque">
                 <label>Preparaci&oacute;n/<br />Recomendaci&oacute;n: </label>
                 <textarea name="requisitos" id="requisitos" class="text-long" style="text-transform:none!important;">[requisitos]</textarea>
+            </div>
+            <div class="bloque">
+                <label>C&aacute;digo Pr&aacute;ctica: </label>
+                <input type="text" class="text-long" name="codigopractica" value="[codigopractica]" />
             </div>
             <div class="bloque botones">
                 <a href="#" id="modificar" class="boton_gris">Modificar</a>

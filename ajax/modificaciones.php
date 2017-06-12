@@ -131,7 +131,8 @@ switch ($tabla){
 					nombre = '".strtoupper(utf8_decode($nombre))."',
 					importe = '".$importe."',
 					arancel = '".$arancel."',
-					requisitos = '".utf8_decode($requisitos)."'
+					requisitos = '".utf8_decode($requisitos)."',
+					codigopractica = '".$codigopractica."'
 					";
 
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
