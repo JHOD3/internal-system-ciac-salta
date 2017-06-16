@@ -1016,7 +1016,7 @@ if ($cant_registros != 0){
 				case "medicos_obras_sociales":
 
 					$row[0] = $aRow["id_medicos_obras_sociales"];
-					$row[1] =  $aRow["nombre"];
+					$row[1] = utf8_encode($aRow["nombre"]);
 					$row[2] = '<input type="text" class="arancel" id="'.$aRow["id_medicos_obras_sociales"].'" value="'.$aRow["arancel"].'" />';
                     if (
                         $_SESSION['ID_USUARIO'] === '0' OR
