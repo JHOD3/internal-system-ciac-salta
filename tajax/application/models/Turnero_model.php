@@ -4,7 +4,7 @@ if (!defined('BASEPATH')) {
 }
 /**
  * Turnero_model
- * 
+ *
  * @package ciac
  * @author DiegoG
  * @copyright 2016
@@ -129,9 +129,9 @@ class Turnero_model extends CI_model
         return $query;
     }
 
-    public function obtMedicosPorEspecialidad()
+    public function obtMedicosPorEspecialidad($tipo, $filter)
     {
-        $query = $this->db
+        $this->db
             ->select('m.*, e.*')
             ->from('medicos AS m')
             ->join('medicos_especialidades AS me', 'me.id_medicos = m.id_medicos', 'right')
@@ -144,6 +144,28 @@ class Turnero_model extends CI_model
             ->where_in('tt.id_turnos_tipos', array(1, 2, 3, 4, 5, 6, 7, 8))
             ->group_by('e.nombre, m.apellidos, m.nombres')
             ->order_by('e.nombre, m.apellidos, m.nombres')
+        ;
+        if (trim($tipo) and trim($filter)) {
+            if (in_array($tipo, array('dr', 'dra', 'lic'))) {
+                $search = trim($tipo).". ".trim(str_replace("-", " ", $filter));
+                $where = <<<SQL
+                    CONCAT(
+                        TRIM(m.saludo),
+                        ' ',
+                        TRIM(m.apellidos),
+                        ' ',
+                        TRIM(m.nombres)
+                    ) LIKE '{$search}'
+SQL;
+            } else {
+                $search = trim(str_replace("-", " ", $filter));
+                $where = <<<SQL
+                    TRIM(e.nombre) LIKE '{$search}'
+SQL;
+            }
+            $this->db->where($where);
+        }
+        $query = $this->db
             ->get()
             ->result_array()
         ;
@@ -201,7 +223,7 @@ class Turnero_model extends CI_model
                 $result[$i] = base_url()."index.php/turnero/calendar/{$id_especialidades}/{$id_medicos}/{$year}/{$month}/".($i<10?'0':'')."{$i}/";
             }
         }
-        return $result;        
+        return $result;
     }
 
     public function obtHorarios(
@@ -346,7 +368,7 @@ class Turnero_model extends CI_model
             ->result_array()
         ;
         return $query;
-        
+
     }
 
     public function obtPacienteById($id_pacientes)

@@ -82,7 +82,7 @@
                         }
                         ?>
                     <?php endfor; ?>
-                    <br />
+                    <br /><br />
                 <?php endforeach; ?>
             </div>
             <input type="hidden" id="desde" name="desde" value="" />
