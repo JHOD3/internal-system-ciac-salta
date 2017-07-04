@@ -19,7 +19,7 @@
             <td>Realizador</td>
             <!--td>Acción</td//-->
             <td>Estudio</td>
-            <td>Obra Social</td>
+            <td>O.Social</td>
             <td>Presentación</td>
             <td>Nro.Orden</td>
             <td>Nro.Afiliado</td>
