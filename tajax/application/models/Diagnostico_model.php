@@ -85,7 +85,7 @@ class Diagnostico_model extends CI_Model
         $query = $this->db
             ->select('COUNT(t.id_turnos) AS Count')
             ->from('turnos AS t')
-            ->where('t.id_especialidades', 33)
+            ->where('t.id_especialidades', ID_ESPECIALIDADES)
             ->where('t.estado', 1)
             ->where('t.fecha', $date)
             ->get()
@@ -111,7 +111,7 @@ class Diagnostico_model extends CI_Model
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('medicos AS m', 't.id_medicos = m.id_medicos', 'left')
             ->join('obras_sociales AS os', 't.id_obras_sociales = os.id_obras_sociales', 'left')
-            ->where('t.id_especialidades', 33)
+            ->where('t.id_especialidades', ID_ESPECIALIDADES)
             ->where('t.estado', 1)
             ->where('t.fecha', $date)
             ->order_by('t.fecha, t.desde, t.hasta, t.id_turnos')
@@ -124,6 +124,46 @@ class Diagnostico_model extends CI_Model
         }
         return $query;
     }
+
+    public function obtDiasSemanaDiagnostico($date){
+        $query = $this->db
+            ->select('id_dias_semana')
+            ->from('medicos_horarios')
+            ->where('id_especialidades', ID_ESPECIALIDADES)
+            ->where('estado', 1)
+            ->group_by('id_dias_semana')
+            ->order_by('id_dias_semana')
+            ->get()
+            ->result_array()
+        ;
+        $dias_semana = array();
+        foreach ($query AS $itm){
+            $val = (($itm['id_dias_semana'] + 5) % 7) + 1;
+            $dias_semana[$val] = $val;
+        }
+        sort($dias_semana);
+
+        $while_condition = true;
+        $i = -1;
+        while ($while_condition) {
+            $dataView['ayer'] = "{$i} day";
+            $dia = date("N", strtotime($dataView['ayer'], strtotime($date)));
+            $while_condition = !in_array($dia, $dias_semana);
+            $i--;
+        }
+
+        $while_condition = true;
+        $i = 1;
+        while ($while_condition) {
+            $dataView['mana'] = "{$i} day";
+            $dia = date("N", strtotime($dataView['mana'], strtotime($date)));
+            $while_condition = !in_array($dia, $dias_semana);
+            $i++;
+        }
+
+        return $dataView;
+    }
+
 
     // IMPACTOS EN LA BASE DE DATOS
 

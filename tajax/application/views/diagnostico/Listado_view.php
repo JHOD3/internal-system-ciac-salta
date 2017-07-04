@@ -14,22 +14,27 @@ $(document).ready(function(){
 </script>
 <style>
 h1{
-    font-size: 25px;
+    font-size: 20px;
     margin:0;
 }
 #tblDxI{
-    background-color: rgba(255, 255, 255, 0.75);
+    background-color: #fff;
 }
 #tblDxI td{
     text-align: left;
     vertical-align: top;
 }
-#tblDxI tr > *{
-    padding: 3px 6px;
+#tblDxI tr:nth-child(even) td{
+    background-color:#e9e9e9;
 }
+#tblDxI tr > *{
+    padding: 0 6px;
+}
+#tblDxI tr:nth-child(even) td:first-child,
 #tblDxI tbody tr.trHead td:first-child{
     border-radius: 4px 0 0 4px;
 }
+#tblDxI tr:nth-child(even) td:last-child,
 #tblDxI tbody tr.trHead td:last-child{
     border-radius: 0 4px 4px 0;
 }
@@ -45,6 +50,7 @@ h1{
 #tblDxI tbody tr.trDate td{
     font-size: 1.5em;
     color: #008A47;
+    padding: 0 6px 6px 6px;
 }
 #tblDxI .aBtnL > a,
 #tblDxI .aBtnR > a{
@@ -64,16 +70,21 @@ h1{
     float: left;
     margin: 0 2px 0 0;
 }
+#tblDxI .trDate strong {
+    width: 370px;
+    text-align: center;
+}
 </style>
 <h1>Diagnóstico por Imágenes</h1>
 <table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
     <tbody>
         <tr class="trDate">
             <td colspan="100%" class="aBtnL">
-                <a href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, "-1 day")?>">Anterior</a>
+                <a href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['ayer'])?>">Anterior</a>
                 <strong style="margin:0 10px;"><?=dateLegible($date)?></strong>
-                <a href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, "+1 day")?>">Siguiente</a>
-                <a href="<?=base_url().$this->router->fetch_class().'/form_agregar/'.$date?>">Sacar Turno</a>
+                <a href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['mana'])?>">Siguiente</a>
+                <a href="<?=base_url().$this->router->fetch_class().'/form_agregar/'.$date?>">Sacar un Turno por la Mañana</a>
+                <a href="<?=base_url().$this->router->fetch_class().'/form_agregar/'.$date?>">Sacar un Turno por la Tarde</a>
             </td>
         </tr>
         <tr class="trHead">

@@ -18,6 +18,7 @@ class Diagnostico extends CI_Controller {
             $dataView['pagination_config']['per_page'],
             $offset
         );
+        $dataView['ds'] = $this->Model->obtDiasSemanaDiagnostico($date);
 
         $this->load->view($this->router->fetch_class().'/Listado_view', $dataView);
     }
