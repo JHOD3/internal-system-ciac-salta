@@ -20,7 +20,7 @@ function GetDateTimeFromStr($dateTime) {
 	{
 		$oDt = @date_create($dateTime);
 	}
-	
+
 	return $oDt;
 }
 /**
@@ -72,12 +72,12 @@ function GetDateTimeFromISO($dateTime,$bRetNULL=false)
  * @return	string
  */
 function GetDateFromFrenchToISO($date,$bRetNULL=true)
-{    
+{
 	$ret='NULL';
 	if(!empty($date)) {
 	    $f = explode(' ',$date);
-	   
-		if ( preg_match( "/([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})/", $date, $regs ) ) 
+
+		if ( preg_match( "/([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})/", $date, $regs ) )
 		{
 	    	$ret = $regs[3].'-'.$regs[2].'-'.$regs[1];
 	    	if($ret=='0000-00-00') {
@@ -101,17 +101,17 @@ function GetDateFromFrenchToISO($date,$bRetNULL=true)
  * @return	string
  */
 function GetDateTimeFromFrenchToISO($date, $bRetNULL = true)
-{	
+{
 	$ret='NULL';
 	if(!empty($date)) {
 	    $f = explode(' ',$date);
-		
+
 		$hora = '';
 		if(sizeof($f) > 1) {
 			$hora = ' '.$f[1];
 		}
-	    
-		if ( preg_match( "/([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})/", $date, $regs ) ) 
+
+		if ( preg_match( "/([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})/", $date, $regs ) )
 		{
 	    	$ret = $regs[3].'-'.$regs[2].'-'.$regs[1];
 	    	if($ret=='0000-00-00') {
@@ -161,32 +161,32 @@ function GetMonthName($bAbrev,$val)
  * @return	string
  */
 function GetDateString($date) {
-	
+
 	if(empty($date)) {
 		return null;
 	}
-	
+
 
 	$dateTime = GetDateTimeFromStr($date);
 	die();
 	if (empty($dateTime)) {
 		return null;
 	}
-	
+
 	$sRet = '';
 	$CI =& get_instance();
 	$CI->lang->load('date.ext');
 	$str =explode('-', $dateTime->format('w-d-n-Y'));
-	
+
 	$aMonthNames = $CI->lang->line('date_months_names');
 	$aDayNames = $CI->lang->line('date_days_names');
-	
+
 	$day = array_shift($str);
-	
+
 	$str[0] = $aDayNames[$str[0]%7];
-	
+
 	$str[1] = $aMonthNames[($str[2] % 12) + 1];
-	
+
 	return  $str[0].' '. $day . $CI->lang->line('date_date_string_connector') . $str[1] . $CI->lang->line('date_date_string_connector') . $str[2];
 }
 /**
@@ -202,7 +202,7 @@ function GetToday($format='')
 {
 	try
 	{
-		$oDt = @new DateTime();	
+		$oDt = @new DateTime();
 	}
 	catch(Exception $e)
 	{
@@ -314,7 +314,7 @@ function getString(DateTime $date, DateTime $compareTo = NULL, $viewTime = TRUE,
     } else {
     	$msj = $date->format($CI->lang->line('date_date_format'));
     }
-	
+
 	return $msj . (($viewTime==TRUE && $dayDiff > 0)? ' a la(s) ' . $date->format($CI->lang->line('date_time_format')): '');
 }
 
@@ -322,4 +322,26 @@ function dateFrenchIsValid($frenchDate) {
 	$regexp = '/^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((1[6-9]|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((1[6-9]|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((1[6-9]|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/';
 	return (bool)preg_match($regexp, $frenchDate);
 }
+
+function dateLegible($fecha)
+{
+    return
+        ucfirst(strftime("%A %d de", strtotime($fecha))).
+        " ".
+        ucfirst(strftime("%B del %Y", strtotime($fecha)))
+    ;
+}
+
+function dateLegiblePlus($fecha, $diff)
+{
+    return (
+        date(
+            'Y-m-d',
+            strtotime(
+                $diff, strtotime($fecha)
+            )
+        )
+    );
+}
+
 // EOF dateext_helper.php

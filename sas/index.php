@@ -49,7 +49,7 @@ $htm_index->Asigna("EST", $dataEST[0]);
 $htm_index->Asigna("EST_NUMROWS", 100 + ($dataEST[1] * 40));
 $htm_index->Asigna("MOTIVOS", $dataMOT);
 
-$htm_index->Asigna("FECHA", strftime("%A %d de %B del %Y"));
+$htm_index->Asigna("FECHA", ucfirst(strftime("%A %d de ")).ucfirst(strftime("%B del %Y")));
 $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));
 $htm_index->Asigna("USUARIO_NOMBRES", utf8_encode($_SESSION['NOMBRES']));
 $htm_index->Asigna("MENU_TABLAS", $htm_menu_tablas->Muestra());

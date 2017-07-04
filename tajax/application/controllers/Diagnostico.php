@@ -3,116 +3,70 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Diagnostico extends CI_Controller {
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
-        $this->load->model('Diagnostico_model');
-        $this->output->set_header('Access-Control-Allow-Origin: *');
+        $this->load->model($this->router->fetch_class().'_model', 'Model');
     }
 
-	public function index()
+    public function listado($date, $offset = 0)
+    {
+        $dataView = $this->Model->obtenerPaginacion($date);
+        $dataView['date'] = $date;
+        $dataView['listado'] = $this->Model->obtenerListado(
+            $date,
+            $dataView['pagination_config']['per_page'],
+            $offset
+        );
+
+        $this->load->view($this->router->fetch_class().'/Listado_view', $dataView);
+    }
+
+	public function form_agregar()
 	{
-        show_404();
+        $dataView = $this->Model->obtenerDropDownsRel();
+		$this->load->view($this->router->fetch_class().'/Form_agregar_view', $dataView);
 	}
 
-    public function medicos()
+    public function guardar_agregar()
     {
-        $aData['aMPEPD'] = $this->Diagnostico_model->obtMedicosPorEspecialidadParaDiagnostico();
-        $this->load->view('diagnostico_medicos_view', $aData);
+        if (!$this->Model->validar()) {
+            $this->form_agregar();
+        } else {
+            $this->Model->guardar_agregar($this->input->post());
+            $this->load->view($this->router->fetch_class().'/Alert_guardar_agregar_view');
+        }
     }
 
-    public function horarios(
-        $id_especialidades,
-        $id_medicos,
-        $year,
-        $month,
-        $day = null,
-        $desde = null
-    ) {
-        $aData['proximoTurnoDisponible'] = $this->Diagnostico_model->proximoTurnoDisponibleParaDiagnostico(
-            $id_especialidades,
-            $id_medicos
-        );
-        if (isset($desde)) {
-            $aData['post'] = array(
-                'desde' => $desde
-            );
-        }
-        $aData['rsEspecialidad'] = $this->Diagnostico_model->obtEspecialidadParaDiagnostico($id_especialidades);
-        $aData['rsMedico'] = $this->Diagnostico_model->obtMedicoParaDiagnostico($id_medicos);
-        $aData['rsObrasSocialesDeMedico'] = $this->Diagnostico_model->obtObrasSocialesDeMedicoParaDiagnostico($id_medicos);
-        if (empty($year)) {
-            $year = date("Y");
-        }
-        if (empty($month)) {
-            $month = date("m");
-        }
-        if (empty($day)) {
-            $day = date("d");
-        }
-        if ($year."-".$month."-".$day < $aData['proximoTurnoDisponible']) {
-            $year = date("Y", strtotime($aData['proximoTurnoDisponible']));
-            $month = date("m", strtotime($aData['proximoTurnoDisponible']));
-            $day = date("d", strtotime($aData['proximoTurnoDisponible']));
-        }
-        $aData['year'] = $year;
-        $aData['month'] = $month;
-        $aData['day'] = $day;
+    public function form_modificar($id)
+	{
+        $dataView = $this->Model->obtenerDropDownsRel();
+        $dataView['item'] = $this->Model->obtenerItem($id);
+		$this->load->view($this->router->fetch_class().'/Form_modificar_view', $dataView);
+	}
 
-        $aData['aDias'] = $this->Diagnostico_model->obtDiasParaDiagnostico(
-            $id_especialidades,
-            $id_medicos,
-            $year,
-            $month
-        );
-        $aData['aHorarios'] = $this->Diagnostico_model->obtHorariosParaDiagnostico(
-            $id_especialidades,
-            $id_medicos,
-            $year,
-            $month,
-            $day
-        );
-        $aData['vcDiasHorarios'] = $this->Diagnostico_model->obtDiasHorariosParaDiagnostico(
-            $id_especialidades,
-            $id_medicos,
-            $year,
-            $month
-        );
-        $aData['vcDuracionTurno'] = $this->Diagnostico_model->obtDuracionTurnoParaDiagnostico(
-            $id_especialidades,
-            $id_medicos
-        );
-        $aData['aTurnosReservados'] = $this->Diagnostico_model->obtTurnosReservadosParaDiagnostico(
-            $id_especialidades,
-            $id_medicos,
-            $year,
-            $month,
-            $day
-        );
-        $aData['aHorariosInhabilitados'] = $this->Diagnostico_model->obtHorariosInhabilitadosParaDiagnostico(
-            $id_especialidades,
-            $id_medicos,
-            $year,
-            $month,
-            $day
-        );
+    public function guardar_modificar($id = null)
+    {
+        if (!$this->Model->validar()) {
+            $this->form_modificar($id);
+        } else {
+            $this->Model->guardar_modificar($this->input->post(), $id);
+            $this->load->view($this->router->fetch_class().'/Alert_guardar_modificar_view');
+        }
+    }
 
-        $prefsCalendar = array (
-            #'start_day' => 'monday',
-            'show_next_prev'  => TRUE,
-            'next_prev_url'   => base_url()."index.php/diagnostico/horarios/{$id_especialidades}/{$id_medicos}"
-        );
-        $this->load->library('calendar', $prefsCalendar);
+    public function form_borrar($id)
+    {
+        $dataView['item'] = $this->Model->obtenerItem($id);
+        $this->load->view($this->router->fetch_class().'/Form_borrar_view', $dataView);
+    }
 
-        $aData['calendar'] = $this->calendar->generate($year, $month, $aData['aDias']);
-        $aData['calendar'] = str_replace(
-            "<td>&nbsp;</td>",
-            "<td></td>",
-            $aData['calendar']
-        );
-        $aData['aObrasSociales'] = $this->Diagnostico_model->obtObrasSocialesParaDiagnostico();
-        $this->load->view('calendar_diagnostico_view', $aData);
+    public function guardar_borrar()
+    {
+        $this->Model->guardar_eliminar($this->input->post('id_turnos'));
+        $this->load->view($this->router->fetch_class().'/Alert_borrar_view');
     }
 
 }
+
 //EOF Diagnostico.php

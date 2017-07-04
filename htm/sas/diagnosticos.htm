@@ -66,113 +66,6 @@
     color:#007FA6;
 }
 
-#diagnosticos_horarios > div:first-child {
-    float: left;
-}
-#diagnosticos_horarios table * {
-    font-size: 20px;
-}
-#diagnosticos_horarios th {
-    background-color: #0080bc;
-    color: #ffffff;
-    padding: 5px;
-    text-transform: uppercase;
-}
-#diagnosticos_horarios th a {
-    color: #ffffff;
-    font-weight: bold;
-    text-decoration: none;
-}
-#diagnosticos_horarios tr td {
-    background-color: #f6f6f6;
-    border: 2px solid #dadada;
-    color: #919292;
-    font-weight: bold;
-    padding: 5px;
-    text-align: center;
-}
-#diagnosticos_horarios tr td a {
-    color: #0080bc;
-    text-decoration: none;
-}
-#diagnosticos_horarios tr td:empty {
-    background-color: #dadada;
-}
-#diagnosticos_horarios tr:nth-child(2) td {
-    background-color: #dadada;
-}
-#diagnosticos_horarios tr td:first-child {
-    border-left-width: 7px;
-}
-#diagnosticos_horarios tr td:last-child {
-    border-right-width: 7px;
-}
-#diagnosticos_horarios tr:last-child td {
-    border-bottom-width: 7px;
-}
-#diagnosticos_horarios tr td.slctd {
-    background-color: #c6f8c6;
-    border: 2px solid #58d758;
-}
-#diagnosticos_horarios tr td.slctd,
-#diagnosticos_horarios tr td.slctd * {
-    color: #00b550 !important;
-}
-#diagnosticos_horarios .detail {
-    margin: 0 0 0 275px;
-}
-#diagnosticos_horarios .detail *, .osList {
-    color: #9d9d9c;
-}
-#diagnosticos_horarios .detail .title, .osTitle {
-    color: #0080bc;
-    font-weight: bold;
-    padding: 6px 0 8px;
-}
-.osTitle {
-    padding-bottom: 0 !important;
-}
-#diagnosticos_horarios .detail .title span, .osList {
-    font-style: italic;
-}
-.osList span:hover {
-    color: #0080bc;
-}
-#diagnosticos_horarios .detail .atencion {
-    color: #00944a;
-    font-size: 0.9em;
-    font-style: italic;
-    font-weight: bold;
-}
-#diagnosticos_horarios .detail .hours div {
-    cursor: pointer;
-    float: left;
-    margin: 4px 0 0;
-    min-width: 60px;
-    padding: 2px 4px;
-    text-align: center;
-}
-#diagnosticos_horarios .detail .hours a div {
-    color: #00b550;
-    font-weight: bold;
-}
-#diagnosticos_horarios .detail .hours > a:hover > div {
-    background-color: #f6f6f6;
-}
-#diagnosticos_horarios .detail .hours > a > div.selected,
-#diagnosticos_horarios .detail .hours > a:hover > div.selected {
-    background-color: #0080bc;
-    color: #ffffff;
-}
-#diagnosticos_horarios div.today {
-    background-color: #1a6b91;
-    border-radius: 27px 27px 0 0;
-    color: #99ccff;
-    font-size: 0.75em;
-    padding: 5px;
-    text-align: center;
-}
-
 a.aBtnD div{
     cursor: pointer;
     float: left;
@@ -251,16 +144,16 @@ a.aBtnD div{
             $('#tb_f10_obrasocial').removeClass('f10focus');
         });
 
+        var f = new Date();
         ajxM = $.ajax({
             type: 'POST',
-            url:'../tajax/diagnostico/medicos',
+            url:
+                '../tajax/diagnostico/listado/[DATE]'
+            ,
             context: document.body
         }).done(function(data) {
             $('#diagnosticos_medicos').html(data);
-            $('#diagnosticos_horarios').html('');
-            $('#diagnosticos_paciente').html('');
-            $('#diagnosticos_datos').html('');
-});
+        });
     });
 
 	jQuery(function($){
@@ -291,12 +184,6 @@ a.aBtnD div{
 <section id="panel_cuerpo">
 	<div class="container">
         <div id="diagnosticos_medicos"></div>
-        <div style="float:none;clear:both;">&nbsp;</div>
-        <div id="diagnosticos_horarios"></div>
-        <div style="float:none;clear:both;">&nbsp;</div>
-        <div id="diagnosticos_paciente"></div>
-        <div style="float:none;clear:both;">&nbsp;</div>
-        <div id="diagnosticos_datos"></div>
         <div style="float:none;clear:both;">&nbsp;</div>
         <input type="hidden" placeholder="Medico" id="medicos" class="ui-autocomplete-input" autocomplete="off">
 	</div>
