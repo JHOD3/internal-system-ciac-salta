@@ -1,80 +1,3 @@
-<script>
-$(document).ready(function(){
-    $('#diagnosticos_medicos a').click(function(event){
-        event.preventDefault();
-        ajxM = $.ajax({
-            type: 'POST',
-            url: $(this).attr('href'),
-            context: document.body
-        }).done(function(data) {
-            $('#diagnosticos_medicos').html(data);
-        });
-    });
-});
-</script>
-<style>
-h1{
-    font-size: 20px;
-    margin:0;
-}
-#tblDxI{
-    background-color: #fff;
-}
-#tblDxI td{
-    text-align: left;
-    vertical-align: top;
-}
-#tblDxI tr:nth-child(even) td{
-    background-color:#e9e9e9;
-}
-#tblDxI tr > *{
-    padding: 0 6px;
-}
-#tblDxI tr:nth-child(even) td:first-child,
-#tblDxI tbody tr.trHead td:first-child{
-    border-radius: 4px 0 0 4px;
-}
-#tblDxI tr:nth-child(even) td:last-child,
-#tblDxI tbody tr.trHead td:last-child{
-    border-radius: 0 4px 4px 0;
-}
-#tblDxI tbody tr.trHead td,
-#tblDxI tfoot tr th{
-    font-weight: bold;
-    background-color: #007FA6;
-    color: #ffffff;
-}
-#tblDxI tfoot tr th{
-    border-radius: 4px;
-}
-#tblDxI tbody tr.trDate td{
-    font-size: 1.5em;
-    color: #008A47;
-    padding: 0 6px 6px 6px;
-}
-#tblDxI .aBtnL > a,
-#tblDxI .aBtnR > a{
-    font-size: 12px;
-    font-weight: bold;
-    float: right;
-    background-color: #008A47;
-    display: block;
-    padding:1px 6px;
-    margin: 0 0 0 2px;
-    color: #ffffff;
-    border-radius: 4px;
-    box-shadow: 1px 1px 2px #999;
-}
-#tblDxI .aBtnL > a,
-#tblDxI .aBtnL > strong{
-    float: left;
-    margin: 0 2px 0 0;
-}
-#tblDxI .trDate strong {
-    width: 370px;
-    text-align: center;
-}
-</style>
 <h1>Diagnóstico por Imágenes</h1>
 <table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
     <tbody>
@@ -83,8 +6,10 @@ h1{
                 <a href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['ayer'])?>">Anterior</a>
                 <strong style="margin:0 10px;"><?=dateLegible($date)?></strong>
                 <a href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['mana'])?>">Siguiente</a>
+                <!--
                 <a href="<?=base_url().$this->router->fetch_class().'/form_agregar/'.$date?>">Sacar un Turno por la Mañana</a>
                 <a href="<?=base_url().$this->router->fetch_class().'/form_agregar/'.$date?>">Sacar un Turno por la Tarde</a>
+                //-->
             </td>
         </tr>
         <tr class="trHead">
@@ -148,4 +73,17 @@ h1{
         <th colspan="100%">Total: <?=$pagination_config['total_rows']?></th>
     </tfoot>
 </table>
-
+<script>
+$(document).ready(function(){
+    $('#diagnosticos_medicos a').click(function(event){
+        event.preventDefault();
+        ajxM = $.ajax({
+            type: 'POST',
+            url: $(this).attr('href'),
+            context: document.body
+        }).done(function(data) {
+            $('#diagnosticos_medicos').html(data);
+        });
+    });
+});
+</script>
