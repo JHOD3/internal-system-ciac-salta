@@ -85,8 +85,10 @@ class Diagnostico_model extends CI_Model
         $query = $this->db
             ->select('COUNT(t.id_turnos) AS Count')
             ->from('turnos AS t')
+            ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
             ->where('t.id_especialidades', ID_ESPECIALIDADES)
             ->where('t.estado', 1)
+            ->where('ts.estado', 1)
             ->where('t.fecha', $date)
             ->get()
             ->result_array()
@@ -103,6 +105,8 @@ class Diagnostico_model extends CI_Model
                 CONCAT(p.apellidos, ', ', p.nombres) AS pacientes,
                 CONCAT(m.apellidos, ', ', m.nombres) AS medicos,
                 os.abreviacion AS obras_sociales,
+                e.nombre AS estudios,
+                ts.*,
                 te.nombre AS turnos_estados,
                 te.color
             ")
@@ -110,9 +114,12 @@ class Diagnostico_model extends CI_Model
             ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('medicos AS m', 't.id_medicos = m.id_medicos', 'left')
-            ->join('obras_sociales AS os', 't.id_obras_sociales = os.id_obras_sociales', 'left')
+            ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
+            ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
+            ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
             ->where('t.id_especialidades', ID_ESPECIALIDADES)
             ->where('t.estado', 1)
+            ->where('ts.estado', 1)
             ->where('t.fecha', $date)
             ->order_by('t.fecha, t.desde, t.hasta, t.id_turnos')
             ->limit($limit, $offset)
