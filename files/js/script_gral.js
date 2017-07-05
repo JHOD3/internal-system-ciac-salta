@@ -65,6 +65,10 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 				Height = 500;
 			break;
 			case "ventana_diagnostico":
+				$("#ventana_estado_turno").append('<div id="'+nombre+'"></div>');
+				Width = 1200;
+				Height = 500;
+            break;
             case "ventana_estudios_modificacion":
 				$("#ventana_estado_turno").append('<div id="'+nombre+'"></div>');
 				Width = 600;

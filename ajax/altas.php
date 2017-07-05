@@ -467,26 +467,60 @@ switch ($tabla){
 		parse_str(stripslashes($datos));
 		$columnas = "(id_turnos, id_estudios, estado)";
 		$ids_estudios =  rtrim($_POST["ids_estudios"], ", ");
-
 		$id_estudiov = explode(", ", $ids_estudios);
-
-		$obj->BajaxTurno($id_turno);
-
 		$rta = false;
 
-		foreach ($id_estudiov as $clave => $valor) {
-			$valores = "(
-					".$id_turno.",
-					".$valor.",
-					1)";
-			$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+        // DAR DE BAJA LOS QUE SE QUITARON
+        $query_string_del = <<<SQL
+            UPDATE
+                turnos_estudios
+            SET
+                estado = 0
+            WHERE
+                id_turnos = '{$id_turno}' AND
+                id_estudios NOT IN ({$ids_estudios})
+SQL;
+        #print "{$query_string_del}<br />";
+        $obj->db->consulta($query_string_del);
 
-
-			if ($obj->db->consulta($query_string))
-				$rta = $obj->db->ultimo_id_insertado();
-			else
-				$rta = false;
+        // DAR DE ALTA LOS QUE SE AGREGARON
+        $query_string = <<<SQL
+            SELECT id_estudios
+            FROM turnos_estudios
+            WHERE
+                estado = 1 AND
+                id_turnos = '{$id_turno}' AND
+                id_estudios IN ({$ids_estudios})
+SQL;
+        $query = $obj->db->consulta($query_string);
+        $new_id_est = $id_estudiov;
+        $key_del = array();
+		while ($row = $obj->db->fetch_array($query)) {
+            for ($i = 0; $i < count($new_id_est); $i++) {
+                if ($new_id_est[$i] == $row['id_estudios']) {
+                    $key_del[] = $i;
+                }
+            }
 		}
+        foreach ($key_del AS $itm_del) {
+            unset($new_id_est[$itm_del]);
+        }
+        foreach ($new_id_est AS $itm_id_est) {
+            $query_string_add = <<<SQL
+                INSERT INTO turnos_estudios (
+                    id_turnos,
+                    id_estudios,
+                    estado
+                )
+                VALUES (
+                    '{$id_turno}',
+                    '{$itm_id_est}',
+                    '1'
+                )
+SQL;
+            #print "{$query_string_add}<br />";
+            $obj->db->consulta($query_string_add);
+        }
 	break;
 
 	case "medicos_obras_sociales":
