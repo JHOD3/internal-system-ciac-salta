@@ -50,11 +50,11 @@
                     </td//-->
                     <td<?=$coln?>><?=ucwords(strtolower($item['estudios']))?></td>
                     <td<?=$coln?>><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
-                    <td<?=$coln?>><?=$item['fecha_presentacion'] ? $item['fecha_presentacion'] : '---'?></td>
+                    <td<?=$coln?>><?=$item['fecha_presentacion'] ? date("d/m/Y", strtotime($item['fecha_presentacion'])) : '---'?></td>
                     <td<?=$coln?>><?=$item['nro_orden'] ? $item['nro_orden'] : '---'?></td>
                     <td<?=$coln?>><?=$item['nro_afiliado'] ? $item['nro_afiliado'] : '---'?></td>
                     <td<?=$colc?>><?=$item['cantidad'] ? $item['cantidad'] : '---'?></td>
-                    <td<?=$coln?>><?=$item['tipo'] == '1' ? 'Ambulatorios' : ($item['tipo'] == '2' ? 'Internado' : '---')?></td>
+                    <td<?=$coln?>><?=$item['tipo'] == '1' ? 'A' : ($item['tipo'] == '2' ? 'I' : '---')?></td>
                     <td<?=$colc?>><?=$item['trajo_pedido'] == '1' ? 'TP' : '---'?></td>
                     <td<?=$colc?>><?=$item['trajo_orden'] == '1' ? 'TO' : '---'?></td>
                     <td<?=$colr?>><?=$item['trajo_arancel'] > 0 ? "\$&nbsp;{$item['trajo_arancel']}" : '---'?></td>

@@ -164,10 +164,10 @@ $query = $this_db->consulta($SQL);
                         <td><input type="text" name="nro_afiliado[]" value="<?=$row['nro_afiliado']?>" style="width:70px;" /></td>
                         <td><input type="text" name="cantidad[]" value="<?=$row_cantidad_default?>" style="width:40px;text-align:right;" /></td>
                         <td>
-                            <select name="tipo[]" style="width:100px;">
+                            <select name="tipo[]" style="width:50px;">
                                 <option value=""<?=!$row['tipo'] ? ' selected="selected"' : ''?>>---</option>
-                                <option value="1"<?=$row['tipo'] == '1' ? ' selected="selected"' : '' ?>>Ambulatorio</option>
-                                <option value="2"<?=$row['tipo'] == '2' ? ' selected="selected"' : '' ?>>Internado</option>
+                                <option value="1"<?=$row['tipo'] == '1' ? ' selected="selected"' : '' ?>>A</option>
+                                <option value="2"<?=$row['tipo'] == '2' ? ' selected="selected"' : '' ?>>I</option>
                             </select>
                         </td>
                         <td>
