@@ -39,7 +39,7 @@
                 $colc =  " style=\"color:#{$item['color']};text-align:center;\"";
                 $colr =  " style=\"color:#{$item['color']};text-align:right;\"";
                 ?>
-                <tr>
+                <tr class="tsEst<?=$item['estado']?>">
                     <td<?=$coln?>><?=$item['hora']?></td>
                     <td<?=$coln?>><?=ucwords(strtolower($item['pacientes']))?></td>
                     <td<?=$coln?>><?=ucwords(strtolower($item['turnos_estados']))?></td>

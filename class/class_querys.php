@@ -556,7 +556,7 @@ class Querys implements iQuerys{
 				ON TE.id_estudios = E.id_estudios
 				LEFT JOIN medicos_estudios ME
 				ON TE.id_estudios = ME.id_estudios
-				WHERE TE.id_turnos = $id_turno";
+				WHERE TE.estado = 1 AND TE.id_turnos = $id_turno";
 		return $query;
 	}
 
@@ -579,7 +579,7 @@ class Querys implements iQuerys{
 	}
 
 	function BajaxTurno($id_turno){
-		$query = "DELETE FROM turnos_estudios WHERE id_turnos = ".$id_turno;
+		$query = "UPDATE turnos_estudios SET estado = 0 WHERE id_turnos = ".$id_turno;
 		return $query;
 	}
 
@@ -599,7 +599,7 @@ class Querys implements iQuerys{
 					FROM medicos_estudios ME
 					INNER JOIN turnos_estudios TE
 					ON ME.id_estudios = TE.id_estudios
-					WHERE TE.id_turnos = '.$id_turno;
+					WHERE TE.estado = 1 AND TE.id_turnos = '.$id_turno;
 		/*$query = "SELECT SUM(E.importe) as PARTICULAR, SUM(OSE.importe) as OBRA_SOCIAL
 				FROM turnos_estudios TE
 				INNER JOIN estudios E
@@ -648,7 +648,7 @@ class Querys implements iQuerys{
 				FROM turnos_estudios TE
 				INNER JOIN estudios E
 				ON TE.id_estudios = E.id_estudios
-				WHERE TE.id_turnos = $id_turnos";
+				WHERE TE.estado = 1 AND TE.id_turnos = $id_turnos";
 		return $query;
 
 	}
@@ -893,6 +893,7 @@ class Querys implements iQuerys{
                 ON te.id_estudios = e.id_estudios
             WHERE
                 {$where}
+                te.estado = 1 AND
                 t.fecha_alta BETWEEN '{$desde}' AND '{$hasta}'
             GROUP BY
             	e.nombre
