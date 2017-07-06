@@ -48,7 +48,7 @@ class Pacientes extends Estructura implements iPacientes{
 		$row["DROP_TIPOS_DOCUMENTOS"] = $obj_tipos_documentos->Drop("DESC", $row["id_tipos_documentos"]);		
 		
 		$obj_obras_sociales = new Obras_sociales();
-		$row["DROP_OBRAS_SOCIALES"] = $obj_obras_sociales->Drop("DESC", $row["id_obras_sociales"]);		
+		$row["DROP_OBRAS_SOCIALES"] = $obj_obras_sociales->Drop("ASC", $row["id_obras_sociales"]);		
 		
 		$obj_obras_sociales_planes = new Obras_sociales_planes();
 		$row["DROP_OBRAS_SOCIALES_PLANES"] = $obj_obras_sociales_planes->Drop("DESC", $row["id_obras_sociales_planes"]);

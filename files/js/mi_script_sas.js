@@ -428,6 +428,34 @@ $(document).on("click", "#btn_agregar_estudio", function(){
 		success: function(requestData){
 			var rta = requestData;
 			//alert(rta, 'ULTIMO ID REGISTRADO');
+        	var id_turno = $("form").find('#id_turno').val();
+        	var id_turno_estado = $(this).data("id_turnos_estados");
+        	var titulo = "Estado del Turno";
+        	IniciarVentana("ventana_estudios", "cerrar");
+        	$(ventana_estudios).dialog('destroy').remove();
+        	//if(id_turno_estado == 1){
+        		IniciarVentana("ventana_estado_turno", "abrir");
+        		$.ajax({ 
+        			dataType: "html",
+        			type: "POST",   
+        			url: "../ajax/admin_turno.php",
+        			data: {tipo:"panel", tabla: "turnos", id_turno: id_turno},
+        			beforeSend: function(data){
+        				$(ventana_estado_turno).html("");
+        			},						
+        			success: function(requestData){
+        				var rta = requestData;
+        				$(ventana_estado_turno).html(rta);
+        				$(ventana_estado_turno).dialog('option', 'title', titulo)
+        				$(ventana_estado_turno).dialog( "open" );
+        			},
+        			complete: function(requestData, exito){
+        			},
+        			error: function(requestData){
+        				alert (requestData);	
+        			}
+        		});
+        	//}
 		},
 		complete: function(requestData, exito){
 		},
@@ -435,8 +463,6 @@ $(document).on("click", "#btn_agregar_estudio", function(){
 			alert (requestData);	
 		}
 	});	
-	IniciarVentana("ventana_estudios", "cerrar");
-	$(ventana_estudios).dialog('destroy').remove();	
 });
 
 $(document).on("click", "#btn_modificar_estudio", function(){
@@ -631,7 +657,6 @@ function HoraActual(){
 
 $(function() {
     $("#medicos").keypress(function(event){
-        if (console && console.log) console.log(event.key);
         letters = ['á','é','í','ó','ú','ñ','ü','Á','É','Í','Ó','Ú','Ñ','Ü'];
         replace = ['a','e','i','o','u','n','u','A','E','I','O','U','N','U'];
         POS = $.inArray(event.key, letters);

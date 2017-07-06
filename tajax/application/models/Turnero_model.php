@@ -4,7 +4,7 @@ if (!defined('BASEPATH')) {
 }
 /**
  * Turnero_model
- * 
+ *
  * @package ciac
  * @author DiegoG
  * @copyright 2016
@@ -129,17 +129,43 @@ class Turnero_model extends CI_model
         return $query;
     }
 
-    public function obtMedicosPorEspecialidad()
+    public function obtMedicosPorEspecialidad($tipo, $filter)
     {
-        $query = $this->db
+        $this->db
             ->select('m.*, e.*')
             ->from('medicos AS m')
             ->join('medicos_especialidades AS me', 'me.id_medicos = m.id_medicos', 'right')
             ->join('especialidades AS e', 'me.id_especialidades = e.id_especialidades', 'right')
+            ->join('medicos_horarios AS tt', 'tt.id_medicos = m.id_medicos AND tt.id_especialidades = e.id_especialidades', 'join')
             ->where('m.estado', 1)
             ->where('me.estado', 1)
             ->where('e.estado', 1)
+            ->where('tt.estado', 1)
+            ->where_in('tt.id_turnos_tipos', array(1, 2, 3, 4, 5, 6, 7, 8))
+            ->group_by('e.nombre, m.apellidos, m.nombres')
             ->order_by('e.nombre, m.apellidos, m.nombres')
+        ;
+        if (trim($tipo) and trim($filter)) {
+            if (in_array($tipo, array('dr', 'dra', 'lic'))) {
+                $search = trim($tipo).". ".trim(str_replace("-", " ", $filter));
+                $where = <<<SQL
+                    CONCAT(
+                        TRIM(m.saludo),
+                        ' ',
+                        TRIM(m.apellidos),
+                        ' ',
+                        TRIM(m.nombres)
+                    ) LIKE '{$search}'
+SQL;
+            } else {
+                $search = trim(str_replace("-", " ", $filter));
+                $where = <<<SQL
+                    TRIM(e.nombre) LIKE '{$search}'
+SQL;
+            }
+            $this->db->where($where);
+        }
+        $query = $this->db
             ->get()
             ->result_array()
         ;
@@ -197,7 +223,7 @@ class Turnero_model extends CI_model
                 $result[$i] = base_url()."index.php/turnero/calendar/{$id_especialidades}/{$id_medicos}/{$year}/{$month}/".($i<10?'0':'')."{$i}/";
             }
         }
-        return $result;        
+        return $result;
     }
 
     public function obtHorarios(
@@ -342,7 +368,7 @@ class Turnero_model extends CI_model
             ->result_array()
         ;
         return $query;
-        
+
     }
 
     public function obtPacienteById($id_pacientes)
@@ -614,7 +640,7 @@ class Turnero_model extends CI_model
     {
         $query = $this->db
             ->select(
-                "t.id_turnos, t.fecha, t.desde, ".
+                "t.id_turnos, t.fecha, t.desde, t.fecha_alta, t.hora_alta, ".
                 "e.id_especialidades, e.nombre AS especialidad, ".
                 "m.id_medicos, m.saludo, m.nombres AS mednombres, m.apellidos AS medapellidos, ".
                 "p.id_pacientes, p.apellidos AS pacapellidos, p.nombres AS pacnombres, p.email, p.telefonos, ".

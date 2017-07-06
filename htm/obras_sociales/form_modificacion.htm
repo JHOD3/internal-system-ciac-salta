@@ -22,10 +22,10 @@
 				},
 				abreviacion: {
 					required: true
-				},
+				}/*,
 				importe_consulta: {
 					required: true
-				}
+				}*/
 			},
 			messages: {
 				nombre: {
@@ -33,10 +33,10 @@
 				},
 				abreviacion: {
 					required: "Ingrese Abreviaci&oacute;n"
-				},
+				}/*,
 				importe_consulta: {
 					required: "Ingrese Importe de la Consulta" 
-				}
+				}*/
 			},
 			submitHandler: function(){
 				var variables = $("#form_obras_sociales").serialize();
@@ -80,10 +80,10 @@
                 <label>Abreviacion: </label>
                 <input type="text" class="text-long" name="abreviacion" value="[abreviacion]" />
             </div>
-            <div class="bloque">
+            <!--div class="bloque">
                 <label>Importe Consulta: </label>
                 <input type="text" class="text-long" name="importe_consulta" value="[importe_consulta]" />
-            </div>
+            </div//-->
             <div class="bloque botones">
                 <a href="#" id="modificar" class="boton_gris">Modificar</a>
                 <a href="#" id="cancelar" class="boton_gris">Cancelar</a>

@@ -273,7 +273,6 @@ $sql = "
     {$where}
     ORDER BY
         n.fechahora DESC
-    LIMIT 10
 ";
 $novedades = $this_db->consulta($sql);
 ?>

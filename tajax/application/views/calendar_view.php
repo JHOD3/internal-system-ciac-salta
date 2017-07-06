@@ -59,7 +59,7 @@
                                     $aHorariosInhabilitados[$hi]['desde'] and
                                     isset($aHorariosInhabilitados[$hi]['hasta']) and
                                     $aHorariosInhabilitados[$hi]['hasta'] and
-                                    $h > $aHorariosInhabilitados[$hi]['desde'] and
+                                    $h >= $aHorariosInhabilitados[$hi]['desde'] and
                                     $h < $aHorariosInhabilitados[$hi]['hasta']
                                 ) {
                                     $boHI = true;
@@ -82,7 +82,7 @@
                         }
                         ?>
                     <?php endfor; ?>
-                    <br />
+                    <br /><br />
                 <?php endforeach; ?>
             </div>
             <input type="hidden" id="desde" name="desde" value="" />

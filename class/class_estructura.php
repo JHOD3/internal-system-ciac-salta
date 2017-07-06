@@ -130,6 +130,9 @@ class Estructura{
             case "dias_semana":
 				$query_string = $this->querys->Registros($this->nombre_tabla, "estado", "1", "id_dias_semana", "", "", "ASC");
             break;
+            case "obras_sociales":
+				$query_string = $this->querys->Registros($this->nombre_tabla, "estado", "1", "abreviacion", "", "", "ASC");
+            break;
 			default:
 				if($id_padre != "")
 					$query_string = $this->querys->Registros($this->nombre_tabla, "id_".$this->tabla_padre, $id_padre, $ordenar, "","",$orden);
@@ -1737,5 +1740,17 @@ class Estructura{
         }
         return array(utf8_encode($data), $i);
     }	
+
+    function obtMotivosDeInhabilitaciones(){
+		$query_string = $this->querys->obtMotivosDeInhabilitaciones($desde, $hasta, $id_usuarios);
+		$query = $this->db->consulta($query_string);
+        $data = "";
+        while ($row = $this->db->fetch_array($query)) {
+            $data.= "
+                <option value=\"{$row['id_horarios_inhabilitados_motivos']}\" data-libre=\"{$row['motivo_libre']}\">{$row['motivo_descripcion']}</option>
+            ";
+        }
+        return utf8_encode($data);
+    }
 	
 }

@@ -415,7 +415,7 @@ class Turnos extends Estructura implements iTurnos{
                 if (strlen($row["requisitos"]) < 2) {
                     $row["requisitos"] = '';
                 } else {
-                    $row["requisitos"] = "<br />".$row["requisitos"];
+                    $row["requisitos"] = "<br />".utf8_encode($row["requisitos"]);
                 }
 				$htm->AsignaBloque('block_registros',$row);
 				$i += 1;		

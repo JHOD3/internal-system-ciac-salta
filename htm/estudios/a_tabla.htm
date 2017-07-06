@@ -4,14 +4,14 @@
 <script type="text/javascript">
 	var TableEstudios;
 	var asInitVals = new Array();
-	
+
 	$(document).ready(function(){
 		CargarDataTable("[NOMBRE_TABLA]");
 	});
-	
+
 	function CargarDataTable(nombre){
-		//CargarBotonesUI(); 
-		 
+		//CargarBotonesUI();
+
 		TableEstudios = $('#t_'+nombre).dataTable( {
 			"aaSorting": [[1, "asc" ]], //argumentos posibles: asc o desc
 			"bAutoWidth": true,
@@ -34,11 +34,14 @@
             },
 			"bLengthChange": false,
 			"aoColumns" : [{ sWidth: '20px' },
-						{ sWidth: '700px' },
-						{ sWidth: '100px',  "sClass": "right"}, 
+						{ sWidth: '1200px' },
+						{ sWidth: '100px',  "sClass": "right"},
+						{ sWidth: '100px',  "sClass": "right"},
+						{ sWidth: '100px',  "sClass": "right"},
+						{ sWidth: '1200px' },
 						{ sWidth: '70px',  "sClass": "right"}]
 		});
-		
+
 		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
 		$('#t_'+nombre+" tfoot input").keyup( function () {
 			TableEstudios.fnFilter( this.value, $('#t_'+nombre+" tfoot input").index(this) );
@@ -59,30 +62,34 @@
 			}
 		});
 		///////////////////////////////////////////////////////
-		
-		
+
+
 	}
 </script>
 <table border="0" id="t_[NOMBRE_TABLA]" class="display">
-    <thead> 
+    <thead>
         <tr>
             <th>ID</th>
             <th>Nombre</th>
             <th>Importe</th>
+            <th>Arancel</th>
+            <th>Prep./Rec.</th>
+            <th>C&oacute;digo Pr&aacute;ctica</th>
             <th>Acci&oacute;n</th>
         </tr>
-    </thead> 
+    </thead>
     <tfoot>
         <tr>
             <th><input type="text" name="tb_id" value="ID" class="search_init" /></th>
             <th><input type="text" name="tb_nombre" value="Nombre" class="search_init" /></th>
             <th><input type="text" name="tb_importe" value="Importe" class="search_init" /></th>
+            <th><input type="text" name="tb_arancel" value="Arancel" class="search_init" /></th>
         </tr>
-    </tfoot>    
+    </tfoot>
     <tbody>
         <tr>
             <td></td>
             <td align="right"></td>
         </tr>
-    </tbody>   
+    </tbody>
 </table>

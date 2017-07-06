@@ -80,7 +80,7 @@ switch ($tipo){
 		$resp = utf8_encode($resp);
 	break;
 	case 'estudios_turno':
-		$resp = $obj-> EstudiosTurnos();
+		$resp = $obj->EstudiosTurnos();
 	break;
 	
 }
