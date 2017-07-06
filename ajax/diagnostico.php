@@ -94,110 +94,116 @@ $SQL = <<<SQL
 SQL;
 $query = $this_db->consulta($SQL);
 ?>
-<div id="vntDiag">
-    <form id="frm_diagnostico" method="post">
-        <input type="hidden" name="id_turno" value="<?=$_POST['id_turno']?>" />
-        <table>
-            <thead>
-                <th>Estudio</th>
-                <th>Realizador</th>
-                <th>O.Social</th>
-                <th>Presentación</th>
-                <th>#Orden</th>
-                <th>#Afiliado</th>
-                <th>Cant.</th>
-                <th>Tipo</th>
-                <th>TP</th>
-                <th>TO</th>
-                <th>($) TA</th>
-                <th>($) DD</th>
-                <th>Derivador</th>
-            </thead>
-            <tbody>
-                <?php
-                while ($row = $this_db->fetch_array($query)):
-                    $row_fecha_default = (isset($row['fecha_presentacion']) and $row['fecha_presentacion'] != '0000-00-00') ? $row['fecha_presentacion'] : '';
-                    if ($row_fecha_default) {
-                        $row_fecha_default = date("d/m/Y", strtotime($row_fecha_default));
-                    }
-                    $row_cantidad_default = isset($row['cantidad']) ? $row['cantidad'] : '1';
-                    ?>
-                    <tr>
-                        <td>
-                            <input type="hidden" name="id_turnos_estudios[]" value="<?=$row['id_turnos_estudios']?>" />
-                            <?=$row['estudios']?>
-                        </td>
-                        <td>
-                            <select name="id_medicos[]" style="width:120px;">
-                                <option value="">---</option>
-                                <?php
-                                $query_med = $this_db->consulta($SQL_med);
-                                ?>
-                                <?php while ($row_med = $this_db->fetch_array($query_med)): ?>
-                                    <option
-                                        value="<?=$row_med['id_medicos']?>"
-                                        <?php if ($row_med['id_medicos'] == $row['id_medicos']): ?>
-                                            selected="selected"
-                                        <?php endif; ?>
-                                    ><?=doSaludo($row_med, false)?></option>
-                                <?php endwhile; ?>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="id_obras_sociales[]" style="width:80px;">
-                                <option value="">---</option>
-                                <?php
-                                $query_os = $this_db->consulta($SQL_os);
-                                ?>
-                                <?php while ($row_os = $this_db->fetch_array($query_os)): ?>
-                                    <option
-                                        value="<?=$row_os['id_obras_sociales']?>"
-                                        <?php if ($row_os['id_obras_sociales'] == $row['id_obras_sociales']): ?>
-                                            selected="selected"
-                                        <?php endif; ?>
-                                    ><?=$row_os['abreviacion']?></option>
-                                <?php endwhile; ?>
-                            </select>
-                        </td>
-                        <td><input type="text" name="fecha_presentacion[]" value="<?=$row_fecha_default?>" style="width:80px;" /></td>
-                        <td><input type="text" name="nro_orden[]" value="<?=$row['nro_orden']?>" style="width:70px;" /></td>
-                        <td><input type="text" name="nro_afiliado[]" value="<?=$row['nro_afiliado']?>" style="width:70px;" /></td>
-                        <td><input type="text" name="cantidad[]" value="<?=$row_cantidad_default?>" style="width:40px;text-align:right;" /></td>
-                        <td>
-                            <select name="tipo[]" style="width:50px;">
-                                <option value=""<?=!$row['tipo'] ? ' selected="selected"' : ''?>>---</option>
-                                <option value="1"<?=$row['tipo'] == '1' ? ' selected="selected"' : '' ?>>A</option>
-                                <option value="2"<?=$row['tipo'] == '2' ? ' selected="selected"' : '' ?>>I</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="trajo_pedido[]" style="width:50px;">
-                                <option value=""<?=!$row['trajo_pedido'] ? ' selected="selected"' : ''?>>---</option>
-                                <option value="1"<?=$row['trajo_pedido'] == '1' ? ' selected="selected"' : ''?>>TP</option>
-                                <option value="2"<?=$row['trajo_pedido'] == '2' ? ' selected="selected"' : ''?>>No</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="trajo_orden[]" style="width:50px;">
-                                <option value=""<?=!$row['trajo_orden'] ? ' selected="selected"' : ''?>>---</option>
-                                <option value="1"<?=$row['trajo_orden'] == '1' ? ' selected="selected"' : ''?>>TO</option>
-                                <option value="2"<?=$row['trajo_orden'] == '2' ? ' selected="selected"' : ''?>>No</option>
-                            </select>
-                        </td>
-                        <td><input type="number" name="trajo_arancel[]" value="<?=$row['trajo_arancel']?>" style="width:40px;text-align:right;" /></td>
-                        <td><input type="number" name="deja_deposito[]" value="<?=$row['deja_deposito']?>" style="width:40px;text-align:right;" /></td>
-                        <td><input type="number" name="matricula_derivacion[]" value="<?=$row['matricula_derivacion']?>" style="width:70px;text-align:right;" /></td>
-                    </tr>
+<?php if ($this_db->num_rows($query) > 0): ?>
+    <div id="vntDiag">
+        <form id="frm_diagnostico" method="post">
+            <input type="hidden" name="id_turno" value="<?=$_POST['id_turno']?>" />
+            <table>
+                <thead>
+                    <th>Estudio</th>
+                    <th>Realizador</th>
+                    <th>O.Social</th>
+                    <th>Presentación</th>
+                    <th>#Orden</th>
+                    <th>#Afiliado</th>
+                    <th>Cant.</th>
+                    <th>Tipo</th>
+                    <th>TP</th>
+                    <th>TO</th>
+                    <th>($) TA</th>
+                    <th>($) DD</th>
+                    <th>Derivador</th>
+                </thead>
+                <tbody>
                     <?php
-                endwhile;
-                ?>
-            </tbody>
-        </table>
-    </form>
-</div>
+                    while ($row = $this_db->fetch_array($query)):
+                        $row_fecha_default = (isset($row['fecha_presentacion']) and $row['fecha_presentacion'] != '0000-00-00') ? $row['fecha_presentacion'] : '';
+                        if ($row_fecha_default) {
+                            $row_fecha_default = date("d/m/Y", strtotime($row_fecha_default));
+                        }
+                        $row_cantidad_default = isset($row['cantidad']) ? $row['cantidad'] : '1';
+                        ?>
+                        <tr>
+                            <td>
+                                <input type="hidden" name="id_turnos_estudios[]" value="<?=$row['id_turnos_estudios']?>" />
+                                <?=$row['estudios']?>
+                            </td>
+                            <td>
+                                <select name="id_medicos[]" style="width:120px;">
+                                    <option value="">---</option>
+                                    <?php
+                                    $query_med = $this_db->consulta($SQL_med);
+                                    ?>
+                                    <?php while ($row_med = $this_db->fetch_array($query_med)): ?>
+                                        <option
+                                            value="<?=$row_med['id_medicos']?>"
+                                            <?php if ($row_med['id_medicos'] == $row['id_medicos']): ?>
+                                                selected="selected"
+                                            <?php endif; ?>
+                                        ><?=doSaludo($row_med, false)?></option>
+                                    <?php endwhile; ?>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="id_obras_sociales[]" style="width:80px;">
+                                    <option value="">---</option>
+                                    <?php
+                                    $query_os = $this_db->consulta($SQL_os);
+                                    ?>
+                                    <?php while ($row_os = $this_db->fetch_array($query_os)): ?>
+                                        <option
+                                            value="<?=$row_os['id_obras_sociales']?>"
+                                            <?php if ($row_os['id_obras_sociales'] == $row['id_obras_sociales']): ?>
+                                                selected="selected"
+                                            <?php endif; ?>
+                                        ><?=$row_os['abreviacion']?></option>
+                                    <?php endwhile; ?>
+                                </select>
+                            </td>
+                            <td><input type="text" name="fecha_presentacion[]" value="<?=$row_fecha_default?>" style="width:80px;" /></td>
+                            <td><input type="text" name="nro_orden[]" value="<?=$row['nro_orden']?>" style="width:70px;" /></td>
+                            <td><input type="text" name="nro_afiliado[]" value="<?=$row['nro_afiliado']?>" style="width:70px;" /></td>
+                            <td><input type="text" name="cantidad[]" value="<?=$row_cantidad_default?>" style="width:40px;text-align:right;" /></td>
+                            <td>
+                                <select name="tipo[]" style="width:50px;">
+                                    <option value=""<?=!$row['tipo'] ? ' selected="selected"' : ''?>>---</option>
+                                    <option value="1"<?=$row['tipo'] == '1' ? ' selected="selected"' : '' ?>>A</option>
+                                    <option value="2"<?=$row['tipo'] == '2' ? ' selected="selected"' : '' ?>>I</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="trajo_pedido[]" style="width:50px;">
+                                    <option value=""<?=!$row['trajo_pedido'] ? ' selected="selected"' : ''?>>---</option>
+                                    <option value="1"<?=$row['trajo_pedido'] == '1' ? ' selected="selected"' : ''?>>TP</option>
+                                    <option value="2"<?=$row['trajo_pedido'] == '2' ? ' selected="selected"' : ''?>>No</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="trajo_orden[]" style="width:50px;">
+                                    <option value=""<?=!$row['trajo_orden'] ? ' selected="selected"' : ''?>>---</option>
+                                    <option value="1"<?=$row['trajo_orden'] == '1' ? ' selected="selected"' : ''?>>TO</option>
+                                    <option value="2"<?=$row['trajo_orden'] == '2' ? ' selected="selected"' : ''?>>No</option>
+                                </select>
+                            </td>
+                            <td><input type="number" name="trajo_arancel[]" value="<?=$row['trajo_arancel']?>" style="width:40px;text-align:right;" /></td>
+                            <td><input type="number" name="deja_deposito[]" value="<?=$row['deja_deposito']?>" style="width:40px;text-align:right;" /></td>
+                            <td><input type="number" name="matricula_derivacion[]" value="<?=$row['matricula_derivacion']?>" style="width:70px;text-align:right;" /></td>
+                        </tr>
+                        <?php
+                    endwhile;
+                    ?>
+                </tbody>
+            </table>
+        </form>
+    </div>
+<?php else: ?>
+    <div>no se ha seleccionado ningún estudio.</div>
+<?php endif; ?>
 <div class="botones">
-    <div id="alert" style="float:left;"></div>
-    <a id="btn_modificar_diagnostico" class="btn" href="#">Aceptar</a>
+    <?php if ($this_db->num_rows($query) > 0): ?>
+        <div id="alert" style="float:left;"></div>
+        <a id="btn_modificar_diagnostico" class="btn" href="#">Aceptar</a>
+    <?php endif; ?>
     <a class="btn salir" href="#">Salir</a>
 </div>
 <script>

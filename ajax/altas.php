@@ -467,7 +467,15 @@ switch ($tabla){
 		parse_str(stripslashes($datos));
 		$columnas = "(id_turnos, id_estudios, estado)";
 		$ids_estudios =  rtrim($_POST["ids_estudios"], ", ");
-		$id_estudiov = explode(", ", $ids_estudios);
+        if (trim($ids_estudios)) {
+    		$id_estudiov = explode(", ", $ids_estudios);
+            $where_del = "AND id_estudios NOT IN ({$ids_estudios})";
+            $where_string = "AND id_estudios IN ({$ids_estudios})";
+        } else {
+    		$id_estudiov = array();
+            $where_del = "";
+            $where_string = "";
+        }
 		$rta = false;
 
         // DAR DE BAJA LOS QUE SE QUITARON
@@ -477,8 +485,8 @@ switch ($tabla){
             SET
                 estado = 0
             WHERE
-                id_turnos = '{$id_turno}' AND
-                id_estudios NOT IN ({$ids_estudios})
+                id_turnos = '{$id_turno}'
+                {$where_del}
 SQL;
         #print "{$query_string_del}<br />";
         $obj->db->consulta($query_string_del);
@@ -489,8 +497,8 @@ SQL;
             FROM turnos_estudios
             WHERE
                 estado = 1 AND
-                id_turnos = '{$id_turno}' AND
-                id_estudios IN ({$ids_estudios})
+                id_turnos = '{$id_turno}'
+                {$where_string}
 SQL;
         $query = $obj->db->consulta($query_string);
         $new_id_est = $id_estudiov;
