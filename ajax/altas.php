@@ -163,11 +163,11 @@ switch ($tabla){
 					'".$importe."',
 					'".$arancel."',
 					1,
-					'".strtoupper(utf8_decode($requisitos))."'
+					'".strtoupper(utf8_decode($requisitos))."',
 					'".$codigopractica."'
 					)";
 
-		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+		print $query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
 		//error_log($query_string);
 		if ($obj->db->consulta($query_string))
 			$rta = $obj->db->ultimo_id_insertado();
