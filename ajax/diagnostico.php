@@ -87,6 +87,7 @@ $SQL = <<<SQL
         turnos AS t
         ON te.id_turnos = t.id_turnos
     WHERE
+        e.codigopractica > 0 AND
         te.estado = 1 AND
         te.id_turnos = '{$_POST['id_turno']}'
     ORDER BY
@@ -207,7 +208,7 @@ $query = $this_db->consulta($SQL);
     <a class="btn salir" href="#">Salir</a>
 </div>
 <script>
-$(document).ready(function(){
+//$(document).ready(function(){
     $('a#btn_modificar_diagnostico').click(function(event){
         event.preventDefault();
         $('#ventana_diagnostico .botones #alert').html('');
@@ -227,7 +228,11 @@ $(document).ready(function(){
     	IniciarVentana("ventana_diagnostico", "cerrar");
     	$(ventana_diagnostico).dialog('destroy').remove();
     });
-});
+    <?php if ($this_db->num_rows($query) == 0): ?>
+    	IniciarVentana("ventana_diagnostico", "cerrar");
+    	$(ventana_diagnostico).dialog('destroy').remove();
+    <?php endif; ?>
+//});
 </script>
 <style>
 #vntDiag input[type=number]::-webkit-outer-spin-button,

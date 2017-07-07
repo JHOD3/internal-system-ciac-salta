@@ -85,10 +85,12 @@ class Diagnostico_model extends CI_Model
         $query = $this->db
             ->select('COUNT(t.id_turnos) AS Count')
             ->from('turnos AS t')
-            ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
+            ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos')
+            ->join('estudios AS e', 'ts.id_estudios = e.id_estudios')
             ->where('t.id_especialidades', ID_ESPECIALIDADES)
             ->where('t.estado', 1)
             ->where('t.fecha', $date)
+            ->where('e.codigopractica >', 0)
             ->get()
             ->result_array()
         ;
@@ -119,6 +121,7 @@ class Diagnostico_model extends CI_Model
             ->where('t.id_especialidades', ID_ESPECIALIDADES)
             ->where('t.estado', 1)
             ->where('t.fecha', $date)
+            ->where('e.codigopractica >', 0)
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
             ->limit($limit, $offset)
             ->get()
