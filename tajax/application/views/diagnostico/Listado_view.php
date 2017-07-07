@@ -41,14 +41,14 @@
                 ?>
                 <tr class="tsEst<?=$item['estado']?>">
                     <td<?=$coln?>><?=$item['hora']?></td>
-                    <td<?=$coln?>><?=ucwords(strtolower($item['pacientes']))?></td>
+                    <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode($item['pacientes'])))))?></td>
                     <td<?=$coln?>><?=ucwords(strtolower($item['turnos_estados']))?></td>
-                    <td<?=$coln?>><?=trim($item['medicos']) ? ucwords(strtolower($item['medicos'])) : '---'?></td>
+                    <td<?=$coln?>><?=trim($item['medicos']) ? utf8_encode(ucwords(lower(trim(utf8_decode($item['medicos']))))) : '---'?></td>
                     <!--td<?=$coln?> class="aBtnL">
                         <a href="<?=base_url().$this->router->fetch_class()?>/form_modificar/<?=$item['id_turnos']?>">Modificar</a>
                         <a href="<?=base_url().$this->router->fetch_class()?>/form_borrar/<?=$item['id_turnos']?>">Eliminar</a>
                     </td//-->
-                    <td<?=$coln?>><?=ucwords(strtolower($item['estudios']))?></td>
+                    <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode($item['estudios'])))))?></td>
                     <td<?=$coln?>><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
                     <td<?=$coln?>><?=$item['fecha_presentacion'] ? date("d/m/Y", strtotime($item['fecha_presentacion'])) : '---'?></td>
                     <td<?=$coln?>><?=$item['nro_orden'] ? $item['nro_orden'] : '---'?></td>

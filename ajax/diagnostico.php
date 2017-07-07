@@ -127,7 +127,7 @@ $query = $this_db->consulta($SQL);
                         <tr>
                             <td>
                                 <input type="hidden" name="id_turnos_estudios[]" value="<?=$row['id_turnos_estudios']?>" />
-                                <?=$row['estudios']?>
+                                <?=utf8_encode($row['estudios'])?>
                             </td>
                             <td>
                                 <select name="id_medicos[]" style="width:120px;">
