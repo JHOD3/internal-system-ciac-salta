@@ -3,12 +3,12 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 	//VALORES POR DEFECTO... CUANDO ABRO MENU PARA ADMINISTRAR, CAMBIA SEGUN LA TABLA...
 	var Height = 700;
 	var Width =  '90%';
-			
-	//ESTO ES PARA ARGUMENTOS OPCIONALES		
+
+	//ESTO ES PARA ARGUMENTOS OPCIONALES
 	tabla || ( tabla = '' );
 	tipo_abm || ( tipo_abm = '' );
-	
-	
+
+
 	if (tipo == "abrir"){
 		switch (nombre){
 			case 'ventana_menu':
@@ -22,7 +22,7 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 				switch (tabla){
 					case 'pacientes':
 					case 'medicos':
-						
+
 					break;
 					case 'especialidades':
 						Width = 600;
@@ -53,7 +53,7 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 				$("#contenedor_imprimir").append('<div id="'+nombre+'"></div>');
 				Width = "90%";
 			break;
-			
+
 			case "ventana_estado_turno":
 				$("#grilla_turnos").append('<div id="'+nombre+'"></div>');
 				Width = 600;
@@ -64,7 +64,12 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 				Width = 600;
 				Height = 500;
 			break;
-			case "ventana_estudios_modificacion":
+			case "ventana_diagnostico":
+				$("#ventana_estado_turno").append('<div id="'+nombre+'"></div>');
+				Width = 1200;
+				Height = 500;
+            break;
+            case "ventana_estudios_modificacion":
 				$("#ventana_estado_turno").append('<div id="'+nombre+'"></div>');
 				Width = 600;
 				Height = 500;
@@ -92,7 +97,7 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 				}
 			break;
 			case "ventana_opciones":
-			
+
 				$("#contenedor_listado").append('<div id="'+nombre+'"></div>');
 				Width = 600;
 				switch (tabla){
@@ -141,12 +146,12 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 			width: Width,
 			modal: true,
 			close: function(){
-				$(this).dialog('destroy').remove();	
+				$(this).dialog('destroy').remove();
 			}
-		});	
-	
+		});
+
 	}
-	
+
 }
 
 //MOSTRAR EL ALERT CON FORMATO UI

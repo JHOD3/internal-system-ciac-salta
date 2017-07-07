@@ -1,0 +1,261 @@
+<script src="[JS]/propios/pacientes.js"></script>
+<script src="[JS]/propios/medicos.js"></script>
+<script src="[JS]/propios/obras_sociales.js"></script>
+<script src="[JS]/propios/mensajes.js"></script>
+
+
+<style>
+.ui-autocomplete {
+	max-height: 200px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+}
+/* IE 6 doesn't support max-height
+* we use height instead, but this forces the menu to always be this tall
+*/
+* html .ui-autocomplete {
+	height: 100px;
+}
+
+.panel_medicos{
+	width:70%;
+	float:left
+}
+
+.panel_paciente{
+	width:30%;
+	float:left
+}
+
+#panel_menu{
+	position:relative;
+}
+
+#panel_menu a#btn_mostrar{
+	width:20px;
+	padding:5px;
+	position:absolute;
+	bottom:-6px;
+	right:10%;
+	background:#fff
+}
+
+#form_inhabilitado #desde, #form_inhabilitado #hasta{
+	width:70%
+}
+
+#myChat,
+#myChat *{
+    font-size:16px;
+    margin:0;
+    padding:0;
+}
+#myChat h3{
+    font-size:19.2px;
+    line-height:19.2px;
+}
+#myChat b{
+    color:#999999;
+    font-weight:lighter;
+    font-size:12px;
+    display:block;
+    height:13px;
+}
+#myChat strong{
+    color:#007FA6;
+}
+
+a.aBtnD div{
+    cursor: pointer;
+    float: left;
+    background-color: #007FA6;
+    color: #ffffff;
+    padding: 3px 6px;
+    margin: 3px 3px 0 0;
+    font-weight: bold;
+}
+
+h1{
+    font-size: 20px;
+    margin:0;
+}
+#tblDxI{
+    background-color: #fff;
+}
+#tblDxI td{
+    text-align: left;
+    vertical-align: top;
+}
+#tblDxI tr:nth-child(even) td{
+    background-color:#e9e9e9;
+}
+#tblDxI tr > *{
+    padding: 0 6px;
+}
+#tblDxI tr:nth-child(even) td:first-child,
+#tblDxI tbody tr.trHead td:first-child{
+    border-radius: 4px 0 0 4px;
+}
+#tblDxI tr:nth-child(even) td:last-child,
+#tblDxI tbody tr.trHead td:last-child{
+    border-radius: 0 4px 4px 0;
+}
+#tblDxI tbody tr.trHead td,
+#tblDxI tfoot tr th{
+    font-weight: bold;
+    background-color: #007FA6;
+    color: #ffffff;
+}
+#tblDxI tfoot tr th{
+    border-radius: 4px;
+}
+#tblDxI tbody tr.trDate td{
+    font-size: 1.5em;
+    color: #008A47;
+    padding: 0 6px 6px 6px;
+}
+#tblDxI .aBtnL > a,
+#tblDxI .aBtnR > a{
+    font-size: 12px;
+    font-weight: bold;
+    float: right;
+    background-color: #008A47;
+    display: block;
+    padding:1px 6px;
+    margin: 0 0 0 2px;
+    color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 1px 1px 2px #999;
+}
+#tblDxI .aBtnL > a,
+#tblDxI .aBtnL > strong{
+    float: left;
+    margin: 0 2px 0 0;
+}
+#tblDxI .trDate strong {
+    width: 370px;
+    text-align: center;
+}
+#tblDxI tr.tsEst0 td{
+    text-decoration:line-through;
+    background-color: #f0f0f0;
+    color: #999!important;
+}
+</style>
+<script>
+	$(document).ready(function(){
+		$("#medicos").focus(function(){
+			$(this).val('');
+		})
+
+		$("#dni").focus(function(){
+			$(this).val('');
+		})
+
+        $(document).keypress(function(e) {
+            if ($('#estudiosF10').length) {
+                if (
+                    (
+                        (e.charCode >= 65 && e.charCode <= 90) ||
+                        (e.charCode >= 97 && e.charCode <= 122) ||
+                        (e.charCode >= 48 && e.charCode <= 58) ||
+                        (e.charCode == 32) ||
+                        (e.charCode == 45)
+                    ) && (
+                        e.key.length == 1
+                    )
+                ) {
+                    e.preventDefault();
+                    $('.f10focus').val($('.f10focus').val() + e.key);
+                    $('.f10focus').keyup();
+                } else if (e.key == 'Backspace') {
+                    e.preventDefault();
+                    $('.f10focus').val($('.f10focus').val().substr(0, $('.f10focus').val().length - 1));
+                    $('.f10focus').keyup();
+                } else if (e.key == 'Tab') {
+                    e.preventDefault();
+                    if ($('.f10focus').attr('id') == 'tb_f10_estudio') {
+                        $('#tb_f10_estudio').removeClass('f10focus');
+                        $('#tb_f10_obrasocial').addClass('f10focus').focus();
+                    } else {
+                        $('#tb_f10_estudio').addClass('f10focus').focus();
+                        $('#tb_f10_obrasocial').removeClass('f10focus');
+                    }
+                }/* else {
+                    if (console && console.log) console.log(e.charCode + ' > ' + e.key);
+                    if (console && console.log) console.log(e);
+                    e.preventDefault();
+                }/**/
+            }
+            if (e.key == 'F10') {
+                e.preventDefault();
+                if ($('#estudiosF10').length) {
+                    $('#estudiosF10').remove();
+                } else {
+                    $.ajax(
+                        '../ajax/estudios_f10.php'
+                    ).done(function(data){
+                        $('body').before(data);
+                        $('.f10focus').focus();
+                    });
+                }
+            }
+        });
+        $('#tb_f10_obrasocial').click(function(){
+            $('#tb_f10_estudio').removeClass('f10focus');
+            $('#tb_f10_obrasocial').addClass('f10focus').focus();
+        });
+        $('#tb_f10_estudio').click(function(){
+            $('#tb_f10_estudio').addClass('f10focus').focus();
+            $('#tb_f10_obrasocial').removeClass('f10focus');
+        });
+
+        var f = new Date();
+        ajxM = $.ajax({
+            type: 'POST',
+            url:
+                '../tajax/diagnostico/listado/[DATE]'
+            ,
+            context: document.body
+        }).done(function(data) {
+            $('#diagnosticos_medicos').html(data);
+        });
+    });
+
+	jQuery(function($){
+	   $("#desde").mask("99:99");
+	   $("#hasta").mask("99:99");
+	});
+
+	//CARGO LA FUNCION DE HORA ACTUAL (mi_script.js)
+  	window.onload = HoraActual
+</script>
+<section class="bg_negro">
+	<div class="container">
+    	<div class="row" id="datos_usr">
+        	<div class="span6">
+        	Bienvenido/a [USUARIO_APELLIDOS], [USUARIO_NOMBRES]
+            <a href="login.php">[Cerrar Sesi&oacute;n]</a>
+            </div>
+            <div id="fecha_hora_actual" class="span6">
+            	<span>[FECHA]</span>  -  <span id="liveclock" ></span>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="panel_menu" class="bg_verde">
+	[MENU_TABLAS]
+</section>
+
+<section id="panel_cuerpo">
+	<div class="container">
+        <div id="diagnosticos_medicos"></div>
+        <div style="float:none;clear:both;">&nbsp;</div>
+        <input type="hidden" placeholder="Medico" id="medicos" class="ui-autocomplete-input" autocomplete="off">
+	</div>
+</div>
+
+<div id="dialog_eliminar" title="Borrar Registos Seleccionado?">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Se borrar&aacute;n todos los datos vinculados al registro. Desea continuar?</p>
+</div>

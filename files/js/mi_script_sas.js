@@ -1,22 +1,22 @@
-//PARA LOS BOTONES DE OPCIONES DE CADA TABLA DEL ADMIN. 
+//PARA LOS BOTONES DE OPCIONES DE CADA TABLA DEL ADMIN.
 //Ej. Detalle, Editar, Tablas Hijas
 $(document).on("click", ".btn_opciones", function(e){
 	e.preventDefault();
 	var tipo_btn = $(this).data("tipo_btn");
 	var id = $(this).data("id");
 	var id_padre = $(this).data("id_padre");
-	
+
 	if (tipo_btn == "tabla_hija"){
-		
+
 		var tabla_hija = $(this).data("hija");
 		//var ventana_opciones_hijas = "#dialog_tabla_" + tabla_hija;
-	
+
 		IniciarVentana('ventana_hija_'+tabla_hija, "abrir", tabla_hija);
 
-		$.ajax({  
-			type: "POST",   
-			url: "../ajax/admin_tabla.php",					
-			data: {tabla: tabla_hija, id_padre: id}, 
+		$.ajax({
+			type: "POST",
+			url: "../ajax/admin_tabla.php",
+			data: {tabla: tabla_hija, id_padre: id},
 			beforeSend: function() {
 				$('#ventana_hija_'+tabla_hija).html("");
 			},
@@ -30,13 +30,13 @@ $(document).on("click", ".btn_opciones", function(e){
 				alert ("error");
 			}
 		});
-		
+
 		var nombre = $(this).data('nombre');
 		$('#ventana_hija_'+tabla_hija).dialog('option', 'title', 'Administraci\u00f3n de ' + nombre);
 		$('#ventana_hija_'+tabla_hija).dialog( "open" );
-		
+
 		$('#ventana_hija_'+tabla_hija).focus();
-			
+
 	}else if(tipo_btn == "tabla_eme"){
 		var tabla = $(this).data("tabla");
 		var tipo = $(this).data("tipo");
@@ -80,13 +80,13 @@ $(document).on("click", ".btn_opciones", function(e){
 		var tabla = $(this).data("tabla");
 		var tipo = $(this).data("tipo");
 		var titulo = $(this).data("titulo");
-		
+
 		IniciarVentana("ventana_opciones", "abrir", tabla, tipo);
-		
-		$.ajax({  
-			type: "POST",   
-			url: "../ajax/admin_form.php",					
-			data: {tabla: tabla, id: id, tipo: tipo, id_padre: id_padre}, 
+
+		$.ajax({
+			type: "POST",
+			url: "../ajax/admin_form.php",
+			data: {tabla: tabla, id: id, tipo: tipo, id_padre: id_padre},
 			beforeSend: function() {
 				$(ventana_opciones).html("");
 			},
@@ -100,7 +100,7 @@ $(document).on("click", ".btn_opciones", function(e){
 				alert ("error");
 			}
 		});
-		
+
 		$(ventana_opciones).dialog('option', 'title', titulo);
 		$(ventana_opciones).dialog( "open" );
 	}
@@ -119,42 +119,42 @@ $(document).on("dblclick", ".reservar", function(e, date){
 	var id_medico = $("#id_medico").val();
 	var id_especialidad = $("#medicos_especialidades").val();
 	var id_turno_tipo = $(this).data("turnos_tipos");
-	
+
 	var fechacompleta = $("#agenda").datepicker('getDate');
 	var dia = fechacompleta.getDay();
-	
+
 	if ($("#id_pacientes").length){
         if ($('#bloqueado').val() == '0') {
     		var id_paciente = $("#id_pacientes").val();
     		var id_obra_social = $("#id_obras_sociales").val();
     		var id_obra_social_plan = $("#id_obras_sociales_planes").val();
-		
+
     		var variables = "id_medico="+id_medico+"&id_especialidad="+id_especialidad+"&id_paciente="+id_paciente+"&desde="+desde+"&hasta="+hasta+"&fecha="+fecha+"&dia="+dia+"&id_turno_tipo="+id_turno_tipo+"&consultorio="+consultorio;
-		
-    		$.ajax({ 
+
+    		$.ajax({
     			dataType: "html",
-    			type: "POST",   
+    			type: "POST",
     			url: "../ajax/altas.php",
     			data: {variables: variables, tabla: "turnos"},
-    			beforeSend: function(data){},						
+    			beforeSend: function(data){},
     			success: function(requestData){
     				//alert (requestData);
     				if (requestData != 'existe_turno'){
     					var id_turno = requestData;
-    					
-    					//SI ES TURNO DE ESTUDIO ABRO LA PANTALLA QUE CARGA LOS ESTUDIOS		
+
+    					//SI ES TURNO DE ESTUDIO ABRO LA PANTALLA QUE CARGA LOS ESTUDIOS
     					//alert (id_turno_tipo, 'ID TURNO TIPO');
-    					
+
     					if (id_turno_tipo == 'estudios'){
     						IniciarVentana("ventana_estudios", "abrir");
-    						$.ajax({ 
+    						$.ajax({
     							dataType: "html",
-    							type: "POST",   
+    							type: "POST",
     							url: "../ajax/admin_turno_estudio.php",
     							data: {tipo:"panelAlta", tabla: "turnos_estudios", id_turno: id_turno, id_medico: id_medico, id_obra_social: id_obra_social},
     							beforeSend: function(data){
-    								$(ventana_estudios).html("");	
-    							},						
+    								$(ventana_estudios).html("");
+    							},
     							success: function(requestData){
     								var rta = requestData;
     								//alert(rta);
@@ -165,71 +165,71 @@ $(document).on("dblclick", ".reservar", function(e, date){
     							complete: function(requestData, exito){
     							},
     							error: function(requestData){
-    								alert (requestData);	
+    								alert (requestData);
     							}
     						});
-    						
+
     					}
     				}else{
     					alert ('Ya existe un turno reservado en esa horario.');
     				}
     				GrillaInicial(fechacompleta);
-    				
+
     			},
     			complete: function(requestData, exito){
     			},
     			error: function(requestData){
-    				alert ("error");	
+    				alert ("error");
     			}
     		});
         }
 	} else {
-		alert ("Falta seleccionar paciente.", 'ATENCIÓN');	
+		alert ("Falta seleccionar paciente.", 'ATENCIÓN');
 	}
-});	
+});
 
 $(document).on("click", ".imprimir", function(){
 	var id = $(this).data('id');
 	var tipo = $(this).data('tipo');
-	
+
 	switch (tipo){
 		/*case "turno":
 			IniciarVentana('turno_detalle_imprimir', "abrir");
-			
+
 			var titulo = "Estado del Turno";
-			$.ajax({ 
+			$.ajax({
 				dataType: "html",
-				type: "POST",   
+				type: "POST",
 				url: "../ajax/imprimir.php",
 				data: {tipo:tipo, id: id},
 				beforeSend: function(data){
-					
-				},						
+
+				},
 				success: function(requestData){
 					var rta = requestData;
 					//EL DIV CONTENEDOR ESTA EN GRILLA TURNOS
 					$(turno_detalle_imprimir).html(rta);
-					
+
 					$(turno_detalle_imprimir).dialog('option', 'title', titulo)
 					$(turno_detalle_imprimir).dialog( "open" );
 				},
 				complete: function(requestData, exito){
 				},
 				error: function(requestData){
-					alert (requestData);	
+					alert (requestData);
 				}
 			});
 		break;*/
 		case "turno":
-			
-			$.ajax({ 
+
+			$.ajax({
 				dataType: "html",
-				type: "POST",   
+				type: "POST",
 				url: "../ajax/imprimir.php",
 				data: {tipo:tipo, id: id},
 				beforeSend: function(data){
-					
-				},						
+
+				},
 				success: function(requestData){
 					var rta = requestData;
 					//EL DIV CONTENEDOR ESTA EN GRILLA TURNOS
@@ -238,77 +238,77 @@ $(document).on("click", ".imprimir", function(){
 				complete: function(requestData, exito){
 				},
 				error: function(requestData){
-					alert (requestData);	
+					alert (requestData);
 				}
 			});
 		break;
 		case "turnos_todos":
 			IniciarVentana('turnos_detalle_imprimir', "abrir");
-	
+
 			var titulo = "Turnos del Medico";
 			var fecha = $(this).data('fecha');
 			var id_especialidad = $(this).data('id_especialidad');
-			
-			$.ajax({ 
+
+			$.ajax({
 				dataType: "html",
-				type: "POST",   
+				type: "POST",
 				url: "../ajax/imprimir.php",
 				data: {tipo:tipo, id: id, fecha: fecha, id_especialidad: id_especialidad},
 				beforeSend: function(data){
-					
-				},						
+
+				},
 				success: function(requestData){
 					var rta = requestData;
 					//EL DIV CONTENEDOR ESTA EN GRILLA TURNOS
 					$(turnos_detalle_imprimir).html(rta);
-					
+
 					$(turnos_detalle_imprimir).dialog('option', 'title', titulo)
 					$(turnos_detalle_imprimir).dialog( "open" );
 				},
 				complete: function(requestData, exito){
 				},
 				error: function(requestData){
-					alert (requestData);	
+					alert (requestData);
 				}
 			});
 		break;
 		case "cobros":
 			IniciarVentana('cobros_imprimir', "abrir");
-	
+
 			var titulo = "Cobros del Medico";
 			var fecha = $(this).data('fecha');
 			var id_especialidad = $(this).data('id_especialidad');
-			
-			$.ajax({ 
+
+			$.ajax({
 				dataType: "html",
-				type: "POST",   
+				type: "POST",
 				url: "../ajax/imprimir.php",
 				data: {tipo:tipo, id: id, fecha: fecha, id_especialidad: id_especialidad},
 				beforeSend: function(data){
-					
-				},						
+
+				},
 				success: function(requestData){
 					var rta = requestData;
 					//EL DIV CONTENEDOR ESTA EN GRILLA TURNOS
 					$(cobros_imprimir).html(rta);
-					
+
 					$(cobros_imprimir).dialog('option', 'title', titulo)
 					$(cobros_imprimir).dialog( "open" );
 				},
 				complete: function(requestData, exito){
 				},
 				error: function(requestData){
-					alert (requestData);	
+					alert (requestData);
 				}
 			});
-		break	
+		break
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 });
 
 //ESTADO DEL TURNO - CLICK EN EL ESTADO DEL TURNO
@@ -320,15 +320,15 @@ $(document).on("dblclick", ".btn_estado_turno", function(e){
 
 	//if(id_turno_estado == 1){
 		IniciarVentana("ventana_estado_turno", "abrir");
-	
-		$.ajax({ 
+
+		$.ajax({
 			dataType: "html",
-			type: "POST",   
+			type: "POST",
 			url: "../ajax/admin_turno.php",
 			data: {tipo:"panel", tabla: "turnos", id_turno: id_turno},
 			beforeSend: function(data){
 				$(ventana_estado_turno).html("");
-			},						
+			},
 			success: function(requestData){
 				var rta = requestData;
 				$(ventana_estado_turno).html(rta);
@@ -338,18 +338,18 @@ $(document).on("dblclick", ".btn_estado_turno", function(e){
 			complete: function(requestData, exito){
 			},
 			error: function(requestData){
-				alert (requestData);	
+				alert (requestData);
 			}
 		});
 	//}
-	
+
 })
 
 
 $(document).on("change", "#medicos_especialidades", function(){
 	CrearAgenda();
 	var fecha=new Date();
-	
+
 	GrillaInicial(fecha);
 });
 
@@ -358,28 +358,28 @@ $(document).on("click", "#btn_estudios_asociados", function(e){
 	var id_turno = $(this).data("id_turno");
 	var id_obra_social = $(this).data("id_obra_social");
 	var id_medico = $(this).data("id_medico");
-	
+
 	//alert (id_medico);
-	
+
 	IniciarVentana("ventana_estudios_modificacion", "abrir");
-	
-	$.ajax({ 
+
+	$.ajax({
 		dataType: "html",
-		type: "POST",   
+		type: "POST",
 		url: "../ajax/admin_turno_estudio.php",
 		data: {tipo: "panel_modificacion", tabla: "turnos_estudios", id_turno: id_turno, id_medico: id_medico, id_obra_social: id_obra_social},
 		beforeSend: function(data){
-			$(ventana_estudios_modificacion).html("");	
-		},						
+			$(ventana_estudios_modificacion).html("");
+		},
 		success: function(requestData){
 			var rta = requestData;
 			$(ventana_estudios_modificacion).html(rta);
-			
+
 		},
 		complete: function(requestData, exito){
 		},
 		error: function(requestData){
-			alert (requestData);	
+			alert (requestData);
 		}
 	});
 	$(ventana_estudios_modificacion).dialog('option', 'title', 'Administrar Estudios de un Turno');
@@ -390,10 +390,10 @@ $(document).on("click", "#btn_enviar", function(e){
 	e.preventDefault();
 	var variables = $("#mensajes").serialize();
 	//alert ("variables: "+variables);
-	$.ajax({  
-		type: "POST",   
-		url: "../ajax/altas.php",					
-		data: {variables: variables, tabla: "mensajes"}, 
+	$.ajax({
+		type: "POST",
+		url: "../ajax/altas.php",
+		data: {variables: variables, tabla: "mensajes"},
 		beforeSend: function() {
 		},
 		success: function(requestData){
@@ -417,14 +417,14 @@ $(document).on("click", "#btn_agregar_estudio", function(){
 		ids_estudios = ids_estudios + id_estudio + ", ";
 	});
 	//alert(ids_estudios, 'ID DE ESTUDIOS A DAR DE ALTA');
-	
+
 	var variables = $("form").serialize();
-	$.ajax({ 
+	$.ajax({
 		dataType: "html",
-		type: "POST",   
+		type: "POST",
 		url: "../ajax/altas.php",
 		data: {variables: variables, tabla: "turnos_estudios", ids_estudios: ids_estudios},
-		beforeSend: function(data){},						
+		beforeSend: function(data){},
 		success: function(requestData){
 			var rta = requestData;
 			//alert(rta, 'ULTIMO ID REGISTRADO');
@@ -435,24 +435,53 @@ $(document).on("click", "#btn_agregar_estudio", function(){
         	$(ventana_estudios).dialog('destroy').remove();
         	//if(id_turno_estado == 1){
         		IniciarVentana("ventana_estado_turno", "abrir");
-        		$.ajax({ 
+        		$.ajax({
         			dataType: "html",
-        			type: "POST",   
+        			type: "POST",
         			url: "../ajax/admin_turno.php",
         			data: {tipo:"panel", tabla: "turnos", id_turno: id_turno},
         			beforeSend: function(data){
         				$(ventana_estado_turno).html("");
-        			},						
+        			},
         			success: function(requestData){
         				var rta = requestData;
         				$(ventana_estado_turno).html(rta);
         				$(ventana_estado_turno).dialog('option', 'title', titulo)
         				$(ventana_estado_turno).dialog( "open" );
+
+                        // ****************************************************/
+                        // ****************************************************/
+                    	// EDITAR DATOS DE DIAGNOSTICOS POR IMAGENES
+                        IniciarVentana("ventana_diagnostico", "abrir");
+                    	var id_turno = $("form").find('#id_turno').val();
+                    	$.ajax({
+                    		dataType: "html",
+                    		type: "POST",
+                    		url: "../ajax/diagnostico.php",
+                    		data: {id_turno: id_turno},
+                    		beforeSend: function(data){
+                    			$(ventana_diagnostico).html("");
+                    		},
+                    		success: function(requestData){
+                    			var rta = requestData;
+                    			$(ventana_diagnostico).html(rta);
+                    			$(ventana_diagnostico).dialog('option', 'title', 'Diagnóstico por Imagen')
+                    			$(ventana_diagnostico).dialog( "open" );
+                    		},
+                    		complete: function(requestData, exito){
+                    		},
+                    		error: function(requestData){
+                    			alert (requestData);
+                    		}
+                    	});
+                        // ****************************************************/
+                        // ****************************************************/
+
         			},
         			complete: function(requestData, exito){
         			},
         			error: function(requestData){
-        				alert (requestData);	
+        				alert (requestData);
         			}
         		});
         	//}
@@ -460,9 +489,9 @@ $(document).on("click", "#btn_agregar_estudio", function(){
 		complete: function(requestData, exito){
 		},
 		error: function(requestData){
-			alert (requestData);	
+			alert (requestData);
 		}
-	});	
+	});
 });
 
 $(document).on("click", "#btn_modificar_estudio", function(){
@@ -473,26 +502,55 @@ $(document).on("click", "#btn_modificar_estudio", function(){
 		ids_estudios = ids_estudios + id_estudio + ", ";
 	});
 	//alert(ids_estudios, 'ID DE ESTUDIOS A DAR DE ALTA');
-	
+
 	var variables = $("form").serialize();
-	$.ajax({ 
+	$.ajax({
 		dataType: "html",
-		type: "POST",   
+		type: "POST",
 		url: "../ajax/altas.php",
 		data: {variables: variables, tabla: "turnos_estudios", ids_estudios: ids_estudios},
-		beforeSend: function(data){},						
+		beforeSend: function(data){},
 		success: function(requestData){
 			var rta = requestData;
 			//alert(rta, 'ULTIMO ID REGISTRADO');
+
+            // ****************************************************************/
+            // ****************************************************************/
+        	// EDITAR DATOS DE DIAGNOSTICOS POR IMAGENES
+            IniciarVentana("ventana_diagnostico", "abrir");
+        	var id_turno = $("form").find('#id_turno').val();
+        	$.ajax({
+        		dataType: "html",
+        		type: "POST",
+        		url: "../ajax/diagnostico.php",
+        		data: {id_turno: id_turno},
+        		beforeSend: function(data){
+        			$(ventana_diagnostico).html("");
+        		},
+        		success: function(requestData){
+        			var rta = requestData;
+        			$(ventana_diagnostico).html(rta);
+        			$(ventana_diagnostico).dialog('option', 'title', 'Diagnóstico por Imagen')
+        			$(ventana_diagnostico).dialog( "open" );
+        		},
+        		complete: function(requestData, exito){
+        		},
+        		error: function(requestData){
+        			alert (requestData);
+        		}
+        	});
+            // ****************************************************************/
+            // ****************************************************************/
+
 		},
 		complete: function(requestData, exito){
 		},
 		error: function(requestData){
-			alert (requestData);	
+			alert (requestData);
 		}
-	});	
+	});
 	IniciarVentana("ventana_estudios_modificacion", "cerrar");
-	$(ventana_estudios_modificacion).dialog('destroy').remove();	
+	$(ventana_estudios_modificacion).dialog('destroy').remove();
 });
 
 $(document).on("click", "#btn_agregar_obra_social", function(){
@@ -503,15 +561,15 @@ $(document).on("click", "#btn_agregar_obra_social", function(){
 		ids_obras_sociales = ids_obras_sociales + id_obra_social + ", ";
 	});
 	//alert(ids_obras_sociales);
-	
-	
+
+
 	var variables = $("form").serialize();
-	$.ajax({ 
+	$.ajax({
 		dataType: "html",
-		type: "POST",   
+		type: "POST",
 		url: "../ajax/altas.php",
 		data: {variables: variables, tabla: "medicos_obras_sociales", ids_obras_sociales: ids_obras_sociales},
-		beforeSend: function(data){},						
+		beforeSend: function(data){},
 		success: function(requestData){
 			var rta = requestData;
 			TableMedicosObrasSociales.fnDraw();
@@ -519,12 +577,12 @@ $(document).on("click", "#btn_agregar_obra_social", function(){
 		complete: function(requestData, exito){
 		},
 		error: function(requestData){
-			alert (requestData);	
+			alert (requestData);
 		}
-	});	
-	
+	});
+
 	IniciarVentana("ventana_opciones", "abrir");
-	$(ventana_opciones).dialog('destroy').remove();	
+	$(ventana_opciones).dialog('destroy').remove();
 });
 
 $(document).on("click", "#btn_agregar_estudio_medico", function(){
@@ -535,15 +593,15 @@ $(document).on("click", "#btn_agregar_estudio_medico", function(){
 		ids_estudios = ids_estudios + id_estudio + ", ";
 	});
 	//alert(ids_obras_sociales);
-	
-	
+
+
 	var variables = $("form").serialize();
-	$.ajax({ 
+	$.ajax({
 		dataType: "html",
-		type: "POST",   
+		type: "POST",
 		url: "../ajax/altas.php",
 		data: {variables: variables, tabla: "medicos_estudios", ids_estudios: ids_estudios},
-		beforeSend: function(data){},						
+		beforeSend: function(data){},
 		success: function(requestData){
 			var rta = requestData;
 			//alert(rta);
@@ -552,12 +610,12 @@ $(document).on("click", "#btn_agregar_estudio_medico", function(){
 		complete: function(requestData, exito){
 		},
 		error: function(requestData){
-			alert (requestData);	
+			alert (requestData);
 		}
-	});	
-	
+	});
+
 	IniciarVentana("ventana_opciones", "abrir");
-	$(ventana_opciones).dialog('destroy').remove();	
+	$(ventana_opciones).dialog('destroy').remove();
 });
 
 
@@ -573,7 +631,7 @@ function imprSelec(muestra){
 	popupWin.document.close();
 	popupWin.print();
 	popupWin.close();
-	
+
 	if(popupWin.attachEvent) {
 		popupWin.attachEvent("onunload", ClosePopup);
 	}else{
@@ -594,7 +652,7 @@ function SoloNros(e){
 	var keynum = window.event ? window.event.keyCode : e.which;
 	if ((keynum == 8) || (keynum == 46))
 	return true;
-	 
+
 	return /\d/.test(String.fromCharCode(keynum));
 }
 
@@ -611,7 +669,7 @@ $(document).ready(function(){
 		  switch(elto.attr("id")){
 			case "dni": //CUANDO BUSCA UN PACIENTE POR EL ID
 				$("#btn_buscar_paciente").trigger("click");
-			break; 
+			break;
 		  }
 	   }
 	});
@@ -676,44 +734,44 @@ $(function() {
 			$( "#medicos" ).val( ui.item.nombres + " " + ui.item.apellidos);
 			$( "#id_medico" ).val( ui.item.id );
 			$( "#medicos_especialidad" ).html( ui.item.especialidad );
-			
+
 			var id_medico = $("#id_medico").val();
-			
-			$.ajax({  
-				type: "POST",   
-				url: "../ajax/generar_control.php",					
-				data: {tipo: "drop", tabla: "medicos_especialidades", valor: id_medico}, 
+
+			$.ajax({
+				type: "POST",
+				url: "../ajax/generar_control.php",
+				data: {tipo: "drop", tabla: "medicos_especialidades", valor: id_medico},
 				beforeSend: function() {
 				},
 				success: function(requestData){
 					var rta = requestData;
 					$("#contenedor_drop_especialidades").html(rta);
-					
+
 					var id_especialidad = $("#medicos_especialidades").val();
-					
+
 					if (id_especialidad != null){
-						CrearAgenda();	
+						CrearAgenda();
 					}else{
 						$("#contenedor_agenda").html("");
 					}
-					
-					var fecha=new Date();
-					
-					GrillaInicial(fecha);
-					
 
-					
-					
-					
+					var fecha=new Date();
+
+					GrillaInicial(fecha);
+
+
+
+
+
 				},
 				complete: function(requestData, exito){
-					
+
 				},
 				error: function (){
 					alert ("error");
 				}
 			});
-	
+
 			return false;
 		}
 	})
@@ -726,10 +784,10 @@ $(function() {
 });
 
 function Duplicados(id_medico, id_especialidad, fecha){
-	$.ajax({  
-		type: "POST",   
-		url: "../ajax/operaciones_varias.php",					
-		data: {fecha: fecha,  id_medico: id_medico, id_especialidad: id_especialidad, tipo:'duplicados'}, 
+	$.ajax({
+		type: "POST",
+		url: "../ajax/operaciones_varias.php",
+		data: {fecha: fecha,  id_medico: id_medico, id_especialidad: id_especialidad, tipo:'duplicados'},
 		beforeSend: function() {
 		},
 		success: function(requestData){

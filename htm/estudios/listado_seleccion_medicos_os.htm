@@ -27,9 +27,9 @@
 	for (var selector in config) {
 	  $(selector).chosen(config[selector]);
 	};
-	
+
 	var ids_estudios = "";
-		
+
     $('#estudios_chosen').after('<div id="estudios_chosen_result_post">...</div>')
 	$(".chosen-select-width").chosen().change(function(){
 		var total_particular = 0;
@@ -52,5 +52,5 @@
 		$(".total #particular").html("$ "+total_particular);
 		$(".total #os").html("$ "+total_os);
 	});
-	
-</script>	
+
+</script>
