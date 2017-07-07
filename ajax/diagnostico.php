@@ -37,9 +37,9 @@ function doSaludo($rsMedico, $prefix = true)
     }
     #$str.= ucwords(lower(trim($rsMedico['saludo'])));
     #$str.= " ";
-    $str.= upper(trim($rsMedico['apellidos']));
+    $str.= upper(trim(utf8_encode($rsMedico['apellidos'])));
     $str.= ", ";
-    $str.= ucwords(lower(trim($rsMedico['nombres'])));
+    $str.= utf8_encode(ucwords(lower(trim($rsMedico['nombres']))));
     return $str;
 }
 
@@ -157,7 +157,7 @@ $query = $this_db->consulta($SQL);
                                             <?php if ($row_os['id_obras_sociales'] == $row['id_obras_sociales']): ?>
                                                 selected="selected"
                                             <?php endif; ?>
-                                        ><?=$row_os['abreviacion']?></option>
+                                        ><?=utf8_encode($row_os['abreviacion'])?></option>
                                     <?php endwhile; ?>
                                 </select>
                             </td>
