@@ -104,7 +104,7 @@ class Diagnostico_model extends CI_Model
                 t.*,
                 LEFT(t.desde, 5) AS hora,
                 CONCAT(p.apellidos, ', ', p.nombres) AS pacientes,
-                CONCAT(m.apellidos, ', ', m.nombres) AS medicos,
+                CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres) AS medicos,
                 os.abreviacion AS obras_sociales,
                 e.nombre AS estudios,
                 ts.*,
@@ -172,6 +172,43 @@ class Diagnostico_model extends CI_Model
         return $dataView;
     }
 
+    public function obtMedicos()
+    {
+        $query = <<<SQL
+            SELECT
+                m.*
+            FROM
+                medicos AS m
+            INNER JOIN
+                medicos_especialidades AS me
+                ON me.id_medicos = m.id_medicos
+            WHERE
+                m.estado = 1 AND
+                me.estado = 1 AND
+                me.id_especialidades IN (63, 64, 65, 68, 66)
+            GROUP BY
+                m.id_medicos
+            ORDER BY
+                m.apellidos,
+                m.nombres
+SQL;
+        return $this->db->query($query)->result_array();
+    }
+
+    public function obtObrasSociales()
+    {
+        $query = <<<SQL
+            SELECT
+                *
+            FROM
+                obras_sociales AS os
+            WHERE
+                os.estado = 1
+            ORDER BY
+                os.abreviacion
+SQL;
+        return $this->db->query($query)->result_array();
+    }
 
     // IMPACTOS EN LA BASE DE DATOS
 
@@ -197,6 +234,109 @@ class Diagnostico_model extends CI_Model
              ->where('id_turnos', $id)
              ->delete('turnos')
         ;
+    }
+
+    function save($post)
+    {
+        if ($post['name'] == 'fecha_presentacion') {
+            $post['value'] = implode("-", array_reverse(explode("/", $post['value'])));
+        }
+        $this->db
+            ->where('id_turnos_estudios', $post['id'])
+            ->update(
+                'turnos_estudios',
+                array(
+                    $post['name'] => $post['value']
+                )
+            )
+        ;
+        $query = $this->db
+            ->select($post['name'])
+            ->from('turnos_estudios')
+            ->where('id_turnos_estudios', $post['id'])
+            ->limit(1)
+            ->get()
+            ->result_array()
+        ;
+        if (count($query) == 1) {
+            switch ($post['name']) {
+                case "id_medicos":
+                    $query = $this->db
+                        ->from('medicos')
+                        ->where('id_medicos', $query[0][$post['name']])
+                        ->get()
+                        ->result_array()
+                    ;
+                    if (count($query) > 0) {
+                        return utf8_encode(ucwords(lower(trim(utf8_decode(
+                            $query[0]['saludo'].' '.$query[0]['apellidos'].', '.$query[0]['nombres']
+                        )))));
+                    } else {
+                        return '---';
+                    }
+                    break;
+                case "id_obras_sociales":
+                    $query = $this->db
+                        ->from('obras_sociales')
+                        ->where('id_obras_sociales', $query[0][$post['name']])
+                        ->get()
+                        ->result_array()
+                    ;
+                    if (count($query) > 0) {
+                        return $query[0]['abreviacion'];
+                    } else {
+                        return '---';
+                    }
+                    break;
+                case "tipo":
+                    if ($query[0][$post['name']] == '1') {
+                        return 'A';
+                    } elseif ($query[0][$post['name']] == '2') {
+                        return 'I';
+                    } else {
+                        return '---';
+                    }
+                    break;
+                case "trajo_pedido":
+                    if ($query[0][$post['name']] == '1') {
+                        return 'TP';
+                    } elseif ($query[0][$post['name']] == '2') {
+                        return 'No';
+                    } else {
+                        return '---';
+                    }
+                    break;
+                case "trajo_orden":
+                    if ($query[0][$post['name']] == '1') {
+                        return 'TO';
+                    } elseif ($query[0][$post['name']] == '2') {
+                        return 'No';
+                    } else {
+                        return '---';
+                    }
+                    break;
+                case "trajo_arancel":
+                case "deja_deposito":
+                    if ($query[0][$post['name']] > 0) {
+                        return "\$&nbsp;{$query[0][$post['name']]}";
+                    } else {
+                        return '---';
+                    }
+                    break;
+                case "fecha_presentacion":
+                    return date("d/m/Y", strtotime($query[0][$post['name']]));
+                    break;
+                default:
+                    if (trim($query[0][$post['name']]) != '') {
+                        return $query[0][$post['name']];
+                    } else {
+                        return '---';
+                    }
+                    break;
+            }
+        } else {
+            return '---';
+        }
     }
 
 }

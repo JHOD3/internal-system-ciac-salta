@@ -20,7 +20,15 @@ class Diagnostico extends CI_Controller {
         );
         $dataView['ds'] = $this->Model->obtDiasSemanaDiagnostico($date);
 
+        $dataView['medicos'] = $this->Model->obtMedicos();
+        $dataView['obras_sociales'] = $this->Model->obtObrasSociales();
+
         $this->load->view($this->router->fetch_class().'/Listado_view', $dataView);
+    }
+
+    public function save()
+    {
+        print $this->Model->save($this->input->post());
     }
 
 }
