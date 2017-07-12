@@ -161,7 +161,7 @@ $query = $this_db->consulta($SQL);
                                     <?php endwhile; ?>
                                 </select>
                             </td>
-                            <td><input type="text" name="fecha_presentacion[]" value="<?=$row_fecha_default?>" style="width:80px;" /></td>
+                            <td><input type="text" name="fecha_presentacion[]" value="<?=$row_fecha_default?>" style="width:80px;" class="datepicker" /></td>
                             <td><input type="text" name="nro_orden[]" value="<?=$row['nro_orden']?>" style="width:70px;" /></td>
                             <td><input type="text" name="nro_afiliado[]" value="<?=$row['nro_afiliado']?>" style="width:70px;" /></td>
                             <td><input type="text" name="cantidad[]" value="<?=$row_cantidad_default?>" style="width:40px;text-align:right;" /></td>
@@ -188,7 +188,7 @@ $query = $this_db->consulta($SQL);
                             </td>
                             <td><input type="number" name="trajo_arancel[]" value="<?=$row['trajo_arancel']?>" style="width:40px;text-align:right;" /></td>
                             <td><input type="number" name="deja_deposito[]" value="<?=$row['deja_deposito']?>" style="width:40px;text-align:right;" /></td>
-                            <td><input type="number" name="matricula_derivacion[]" value="<?=$row['matricula_derivacion']?>" style="width:70px;text-align:right;" /></td>
+                            <td><input type="text" name="matricula_derivacion[]" value="<?=$row['matricula_derivacion']?>" style="width:70px;text-align:right;" class="ac_matricula_derivacion" /></td>
                         </tr>
                         <?php
                     endwhile;
@@ -232,6 +232,14 @@ $query = $this_db->consulta($SQL);
     	IniciarVentana("ventana_diagnostico", "cerrar");
     	$(ventana_diagnostico).dialog('destroy').remove();
     <?php endif; ?>
+    $(".datepicker").datepicker();
+    var tagsACMD = [
+        {label: 'LEZAOLA, Marcelo - 1212', value: '1212'},
+        {label: 'LOMBARDI, Carlos - 4546', value: '4546'}
+    ];
+    $(".ac_matricula_derivacion").autocomplete({
+        source: tagsACMD
+    });
 //});
 </script>
 <style>
@@ -253,5 +261,10 @@ $query = $this_db->consulta($SQL);
 }
 #vntDiag table thead th:first-child{
     text-align: left;
+}
+.ui-datepicker {
+    width:300px!important;
+    z-index:848745;
+    background-color: #fff;
 }
 </style>
