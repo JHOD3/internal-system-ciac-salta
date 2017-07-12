@@ -62,6 +62,25 @@ $SQL_med = <<<SQL
         m.nombres
 SQL;
 
+$SQL_med_cm = <<<SQL
+    SELECT
+        m.*
+    FROM
+        medicos AS m
+    INNER JOIN
+        medicos_especialidades AS me
+        ON me.id_medicos = m.id_medicos
+    WHERE
+        m.estado = 1 AND
+        m.matricula > 0 AND
+        me.estado = 1
+    GROUP BY
+        m.id_medicos
+    ORDER BY
+        m.apellidos,
+        m.nombres
+SQL;
+
 $SQL_os = <<<SQL
     SELECT
         *
@@ -234,8 +253,14 @@ $query = $this_db->consulta($SQL);
     <?php endif; ?>
     $(".datepicker").datepicker();
     var tagsACMD = [
-        {label: 'LEZAOLA, Marcelo - 1212', value: '1212'},
-        {label: 'LOMBARDI, Carlos - 4546', value: '4546'}
+        <?php
+        $query_med_cm = $this_db->consulta($SQL_med_cm);
+        ?>
+        <?php $cnct = ''; ?>
+        <?php while ($row_med_cm = $this_db->fetch_array($query_med_cm)): ?>
+            <?=$cnct?>{label: '<?=utf8_encode(trim($row_med_cm['apellidos']))?>, <?=utf8_encode(trim($row_med_cm['nombres']))?> - <?=$row_med_cm['matricula']?>', value: '<?=$row_med_cm['matricula']?>'}
+            <?php $cnct = ','; ?>
+        <?php endwhile; ?>
     ];
     $(".ac_matricula_derivacion").autocomplete({
         source: tagsACMD

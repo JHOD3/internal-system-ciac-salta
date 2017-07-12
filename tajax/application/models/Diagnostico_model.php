@@ -195,6 +195,29 @@ SQL;
         return $this->db->query($query)->result_array();
     }
 
+    public function obtMedicosConMatriculas()
+    {
+        $query = <<<SQL
+            SELECT
+                m.*
+            FROM
+                medicos AS m
+            INNER JOIN
+                medicos_especialidades AS me
+                ON me.id_medicos = m.id_medicos
+            WHERE
+                m.estado = 1 AND
+                m.matricula > 0 AND
+                me.estado = 1
+            GROUP BY
+                m.id_medicos
+            ORDER BY
+                m.apellidos,
+                m.nombres
+SQL;
+        return $this->db->query($query)->result_array();
+    }
+
     public function obtObrasSociales()
     {
         $query = <<<SQL

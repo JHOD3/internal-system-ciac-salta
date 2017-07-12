@@ -103,7 +103,7 @@
         <?php endforeach; ?>
     </select>
 </div>
-<div id="tab_fecha_presentacion" class="tab_hidden"><input type="text" name="fecha_presentacion" value="" style="width:80px;" class="datepicker" /></div>
+<div id="tab_fecha_presentacion" class="tab_hidden"><input type="text" name="fecha_presentacion" value="" style="width:80px;" /></div>
 <div id="tab_nro_orden" class="tab_hidden"><input type="text" name="nro_orden" value="" style="width:70px;" /></div>
 <div id="tab_nro_afiliado" class="tab_hidden"><input type="text" name="nro_afiliado" value="" style="width:70px;" /></div>
 <div id="tab_cantidad" class="tab_hidden"><input type="text" name="cantidad" value="" style="width:40px;text-align:right;" /></div>
@@ -144,50 +144,58 @@ $(document).ready(function(){
             $('#diagnosticos_medicos').html(data);
         });
     });
-    $('.tdTab').dblclick(function(){
-        var valDefault = $(this).html().replace('$&nbsp;', '').replace('---', '');
-        $(this).html($('#tab_' + $(this).data('method')).html());
-        switch ($(this).find('input, select').prop('tagName')) {
-            case 'INPUT':
-                $(this).find('input').val(valDefault);
-                break;
-            case 'SELECT':
-                if (console && console.log) console.log(valDefault.toLowerCase());
-                $(this).find('select option').each(function(){
-                    if ($(this).html().toLowerCase() == valDefault.toLowerCase()) {
-                        if (console && console.log) console.log('si ' + $(this).html().toLowerCase());
-                        $(this).attr("selected", true);
-                    } else {
-                        if (console && console.log) console.log('no' + $(this).html().toLowerCase());
-                    }
-                });
-                break;
-        }
-        $(this).find('input, select').focus();
-        switch ($(this).data('method')) {
-            case "medicos":
-                break;
-        }
-        $('.tdTab select, .tdTab input').attr('data-id', $(this).data('id'));
-        $('.tdTab input, .tdTab select').focusout(function(){
-            var my_id = $(this).data('id');
-            var my_name = $(this).attr('name');
-            var my_value = $(this).val();
-            var layer = $(this).parent();
-            $(this).parent().html('&#8634;');
-            ajxM = $.ajax({
-                type: 'POST',
-                data: {
-                    id: my_id,
-                    name: my_name,
-                    value: my_value
-                },
-                url: '<?=base_url()?>diagnostico/save',
-                context: layer
-            }).done(function(data) {
-                 $(this).html(data);
+    $('.tdTab').dblclick(function(event){
+        if (event.target == this) {
+            var valDefault = $(this).html().replace('$&nbsp;', '').replace('---', '');
+            $(this).html($('#tab_' + $(this).data('method')).html());
+            switch ($(this).find('input, select').prop('tagName')) {
+                case 'INPUT':
+                    $(this).find('input').val(valDefault);
+                    break;
+                case 'SELECT':
+                    if (console && console.log) console.log(valDefault.toLowerCase());
+                    $(this).find('select option').each(function(){
+                        if ($(this).html().toLowerCase() == valDefault.toLowerCase()) {
+                            if (console && console.log) console.log('si ' + $(this).html().toLowerCase());
+                            $(this).attr("selected", true);
+                        } else {
+                            if (console && console.log) console.log('no' + $(this).html().toLowerCase());
+                        }
+                    });
+                    break;
+            }
+            $(this).find('input, select').focus();
+            var tagsACMD = [
+                <?php $cnct = ''; ?>
+                <?php foreach ($medicos_cm AS $rs_mcm): ?>
+                    <?=$cnct?>{label: '<?=utf8_encode(trim(utf8_decode($rs_mcm['apellidos'])))?>, <?=utf8_encode(trim(utf8_decode($rs_mcm['nombres'])))?> - <?=$rs_mcm['matricula']?>', value: '<?=$rs_mcm['matricula']?>'}
+                    <?php $cnct = ','; ?>
+                <?php endforeach; ?>
+            ];
+            $(".ac_matricula_derivacion").autocomplete({
+                source: tagsACMD
             });
-        });
+            $('.tdTab select, .tdTab input').attr('data-id', $(this).data('id'));
+            $('.tdTab input, .tdTab select').focusout(function(){
+                var my_id = $(this).data('id');
+                var my_name = $(this).attr('name');
+                var my_value = $(this).val();
+                var layer = $(this).parent();
+                $(this).parent().html('&#8634;');
+                ajxM = $.ajax({
+                    type: 'POST',
+                    data: {
+                        id: my_id,
+                        name: my_name,
+                        value: my_value
+                    },
+                    url: '<?=base_url()?>diagnostico/save',
+                    context: layer
+                }).done(function(data) {
+                     $(this).html(data);
+                });
+            });
+        }
     });
 });
 </script>
