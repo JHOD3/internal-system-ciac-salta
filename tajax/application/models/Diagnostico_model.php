@@ -233,6 +233,72 @@ SQL;
         return $this->db->query($query)->result_array();
     }
 
+    public function obtDiagnosticosExport($year, $month)
+    {
+        $fecha = $year.'-'.$month.'-%';
+        $query = $this->db
+            ->select("
+                '0' AS orden,
+                CONCAT(p.apellidos, ', ', p.nombres) AS pacientes,
+                'CIAC' AS presentador,
+                CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres) AS medicos,
+                os.abreviacion AS obras_sociales,
+                t.fecha,
+                ts.nro_orden,
+                ts.nro_afiliado,
+                e.nombre,
+                e.codigopractica,
+                ts.cantidad,
+                ts.tipo,
+                ts.trajo_pedido,
+                ts.trajo_orden,
+                ts.trajo_arancel,
+                ts.deja_deposito,
+                ts.matricula_derivacion
+            ")
+            ->from('turnos AS t')
+            ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
+            ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
+            ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
+            ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
+            ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
+            ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
+            ->where('t.estado', 1)
+            ->where('YEAR(t.fecha)', $year)
+            ->where('MONTH(t.fecha)', $month)
+            ->where('e.codigopractica >', 0)
+            ->where_in('ts.estado', array(1, 2, 7))
+            ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
+            ->get()
+            ->result_array()
+        ;
+        for ($i = 0; $i < count($query); $i++) {
+            $query[$i]['orden'] = $i + 1;
+            switch ($query[$i]['tipo']) {
+                case '1': $query[$i]['tipo'] = 'A'; break;
+                case '2': $query[$i]['tipo'] = 'I'; break;
+                default: $query[$i]['tipo'] = ''; break;
+            }
+            switch ($query[$i]['trajo_pedido']) {
+                case '1': $query[$i]['trajo_pedido'] = 'Si'; break;
+                case '2': $query[$i]['trajo_pedido'] = 'No'; break;
+                default: $query[$i]['trajo_pedido'] = ''; break;
+            }
+            switch ($query[$i]['trajo_orden']) {
+                case '1': $query[$i]['trajo_orden'] = 'Si'; break;
+                case '2': $query[$i]['trajo_orden'] = 'No'; break;
+                default: $query[$i]['trajo_orden'] = ''; break;
+            }
+            if ($query[$i]['trajo_arancel'] > 0) {
+                $query[$i]['trajo_arancel'] = "\$&nbsp;{$query[$i]['trajo_arancel']}";
+            }
+            if ($query[$i]['deja_deposito'] > 0) {
+                $query[$i]['deja_deposito'] = "\$&nbsp;{$query[$i]['deja_deposito']}";
+            }
+        }
+        return $query;
+    }
+
     // IMPACTOS EN LA BASE DE DATOS
 
     function guardar_agregar($post)

@@ -32,6 +32,34 @@ class Diagnostico extends CI_Controller {
         print utf8_encode(json_encode($this->Model->saveDiagnostico($this->input->post())));
     }
 
+    public function exportar($year, $month)
+    {
+        $this->load->library('table');
+        $dataView['year'] = $year;
+        $dataView['month'] = $month;
+        $dataView['aDiagnosticos'] = $this->Model->obtDiagnosticosExport($year, $month);
+        $this->table->set_heading(
+            'Nro de Paciente',
+            'Paciente',
+            'Presentador',
+            'Realizador',
+            'Obra Social',
+            'Fecha de Presentación',
+            'Nro. de Orden',
+            'Nro. de Afiliado',
+            'Estudio',
+            'Código de Presentación',
+            'Cantidad',
+            'Tipo',
+            'TP',
+            'TO',
+            'TA',
+            'DD',
+            'Derivador'
+        );
+        $this->load->view($this->router->fetch_class().'/Exportar_view', $dataView);
+    }
+
 }
 
 //EOF Diagnostico.php

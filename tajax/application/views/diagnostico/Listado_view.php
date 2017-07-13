@@ -76,6 +76,21 @@
         <th colspan="100%">Total: <?=$pagination_config['total_rows']?></th>
     </tfoot>
 </table>
+<div>
+<?php $cnct = ''; ?>
+<?php for($ym = "2017-07"; $ym <= date("Y-m"); $ym = date("Y-m", strtotime('+1 month', strtotime($ym.'-01')))): ?>
+    <?=$cnct?>
+    <a class="clickHidden" href="<?=
+    base_url().
+    $this->router->fetch_class().
+    '/exportar/'.
+    date("Y/m", strtotime($ym))
+    ?>">Exportar <?=
+    date("m/Y", strtotime($ym.'-01'))
+    ?></a>
+    <?php $cnct = '|'; ?>
+<?php endfor; ?>
+</div>
 
 <div id="tab_medicos" class="tab_hidden">
     <select name="id_medicos" style="width:120px;">
