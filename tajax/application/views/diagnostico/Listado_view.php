@@ -3,9 +3,9 @@
     <tbody>
         <tr class="trDate">
             <td colspan="100%" class="aBtnL">
-                <a href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['ayer'])?>">Anterior</a>
+                <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['ayer'])?>">Anterior</a>
                 <strong style="margin:0 10px;"><?=utf8_encode(dateLegible($date))?></strong>
-                <a href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['mana'])?>">Siguiente</a>
+                <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['mana'])?>">Siguiente</a>
                 <!--
                 <a href="<?=base_url().$this->router->fetch_class().'/form_agregar/'.$date?>">Sacar un Turno por la Mañana</a>
                 <a href="<?=base_url().$this->router->fetch_class().'/form_agregar/'.$date?>">Sacar un Turno por la Tarde</a>
@@ -30,6 +30,7 @@
             <td>TA</td>
             <td>DD</td>
             <td>Derivador</td>
+            <td>Acciones</td>
         </tr>
         <tr><td colspan="100%" class="aBtnL"><?=$pagination_links;?></td></tr>
         <?php if (count($listado) > 0) : ?>
@@ -40,9 +41,9 @@
                 $colr = " style=\"color:#{$item['color']};text-align:right;\"";
                 $idme = 'class="tdTab" data-id="'.$item['id_turnos_estudios'].'" data-method=';
                 ?>
-                <tr class="tsEst<?=$item['estado']?>">
+                <tr class="tsEst<?=$item['estado']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
                     <td<?=$coln?>><?=$item['hora']?></td>
-                    <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode($item['pacientes'])))))?></td>
+                    <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
                     <td<?=$coln?>><?=ucwords(strtolower($item['turnos_estados']))?></td>
                     <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode($item['estudios'])))))?></td>
                     <!--td<?=$coln?> class="aBtnL">
@@ -61,6 +62,7 @@
                     <td<?=$colr.$idme?>"trajo_arancel"><?=$item['trajo_arancel'] > 0 ? "\$&nbsp;{$item['trajo_arancel']}" : '---'?></td>
                     <td<?=$colr.$idme?>"deja_deposito"><?=$item['deja_deposito'] > 0 ? "\$&nbsp;{$item['deja_deposito']}" : '---'?></td>
                     <td<?=$colr.$idme?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
+                    <td<?=$colr.$idme?>"save"></td>
                 </tr>
             <?php endforeach;?>
         <?php else: ?>
@@ -103,7 +105,7 @@
         <?php endforeach; ?>
     </select>
 </div>
-<div id="tab_fecha_presentacion" class="tab_hidden"><input type="text" name="fecha_presentacion" value="" style="width:80px;" /></div>
+<div id="tab_fecha_presentacion" class="tab_hidden"><input type="text" name="fecha_presentacion" value="" style="width:80px;" class="datepicker" /></div>
 <div id="tab_nro_orden" class="tab_hidden"><input type="text" name="nro_orden" value="" style="width:70px;" /></div>
 <div id="tab_nro_afiliado" class="tab_hidden"><input type="text" name="nro_afiliado" value="" style="width:70px;" /></div>
 <div id="tab_cantidad" class="tab_hidden"><input type="text" name="cantidad" value="" style="width:40px;text-align:right;" /></div>
@@ -131,9 +133,17 @@
 <div id="tab_trajo_arancel" class="tab_hidden"><input type="number" name="trajo_arancel" value="" style="width:40px;text-align:right;" /></div>
 <div id="tab_deja_deposito" class="tab_hidden"><input type="number" name="deja_deposito" value="" style="width:40px;text-align:right;" /></div>
 <div id="tab_matricula_derivacion" class="tab_hidden"><input type="text" name="matricula_derivacion" value="" style="width:70px;text-align:right;" class="ac_matricula_derivacion" /></div>
+<div id="tab_save" class="tab_hidden"><input type="button" value="Guardar" /></div>
 
 <script>
 $(document).ready(function(){
+    var tagsACMD = [
+        <?php $cnct = ''; ?>
+        <?php foreach ($medicos_cm AS $rs_mcm): ?>
+            <?=$cnct?>{label: '<?=utf8_encode(trim(utf8_decode($rs_mcm['apellidos'])))?>, <?=utf8_encode(trim(utf8_decode($rs_mcm['nombres'])))?> - <?=$rs_mcm['matricula']?>', value: '<?=$rs_mcm['matricula']?>'}
+            <?php $cnct = ','; ?>
+        <?php endforeach; ?>
+    ];
     $('#diagnosticos_medicos a').click(function(event){
         event.preventDefault();
         ajxM = $.ajax({
@@ -144,56 +154,94 @@ $(document).ready(function(){
             $('#diagnosticos_medicos').html(data);
         });
     });
+    $('.clickHidden').click(function(){
+        $('.clickHidden').each(function(){
+            $(this).attr('style', 'visibility:hidden;');
+        })
+    })
     $('.tdTab').dblclick(function(event){
         if (event.target == this) {
-            var valDefault = $(this).html().replace('$&nbsp;', '').replace('---', '');
-            $(this).html($('#tab_' + $(this).data('method')).html());
-            switch ($(this).find('input, select').prop('tagName')) {
-                case 'INPUT':
-                    $(this).find('input').val(valDefault);
-                    break;
-                case 'SELECT':
-                    if (console && console.log) console.log(valDefault.toLowerCase());
-                    $(this).find('select option').each(function(){
-                        if ($(this).html().toLowerCase() == valDefault.toLowerCase()) {
-                            if (console && console.log) console.log('si ' + $(this).html().toLowerCase());
-                            $(this).attr("selected", true);
-                        } else {
-                            if (console && console.log) console.log('no' + $(this).html().toLowerCase());
-                        }
+            $(this).parent().find('.tdTab').each(function(){
+                var valDefault = $(this).html().replace('$&nbsp;', '').replace('---', '');
+                if (valDefault[0] != '<') {
+                    $(this).html($('#tab_' + $(this).data('method')).html());
+                    switch ($(this).find('input, select').prop('tagName')) {
+                        case 'INPUT':
+                            if ($(this).find('input').attr('type') != 'button') {
+                                $(this).find('input').val(valDefault);
+                            }
+                            break;
+                        case 'SELECT':
+                            if (console && console.log) console.log(valDefault.toLowerCase());
+                            $(this).find('select option').each(function(){
+                                if ($(this).html().toLowerCase() == valDefault.toLowerCase()) {
+                                    if (console && console.log) console.log('si ' + $(this).html().toLowerCase());
+                                    $(this).attr("selected", true);
+                                } else {
+                                    if (console && console.log) console.log('no' + $(this).html().toLowerCase());
+                                }
+                            });
+                            break;
+                    }
+                    $(this).find('.ac_matricula_derivacion').autocomplete({
+                        source: tagsACMD
                     });
-                    break;
-            }
-            $(this).find('input, select').focus();
-            var tagsACMD = [
-                <?php $cnct = ''; ?>
-                <?php foreach ($medicos_cm AS $rs_mcm): ?>
-                    <?=$cnct?>{label: '<?=utf8_encode(trim(utf8_decode($rs_mcm['apellidos'])))?>, <?=utf8_encode(trim(utf8_decode($rs_mcm['nombres'])))?> - <?=$rs_mcm['matricula']?>', value: '<?=$rs_mcm['matricula']?>'}
-                    <?php $cnct = ','; ?>
-                <?php endforeach; ?>
-            ];
-            $(".ac_matricula_derivacion").autocomplete({
-                source: tagsACMD
-            });
-            $('.tdTab select, .tdTab input').attr('data-id', $(this).data('id'));
-            $('.tdTab input, .tdTab select').focusout(function(){
-                var my_id = $(this).data('id');
-                var my_name = $(this).attr('name');
-                var my_value = $(this).val();
-                var layer = $(this).parent();
-                $(this).parent().html('&#8634;');
-                ajxM = $.ajax({
-                    type: 'POST',
-                    data: {
-                        id: my_id,
-                        name: my_name,
-                        value: my_value
-                    },
-                    url: '<?=base_url()?>diagnostico/save',
-                    context: layer
-                }).done(function(data) {
-                     $(this).html(data);
-                });
+                    $(this).find('.datepicker').datepicker();
+                    $(this).find('input[type="button"]').attr('data-id', $(this).data('id'));
+                    $(this).find('input[type="button"]').click(function(){
+                        $(this).parent().html('');
+                        var pre_d = '#id_te_' + $(this).data('id') + ' *[data-method="';
+                        var pre_i = '#id_te_' + $(this).data('id') + ' input[name="';
+                        var pre_s = '#id_te_' + $(this).data('id') + ' select[name="';
+                        var pos = '"]';
+                        var serialized;
+                        serialized = 'id_turnos_estudios=' + $(this).data('id');
+                        serialized+= '&id_medicos=' + $(pre_s + 'id_medicos' + pos).val();
+                        serialized+= '&id_obras_sociales=' + $(pre_s + 'id_obras_sociales' + pos).val();
+                        serialized+= '&fecha_presentacion=' + $(pre_i + 'fecha_presentacion' + pos).val();
+                        serialized+= '&nro_orden=' + $(pre_i + 'nro_orden' + pos).val();
+                        serialized+= '&nro_afiliado=' + $(pre_i + 'nro_afiliado' + pos).val();
+                        serialized+= '&cantidad=' + $(pre_i + 'cantidad' + pos).val();
+                        serialized+= '&tipo=' + $(pre_s + 'tipo' + pos).val();
+                        serialized+= '&trajo_pedido=' + $(pre_s + 'trajo_pedido' + pos).val();
+                        serialized+= '&trajo_orden=' + $(pre_s + 'trajo_orden' + pos).val();
+                        serialized+= '&trajo_arancel=' + $(pre_i + 'trajo_arancel' + pos).val();
+                        serialized+= '&deja_deposito=' + $(pre_i + 'deja_deposito' + pos).val();
+                        serialized+= '&matricula_derivacion=' + $(pre_i + 'matricula_derivacion' + pos).val();
+                        $(pre_d + 'medicos' + pos).html('&#8634;');
+                        $(pre_d + 'obras_sociales' + pos).html('&#8634;');
+                        $(pre_d + 'fecha_presentacion' + pos).html('&#8634;');
+                        $(pre_d + 'nro_orden' + pos).html('&#8634;');
+                        $(pre_d + 'nro_afiliado' + pos).html('&#8634;');
+                        $(pre_d + 'cantidad' + pos).html('&#8634;');
+                        $(pre_d + 'tipo' + pos).html('&#8634;');
+                        $(pre_d + 'trajo_pedido' + pos).html('&#8634;');
+                        $(pre_d + 'trajo_orden' + pos).html('&#8634;');
+                        $(pre_d + 'trajo_arancel' + pos).html('&#8634;');
+                        $(pre_d + 'deja_deposito' + pos).html('&#8634;');
+                        $(pre_d + 'matricula_derivacion' + pos).html('&#8634;');
+                        ajxM = $.ajax({
+                            type: 'POST',
+                            data: serialized,
+                            url: '<?=base_url()?>diagnostico/savediagnostico',
+                            context: $('#id_te_' + $(this).data('id'))
+                        }).done(function(data) {
+                            var dataJSON = JSON && JSON.parse(data) || $.parseJSON(data);
+                            $(pre_d + 'medicos' + pos).html(dataJSON['id_medicos']);
+                            $(pre_d + 'obras_sociales' + pos).html(dataJSON['id_obras_sociales']);
+                            $(pre_d + 'fecha_presentacion' + pos).html(dataJSON['fecha_presentacion']);
+                            $(pre_d + 'nro_orden' + pos).html(dataJSON['nro_orden']);
+                            $(pre_d + 'nro_afiliado' + pos).html(dataJSON['nro_afiliado']);
+                            $(pre_d + 'cantidad' + pos).html(dataJSON['cantidad']);
+                            $(pre_d + 'tipo' + pos).html(dataJSON['tipo']);
+                            $(pre_d + 'trajo_pedido' + pos).html(dataJSON['trajo_pedido']);
+                            $(pre_d + 'trajo_orden' + pos).html(dataJSON['trajo_orden']);
+                            $(pre_d + 'trajo_arancel' + pos).html(dataJSON['trajo_arancel']);
+                            $(pre_d + 'deja_deposito' + pos).html(dataJSON['deja_deposito']);
+                            $(pre_d + 'matricula_derivacion' + pos).html(dataJSON['matricula_derivacion']);
+                        });
+                    });
+                }
             });
         }
     });

@@ -259,106 +259,105 @@ SQL;
         ;
     }
 
-    function save($post)
+    function saveDiagnostico($post)
     {
-        if ($post['name'] == 'fecha_presentacion') {
-            $post['value'] = implode("-", array_reverse(explode("/", $post['value'])));
-        }
+        $id_turnos_estudios = $post['id_turnos_estudios'];
+        unset($post['id_turnos_estudios']);
+        $post['fecha_presentacion'] = implode("-", array_reverse(explode("/", $post['fecha_presentacion'])));
         $this->db
-            ->where('id_turnos_estudios', $post['id'])
-            ->update(
-                'turnos_estudios',
-                array(
-                    $post['name'] => $post['value']
-                )
-            )
+            ->where('id_turnos_estudios', $id_turnos_estudios)
+            ->update('turnos_estudios', $post)
         ;
         $query = $this->db
-            ->select($post['name'])
             ->from('turnos_estudios')
-            ->where('id_turnos_estudios', $post['id'])
+            ->where('id_turnos_estudios', $id_turnos_estudios)
             ->limit(1)
             ->get()
             ->result_array()
         ;
         if (count($query) == 1) {
-            switch ($post['name']) {
-                case "id_medicos":
-                    $query = $this->db
-                        ->from('medicos')
-                        ->where('id_medicos', $query[0][$post['name']])
-                        ->get()
-                        ->result_array()
-                    ;
-                    if (count($query) > 0) {
-                        return utf8_encode(ucwords(lower(trim(utf8_decode(
-                            $query[0]['saludo'].' '.$query[0]['apellidos'].', '.$query[0]['nombres']
-                        )))));
-                    } else {
-                        return '---';
-                    }
-                    break;
-                case "id_obras_sociales":
-                    $query = $this->db
-                        ->from('obras_sociales')
-                        ->where('id_obras_sociales', $query[0][$post['name']])
-                        ->get()
-                        ->result_array()
-                    ;
-                    if (count($query) > 0) {
-                        return $query[0]['abreviacion'];
-                    } else {
-                        return '---';
-                    }
-                    break;
-                case "tipo":
-                    if ($query[0][$post['name']] == '1') {
-                        return 'A';
-                    } elseif ($query[0][$post['name']] == '2') {
-                        return 'I';
-                    } else {
-                        return '---';
-                    }
-                    break;
-                case "trajo_pedido":
-                    if ($query[0][$post['name']] == '1') {
-                        return 'TP';
-                    } elseif ($query[0][$post['name']] == '2') {
-                        return 'No';
-                    } else {
-                        return '---';
-                    }
-                    break;
-                case "trajo_orden":
-                    if ($query[0][$post['name']] == '1') {
-                        return 'TO';
-                    } elseif ($query[0][$post['name']] == '2') {
-                        return 'No';
-                    } else {
-                        return '---';
-                    }
-                    break;
-                case "trajo_arancel":
-                case "deja_deposito":
-                    if ($query[0][$post['name']] > 0) {
-                        return "\$&nbsp;{$query[0][$post['name']]}";
-                    } else {
-                        return '---';
-                    }
-                    break;
-                case "fecha_presentacion":
-                    return date("d/m/Y", strtotime($query[0][$post['name']]));
-                    break;
-                default:
-                    if (trim($query[0][$post['name']]) != '') {
-                        return $query[0][$post['name']];
-                    } else {
-                        return '---';
-                    }
-                    break;
+            $query_med = $this->db
+                ->from('medicos')
+                ->where('id_medicos', $query[0]['id_medicos'])
+                ->get()
+                ->result_array()
+            ;
+            if (count($query_med) > 0) {
+                $query[0]['id_medicos'] = utf8_encode(ucwords(lower(trim(utf8_decode(
+                    $query_med[0]['saludo'].' '.$query_med[0]['apellidos'].', '.$query_med[0]['nombres']
+                )))));
+            } else {
+                $query[0]['id_medicos'] = '---';
             }
+
+            $query_os = $this->db
+                ->from('obras_sociales')
+                ->where('id_obras_sociales', $query[0]['id_obras_sociales'])
+                ->get()
+                ->result_array()
+            ;
+            if (count($query_os) > 0) {
+                $query[0]['id_obras_sociales'] = $query_os[0]['abreviacion'];
+            } else {
+                $query[0]['id_obras_sociales'] = '---';
+            }
+
+            $query[0]['fecha_presentacion'] = date("d/m/Y", strtotime($query[0]['fecha_presentacion']));
+
+            if (trim($query[0]['nro_orden']) == '') {
+                $query[0]['nro_orden'] = '---';
+            }
+
+            if (trim($query[0]['nro_afiliado']) == '') {
+                $query[0]['nro_afiliado'] = '---';
+            }
+
+            if (trim($query[0]['cantidad']) == '') {
+                $query[0]['cantidad'] = '---';
+            }
+
+            if ($query[0]['tipo'] == '1') {
+                $query[0]['tipo'] = 'A';
+            } elseif ($query[0]['tipo'] == '2') {
+                $query[0]['tipo'] = 'I';
+            } else {
+                $query[0]['tipo'] = '---';
+            }
+
+            if ($query[0]['trajo_pedido'] == '1') {
+                $query[0]['trajo_pedido'] = 'TP';
+            } elseif ($query[0]['trajo_pedido'] == '2') {
+                $query[0]['trajo_pedido'] = 'No';
+            } else {
+                $query[0]['trajo_pedido'] = '---';
+            }
+
+            if ($query[0]['trajo_orden'] == '1') {
+                $query[0]['trajo_orden'] = 'TO';
+            } elseif ($query[0]['trajo_orden'] == '2') {
+                $query[0]['trajo_orden'] = 'No';
+            } else {
+                $query[0]['trajo_orden'] = '---';
+            }
+
+            if ($query[0]['trajo_arancel'] > 0) {
+                $query[0]['trajo_arancel'] = "\$&nbsp;{$query[0]['trajo_arancel']}";
+            } else {
+                $query[0]['trajo_arancel'] = '---';
+            }
+
+            if ($query[0]['deja_deposito'] > 0) {
+                $query[0]['deja_deposito'] = "\$&nbsp;{$query[0]['deja_deposito']}";
+            } else {
+                $query[0]['deja_deposito'] = '---';
+            }
+
+            if (trim($query[0]['matricula_derivacion']) == '') {
+                $query[0]['matricula_derivacion'] = '---';
+            }
+            return $query[0];
         } else {
-            return '---';
+            return array();
         }
     }
 

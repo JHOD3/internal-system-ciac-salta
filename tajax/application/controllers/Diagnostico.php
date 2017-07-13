@@ -27,9 +27,9 @@ class Diagnostico extends CI_Controller {
         $this->load->view($this->router->fetch_class().'/Listado_view', $dataView);
     }
 
-    public function save()
+    public function savediagnostico()
     {
-        print $this->Model->save($this->input->post());
+        print utf8_encode(json_encode($this->Model->saveDiagnostico($this->input->post())));
     }
 
 }
