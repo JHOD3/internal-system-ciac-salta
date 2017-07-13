@@ -6,10 +6,6 @@
                 <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['ayer'])?>">Anterior</a>
                 <strong style="margin:0 10px;"><?=utf8_encode(dateLegible($date))?></strong>
                 <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['mana'])?>">Siguiente</a>
-                <!--
-                <a href="<?=base_url().$this->router->fetch_class().'/form_agregar/'.$date?>">Sacar un Turno por la Mañana</a>
-                <a href="<?=base_url().$this->router->fetch_class().'/form_agregar/'.$date?>">Sacar un Turno por la Tarde</a>
-                //-->
             </td>
         </tr>
         <tr class="trHead">
@@ -17,7 +13,6 @@
             <td>Paciente</td>
             <td>Estado</td>
             <td>Estudio</td>
-            <!--td>Acción</td//-->
             <td>Realizador</td>
             <td>O.Social</td>
             <td>Presentación</td>
@@ -46,10 +41,6 @@
                     <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
                     <td<?=$coln?>><?=ucwords(strtolower($item['turnos_estados']))?></td>
                     <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode($item['estudios'])))))?></td>
-                    <!--td<?=$coln?> class="aBtnL">
-                        <a href="<?=base_url().$this->router->fetch_class()?>/form_modificar/<?=$item['id_turnos']?>">Modificar</a>
-                        <a href="<?=base_url().$this->router->fetch_class()?>/form_borrar/<?=$item['id_turnos']?>">Eliminar</a>
-                    </td//-->
                     <td<?=$coln.$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(lower(trim(utf8_decode($item['medicos']))))) : '---'?></td>
                     <td<?=$coln.$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
                     <td<?=$coln.$idme?>"fecha_presentacion"><?=$item['fecha_presentacion'] ? date("d/m/Y", strtotime($item['fecha_presentacion'])) : '---'?></td>
@@ -80,7 +71,7 @@
 <?php $cnct = ''; ?>
 <?php for($ym = "2017-07"; $ym <= date("Y-m"); $ym = date("Y-m", strtotime('+1 month', strtotime($ym.'-01')))): ?>
     <?=$cnct?>
-    <a class="clickHidden" href="<?=
+    <a href="<?=
     base_url().
     $this->router->fetch_class().
     '/exportar/'.
@@ -159,7 +150,7 @@ $(document).ready(function(){
             <?php $cnct = ','; ?>
         <?php endforeach; ?>
     ];
-    $('#diagnosticos_medicos a').click(function(event){
+    $('#diagnosticos_medicos .aBtnL a').click(function(event){
         event.preventDefault();
         ajxM = $.ajax({
             type: 'POST',
