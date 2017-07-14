@@ -281,13 +281,13 @@
         		var tipo = $(this).data("tipo");
         		var titulo = $(this).data("titulo");
                 var id = $(this).data("id");
-        
+
         		IniciarVentana("ventana_menu", "abrir", tabla);
         		$(ventana_menu).html('');
         		$(ventana_menu).dialog('option', 'title', 'Editar Paciente');
         		$(ventana_menu).dialog( "open" );
         		$(ventana_menu).focus();
-        
+
         		$(ventana_menu).dialog({
         		  autoOpen: false,
         		  height: 670,
@@ -295,7 +295,7 @@
         		  modal: true,
         		  close: function() {  }
         		});
-        
+
         		$.ajax({
         			type: "POST",
         			url: "../ajax/admin_form.php",
@@ -312,7 +312,7 @@
         				alert ("error");
         			}
         		});
-        
+
         		$(ventana_menu).dialog('option', 'title', titulo);
         		$(ventana_menu).dialog( "open" );
         	}else{
@@ -357,17 +357,17 @@
         	if (console && console.log) console.log('click eliminar');
         	var id = $(this).data("id");
         	var tabla = $(this).data("tabla");
-        	
+
         	$("#dialog_eliminar").dialog({
         		resizable: false,
         		height:200,
         		modal: true,
         		buttons: {
         			"Aceptar": function() {
-        				$.ajax({  
-        					type: "POST",   
+        				$.ajax({
+        					type: "POST",
         					url: "../ajax/bajas.php",
-        					data: {tabla:tabla, id: id}, 
+        					data: {tabla:tabla, id: id},
         					beforeSend: function() {
         						$("#mje").html("Enviando información...");
         					},
@@ -381,7 +381,7 @@
         							break;
         							case 'medicos_obras_sociales':
         								TableMedicosObrasSociales.fnDraw();
-        							break;		
+        							break;
         						};
         						alert(requestData);
                                 $('.btn_eliminar[data-id="' + id + '"]').parent().parent().find('td').attr('style', 'color:#900;font-weight:bold;text-decoration:line-through;');
@@ -406,6 +406,7 @@
 </head>
 
 <body id="sam">
+    <div id="notLayer"></div>
     <div id="dieAjaxNovedadesDiv"></div>
 	<!--script type="text/javascript" src="../blab_im_free/bar.php"></script//-->
     <div id="mensaje_gral" class="oculto">
