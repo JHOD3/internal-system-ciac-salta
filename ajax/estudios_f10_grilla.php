@@ -1,5 +1,6 @@
 <?php
 require_once("../engine/config.php");
+require_once("../engine/restringir_acceso.php");
 requerir_class("tpl","querys","mysql","estructura","json");
 
 $this_db = new MySQL();

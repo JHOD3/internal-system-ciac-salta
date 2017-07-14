@@ -17,14 +17,14 @@ $(document).ready(function(){
 			var usr = $("#usuario").val();
 			var pass = $("#password").val();
 			var captcha = $("#captcha").val();
-			$.ajax({   
+			$.ajax({
 				//dataType: "html",
-				type: "POST",   
+				type: "POST",
 				url: "[URL]ajax/valida_login.php",
-				data: {usr: usr, pass: pass, captcha: captcha, sistema: "sam"}, 
+				data: {usr: usr, pass: pass, captcha: captcha, sistema: "sam"},
 				beforeSend: function() {
 					$('#mje_login')
-					.fadeOut("fast")   
+					.fadeOut("fast")
 					.html("Verificando... Espere ...");
 				},
 				success: function(requestData){
@@ -53,8 +53,8 @@ $(document).ready(function(){
 				error: function(requestData){
 					alert ("error");
 				}
-			});   	
-			return false; 
+			});
+			return false;
 		}
 	});
 

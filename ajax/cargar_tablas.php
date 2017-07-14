@@ -1,6 +1,7 @@
 <?php
 set_time_limit(0);
 require_once("../engine/config.php");
+require_once("../engine/restringir_acceso.php");
 requerir_class("tpl","querys","mysql","estructura");
 
 requerir_class(

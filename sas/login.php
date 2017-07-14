@@ -10,6 +10,12 @@ $htm_gral = $obj_estructura->html("gral_login");
 
 $htm_login = $obj_estructura->html("sas/login");
 
+switch ($_GET['err']) {
+    case "1": $error = 'La sesi&oacute;n ha expirado. Por favor identif&iacute;quese nuevamente. Muchas Gracias!'; break;
+    default: $error = ''; break;
+}
+$htm_gral->Asigna("ERROR", $error);
+
 $htm_gral->Asigna("TITULO_SISTEMA", "SAS - Sistema de Administraci&oacute;n de Secretar&iacute;a");
 $htm_gral->Asigna("CUERPO", $htm_login->Muestra());
 

@@ -27,7 +27,7 @@ switch($sistema){
 		$rta = $obj_medicos->ValidaLogueo($usuario, $password);
 	break;
 	case "sag":
-	
+
 	break;
 }
 echo ($rta);

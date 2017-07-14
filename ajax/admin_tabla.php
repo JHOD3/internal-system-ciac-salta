@@ -1,5 +1,6 @@
 <?php
 require_once("../engine/config.php");
+require_once("../engine/restringir_acceso.php");
 requerir_class("tpl","querys","mysql","estructura","json");
 
 $tabla = $_POST["tabla"];
@@ -14,15 +15,14 @@ if ($tabla == 'novedades') {
     $obj = new $clase();
 
     if (isset($_POST["id_padre"]) && $_POST["id_padre"] != ""){
-    	$rta = $obj->PanelAdmin($_POST["id_padre"]);	
+    	$rta = $obj->PanelAdmin($_POST["id_padre"]);
     }else{
     	$rta = $obj->PanelAdmin();
     }
 
-    /*$json = new Services_JSON();				
+    /*$json = new Services_JSON();
     $myjson = $json->encode($rta);*/
 
     echo $rta;
 }
-
 //EOF admin_tabla.php

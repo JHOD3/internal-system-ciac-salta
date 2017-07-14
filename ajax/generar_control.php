@@ -1,5 +1,6 @@
 <?php
 require_once("../engine/config.php");
+require_once("../engine/restringir_acceso.php");
 requerir_class("tpl","querys","mysql","estructura");
 
 $tipo = $_POST["tipo"];
@@ -17,7 +18,7 @@ switch ($tabla){
 		$obj = new $clase($valor);
 	break;
 	default:
-		$obj = new $clase();	
+		$obj = new $clase();
 }
 
 switch ($tipo){
@@ -63,7 +64,7 @@ switch ($tipo){
 	break;
 	case "turnos_todos":
 		$obj = new $clase($valor);
-	
+
 		$id_especialidad = $_POST["id_especialidad"];
 		$fecha = $_POST["fecha"];
 		$horarios = $_POST["horarios"];
@@ -72,7 +73,7 @@ switch ($tipo){
 	break;
 	case "cobros":
 		$obj = new $clase($valor);
-	
+
 		$id_especialidad = $_POST["id_especialidad"];
 		$fecha = $_POST["fecha"];
 		$horarios = $_POST["horarios"];
@@ -82,7 +83,7 @@ switch ($tipo){
 	case 'estudios_turno':
 		$resp = $obj->EstudiosTurnos();
 	break;
-	
+
 }
 
 echo $resp;

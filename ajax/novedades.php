@@ -1,6 +1,7 @@
 <?php
 if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-1')) {
     require_once("../engine/config.php");
+    require_once("../engine/restringir_acceso.php");
     requerir_class("tpl","querys","mysql","estructura","json");
 
     $this_db = new MySQL();
