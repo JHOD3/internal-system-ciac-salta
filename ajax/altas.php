@@ -108,7 +108,7 @@ switch ($tabla){
 					'".strtoupper(utf8_decode($domicilio))."',
 					'".strtoupper($email)."',
 					1,
-					'".utf8_encode(strtolower($obj->QuitarTildes($nombres[0].$apellidos)))."',
+					'".strtolower($obj->QuitarTildes(utf8_encode($nombres[0].$apellidos)))."',
 					'".base64_encode($nro_documento)."',
 					'".$particular_consulta."',
 					".$sectores.",
