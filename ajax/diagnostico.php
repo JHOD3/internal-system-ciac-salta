@@ -3,6 +3,8 @@ require_once ("../engine/config.php");
 require_once ("../engine/restringir_acceso.php");
 requerir_class("tpl","mysql","querys","estructura");
 
+defined('ID_ESPECIALIDADES')   OR define('ID_ESPECIALIDADES', 33);
+
 //requerir_class("dias_semana");
 $this_db = new MySQL();
 
@@ -42,6 +44,22 @@ function doSaludo($rsMedico, $prefix = true)
     $str.= utf8_encode(ucwords(lower(trim($rsMedico['nombres']))));
     return $str;
 }
+
+$SQL_esp = <<<SQL
+    SELECT
+        t.id_especialidades
+    FROM
+        turnos AS t
+    WHERE
+        t.id_turnos = '{$_POST['id_turno']}' AND
+        t.estado = 1
+    LIMIT 1
+SQL;
+$query_esp = $this_db->consulta($SQL_esp);
+
+if ($row_esp = $this_db->fetch_assoc($query_esp) and $row_esp['id_especialidades'] == ID_ESPECIALIDADES) {
+// IF NO ANIDADO
+
 
 $SQL_med = <<<SQL
     SELECT
@@ -106,7 +124,6 @@ $SQL = <<<SQL
         turnos AS t
         ON te.id_turnos = t.id_turnos
     WHERE
-        e.codigopractica > 0 AND
         te.estado = 1 AND
         te.id_turnos = '{$_POST['id_turno']}'
     ORDER BY
@@ -293,3 +310,9 @@ $query = $this_db->consulta($SQL);
     background-color: #fff;
 }
 </style>
+<?php
+
+// IF NO ANIDADO
+}
+
+//EOF diagnostico.php
