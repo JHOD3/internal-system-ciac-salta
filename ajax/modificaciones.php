@@ -74,8 +74,6 @@ switch ($tabla){
 					nro_documento = '".$nro_documento."',
 					domicilio = '".strtoupper(utf8_decode($domicilio))."',
 					email = '".strtoupper($email)."',
-					usuario = '".strtolower($obj->QuitarTildes($nombres[0].$apellidos))."',
-					pass = '".base64_encode($nro_documento)."',
 					particular_consulta = '".$particular_consulta."',
 					id_sectores = ".$sectores.",
 					nro_sector = '".strtoupper(utf8_decode($nro_sector))."',
@@ -83,6 +81,8 @@ switch ($tabla){
 					matricula = ".$matricula.",
                     saludo = '".$saludo."'
 					";
+		#usuario = '".strtolower($obj->QuitarTildes($nombres[0].$apellidos))."',
+		#pass = '".base64_encode($nro_documento)."',
 
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
 
