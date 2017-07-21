@@ -9,16 +9,18 @@ class Diagnostico extends CI_Controller {
         $this->load->model($this->router->fetch_class().'_model', 'Model');
     }
 
-    public function listado($date, $offset = 0)
+    public function listado($date1, $date2, $offset = 0)
     {
-        $dataView = $this->Model->obtenerPaginacion($date);
-        $dataView['date'] = $date;
+        $dataView = $this->Model->obtenerPaginacion($date1, $date2);
+        $dataView['date1'] = $date1;
+        $dataView['date2'] = $date2;
         $dataView['listado'] = $this->Model->obtenerListado(
-            $date,
+            $date1,
+            $date2,
             $dataView['pagination_config']['per_page'],
             $offset
         );
-        $dataView['ds'] = $this->Model->obtDiasSemanaDiagnostico($date);
+        #$dataView['ds'] = $this->Model->obtDiasSemanaDiagnostico($date1, $date2);
 
         $dataView['medicos'] = $this->Model->obtMedicos();
         $dataView['medicos_cm'] = $this->Model->obtMedicosConMatriculas();
@@ -32,12 +34,12 @@ class Diagnostico extends CI_Controller {
         print utf8_encode(json_encode($this->Model->saveDiagnostico($this->input->post())));
     }
 
-    public function exportar($year, $month)
+    public function exportar($date1, $date2)
     {
         $this->load->library('table');
-        $dataView['year'] = $year;
-        $dataView['month'] = $month;
-        $dataView['aDiagnosticos'] = $this->Model->obtDiagnosticosExport($year, $month);
+        $dataView['date1'] = $date1;
+        $dataView['date2'] = $date2;
+        $dataView['aDiagnosticos'] = $this->Model->obtDiagnosticosExport($date1, $date2);
         $this->table->set_heading(
             'Nro de Paciente',
             'Paciente',

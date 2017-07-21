@@ -3,9 +3,18 @@
     <tbody>
         <tr class="trDate">
             <td colspan="100%" class="aBtnL">
+                Desde:
+                <input type="text" id="date1" value="<?=date("d/m/Y", strtotime($date1))?>" class="datepicker" /> -
+                Hasta:
+                <input type="text" id="date2" value="<?=date("d/m/Y", strtotime($date2))?>" class="datepicker" />
+                <input type="button" id="dateok" value="ok" />
+                <?php
+                /*
                 <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['ayer'])?>">Anterior</a>
                 <strong style="margin:0 10px;"><?=utf8_encode(dateLegible($date))?></strong>
                 <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['mana'])?>">Siguiente</a>
+                */
+                ?>
             </td>
         </tr>
         <tr class="trHead">
@@ -68,19 +77,7 @@
     </tfoot>
 </table>
 <div>
-<?php $cnct = ''; ?>
-<?php for($ym = "2017-07"; $ym <= date("Y-m"); $ym = date("Y-m", strtotime('+1 month', strtotime($ym.'-01')))): ?>
-    <?=$cnct?>
-    <a href="<?=
-    base_url().
-    $this->router->fetch_class().
-    '/exportar/'.
-    date("Y/m", strtotime($ym))
-    ?>">Exportar <?=
-    date("m/Y", strtotime($ym.'-01'))
-    ?></a>
-    <?php $cnct = '|'; ?>
-<?php endfor; ?>
+<a href="<?=base_url().$this->router->fetch_class().'/exportar/'.$date1.'/'.$date2?>">Exportar Listado</a>
 </div>
 
 <div id="tab_medicos" class="tab_hidden">
@@ -143,6 +140,25 @@
 
 <script>
 $(document).ready(function(){
+    $('.datepicker').datepicker();
+    $('#dateok').click(function(){
+        var d1 = $('#date1').val().split('/');
+        var d2 = $('#date2').val().split('/');
+        $('#date1').attr('disabled', 'disabled');
+        $('#date2').attr('disabled', 'disabled');
+        $('#dateok').remove();
+        ajxM = $.ajax({
+            type: 'POST',
+            url:
+                '<?=base_url().$this->router->fetch_class().'/listado/'?>' +
+                d1[2] + '-' + d1[1] + '-' + d1[0] + '/' +
+                d2[2] + '-' + d2[1] + '-' + d2[0]
+            ,
+            context: document.body
+        }).done(function(data) {
+            $('#diagnosticos_medicos').html(data);
+        });
+    })
     var tagsACMD = [
         <?php $cnct = ''; ?>
         <?php foreach ($medicos_cm AS $rs_mcm): ?>

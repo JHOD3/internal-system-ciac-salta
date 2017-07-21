@@ -41,12 +41,12 @@ class Diagnostico_model extends CI_Model
         return ($this->form_validation->run() != FALSE);
     }
 
-    function obtenerPaginacion($date)
+    function obtenerPaginacion($date1, $date2)
     {
         $config = array(
-            'base_url' => base_url().$this->router->fetch_class().'/listado/'.$date.'/',
-            'total_rows' => $this->obtenerListadoCount($date),
-            'per_page' => 50
+            'base_url' => base_url().$this->router->fetch_class().'/listado/'.$date1.'/'.$date2.'/',
+            'total_rows' => $this->obtenerListadoCount($date1, $date2),
+            'per_page' => 100
         );
         $this->pagination->initialize($config);
         return array(
@@ -80,7 +80,7 @@ class Diagnostico_model extends CI_Model
         }
     }
 
-    function obtenerListadoCount($date)
+    function obtenerListadoCount($date1, $date2)
     {
         $query = $this->db
             ->select('COUNT(t.id_turnos) AS Count')
@@ -89,15 +89,15 @@ class Diagnostico_model extends CI_Model
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios')
             ->where('t.id_especialidades', ID_ESPECIALIDADES)
             ->where('t.estado', 1)
-            ->where('t.fecha', $date)
-            ->where('e.codigopractica >', 0)
+            ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
+            #->where('e.codigopractica >', 0)
             ->get()
             ->result_array()
         ;
         return $query[0]['Count'];
     }
 
-    function obtenerListado($date, $limit, $offset)
+    function obtenerListado($date1, $date2, $limit, $offset)
     {
         $query = $this->db
             ->select("
@@ -120,8 +120,8 @@ class Diagnostico_model extends CI_Model
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
             ->where('t.id_especialidades', ID_ESPECIALIDADES)
             ->where('t.estado', 1)
-            ->where('t.fecha', $date)
-            ->where('e.codigopractica >', 0)
+            ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
+            #->where('e.codigopractica >', 0)
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
             ->limit($limit, $offset)
             ->get()
@@ -132,8 +132,8 @@ class Diagnostico_model extends CI_Model
         }
         return $query;
     }
-
-    public function obtDiasSemanaDiagnostico($date){
+/*
+    public function obtDiasSemanaDiagnostico($date1, $date2){
         $query = $this->db
             ->select('id_dias_semana')
             ->from('medicos_horarios')
@@ -171,7 +171,7 @@ class Diagnostico_model extends CI_Model
 
         return $dataView;
     }
-
+*/
     public function obtMedicos()
     {
         $query = <<<SQL
@@ -233,9 +233,8 @@ SQL;
         return $this->db->query($query)->result_array();
     }
 
-    public function obtDiagnosticosExport($year, $month)
+    public function obtDiagnosticosExport($date1, $date2)
     {
-        $fecha = $year.'-'.$month.'-%';
         $query = $this->db
             ->select("
                 '0' AS orden,
@@ -264,9 +263,8 @@ SQL;
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
             ->where('t.estado', 1)
-            ->where('YEAR(t.fecha)', $year)
-            ->where('MONTH(t.fecha)', $month)
-            ->where('e.codigopractica >', 0)
+            ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
+            #->where('e.codigopractica >', 0)
             ->where_in('ts.estado', array(1, 2, 7))
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
             ->get()
