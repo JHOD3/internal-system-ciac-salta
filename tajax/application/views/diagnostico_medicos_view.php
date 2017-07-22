@@ -19,7 +19,7 @@ $(document).ready(function(){
         ajxM = $.ajax({
             type: 'POST',
             url:
-                '../tajax/diagnostico/horarios/' +
+                '../tajax/index.php/diagnostico/horarios/' +
                 $(this).data('id_especialidades') +
                 '/' +
                 $(this).data('id_medicos') +
