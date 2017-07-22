@@ -323,15 +323,31 @@ SQL;
         ;
     }
 
-    function saveDiagnostico($post)
+    function saveDiagnostico($post, $id_usuario = null)
     {
         $id_turnos_estudios = $post['id_turnos_estudios'];
         unset($post['id_turnos_estudios']);
+
         $post['fecha_presentacion'] = implode("-", array_reverse(explode("/", $post['fecha_presentacion'])));
         $this->db
             ->where('id_turnos_estudios', $id_turnos_estudios)
             ->update('turnos_estudios', $post)
         ;
+
+        $this->db
+            ->insert(
+                'turnos_estudios_historicos',
+                array_merge(
+                    $post,
+                    array(
+                        'id_turnos_estudios' => $id_turnos_estudios,
+                        'id_usuarios' => $id_usuario,
+                        'fechahora' => date("Y-m-d H:i:s")
+                    )
+                )
+            )
+        ;
+
         $query = $this->db
             ->from('turnos_estudios')
             ->where('id_turnos_estudios', $id_turnos_estudios)

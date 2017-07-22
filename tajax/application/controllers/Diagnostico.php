@@ -9,8 +9,11 @@ class Diagnostico extends CI_Controller {
         $this->load->model($this->router->fetch_class().'_model', 'Model');
     }
 
-    public function listado($date1, $date2, $offset = 0)
+    public function listado($date1, $date2, $offset = 0, $id_usuario = null)
     {
+        if (isset($id_usuario)) {
+            $this->session->set_userdata(array('ID_USUARIO' => $id_usuario));
+        }
         $dataView = $this->Model->obtenerPaginacion($date1, $date2);
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
@@ -31,7 +34,14 @@ class Diagnostico extends CI_Controller {
 
     public function savediagnostico()
     {
-        print utf8_encode(json_encode($this->Model->saveDiagnostico($this->input->post())));
+        print utf8_encode(
+            json_encode(
+                $this->Model->saveDiagnostico(
+                    $this->input->post(),
+                    $this->session->userdata('ID_USUARIO')
+                )
+            )
+        );
     }
 
     public function exportar($date1, $date2)

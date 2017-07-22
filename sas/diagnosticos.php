@@ -40,6 +40,8 @@ switch (date("w")) {
 
 $htm_index->Asigna("DATE1", date("Y-m-d", strtotime("-{$days} days")));
 $htm_index->Asigna("DATE2", date("Y-m-d"));
+$htm_index->Asigna("ID_USUARIO", $_SESSION['ID_USUARIO']);
+
 $htm_index->Asigna("FECHA", ucfirst(strftime("%A %d de ")).ucfirst(strftime("%B del %Y")));
 $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));
 $htm_index->Asigna("USUARIO_NOMBRES", utf8_encode($_SESSION['NOMBRES']));
