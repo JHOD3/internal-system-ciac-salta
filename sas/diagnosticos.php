@@ -26,7 +26,19 @@ if (!$d or $d->format($format) != $date or strlen($hasta) != 10) {
     $hasta = date('Y-m-d');
 }
 
-$htm_index->Asigna("DATE1", date("Y-m-01"));
+$days = 2;
+switch (date("w")) {
+    case "6":
+        $days = 3;
+        break;
+    case "0":
+    case "1":
+    case "2":
+        $days = 4;
+        break;
+}
+
+$htm_index->Asigna("DATE1", date("Y-m-d", strtotime("-{$days} days")));
 $htm_index->Asigna("DATE2", date("Y-m-d"));
 $htm_index->Asigna("FECHA", ucfirst(strftime("%A %d de ")).ucfirst(strftime("%B del %Y")));
 $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));
