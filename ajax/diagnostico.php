@@ -3,7 +3,7 @@ require_once ("../engine/config.php");
 require_once ("../engine/restringir_acceso.php");
 requerir_class("tpl","mysql","querys","estructura");
 
-defined('ID_ESPECIALIDADES')   OR define('ID_ESPECIALIDADES', 33);
+defined('ID_ESPECIALIDADES') OR define('ID_ESPECIALIDADES', '63, 64, 65, 68, 66');
 
 //requerir_class("dias_semana");
 $this_db = new MySQL();
@@ -57,10 +57,10 @@ $SQL_esp = <<<SQL
 SQL;
 $query_esp = $this_db->consulta($SQL_esp);
 
-if ($row_esp = $this_db->fetch_assoc($query_esp) and $row_esp['id_especialidades'] == ID_ESPECIALIDADES) {
+if ($row_esp = $this_db->fetch_assoc($query_esp) and in_array($row_esp['id_especialidades'], explode(", ", ID_ESPECIALIDADES . ', 33'))) {
 // IF NO ANIDADO
 
-
+$ID_ESPECIALIDADES = ID_ESPECIALIDADES;
 $SQL_med = <<<SQL
     SELECT
         m.*
@@ -72,7 +72,7 @@ $SQL_med = <<<SQL
     WHERE
         m.estado = 1 AND
         me.estado = 1 AND
-        me.id_especialidades IN (63, 64, 65, 68, 66)
+        me.id_especialidades IN ({$ID_ESPECIALIDADES})
     GROUP BY
         m.id_medicos
     ORDER BY
@@ -114,7 +114,8 @@ SQL;
 $SQL = <<<SQL
     SELECT
         te.*,
-        e.nombre AS estudios
+        e.nombre AS estudios,
+        t.id_medicos AS turnos_id_medicos
     FROM
         turnos_estudios AS te
     LEFT JOIN
@@ -166,6 +167,7 @@ $query = $this_db->consulta($SQL);
                                 <?=utf8_encode($row['estudios'])?>
                             </td>
                             <td>
+                                <?=$_POST['id_medicos']?>
                                 <select name="id_medicos[]" style="width:120px;">
                                     <option value="">---</option>
                                     <?php
@@ -174,9 +176,21 @@ $query = $this_db->consulta($SQL);
                                     <?php while ($row_med = $this_db->fetch_array($query_med)): ?>
                                         <option
                                             value="<?=$row_med['id_medicos']?>"
-                                            <?php if ($row_med['id_medicos'] == $row['id_medicos']): ?>
+                                            <?php
+                                            if (
+                                                (
+                                                    $row['id_medicos'] != '' and
+                                                    $row_med['id_medicos'] == $row['id_medicos']
+                                                ) or (
+                                                    $row['id_medicos'] == '' and
+                                                    $row_med['id_medicos'] == $row['turnos_id_medicos']
+                                                )
+                                            ):
+                                                ?>
                                                 selected="selected"
-                                            <?php endif; ?>
+                                                <?php
+                                            endif;
+                                            ?>
                                         ><?=doSaludo($row_med, false)?></option>
                                     <?php endwhile; ?>
                                 </select>

@@ -87,7 +87,7 @@ class Diagnostico_model extends CI_Model
             ->from('turnos AS t')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios')
-            ->where('t.id_especialidades', ID_ESPECIALIDADES)
+            ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
             ->where('t.estado', 1)
             ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
             #->where('e.codigopractica >', 0)
@@ -118,7 +118,7 @@ class Diagnostico_model extends CI_Model
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
-            ->where('t.id_especialidades', ID_ESPECIALIDADES)
+            ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
             ->where('t.estado', 1)
             ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
             #->where('e.codigopractica >', 0)
@@ -137,7 +137,7 @@ class Diagnostico_model extends CI_Model
         $query = $this->db
             ->select('id_dias_semana')
             ->from('medicos_horarios')
-            ->where('id_especialidades', ID_ESPECIALIDADES)
+            ->where_in('id_especialidades', explode(", ", ID_ESPECIALIDADES) . ', 33')
             ->where('estado', 1)
             ->group_by('id_dias_semana')
             ->order_by('id_dias_semana')
@@ -174,6 +174,7 @@ class Diagnostico_model extends CI_Model
 */
     public function obtMedicos()
     {
+        $ID_ESPECIALIDADES = ID_ESPECIALIDADES;
         $query = <<<SQL
             SELECT
                 m.*
@@ -185,7 +186,7 @@ class Diagnostico_model extends CI_Model
             WHERE
                 m.estado = 1 AND
                 me.estado = 1 AND
-                me.id_especialidades IN (63, 64, 65, 68, 66)
+                me.id_especialidades IN ({$ID_ESPECIALIDADES})
             GROUP BY
                 m.id_medicos
             ORDER BY
@@ -235,6 +236,7 @@ SQL;
 
     public function obtDiagnosticosExport($date1, $date2)
     {
+        $ID_ESPECIALIDADES = ID_ESPECIALIDADES;
         $query = $this->db
             ->select("
                 '0' AS orden,
@@ -260,10 +262,12 @@ SQL;
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
+            ->join('medicos_especialidades AS me', 'me.id_medicos = m.id_medicos')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
             ->where('t.estado', 1)
             ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
+            ->where_in("me.id_especialidades IN ({$ID_ESPECIALIDADES})")
             #->where('e.codigopractica >', 0)
             ->where_in('ts.estado', array(1, 2, 7))
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')

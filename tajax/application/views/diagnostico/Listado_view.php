@@ -18,7 +18,6 @@
             </td>
         </tr>
         <tr class="trHead">
-            <td>Hora</td>
             <td>Paciente</td>
             <td>Estado</td>
             <td>Estudio</td>
@@ -46,7 +45,6 @@
                 $idme = 'class="tdTab" data-id="'.$item['id_turnos_estudios'].'" data-method=';
                 ?>
                 <tr class="tsEst<?=$item['estado']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
-                    <td<?=$coln?>><?=$item['hora']?></td>
                     <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
                     <td<?=$coln?>><?=ucwords(strtolower($item['turnos_estados']))?></td>
                     <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode($item['estudios'])))))?></td>
