@@ -75,7 +75,7 @@
     </tfoot>
 </table>
 <div>
-<a href="<?=base_url().$this->router->fetch_class().'/exportar/'.$date1.'/'.$date2?>">Exportar Listado</a>
+<a href="<?=base_url().'index.php/',$this->router->fetch_class().'/exportar/'.$date1.'/'.$date2?>">Exportar Listado</a>
 </div>
 
 <div id="tab_medicos" class="tab_hidden">
