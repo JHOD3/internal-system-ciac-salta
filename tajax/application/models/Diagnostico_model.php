@@ -44,7 +44,7 @@ class Diagnostico_model extends CI_Model
     function obtenerPaginacion($date1, $date2)
     {
         $config = array(
-            'base_url' => base_url().$this->router->fetch_class().'/listado/'.$date1.'/'.$date2.'/',
+            'base_url' => base_url().'index.php/'.$this->router->fetch_class().'/listado/'.$date1.'/'.$date2.'/',
             'total_rows' => $this->obtenerListadoCount($date1, $date2),
             'per_page' => 100
         );
