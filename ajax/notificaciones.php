@@ -6,7 +6,7 @@ requerir_class("tpl","querys","mysql","estructura","json");
 $this_db = new MySQL();
 
 $fecha = date('Y-m-d');
-$hora = date('H:i:s', strtotime('-60 second'));
+$hora = date('H:i:s', strtotime('-120 second'));
 
 if ($_GET['first'] == true) {
     $where = "";
