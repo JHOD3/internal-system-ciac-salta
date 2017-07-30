@@ -148,7 +148,7 @@ $(document).ready(function(){
         ajxM = $.ajax({
             type: 'POST',
             url:
-                '../index.php/<?=$this->router->fetch_class().'/listado/'?>' +
+                '../tajax/index.php/<?=$this->router->fetch_class().'/listado/'?>' +
                 d1[2] + '-' + d1[1] + '-' + d1[0] + '/' +
                 d2[2] + '-' + d2[1] + '-' + d2[0]
             ,
@@ -243,7 +243,7 @@ $(document).ready(function(){
                         ajxM = $.ajax({
                             type: 'POST',
                             data: serialized,
-                            url: '../index.php/<?=$this->router->fetch_class()?>/savediagnostico',
+                            url: '../tajax/index.php/<?=$this->router->fetch_class()?>/savediagnostico',
                             context: $('#id_te_' + $(this).data('id'))
                         }).done(function(data) {
                             var dataJSON = JSON && JSON.parse(data) || $.parseJSON(data);
