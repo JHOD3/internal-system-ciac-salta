@@ -243,7 +243,7 @@ $(document).ready(function(){
                         ajxM = $.ajax({
                             type: 'POST',
                             data: serialized,
-                            url: '<?=base_url()?>index.php/diagnostico/savediagnostico',
+                            url: '/index.php/diagnostico/savediagnostico',
                             context: $('#id_te_' + $(this).data('id'))
                         }).done(function(data) {
                             var dataJSON = JSON && JSON.parse(data) || $.parseJSON(data);
