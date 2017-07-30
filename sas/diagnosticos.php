@@ -38,7 +38,7 @@ switch (date("w")) {
         break;
 }
 
-$htm_index->Asigna("DATE1", date("Y-m-d", strtotime("-{$days} days")));
+$htm_index->Asigna("DATE1", date("Y-m-d"));
 $htm_index->Asigna("DATE2", date("Y-m-d"));
 $htm_index->Asigna("ID_USUARIO", $_SESSION['ID_USUARIO']);
 
