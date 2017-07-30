@@ -710,5 +710,34 @@ SQL;
         }
     }
 
+    public function obtMedEsp($post)
+    {
+        $med_esp = "";
+        $query = $this->db
+            ->from('especialidades')
+            ->where('id_especialidades', $post['id_especialidades'])
+            ->limit(1)
+            ->get()
+            ->result_array()
+        ;
+        if (count($query) > 0) {
+            $med_esp = trim($query[0]['nombre']);
+        }
+        $query = $this->db
+            ->from('medicos')
+            ->where('id_medicos', $post['id_medicos'])
+            ->limit(1)
+            ->get()
+            ->result_array()
+        ;
+        if (count($query) > 0) {
+            if (strlen(trim($med_esp)) > 0) {
+                $med_esp.= " - ";
+            }
+            $med_esp.= trim($query[0]['apellidos']).", ".trim($query[0]['apellidos']);
+        }
+        return $med_esp;
+    }
+
 }
 //EOF Turnero_model.php
