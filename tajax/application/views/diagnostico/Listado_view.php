@@ -19,7 +19,6 @@
         </tr>
         <tr class="trHead">
             <td>Paciente</td>
-            <td>Estado</td>
             <td>Estudio</td>
             <td>Realizador</td>
             <td>O.Social</td>
@@ -46,7 +45,6 @@
                 ?>
                 <tr class="tsEst<?=$item['estado']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
                     <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
-                    <td<?=$coln?>><?=ucwords(strtolower($item['turnos_estados']))?></td>
                     <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode($item['estudios'])))))?></td>
                     <td<?=$coln.$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(lower(trim(utf8_decode($item['medicos']))))) : '---'?></td>
                     <td<?=$coln.$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
