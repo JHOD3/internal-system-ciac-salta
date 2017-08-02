@@ -111,7 +111,7 @@ $SQL_os = <<<SQL
 SQL;
 
 
-$SQL = <<<SQL
+$SQL_Estudios = <<<SQL
     SELECT
         te.*,
         e.nombre AS estudios,
@@ -130,7 +130,7 @@ $SQL = <<<SQL
     ORDER BY
         e.nombre
 SQL;
-$query = $this_db->consulta($SQL);
+$query = $this_db->consulta($SQL_Estudios);
 ?>
 <?php if ($this_db->num_rows($query) > 0): ?>
     <div id="vntDiag">
@@ -151,6 +151,7 @@ $query = $this_db->consulta($SQL);
                     <th>($) TA</th>
                     <th>($) DD</th>
                     <th>Derivador</th>
+                    <th>Acciones</th>
                 </thead>
                 <tbody>
                     <?php
@@ -161,13 +162,12 @@ $query = $this_db->consulta($SQL);
                         }
                         $row_cantidad_default = isset($row['cantidad']) ? $row['cantidad'] : '1';
                         ?>
-                        <tr>
+                        <tr id="id_medicos_tr_<?=$row['id_estudios']?>">
                             <td>
                                 <input type="hidden" name="id_turnos_estudios[]" value="<?=$row['id_turnos_estudios']?>" />
                                 <?=utf8_encode($row['estudios'])?>
                             </td>
                             <td>
-                                <?=$_POST['id_medicos']?>
                                 <select name="id_medicos[]" style="width:120px;">
                                     <option value="">---</option>
                                     <?php
@@ -239,6 +239,19 @@ $query = $this_db->consulta($SQL);
                             <td><input type="number" name="trajo_arancel[]" value="<?=$row['trajo_arancel']?>" style="width:40px;text-align:right;" /></td>
                             <td><input type="number" name="deja_deposito[]" value="<?=$row['deja_deposito']?>" style="width:40px;text-align:right;" /></td>
                             <td><input type="text" name="matricula_derivacion[]" value="<?=$row['matricula_derivacion']?>" style="width:70px;text-align:right;" class="ac_matricula_derivacion" /></td>
+                            <td>
+                                <select class="copy_id_medicos" id="copy_id_medicos_<?=$row['id_estudios']?>" style="width:120px;">
+                                    <option value="">---</option>
+                                    <?php
+                                    $query_estudios = $this_db->consulta($SQL_Estudios);
+                                    ?>
+                                    <?php while ($row_est = $this_db->fetch_array($query_estudios)): ?>
+                                        <?php if ($row['id_estudios'] != $row_est['id_estudios']): ?>
+                                            <option value="<?=$row_est['id_estudios']?>">Copiar desde <?=utf8_encode($row_est['estudios'])?></option>
+                                        <?php endif; ?>
+                                    <?php endwhile; ?>
+                                </select>
+                            </td>
                         </tr>
                         <?php
                     endwhile;
@@ -295,6 +308,27 @@ $query = $this_db->consulta($SQL);
     ];
     $(".ac_matricula_derivacion").autocomplete({
         source: tagsACMD
+    });
+    $('select.copy_id_medicos').change(function(){
+        if ($(this).val() != '') {
+            var trhs = 'tr#id_medicos_tr_' + $(this).attr('id').replace($(this).attr('class') + '_', '') + ' select';
+            var trhi = 'tr#id_medicos_tr_' + $(this).attr('id').replace($(this).attr('class') + '_', '') + ' input';
+            var trds = 'tr#id_medicos_tr_' + $(this).val() + ' select';
+            var trdi = 'tr#id_medicos_tr_' + $(this).val() + ' input';
+            $(trhs + '[name="id_medicos[]"]').val($(trds + '[name="id_medicos[]"]').val());
+            $(trhs + '[name="id_obras_sociales[]"]').val($(trds + '[name="id_obras_sociales[]"]').val());
+            $(trhi + '[name="fecha_presentacion[]"]').val($(trdi + '[name="fecha_presentacion[]"]').val());
+            $(trhi + '[name="nro_orden[]"]').val($(trdi + '[name="nro_orden[]"]').val());
+            $(trhi + '[name="nro_afiliado[]"]').val($(trdi + '[name="nro_afiliado[]"]').val());
+            $(trhi + '[name="cantidad[]"]').val($(trdi + '[name="cantidad[]"]').val());
+            $(trhs + '[name="tipo[]"]').val($(trds + '[name="tipo[]"]').val());
+            $(trhs + '[name="trajo_pedido[]"]').val($(trds + '[name="trajo_pedido[]"]').val());
+            $(trhs + '[name="trajo_orden[]"]').val($(trds + '[name="trajo_orden[]"]').val());
+            $(trhi + '[name="trajo_arancel[]"]').val($(trdi + '[name="trajo_arancel[]"]').val());
+            $(trhi + '[name="deja_deposito[]"]').val($(trdi + '[name="deja_deposito[]"]').val());
+            $(trhi + '[name="matricula_derivacion[]"]').val($(trdi + '[name="matricula_derivacion[]"]').val());
+            $(this).val('');
+        }
     });
 //});
 </script>

@@ -51,6 +51,6 @@ SQL;
 SQL;
     #print "<pre>{$query_string}</pre>";
     $this_db->consulta($query_string);
-    print "<pre>{$query_historico_string}</pre>";
+    #print "<pre>{$query_historico_string}</pre>";
     $this_db->consulta($query_historico_string);
 }
