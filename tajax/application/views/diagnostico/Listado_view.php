@@ -3,6 +3,8 @@
     <tbody>
         <tr class="trDate">
             <td colspan="100%" class="aBtnL">
+                Filtro:
+                <input type="text" id="filtro" name="filtro" value="<?=$filtro?>" style="text-transform: none!important;" /> -
                 Desde:
                 <input type="text" id="date1" value="<?=date("d/m/Y", strtotime($date1))?>" class="datepicker" /> -
                 Hasta:
@@ -140,15 +142,18 @@ $(document).ready(function(){
     $('#dateok').click(function(){
         var d1 = $('#date1').val().split('/');
         var d2 = $('#date2').val().split('/');
+        var ft = $('#filtro').val().trim().toLowerCase();
         $('#date1').attr('disabled', 'disabled');
         $('#date2').attr('disabled', 'disabled');
+        $('#filtro').attr('disabled', 'disabled');
         $('#dateok').remove();
         ajxM = $.ajax({
             type: 'POST',
             url:
                 '../tajax/index.php/<?=$this->router->fetch_class().'/listado/'?>' +
                 d1[2] + '-' + d1[1] + '-' + d1[0] + '/' +
-                d2[2] + '-' + d2[1] + '-' + d2[0]
+                d2[2] + '-' + d2[1] + '-' + d2[0] + '/' +
+                ft + '/0'
             ,
             context: document.body
         }).done(function(data) {

@@ -9,17 +9,19 @@ class Diagnostico extends CI_Controller {
         $this->load->model($this->router->fetch_class().'_model', 'Model');
     }
 
-    public function listado($date1, $date2, $offset = 0, $id_usuario = null)
+    public function listado($date1, $date2, $filtro = null, $offset = 0, $id_usuario = null)
     {
         if (isset($id_usuario)) {
             $this->session->set_userdata(array('ID_USUARIO' => $id_usuario));
         }
-        $dataView = $this->Model->obtenerPaginacion($date1, $date2);
+        $dataView = $this->Model->obtenerPaginacion($date1, $date2, $filtro);
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
+        $dataView['filtro'] = $filtro == '0' ? '' : $filtro;
         $dataView['listado'] = $this->Model->obtenerListado(
             $date1,
             $date2,
+            $filtro,
             $dataView['pagination_config']['per_page'],
             $offset
         );

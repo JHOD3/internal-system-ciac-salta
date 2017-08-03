@@ -41,11 +41,11 @@ class Diagnostico_model extends CI_Model
         return ($this->form_validation->run() != FALSE);
     }
 
-    function obtenerPaginacion($date1, $date2)
+    function obtenerPaginacion($date1, $date2, $filtro)
     {
         $config = array(
-            'base_url' => base_url().'index.php/'.$this->router->fetch_class().'/listado/'.$date1.'/'.$date2.'/',
-            'total_rows' => $this->obtenerListadoCount($date1, $date2),
+            'base_url' => base_url().'index.php/'.$this->router->fetch_class().'/listado/'.$date1.'/'.$date2.'/'.$filtro.'/',
+            'total_rows' => $this->obtenerListadoCount($date1, $date2, $filtro),
             'per_page' => 100
         );
         $this->pagination->initialize($config);
@@ -80,26 +80,46 @@ class Diagnostico_model extends CI_Model
         }
     }
 
-    function obtenerListadoCount($date1, $date2)
+    function obtenerListadoCount($date1, $date2, $filtro)
     {
-        $query = $this->db
+        $this->db
             ->select('COUNT(t.id_turnos) AS Count')
             ->from('turnos AS t')
-            ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos')
-            ->join('estudios AS e', 'ts.id_estudios = e.id_estudios')
+            ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
+            ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
+            ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
+            ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
+            ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
+            ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
             ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
             ->where('t.estado', 1)
             ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
             #->where('e.codigopractica >', 0)
+        ;
+        if (trim($filtro) != '' and $filtro != '0') {
+            $this->db->where(
+                "
+                (
+                    p.apellidos LIKE '%{$filtro}%' OR
+                    p.nombres LIKE '%{$filtro}%' OR
+                    m.apellidos LIKE '%{$filtro}%' OR
+                    m.nombres LIKE '%{$filtro}%' OR
+                    os.abreviacion LIKE '%{$filtro}%' OR
+                    e.nombre LIKE '%{$filtro}%'
+                )
+                "
+            );
+        }
+        $query = $this->db
             ->get()
             ->result_array()
         ;
         return $query[0]['Count'];
     }
 
-    function obtenerListado($date1, $date2, $limit, $offset)
+    function obtenerListado($date1, $date2, $filtro, $limit, $offset)
     {
-        $query = $this->db
+        $this->db
             ->select("
                 t.*,
                 LEFT(t.desde, 5) AS hora,
@@ -121,12 +141,31 @@ class Diagnostico_model extends CI_Model
             ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
             ->where('t.estado', 1)
             ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
+        ;
+        if (trim($filtro) != '' and $filtro != '0') {
+            $this->db->where(
+                "
+                (
+                    p.apellidos LIKE '%{$filtro}%' OR
+                    p.nombres LIKE '%{$filtro}%' OR
+                    m.apellidos LIKE '%{$filtro}%' OR
+                    m.nombres LIKE '%{$filtro}%' OR
+                    os.abreviacion LIKE '%{$filtro}%' OR
+                    e.nombre LIKE '%{$filtro}%'
+                )
+                "
+            );
+        }
+        $this->db
             #->where('e.codigopractica >', 0)
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
             ->limit($limit, $offset)
+        ;
+        $query = $this->db
             ->get()
             ->result_array()
         ;
+        #print "<pre>".($this->db->last_query())."</pre>";
         for ($i = 0; $i < count($query); $i++) {
             #$query[$i]['fechanac'] = date_view($query[$i]['fechanac']);
         }
