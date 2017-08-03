@@ -146,7 +146,7 @@ $(document).ready(function(){
         $('#date1').attr('disabled', 'disabled');
         $('#date2').attr('disabled', 'disabled');
         $('#filtro').attr('disabled', 'disabled');
-        $('#dateok').remove();
+        $('#dateok').replaceWith('<img src="../files/img/ajax-loader.gif" alt="" />');
         ajxM = $.ajax({
             type: 'POST',
             url:

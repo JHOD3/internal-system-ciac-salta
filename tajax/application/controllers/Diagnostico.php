@@ -17,7 +17,7 @@ class Diagnostico extends CI_Controller {
         $dataView = $this->Model->obtenerPaginacion($date1, $date2, $filtro);
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
-        $dataView['filtro'] = $filtro == '0' ? '' : $filtro;
+        $dataView['filtro'] = $filtro == '0' ? '' : trim(str_replace('%20', ' ', $filtro));
         $dataView['listado'] = $this->Model->obtenerListado(
             $date1,
             $date2,
