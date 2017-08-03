@@ -143,6 +143,13 @@ $(document).ready(function(){
         var d1 = $('#date1').val().split('/');
         var d2 = $('#date2').val().split('/');
         var ft = $('#filtro').val().trim().toLowerCase();
+        ft = ft.replace('á', 'a').replace('Á', 'A');
+        ft = ft.replace('é', 'e').replace('É', 'E');
+        ft = ft.replace('í', 'i').replace('Í', 'I');
+        ft = ft.replace('ó', 'o').replace('Ó', 'O');
+        ft = ft.replace('ú', 'u').replace('Ú', 'U');
+        ft = ft.replace('ü', 'u').replace('Ü', 'U');
+        ft = ft.replace('ñ', 'n').replace('Ñ', 'N');
         $('#date1').attr('disabled', 'disabled');
         $('#date2').attr('disabled', 'disabled');
         $('#filtro').attr('disabled', 'disabled');
