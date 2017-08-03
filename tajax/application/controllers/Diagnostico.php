@@ -51,7 +51,7 @@ class Diagnostico extends CI_Controller {
         $this->load->library('table');
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
-        $dataView['filter'] = $filter;
+        $dataView['filter'] = utf8_encode($filter);
         $dataView['aDiagnosticos'] = $this->Model->obtDiagnosticosExport($date1, $date2, $filter);
         $this->table->set_heading(
             'Nro de Paciente',
