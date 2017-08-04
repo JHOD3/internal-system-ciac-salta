@@ -80,6 +80,31 @@ class Diagnostico_model extends CI_Model
         }
     }
 
+    protected function _filtroListado($filtro)
+    {
+        if (trim($filtro) != '' and $filtro != '0') {
+            $filtro = str_replace('%20', ' ', $filtro);
+            $aFiltros = explode(' ', $filtro);
+            $where = "";
+            $cnct = "";
+            foreach ($aFiltros AS $f) {
+                $where.= "
+                    {$cnct} (
+                        CONCAT(TRIM(p.apellidos), ' ', TRIM(p.nombres)) LIKE '%{$f}%' OR
+                        CONCAT(TRIM(m.apellidos), ' ', TRIM(m.nombres)) LIKE '%{$f}%' OR
+                        TRIM(os.abreviacion) LIKE '%{$f}%' OR
+                        TRIM(e.nombre) LIKE '%{$f}%'
+                    )
+                ";
+                $cnct = "AND";
+            }
+            $this->db->where(
+                "($where)"
+            );
+            #print "<pre>{$where}</pre>";
+        }
+    }
+
     function obtenerListadoCount($date1, $date2, $filtro)
     {
         $this->db
@@ -96,20 +121,7 @@ class Diagnostico_model extends CI_Model
             ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
             #->where('e.codigopractica >', 0)
         ;
-        if (trim($filtro) != '' and $filtro != '0') {
-            $this->db->where(
-                "
-                (
-                    p.apellidos LIKE '%{$filtro}%' OR
-                    p.nombres LIKE '%{$filtro}%' OR
-                    m.apellidos LIKE '%{$filtro}%' OR
-                    m.nombres LIKE '%{$filtro}%' OR
-                    os.abreviacion LIKE '%{$filtro}%' OR
-                    e.nombre LIKE '%{$filtro}%'
-                )
-                "
-            );
-        }
+        $this->_filtroListado($filtro);
         $query = $this->db
             ->get()
             ->result_array()
@@ -142,20 +154,7 @@ class Diagnostico_model extends CI_Model
             ->where('t.estado', 1)
             ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
         ;
-        if (trim($filtro) != '' and $filtro != '0') {
-            $this->db->where(
-                "
-                (
-                    p.apellidos LIKE '%{$filtro}%' OR
-                    p.nombres LIKE '%{$filtro}%' OR
-                    m.apellidos LIKE '%{$filtro}%' OR
-                    m.nombres LIKE '%{$filtro}%' OR
-                    os.abreviacion LIKE '%{$filtro}%' OR
-                    e.nombre LIKE '%{$filtro}%'
-                )
-                "
-            );
-        }
+        $this->_filtroListado($filtro);
         $this->db
             #->where('e.codigopractica >', 0)
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
