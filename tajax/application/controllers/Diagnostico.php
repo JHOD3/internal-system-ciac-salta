@@ -25,6 +25,11 @@ class Diagnostico extends CI_Controller {
             $dataView['pagination_config']['per_page'],
             $offset
         );
+        $dataView['deja_deposito_suma'] = $this->Model->obtDejaDepositoSuma(
+            $date1,
+            $date2,
+            $filtro
+        );
         #$dataView['ds'] = $this->Model->obtDiasSemanaDiagnostico($date1, $date2);
 
         $dataView['medicos'] = $this->Model->obtMedicos();

@@ -74,8 +74,9 @@
         <th colspan="100%">Total: <?=$pagination_config['total_rows']?></th>
     </tfoot>
 </table>
+<div>Total en Caja:&nbsp;$&nbsp;<?=$deja_deposito_suma?></div>
 <div>
-<a href="../tajax/index.php/<?=$this->router->fetch_class().'/exportar/'.$date1.'/'.$date2.'/'.$filtro?>">Exportar Listado</a>
+    <a href="../tajax/index.php/<?=$this->router->fetch_class().'/exportar/'.$date1.'/'.$date2.'/'.$filtro?>">Exportar Listado</a>
 </div>
 
 <div id="tab_medicos" class="tab_hidden">

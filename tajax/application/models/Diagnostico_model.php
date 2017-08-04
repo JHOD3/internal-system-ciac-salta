@@ -105,6 +105,29 @@ class Diagnostico_model extends CI_Model
         }
     }
 
+    function obtDejaDepositoSuma($date1, $date2, $filtro)
+    {
+        $this->db
+            ->select('SUM(ts.deja_deposito) AS Suma')
+            ->from('turnos AS t')
+            ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
+            ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
+            ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
+            ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
+            ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
+            ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
+            ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
+            ->where('t.estado', 1)
+            ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
+        ;
+        $this->_filtroListado($filtro);
+        $query = $this->db
+            ->get()
+            ->result_array()
+        ;
+        return $query[0]['Suma'];
+    }
+
     function obtenerListadoCount($date1, $date2, $filtro)
     {
         $this->db
@@ -119,7 +142,6 @@ class Diagnostico_model extends CI_Model
             ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
             ->where('t.estado', 1)
             ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
-            #->where('e.codigopractica >', 0)
         ;
         $this->_filtroListado($filtro);
         $query = $this->db
@@ -156,7 +178,6 @@ class Diagnostico_model extends CI_Model
         ;
         $this->_filtroListado($filtro);
         $this->db
-            #->where('e.codigopractica >', 0)
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
             ->limit($limit, $offset)
         ;
@@ -306,7 +327,6 @@ SQL;
             ->where('t.estado', 1)
             ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
             ->where_in("me.id_especialidades IN ({$ID_ESPECIALIDADES})")
-            #->where('e.codigopractica >', 0)
             ->where_in('ts.estado', array(1, 2, 7))
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
             ->get()
@@ -371,10 +391,30 @@ SQL;
         unset($post['id_turnos_estudios']);
 
         $post['fecha_presentacion'] = implode("-", array_reverse(explode("/", $post['fecha_presentacion'])));
+
+        $deja_deposito = $this->db
+            ->select('deja_deposito')
+            ->from('turnos_estudios')
+            ->where('id_turnos_estudios', $id_turnos_estudios)
+            ->limit(1)
+            ->get()
+            ->result_array()
+        ;
+
         $this->db
             ->where('id_turnos_estudios', $id_turnos_estudios)
             ->update('turnos_estudios', $post)
         ;
+
+        $post['deja_deposito_fecha'] = date("Y-m-d");
+        if (count($deja_deposito) > 0) {
+            $post['deja_deposito_diferencia'] =
+                $post['deja_deposito'] -
+                $deja_deposito[0]['deja_deposito']
+            ;
+        } else {
+            $post['deja_deposito_diferencia'] = 0;
+        }
 
         $this->db
             ->insert(

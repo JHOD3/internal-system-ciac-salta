@@ -12,6 +12,15 @@ $fechahora = date("Y-m-d H:i:s");
 
 for ($i = 0; $i < count($_POST['id_turnos_estudios']); $i++) {
     $cnct = "\nSET";
+
+    $deja_deposito = <<<SQL
+        SELECT deja_deposito
+        FROM turnos_estudios
+        WHERE id_turnos_estudios = '{$_POST['id_turnos_estudios'][$i]}'
+        LIMIT 1
+SQL;
+    $deja_deposito = $this_db->consulta($deja_deposito);
+
     $query_string = <<<SQL
 UPDATE
     turnos_estudios
@@ -20,10 +29,27 @@ SQL;
 INSERT INTO
     turnos_estudios_historicos
 SQL;
+
+    $query_historico_string.=
+        $cnct."\n    `deja_deposito_fecha` = '".date("Y-m-d")."'"
+    ;
+    if ($deja_deposito = $this_db->fetch_array($deja_deposito)) {
+        $query_historico_string.=
+            ",\n    `deja_deposito_diferencia` = ".(
+                $_POST['deja_deposito'][$i] -
+                $deja_deposito['deja_deposito']
+            );
+        ;
+    } else {
+        $query_historico_string.=
+            ",\n    `deja_deposito_diferencia` = '0'";
+        ;
+    }
+
     foreach ($keys AS $k) {
         if (!in_array($k, array('id_turno', 'id_turnos_estudios'))) {
             $query_string.= $cnct."\n    {$k} = ";
-            $query_historico_string.= $cnct."\n    {$k} = ";
+            $query_historico_string.= ",\n    {$k} = ";
             if ($k == 'fecha_presentacion' and $_POST[$k][$i]) {
                 $_POST[$k][$i] = implode("-", array_reverse(explode("/", $_POST[$k][$i])));
             } elseif ($k == 'fecha_presentacion') {
