@@ -107,6 +107,30 @@ class Diagnostico_model extends CI_Model
 
     function obtDejaDepositoSuma($date1, $date2, $filtro)
     {
+        $suma = 0;
+
+        $this->db
+            ->select('SUM(ts.trajo_arancel) AS Suma')
+            ->from('turnos AS t')
+            ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
+            ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
+            ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
+            ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
+            ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
+            ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
+            ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
+            ->where('t.estado', 1)
+            ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
+        ;
+        $this->_filtroListado($filtro);
+        $query = $this->db
+            ->get()
+            ->result_array()
+        ;
+        if (count($query) > 0) {
+            $suma+= $query[0]['Suma'];
+        }
+
         $this->db
             ->select('SUM(ts.deja_deposito) AS Suma')
             ->from('turnos AS t')
@@ -125,7 +149,11 @@ class Diagnostico_model extends CI_Model
             ->get()
             ->result_array()
         ;
-        return $query[0]['Suma'];
+        if (count($query) > 0) {
+            $suma+= $query[0]['Suma'];
+        }
+
+        return $suma;
     }
 
     function obtenerListadoCount($date1, $date2, $filtro)
