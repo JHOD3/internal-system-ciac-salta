@@ -51,7 +51,7 @@ class Diagnostico extends CI_Controller {
         );
     }
 
-    public function exportar($date1, $date2, $filter)
+    public function exportar($date1, $date2, $filter = '')
     {
         $this->load->library('table');
         $dataView['date1'] = $date1;

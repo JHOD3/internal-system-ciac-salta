@@ -80,8 +80,13 @@ class Diagnostico_model extends CI_Model
         }
     }
 
-    protected function _filtroListado($filtro)
+    protected function _filtroListado($date1, $date2, $filtro)
     {
+        $this->db
+            ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
+            ->where('t.estado', 1)
+            ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
+        ;
         if (trim($filtro) != '' and $filtro != '0') {
             $filtro = str_replace('%20', ' ', $filtro);
             $aFiltros = explode(' ', $filtro);
@@ -118,11 +123,8 @@ class Diagnostico_model extends CI_Model
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
-            ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
-            ->where('t.estado', 1)
-            ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
         ;
-        $this->_filtroListado($filtro);
+        $this->_filtroListado($date1, $date2, $filtro);
         $query = $this->db
             ->get()
             ->result_array()
@@ -140,11 +142,8 @@ class Diagnostico_model extends CI_Model
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
-            ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
-            ->where('t.estado', 1)
-            ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
         ;
-        $this->_filtroListado($filtro);
+        $this->_filtroListado($date1, $date2, $filtro);
         $query = $this->db
             ->get()
             ->result_array()
@@ -167,11 +166,8 @@ class Diagnostico_model extends CI_Model
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
-            ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
-            ->where('t.estado', 1)
-            ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
         ;
-        $this->_filtroListado($filtro);
+        $this->_filtroListado($date1, $date2, $filtro);
         $query = $this->db
             ->get()
             ->result_array()
@@ -200,11 +196,8 @@ class Diagnostico_model extends CI_Model
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
-            ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
-            ->where('t.estado', 1)
-            ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
         ;
-        $this->_filtroListado($filtro);
+        $this->_filtroListado($date1, $date2, $filtro);
         $this->db
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
             ->limit($limit, $offset)
@@ -321,10 +314,9 @@ SQL;
         return $this->db->query($query)->result_array();
     }
 
-    public function obtDiagnosticosExport($date1, $date2)
+    public function obtDiagnosticosExport($date1, $date2, $filtro)
     {
-        $ID_ESPECIALIDADES = ID_ESPECIALIDADES;
-        $query = $this->db
+        $this->db
             ->select("
                 '0' AS orden,
                 CONCAT(p.apellidos, ', ', p.nombres) AS pacientes,
@@ -349,14 +341,15 @@ SQL;
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
-            ->join('medicos_especialidades AS me', 'me.id_medicos = m.id_medicos')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
-            ->where('t.estado', 1)
-            ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
-            ->where_in("me.id_especialidades IN ({$ID_ESPECIALIDADES})")
-            ->where_in('ts.estado', array(1, 2, 7))
+        ;
+        $this->_filtroListado($date1, $date2, $filtro);
+        $this->db
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
+            #->limit($limit, $offset)
+        ;
+        $query = $this->db
             ->get()
             ->result_array()
         ;
