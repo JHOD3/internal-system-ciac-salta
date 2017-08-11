@@ -151,10 +151,7 @@ $(document).ready(function(){
         ft = ft.replace('ú', 'u').replace('Ú', 'U');
         ft = ft.replace('ü', 'u').replace('Ü', 'U');
         ft = ft.replace('ñ', 'n').replace('Ñ', 'N');
-        $('#date1').attr('disabled', 'disabled');
-        $('#date2').attr('disabled', 'disabled');
-        $('#filtro').attr('disabled', 'disabled');
-        $('#dateok').replaceWith('<img src="../files/img/ajax-loader.gif" alt="" />');
+        $('#dateok').parent().replaceWith('<img alt="" src="../files/img/ajax-loader.gif" /> Cargando los diagnósticos<br /><img alt="" src="../files/img/ajax-loader.gif" /> Espere un momento por favor');
         ajxM = $.ajax({
             type: 'POST',
             url:
