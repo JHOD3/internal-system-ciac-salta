@@ -107,7 +107,7 @@
         <?php endforeach; ?>
     </select>
 </div>
-<div id="tab_fecha_presentacion" class="tab_hidden"><input type="text" name="fecha_presentacion" value="" style="width:80px;" class="datepicker" /></div>
+<div id="tab_fecha_presentacion" class="tab_hidden"><input type="text" name="fecha_presentacion" value="" style="width:80px;" class="date_picker" /></div>
 <div id="tab_nro_orden" class="tab_hidden"><input type="text" name="nro_orden" value="" style="width:70px;" /></div>
 <div id="tab_nro_afiliado" class="tab_hidden"><input type="text" name="nro_afiliado" value="" style="width:70px;" /></div>
 <div id="tab_cantidad" class="tab_hidden"><input type="text" name="cantidad" value="" style="width:40px;text-align:right;" /></div>
@@ -197,7 +197,7 @@ $(document).ready(function(){
             $(this).parent().find('.tdTab').each(function(){
                 var valDefault = $(this).html().replace('$&nbsp;', '').replace('---', '');
                 if (valDefault[0] != '<') {
-                    $(this).html($('#tab_' + $(this).data('method')).html());
+                    $(this).html($('#tab_' + $(this).data('method')).html().replace('date_picker', 'datepicker'));
                     switch ($(this).find('input, select').prop('tagName')) {
                         case 'INPUT':
                             if ($(this).find('input').attr('type') != 'button') {
@@ -205,13 +205,9 @@ $(document).ready(function(){
                             }
                             break;
                         case 'SELECT':
-                            if (console && console.log) console.log(valDefault.toLowerCase());
                             $(this).find('select option').each(function(){
                                 if ($(this).html().toLowerCase() == valDefault.toLowerCase()) {
-                                    if (console && console.log) console.log('si ' + $(this).html().toLowerCase());
                                     $(this).attr("selected", true);
-                                } else {
-                                    if (console && console.log) console.log('no' + $(this).html().toLowerCase());
                                 }
                             });
                             break;
@@ -219,7 +215,6 @@ $(document).ready(function(){
                     $(this).find('.ac_matricula_derivacion').autocomplete({
                         source: tagsACMD
                     });
-                    $(this).find('.datepicker').datepicker();
                     $(this).find('input[type="button"]').attr('data-id', $(this).data('id'));
                     $(this).find('input[type="button"]').click(function(){
                         $(this).parent().html('');
@@ -277,6 +272,13 @@ $(document).ready(function(){
                 }
             });
         }
+    });
+    $('body').on('focus',".datepicker", function(){
+
+        if( $(this).hasClass('hasDatepicker') === false )  {
+            $(this).datepicker();
+        }
+
     });
 });
 </script>
