@@ -151,7 +151,7 @@ $(document).ready(function(){
         ft = ft.replace('ú', 'u').replace('Ú', 'U');
         ft = ft.replace('ü', 'u').replace('Ü', 'U');
         ft = ft.replace('ñ', 'n').replace('Ñ', 'N');
-        $('#dateok').parent().replaceWith('<img alt="" src="../files/img/ajax-loader.gif" /> Cargando los diagnósticos<br /><img alt="" src="../files/img/ajax-loader.gif" /> Espere un momento por favor');
+        $('#dateok').parent().parent().html('<div><img alt="" src="../files/img/ajax-loader.gif" /> Cargando los diagnósticos<br /><img alt="" src="../files/img/ajax-loader.gif" /> Espere un momento por favor</div>');
         ajxM = $.ajax({
             type: 'POST',
             url:
