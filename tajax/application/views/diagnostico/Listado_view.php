@@ -46,8 +46,8 @@
                 $idme = 'class="tdTab" data-id="'.$item['id_turnos_estudios'].'" data-method=';
                 ?>
                 <tr class="tsEst<?=$item['estado']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
-                    <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
-                    <td<?=$coln?>><?=utf8_encode(ucwords(lower(trim(utf8_decode($item['estudios'])))))?></td>
+                    <td<?=$coln?>><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
+                    <td<?=$coln?>><?=utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios'])))))?></td>
                     <td<?=$coln.$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(lower(trim(utf8_decode($item['medicos']))))) : '---'?></td>
                     <td<?=$coln.$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
                     <td<?=$coln.$idme?>"fecha_presentacion"><?=$item['fecha_presentacion'] ? date("d/m/Y", strtotime($item['fecha_presentacion'])) : '---'?></td>
