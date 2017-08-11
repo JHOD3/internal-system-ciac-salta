@@ -8,9 +8,17 @@ class Diagnostico extends CI_Controller {
         parent::__construct();
         $this->load->model($this->router->fetch_class().'_model', 'Model');
     }
-
+    /*
+    function microtime_float()
+    {
+        list($useg, $seg) = explode(" ", microtime());
+        return ((float)$useg + (float)$seg);
+    }
+    */
     public function listado($date1, $date2, $filtro = null, $offset = 0, $id_usuario = null)
     {
+        #$tiempo_inicio = $this->microtime_float();
+
         if (isset($id_usuario)) {
             $this->session->set_userdata(array('ID_USUARIO' => $id_usuario));
         }
@@ -18,6 +26,7 @@ class Diagnostico extends CI_Controller {
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
         $dataView['filtro'] = $filtro == '0' ? '' : trim(str_replace('%20', ' ', $filtro));
+        #$tiempo_fin = $this->microtime_float(); $tiempo = $tiempo_fin - $tiempo_inicio; echo "Tiempo empleado: " . ($tiempo_fin - $tiempo_inicio)."<br />";
         $dataView['listado'] = $this->Model->obtenerListado(
             $date1,
             $date2,
@@ -25,11 +34,13 @@ class Diagnostico extends CI_Controller {
             $dataView['pagination_config']['per_page'],
             $offset
         );
+        #$tiempo_fin = $this->microtime_float(); $tiempo = $tiempo_fin - $tiempo_inicio; echo "Tiempo empleado: " . ($tiempo_fin - $tiempo_inicio)."<br />";
         $dataView['deja_deposito_suma'] = $this->Model->obtDejaDepositoSuma(
             $date1,
             $date2,
             $filtro
         );
+        #$tiempo_fin = $this->microtime_float(); $tiempo = $tiempo_fin - $tiempo_inicio; echo "Tiempo empleado: " . ($tiempo_fin - $tiempo_inicio)."<br />";
         #$dataView['ds'] = $this->Model->obtDiasSemanaDiagnostico($date1, $date2);
 
         $dataView['medicos'] = $this->Model->obtMedicos();
@@ -37,6 +48,8 @@ class Diagnostico extends CI_Controller {
         $dataView['obras_sociales'] = $this->Model->obtObrasSociales();
 
         $this->load->view($this->router->fetch_class().'/Listado_view', $dataView);
+
+        #$tiempo_fin = $this->microtime_float(); $tiempo = $tiempo_fin - $tiempo_inicio; echo "Tiempo empleado: " . ($tiempo_fin - $tiempo_inicio)."<br />";
     }
 
     public function savediagnostico()

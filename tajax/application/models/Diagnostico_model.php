@@ -129,6 +129,7 @@ class Diagnostico_model extends CI_Model
             ->get()
             ->result_array()
         ;
+        #print "<pre>".$this->db->last_query()."</pre>";
         if (count($query) > 0) {
             $suma+= $query[0]['Suma'];
         }
