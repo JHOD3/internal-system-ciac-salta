@@ -48,7 +48,7 @@
                 <tr class="tsEst<?=$item['estado']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
                     <td<?=$coln?>><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
                     <td<?=$coln?>><?=utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios'])))))?></td>
-                    <td<?=$coln.$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(lower(trim(utf8_decode($item['medicos']))))) : '---'?></td>
+                    <td<?=$coln.$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
                     <td<?=$coln.$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
                     <td<?=$coln.$idme?>"fecha_presentacion"><?=$item['fecha_presentacion'] ? date("d/m/Y", strtotime($item['fecha_presentacion'])) : '---'?></td>
                     <td<?=$coln.$idme?>"nro_orden"><?=$item['nro_orden'] ? $item['nro_orden'] : '---'?></td>
@@ -86,7 +86,7 @@
             <option
                 value="<?=$row_med['id_medicos']?>"
             ><?=
-                utf8_encode(ucwords(lower(trim(utf8_decode(
+                utf8_encode(ucwords(upper(trim(utf8_decode(
                     $row_med['saludo'].' '.$row_med['apellidos'].', '.$row_med['nombres']
                 )))))
             ?></option>
@@ -168,6 +168,11 @@ $(document).ready(function(){
             $('#diagnosticos_medicos').html(data);
         });
     })
+    $('#date1, #date2, #filtro').keypress(function(e){
+        if(e.which == 13) {
+            $('#dateok').focus().click();
+        }
+    });
     var tagsACMD = [
         <?php $cnct = ''; ?>
         <?php foreach ($medicos_cm AS $rs_mcm): ?>
