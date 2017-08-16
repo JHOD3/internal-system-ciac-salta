@@ -2,19 +2,19 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		
+
 		$("#especialidades").focus();
-		
+
 		$("a#cargar").click(function(e){
 			e.preventDefault();
 			$("#form_medicos_horarios").submit();
 		});
-		
+
 		$("a#cancelar").click(function(){
 			IniciarVentana("ventana_opciones", "cerrar");
 			$(ventana_opciones).dialog('destroy').remove();
 		});
-		
+
 		$("#form_medicos_horarios").validate({
 			rules: {
 				turnos_tipos: {
@@ -46,10 +46,10 @@
 			},
 			submitHandler: function(){
 				var variables = $("#form_medicos_horarios").serialize();
-				$.ajax({  
-					type: "POST",   
+				$.ajax({
+					type: "POST",
 					url: "[URL]ajax/altas.php",
-					data: {variables: variables, tabla: "[TABLA]"}, 
+					data: {variables: variables, tabla: "[TABLA]"},
 					beforeSend: function() {
 						$("#mje").html("Enviando información...");
 					},
@@ -92,7 +92,7 @@
 </script>
 
 <div id="panel_alta">
-	<form name="form_medicos_horarios" id="form_medicos_horarios" class="jNice">					
+	<form name="form_medicos_horarios" id="form_medicos_horarios" class="jNice">
 		<fieldset>
         	<div class="bloque oculto">
                 <label>ID Medico: </label>
@@ -107,6 +107,10 @@
 			<div class="bloque">
 				<label>D&iacute;a de la Semana: </label>
 				[DROP_DIAS_SEMANA]
+			</div>
+			<div class="bloque">
+				<label>Planta: </label>
+				[DROP_PLANTA]
 			</div>
             <div class="bloque">
                 <label>Desde: </label>

@@ -1,20 +1,20 @@
 <script src="[JS]jquery.validate.js"></script>
-		
+
 <script type="text/javascript">
 	$(document).ready(function(){
-		
+
 		$("#nombre").focus();
-			
+
 		$("a#modificar").click(function(e){
 			e.preventDefault();
 			$("#form_medicos_horarios").submit();
 		});
-		
+
 		$("a#cancelar").click(function(){
 			IniciarVentana("ventana_opciones", "cerrar");
 			$(ventana_opciones).dialog('destroy').remove();
 		});
-		
+
 		$("#form_medicos_horarios").validate({
 			rules: {
 				turnos_tipos: {
@@ -46,10 +46,10 @@
 			},
 			submitHandler: function(){
 				var variables = $("#form_medicos_horarios").serialize();
-				$.ajax({  
-					type: "POST",   
+				$.ajax({
+					type: "POST",
 					url: "[URL]ajax/modificaciones.php",
-					data: {variables: variables, tabla: "[TABLA]"}, 
+					data: {variables: variables, tabla: "[TABLA]"},
 					beforeSend: function() {
 						$("#mje").html("Enviando información...");
 					},
@@ -90,9 +90,9 @@
 	});
 </script>
 
-[block: block_registros]		
+[block: block_registros]
 <div id="panel_modificacion">
-    <form name="form_medicos_horarios" id="form_medicos_horarios" class="jNice">					
+    <form name="form_medicos_horarios" id="form_medicos_horarios" class="jNice">
 		<fieldset>
         	<div class="bloque oculto">
             	<label>ID: </label>
@@ -109,6 +109,10 @@
 			<div class="bloque">
 				<label>D&iacute;a de la Semana: </label>
 				[DROP_DIAS_SEMANA]
+			</div>
+			<div class="bloque">
+				<label>Planta: </label>
+				[DROP_PLANTA]
 			</div>
             <div class="bloque">
                 <label>Desde: </label>

@@ -1,6 +1,6 @@
 <div id="detalle" >
 [block: block_registros]
-	<img src="[IMG]logo_imprimir.png" style="width:100%; margin:auto; text-align:center; display: inherit;" />
+	<img src="[IMG]logo_imprimir.png" style="width:100%; margin:auto; text-align:center; display: inherit; max-width: 600px;" />
     <h2 style="font-size:12px; font-family:Arial; text-align:center; font-weight:normal">Santiago del Estero 449 &shy; A4400BKI - Salta - Argentina<br />
 Tel: 4214738 – 4213251<br />
 administracion@ciacsalta.com.ar<br />
@@ -8,16 +8,18 @@ Lunes a viernes de 7.30 a 21 hs</h2>
 
 	<p style="font-family:Arial; font-size:12px;">Paciente: <strong>
 	[PACIENTE]</strong></p>
-    
+
     <p style="font-family:Arial; font-size:12px;">M&eacute;dico: <strong>
 	[MEDICO]</strong></p>
 
     <p style="font-family:Arial; font-size:12px;">Turno: <strong>
 	[FECHA] - [desde]</strong></p>
-    
+
+    [PLANTA]
+
     <p style="font-family:Arial; font-size:12px;">Ud. fue atendido por <strong>
 	[SECRETARIA]</strong></p>
-    
+
     <p><br />
 	</p>
 <!--	<p>Requisitos:</p>

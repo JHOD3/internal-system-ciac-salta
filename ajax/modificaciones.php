@@ -60,6 +60,9 @@ switch ($tabla){
 		if (!isset($nro_sector) || $nro_sector == "")
 			$nro_sector = "-";
 
+		if (!isset($plantas) || $plantas == "")
+			$plantas = 0;
+
 		if (!isset($interno) || $interno == "")
 			$interno = 0;
 
@@ -77,6 +80,7 @@ switch ($tabla){
 					particular_consulta = '".$particular_consulta."',
 					id_sectores = ".$sectores.",
 					nro_sector = '".strtoupper(utf8_decode($nro_sector))."',
+					id_plantas = ".$plantas.",
 					interno = ".$interno.",
 					matricula = ".$matricula.",
                     saludo = '".$saludo."'
@@ -95,10 +99,14 @@ switch ($tabla){
 	case "medicos_horarios":
 		parse_str(stripslashes($datos));
 
+		if (!isset($plantas) || $plantas == "")
+			$plantas = 0;
+
 		$asignaciones = "
 					desde = '".$desde."',
 					hasta = '".$hasta."',
-					id_turnos_tipos = ".$turnos_tipos."
+					id_turnos_tipos = ".$turnos_tipos.",
+					id_plantas = ".$plantas."
 					";
 
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);

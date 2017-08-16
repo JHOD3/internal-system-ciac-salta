@@ -15,7 +15,7 @@ class Medicos extends Estructura implements iMedicos{
 
 		parent::__construct($id);
 
-		requerir_class("pacientes", "turnos_estados", 'sectores', "tipos_documentos");
+		requerir_class("pacientes", "turnos_estados", "sectores", "plantas", "tipos_documentos");
 	}
 
 	function FormAlta(){
@@ -28,6 +28,9 @@ class Medicos extends Estructura implements iMedicos{
 
 		$obj_sectores = new Sectores();
 		$htm->Asigna("DROP_SECTORES", $obj_sectores->Drop());
+
+		$obj_plantas = new Plantas();
+		$htm->Asigna("DROP_PLANTAS", $obj_plantas->Drop());
 
 		$htm->Asigna("TABLA",$this->nombre_tabla);
 
@@ -46,6 +49,9 @@ class Medicos extends Estructura implements iMedicos{
 
 		$obj_sectores = new Sectores();
 		$htm->Asigna("DROP_SECTORES", $obj_sectores->Drop("", $row["id_sectores"]));
+
+		$obj_plantas = new Plantas();
+		$htm->Asigna("DROP_PLANTAS", $obj_plantas->Drop("", $row["id_plantas"]));
 
 		$htm->Asigna("TABLA",$this->nombre_tabla);
 
@@ -70,6 +76,7 @@ class Medicos extends Estructura implements iMedicos{
 
 					$obj_sectores = new Sectores($row['id_sectores']);
 					$row['SECTOR'] = $obj_sectores->nombre." ".$row['nro_sector'];
+
 					$row['email'] = strtolower($row['email']);
 
 					$tabla->AsignaBloque("block_".$this->nombre_tabla, $row);

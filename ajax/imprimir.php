@@ -25,5 +25,4 @@
 
 	echo $rta;
 
-
-?>
+//EOF imprimir.php
