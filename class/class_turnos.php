@@ -230,8 +230,7 @@ SQL;
             if ($id_plantas > 0) {
                 $obj_planta = new Plantas($id_plantas);
                 $row['PLANTA'].= <<<HTML
-<p style="font-family:Arial; font-size:12px;">Planta: <strong>
-{$obj_planta->nombre}</strong></p>
+ / {$obj_planta->nombre}
 HTML;
             } else {
     		  $row['PLANTA'].= '';
@@ -245,6 +244,9 @@ HTML;
 
 		$obj_medico = new Medicos($row['id_medicos']);
 		$row['MEDICO'] = $obj_medico->apellidos.', '.$obj_medico->nombres;
+
+        $row['desde'] = substr($row['desde'], 0, 5);
+
 		$htm->AsignaBloque('block_registros',$row);
 
 		CargarVariablesGrales($htm);

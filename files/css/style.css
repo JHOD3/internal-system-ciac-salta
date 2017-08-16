@@ -1269,7 +1269,7 @@ label.error{
 }
 
 #contenedor_imprimir{
-	*display:none
+	display:none
 }
 
 #habilitar_inhabilitar{
