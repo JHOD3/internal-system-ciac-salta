@@ -216,7 +216,7 @@ class Turnos extends Estructura implements iTurnos{
                 t.id_turnos = '{$row['id_turnos']}' AND
                 mh.id_dias_semana = '{$dia_nro}' AND
                 t.desde BETWEEN mh.desde AND mh.hasta
-            LIMIT 2
+            LIMIT 1
 SQL;
 		$query = $this->db->consulta($query_string);
         $row['PLANTA'] = '';
