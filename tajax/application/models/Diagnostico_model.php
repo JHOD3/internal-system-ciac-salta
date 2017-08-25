@@ -462,7 +462,7 @@ SQL;
         ;
     }
 
-    function saveDiagnostico($post, $id_usuario = null)
+    function guardarDiagnostico($post, $id_usuario = null)
     {
         $id_turnos_estudios = $post['id_turnos_estudios'];
         unset($post['id_turnos_estudios']);
@@ -493,6 +493,7 @@ SQL;
             $post['deja_deposito_diferencia'] = 0;
         }
 
+        unset($post['id_estudios']);
         $this->db
             ->insert(
                 'turnos_estudios_historicos',
@@ -515,6 +516,20 @@ SQL;
             ->result_array()
         ;
         if (count($query) == 1) {
+            $query_est = $this->db
+                ->from('estudios')
+                ->where('id_estudios', $query[0]['id_estudios'])
+                ->get()
+                ->result_array()
+            ;
+            if (count($query_est) > 0) {
+                $query[0]['id_estudios'] = utf8_encode(ucwords(lower(trim(utf8_decode(
+                    $query_est[0]['nombre']
+                )))));
+            } else {
+                $query[0]['id_estudios'] = '---';
+            }
+
             $query_med = $this->db
                 ->from('medicos')
                 ->where('id_medicos', $query[0]['id_medicos'])

@@ -119,6 +119,7 @@ class Diagnostico extends CI_Controller {
         #$dataView['ds'] = $this->Model->obtDiasSemanaDiagnostico($date1, $date2);
 
         $dataView['medicos'] = $this->Model->obtMedicos();
+        $dataView['estudios'] = $this->Model->obtEstudios();
         $dataView['medicos_cm'] = $this->Model->obtMedicosConMatriculas();
         $dataView['obras_sociales'] = $this->Model->obtObrasSociales();
 
@@ -131,7 +132,7 @@ class Diagnostico extends CI_Controller {
     {
         print utf8_encode(
             json_encode(
-                $this->Model->saveDiagnostico(
+                $this->Model->guardarDiagnostico(
                     $this->input->post(),
                     $this->session->userdata('ID_USUARIO')
                 )

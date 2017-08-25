@@ -47,7 +47,7 @@
                 ?>
                 <tr class="tsEst<?=$item['estado']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
                     <td<?=$coln?>><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
-                    <td<?=$coln?>><?=utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios'])))))?></td>
+                    <td<?=$coln.$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
                     <td<?=$coln.$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
                     <td<?=$coln.$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
                     <td<?=$coln.$idme?>"fecha_presentacion"><?=$item['fecha_presentacion'] ? date("d/m/Y", strtotime($item['fecha_presentacion'])) : '---'?></td>
@@ -81,6 +81,20 @@
     <a class="dmBtnA" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a>
 </div>
 
+<div id="tab_estudios" class="tab_hidden">
+    <select name="id_estudios" style="width:120px;">
+        <option value="">---</option>
+        <?php foreach ($estudios AS $row_est): ?>
+            <option
+                value="<?=$row_est['id_estudios']?>"
+            ><?=
+                utf8_encode(ucwords(upper(trim(utf8_decode(
+                    $row_est['nombre']
+                )))))
+            ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>
 <div id="tab_medicos" class="tab_hidden">
     <select name="id_medicos" style="width:120px;">
         <option value="">---</option>
@@ -226,6 +240,7 @@ $(document).ready(function(){
                         var pos = '"]';
                         var serialized;
                         serialized = 'id_turnos_estudios=' + $(this).data('id');
+                        serialized+= '&id_estudios=' + $(pre_s + 'id_estudios' + pos).val();
                         serialized+= '&id_medicos=' + $(pre_s + 'id_medicos' + pos).val();
                         serialized+= '&id_obras_sociales=' + $(pre_s + 'id_obras_sociales' + pos).val();
                         serialized+= '&fecha_presentacion=' + $(pre_i + 'fecha_presentacion' + pos).val();
@@ -238,6 +253,7 @@ $(document).ready(function(){
                         serialized+= '&trajo_arancel=' + $(pre_i + 'trajo_arancel' + pos).val();
                         serialized+= '&deja_deposito=' + $(pre_i + 'deja_deposito' + pos).val();
                         serialized+= '&matricula_derivacion=' + $(pre_i + 'matricula_derivacion' + pos).val();
+                        $(pre_d + 'estudios' + pos).html('&#8634;');
                         $(pre_d + 'medicos' + pos).html('&#8634;');
                         $(pre_d + 'obras_sociales' + pos).html('&#8634;');
                         $(pre_d + 'fecha_presentacion' + pos).html('&#8634;');
@@ -257,6 +273,7 @@ $(document).ready(function(){
                             context: $('#id_te_' + $(this).data('id'))
                         }).done(function(data) {
                             var dataJSON = JSON && JSON.parse(data) || $.parseJSON(data);
+                            $(pre_d + 'estudios' + pos).html(dataJSON['id_estudios']);
                             $(pre_d + 'medicos' + pos).html(dataJSON['id_medicos']);
                             $(pre_d + 'obras_sociales' + pos).html(dataJSON['id_obras_sociales']);
                             $(pre_d + 'fecha_presentacion' + pos).html(dataJSON['fecha_presentacion']);
