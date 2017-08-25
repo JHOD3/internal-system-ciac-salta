@@ -330,6 +330,22 @@ switch ($tabla){
 		else
 			$rta = false;
 	break;
+
+	case "sectores":
+		parse_str(stripslashes($datos));
+
+		$asignaciones = "
+					nombre = '".utf8_decode($nombre)."'
+					";
+
+        $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
+
+		if ($obj->db->consulta($query_string))
+			$rta = true;
+		else
+			$rta = false;
+
+	break;
 }
 echo $rta;
 ?>

@@ -72,6 +72,9 @@ switch ($tabla){
 	case "turnos":
 		$aColumns = array('id_turnos','id_medicos','fecha','desde', 'hasta', 'estado');
 	break;
+	case "sectores":
+		$aColumns = array('id_sectores','nombre');
+	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
 }
@@ -821,9 +824,15 @@ $sWhere = trim($sWhere, " AND ");
 $sWhere = trim($sWhere, " OR ");
 
 if ( $sWhere == "" ){
-		$sWhere = "WHERE $pfTable.estado = 1";
-}else{
-		$sWhere = $sWhere.") AND $pfTable.estado = 1";
+    if ($tabla != 'sectores') {
+    		$sWhere = "WHERE $pfTable.estado = 1";
+    }
+} else {
+    if ($tabla != 'sectores') {
+    	$sWhere = $sWhere.") AND $pfTable.estado = 1";
+    } else {
+    	$sWhere = $sWhere.")";
+    }
 }
 
 
@@ -1168,6 +1177,11 @@ if ($cant_registros != 0){
 					$row[3] = utf8_encode($aRow["desde"]);
 					$row[4] = utf8_encode($aRow["hasta"]);
 					$row[5] = utf8_encode($aRow["estado"]);
+				break;
+				case 'sectores':
+					$row[0] = $aRow["id_sectores"];
+					$row[1] = utf8_encode($aRow['nombre']);
+                    $row[2] = $editar.''.$eliminar.'';
 				break;
 
 			}
