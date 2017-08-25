@@ -77,6 +77,8 @@
 <div>Total en Caja:&nbsp;$&nbsp;<?=number_format($deja_deposito_suma, 2, ",", ".")?></div>
 <div>
     <a href="../tajax/index.php/<?=$this->router->fetch_class().'/exportar/'.$date1.'/'.$date2.'/'.$filtro?>">Exportar Listado</a>
+    |
+    <a class="dmBtnA" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a>
 </div>
 
 <div id="tab_medicos" class="tab_hidden">
@@ -177,7 +179,7 @@ $(document).ready(function(){
             <?php $cnct = ','; ?>
         <?php endforeach; ?>
     ];
-    $('#diagnosticos_medicos .aBtnL a').click(function(event){
+    $('#diagnosticos_medicos .aBtnL a, .dmBtnA').click(function(event){
         event.preventDefault();
         ajxM = $.ajax({
             type: 'POST',

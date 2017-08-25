@@ -277,6 +277,61 @@ SQL;
         return $this->db->query($query)->result_array();
     }
 
+    public function buscarPacientes($nro_documento)
+    {
+        $query = <<<SQL
+            SELECT
+                p.*
+            FROM
+                pacientes AS p
+            WHERE
+                p.estado = 1 AND
+                p.nro_documento = '{$nro_documento}'
+            ORDER BY
+                p.apellidos,
+                p.nombres
+SQL;
+        return $this->db->query($query)->result_array();
+    }
+
+    public function obtEstudios()
+    {
+        $query = <<<SQL
+            SELECT
+                e.*
+            FROM
+                estudios AS e
+            WHERE
+                e.estado = 1
+            ORDER BY
+                e.nombre
+SQL;
+        return $this->db->query($query)->result_array();
+    }
+
+    public function obtEspecialidadDeMedico($id_medico)
+    {
+        $ID_ESPECIALIDADES = ID_ESPECIALIDADES;
+        $query = <<<SQL
+            SELECT
+                e.*
+            FROM
+                medicos_especialidades AS me
+            INNER JOIN
+                especialidades AS e
+                ON me.id_especialidades = e.id_especialidades
+            WHERE
+                me.id_medicos = '{$id_medico}' AND
+                me.estado = 1 AND
+                me.id_especialidades IN ({$ID_ESPECIALIDADES}) AND
+                e.estado = 1
+            GROUP BY
+                me.id_medicos,
+                me.id_especialidades
+SQL;
+        return $this->db->query($query)->result_array();
+    }
+
     public function obtMedicosConMatriculas()
     {
         $query = <<<SQL
@@ -543,6 +598,62 @@ SQL;
         } else {
             return array();
         }
+    }
+
+    public function agregarTurno($vcDuracionTurno, $post)
+    {
+        if ($post['fecha'] != '') {
+            $post['fecha'] = implode("-", array_reverse(explode("/", $post['fecha'])));
+        }
+        if ($post['fecha_presentacion'] != '') {
+            $post['fecha_presentacion'] = implode("-", array_reverse(explode("/", $post['fecha_presentacion'])));
+        }
+        if ($post['desde'] != '') {
+            $post['hasta'] = horaMM($post['desde'], $vcDuracionTurno);
+        }
+        if ($this->session->userdata('ID_USUARIO') != '') {
+            $post['id_usuarios'] = $this->session->userdata('ID_USUARIO');
+        } else {
+            $post['id_usuarios'] = '0';
+        }
+        $post['id_pacientes'] = $this->buscarPacientes($post['id_pacientes']);
+        if (count($post['id_pacientes']) > 0) {
+            $post['id_pacientes'] = $post['id_pacientes'][0]['id_pacientes'];
+        } else {
+            $post['id_pacientes'] = '0';
+        }
+        $dataInsertTurno['id_medicos'] = $post['id_medicos'];
+        $dataInsertTurno['id_especialidades'] = $post['id_especialidades'];
+        $dataInsertTurno['id_pacientes'] = $post['id_pacientes'];
+        $dataInsertTurno['id_turnos_estados'] = '7';
+        $dataInsertTurno['fecha'] = $post['fecha'];
+        $dataInsertTurno['desde'] = $post['desde'];
+        $dataInsertTurno['hasta'] = $post['hasta'];
+        $dataInsertTurno['id_turnos_tipos'] = '2';
+        $dataInsertTurno['estado'] = '1';
+        $dataInsertTurno['tipo_usuario'] = 'U';
+        $dataInsertTurno['id_usuarios'] = $post['id_usuarios'];
+        $dataInsertTurno['fecha_alta'] = date("Y-m-d");
+        $dataInsertTurno['hora_alta'] = date("H:m:s");
+        $this->db->insert('turnos', $dataInsertTurno);
+        $id_turnos = $this->db->insert_id();
+
+        $dataInsertTurnosEstudios['id_turnos'] = $id_turnos;
+        $dataInsertTurnosEstudios['id_estudios'] = $post['id_estudios'];
+        $dataInsertTurnosEstudios['estado'] = '1';
+        $dataInsertTurnosEstudios['id_medicos'] = $post['id_medicos'];
+        $dataInsertTurnosEstudios['id_obras_sociales'] = $post['id_obras_sociales'];
+        $dataInsertTurnosEstudios['fecha_presentacion'] = $post['fecha_presentacion'];
+        $dataInsertTurnosEstudios['nro_orden'] = $post['nro_orden'];
+        $dataInsertTurnosEstudios['nro_afiliado'] = $post['nro_afiliado'];
+        $dataInsertTurnosEstudios['cantidad'] = $post['cantidad'];
+        $dataInsertTurnosEstudios['tipo'] = $post['tipo'];
+        $dataInsertTurnosEstudios['trajo_pedido'] = $post['trajo_pedido'];
+        $dataInsertTurnosEstudios['trajo_orden'] = $post['trajo_orden'];
+        $dataInsertTurnosEstudios['trajo_arancel'] = $post['trajo_arancel'];
+        $dataInsertTurnosEstudios['deja_deposito'] = $post['deja_deposito'];
+        $dataInsertTurnosEstudios['matricula_derivacion'] = $post['matricula_derivacion'];
+        $this->db->insert('turnos_estudios', $dataInsertTurnosEstudios);
     }
 
 }
