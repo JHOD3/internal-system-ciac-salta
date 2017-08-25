@@ -86,6 +86,7 @@ input[type="number"] {
                     <?php endif; ?>
                 <?php endfor; ?>
             <?php endforeach; ?>
+            <option value="21:15:00">SOBRETURNO</option>
         </select>
     </div>
     <div class="tab_float">
