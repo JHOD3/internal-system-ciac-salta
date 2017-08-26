@@ -13,7 +13,8 @@ requerir_class(
     'dias_semana',
     'cobros_conceptos',
     'estructura',
-    'sectores'
+    'sectores',
+    'subsectores'
 );
 
 $tabla = $_GET["tabla"];
@@ -74,6 +75,9 @@ switch ($tabla){
 	break;
 	case "sectores":
 		$aColumns = array('id_sectores','nombre');
+	break;
+	case "subsectores":
+		$aColumns = array('id_subsectores','id_sectores','nombre');
 	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
@@ -519,6 +523,35 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 							}
 						break;
 				break;
+                case 'subsectores':
+					switch($aColumns[$i]){
+						case "id_sectores":
+							$obj = new Sectores();
+							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
+
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
+						break;
+                    }
+                break;
 				default:
 					switch($aColumns[$i]){
 						case 'id_especialidades':
@@ -824,11 +857,11 @@ $sWhere = trim($sWhere, " AND ");
 $sWhere = trim($sWhere, " OR ");
 
 if ( $sWhere == "" ){
-    if ($tabla != 'sectores') {
+    if ($tabla != 'sectores' and $tabla != 'subsectores') {
     		$sWhere = "WHERE $pfTable.estado = 1";
     }
 } else {
-    if ($tabla != 'sectores') {
+    if ($tabla != 'sectores' and $tabla != 'subsectores') {
     	$sWhere = $sWhere.") AND $pfTable.estado = 1";
     } else {
     	$sWhere = $sWhere.")";
@@ -931,6 +964,11 @@ if ($cant_registros != 0){
 				if ($aColumns[$i] == "id_sectores"){
 					$obj_sectores = new Sectores($aRow[$aColumns[$i]]);
 					$sector = $obj_sectores->nombre;
+				}
+
+				if ($aColumns[$i] == "id_subsectores"){
+					$obj_subsectores = new Subsectores($aRow[$aColumns[$i]]);
+					$subsector = $obj_subsectores->nombre;
 				}
 
 				if ($aColumns[$i] == "id_plantas"){
@@ -1182,6 +1220,12 @@ if ($cant_registros != 0){
 					$row[0] = $aRow["id_sectores"];
 					$row[1] = utf8_encode($aRow['nombre']);
                     $row[2] = $editar.''.$eliminar.'';
+				break;
+				case 'subsectores':
+					$row[0] = $aRow["id_subsectores"];
+					$row[1] = utf8_encode($sector);
+					$row[2] = utf8_encode($aRow['nombre']);
+                    $row[3] = $editar.''.$eliminar.'';
 				break;
 
 			}

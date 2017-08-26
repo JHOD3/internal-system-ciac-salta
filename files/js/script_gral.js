@@ -28,6 +28,8 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 						Width = 600;
 					break;
 					case 'estudios':
+					case 'sectores':
+					case 'subsectores':
 						Width = 600;
 					break;
 					case 'obras_sociales':

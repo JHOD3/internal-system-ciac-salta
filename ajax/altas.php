@@ -728,6 +728,25 @@ SQL;
 			$rta = false;
 
 	break;
+	case "subsectores":
+		parse_str(stripslashes($datos));
+
+		$columnas = "(
+					nombre
+					)";
+
+		$valores = "(
+					'".utf8_decode($nombre)."'
+					)";
+
+		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+		if ($obj->db->consulta($query_string))
+			$rta = $obj->db->ultimo_id_insertado();
+		else
+			$rta = false;
+
+	break;
 }
 echo $rta;
 ?>
