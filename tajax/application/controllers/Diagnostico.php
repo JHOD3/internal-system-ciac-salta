@@ -8,6 +8,7 @@ class Diagnostico extends CI_Controller {
         parent::__construct();
         $this->load->model($this->router->fetch_class().'_model', 'Model');
     }
+
     /*
     function microtime_float()
     {
@@ -15,6 +16,80 @@ class Diagnostico extends CI_Controller {
         return ((float)$useg + (float)$seg);
     }
     */
+
+    public function agregar()
+    {
+        $dataView['post'] = $this->input->post();
+        $dataView['medicos'] = $this->Model->obtMedicos();
+        $dataView['estudios'] = $this->Model->obtEstudios();
+        $this->load->view('diagnostico/Agregar_view', $dataView);
+    }
+
+    public function agregar_grilla(
+        $fecha,
+        $id_medicos = null,
+        $id_especialidades = null
+    ) {
+        $dataView['id_especialidades'] = $id_especialidades;
+        if ($id_medicos) {
+            $dataView['especialidades'] = $this->Model->obtEspecialidadDeMedico($id_medicos);
+            if ($id_especialidades) {
+                $this->load->model('Turnero_model');
+                $year = substr($fecha, 0, 4);
+                $month = substr($fecha, 5, 2);
+                $day = substr($fecha, 8, 2);
+                $dataView['year'] = $year;
+                $dataView['month'] = $month;
+                $dataView['day'] = $day;
+                $dataView['aHorarios'] = $this->turnero_model->obtHorarios(
+                    $id_especialidades,
+                    $id_medicos,
+                    $year,
+                    $month,
+                    $day
+                );
+                $dataView['vcDuracionTurno'] = $this->turnero_model->obtDuracionTurno(
+                    $id_especialidades,
+                    $id_medicos
+                );
+                $dataView['aTurnosReservados'] = $this->turnero_model->obtTurnosReservados(
+                    $id_especialidades,
+                    $id_medicos,
+                    $year,
+                    $month,
+                    $day
+                );
+                $dataView['aHorariosInhabilitados'] = $this->turnero_model->obtHorariosInhabilitados(
+                    $id_especialidades,
+                    $id_medicos,
+                    $year,
+                    $month,
+                    $day
+                );
+                $dataView['estudios'] = $this->Model->obtEstudios();
+                $dataView['medicos_cm'] = $this->Model->obtMedicosConMatriculas();
+                $dataView['obras_sociales'] = $this->Model->obtObrasSociales();
+            }
+        }
+        $this->load->view('diagnostico/Agregar_grilla_view', $dataView);
+    }
+
+    public function buscar_paciente() {
+        $dataView['nro_documento'] = $this->input->post('nro_documento');
+        $dataView['paciente'] = $this->Model->buscarPacientes($dataView['nro_documento']);
+        $this->load->view('diagnostico/Agregar_grilla_pacientes_view', $dataView);
+    }
+
+    public function agregar_turno() {
+        $vcDuracionTurno = $this->turnero_model->obtDuracionTurno(
+            $this->input->post('id_especialidades'),
+            $this->input->post('id_medicos')
+        );
+        $this->Model->agregarTurno($vcDuracionTurno, $this->input->post());
+        print "<strong>Se agregó el turno con éxito!</strong>";
+        print "<script>setTimeout(function() {\$('#ag_fecha').change();}, 1000);</script>";
+    }
+
     public function listado($date1, $date2, $filtro = null, $offset = 0, $id_usuario = null)
     {
         #$tiempo_inicio = $this->microtime_float();
@@ -44,6 +119,7 @@ class Diagnostico extends CI_Controller {
         #$dataView['ds'] = $this->Model->obtDiasSemanaDiagnostico($date1, $date2);
 
         $dataView['medicos'] = $this->Model->obtMedicos();
+        $dataView['estudios'] = $this->Model->obtEstudios();
         $dataView['medicos_cm'] = $this->Model->obtMedicosConMatriculas();
         $dataView['obras_sociales'] = $this->Model->obtObrasSociales();
 
@@ -56,7 +132,7 @@ class Diagnostico extends CI_Controller {
     {
         print utf8_encode(
             json_encode(
-                $this->Model->saveDiagnostico(
+                $this->Model->guardarDiagnostico(
                     $this->input->post(),
                     $this->session->userdata('ID_USUARIO')
                 )
