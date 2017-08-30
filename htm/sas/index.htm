@@ -20,16 +20,16 @@
 
 .panel_medicos{
 	width:70%;
-	float:left	
+	float:left
 }
 
 .panel_paciente{
 	width:30%;
-	float:left	
+	float:left
 }
 
 #panel_menu{
-	position:relative;	
+	position:relative;
 }
 
 #panel_menu a#btn_mostrar{
@@ -38,11 +38,11 @@
 	position:absolute;
 	bottom:-6px;
 	right:10%;
-	background:#fff	
+	background:#fff
 }
 
 #form_inhabilitado #desde, #form_inhabilitado #hasta{
-	width:70%	
+	width:70%
 }
 
 #myChat,
@@ -68,25 +68,25 @@
 </style>
 <script>
 	$(document).ready(function(){
-		
+
 		//BOTON INHABILITAR
 		$("#inhabilitar").click(function(e){
 			e.preventDefault();
-			
+
 			if (($("#desde").val().length > 0) && ($("#hasta").val().length > 0) ){
 				var date = $("#agenda").datepicker('getDate');
-				
-				day  = date.getDate(),  
-				month = date.getMonth() + 1,              
+
+				day  = date.getDate(),
+				month = date.getMonth() + 1,
 				year =  date.getFullYear();
 				var fecha = year + '-' + month + '-' + day;
-				
+
 				var variables = $("#form_inhabilitado").serialize();
 				variables += "&medico=" + $("#id_medico").val() + "&especialidad=" + $("#medicos_especialidades").val() + "&fecha=" + fecha;
-				$.ajax({  
-					type: "POST",   
+				$.ajax({
+					type: "POST",
 					url: "[URL]ajax/altas.php",
-					data: {variables: variables, tabla: "horarios_inhabilitados"}, 
+					data: {variables: variables, tabla: "horarios_inhabilitados"},
 					beforeSend: function() {
 						$("#mje").html("Enviando información...");
 					},
@@ -95,27 +95,27 @@
 						//alert (rta);
 						alert ('Horarios Inhabilitados Correctamente');
 						GrillaInicial(date);
-						
+
 					},
 					complete: function(requestData, exito){},
 					error: function (){
 						alert ("Ocurri&oacute; un error. Vuelva a Intentarlo.");
 					}
-				});	
+				});
 			}else{
-				alert ('Debe ingresar hoarario DESDE y HASTA para inhabilitar turnos.')	
+				alert ('Debe ingresar hoarario DESDE y HASTA para inhabilitar turnos.')
 			}
-			
+
 		});
-		
+
 	});
-	
-	
+
+
 	$(document).ready(function(){
 		$("#medicos").focus(function(){
 			$(this).val('');
 		})
-		
+
 		$("#dni").focus(function(){
 			$(this).val('');
 		})
@@ -202,8 +202,12 @@
             $('#tb_f10_estudio').addClass('f10focus').focus();
             $('#tb_f10_obrasocial').removeClass('f10focus');
         });
+
+        $('.datepicker').datepicker({
+            autoSize: true
+        });
 	});
-	
+
 	jQuery(function($){
 	   $("#desde").mask("99:99");
 	   $("#hasta").mask("99:99");
@@ -244,7 +248,7 @@
                 <a href="#" id="btn_buscar_paciente" class="btn">Buscar</a>
                 <a href="#" class="btn btn_tabla" data-nombre="pacientes">Nuevo</a>
             </div>
-            
+
         </div>
    	</div>
 </section>
@@ -253,7 +257,7 @@
 	<div class="container">
     	<div class="row">
             <div class="span3">
-            	
+
                 <div class="row">
                 	<div id="contenedor_agenda" class="span3 contenedor" style="margin-bottom:10px;">
                     </div>
@@ -270,9 +274,9 @@
             	<div class="row">
                     <div id="cont_grilla_turnos">
                         <form action="index.php" method="post">
-                            Desde: <input type="date" name="desde" value="[DATE_DESDE]" style="width:150px;" />                        
+                            Desde: <input type="date" name="desde" value="[DATE_DESDE]" style="width:150px;" />
                             Hasta: <input type="date" name="hasta" value="[DATE_HASTA]" style="width:150px;" />
-                            <input type="submit" value="ok"/>                            
+                            <input type="submit" value="ok"/>
                         </form>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
@@ -363,6 +367,12 @@ function drawBar4Chart() {
                             <div class="clear"></div>
                             <form id="form_inhabilitado" name="form_inhabilitado">
                                 <div style="display:inline-block; width:40%; vertical-align:top">
+                                    Desde: <input type="text" id="fdesde" name="fdesde" value="[DATE_TODAY]" style="width: 70%;" class="datepicker" />
+                                </div>
+                                <div style="display:inline-block; width:40%; vertical-align:top">
+                                    Hasta: <input type="text" id="fhasta" name="fhasta" value="[DATE_TODAY]" style="width: 70%;" class="datepicker" />
+                                </div>
+                                <div style="display:inline-block; width:40%; vertical-align:top">
                                     Desde: <input type="text" id="desde" name="desde" />
                                 </div>
                                 <div style="display:inline-block; width:40%; vertical-align:top">
@@ -390,7 +400,7 @@ function drawBar4Chart() {
                     </div>
                 </div>
             </div>
-            
+
         </div>
 	</div>
 </div>

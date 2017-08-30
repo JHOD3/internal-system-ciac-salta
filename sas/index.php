@@ -33,6 +33,7 @@ $dataOST = $obj_estructura->obtTurnosOtorgadosPorOS($desde, $hasta, $_SESSION['I
 $dataEST = $obj_estructura->obtTurnosOtorgadosPorEST($desde, $hasta, $_SESSION['ID_USUARIO']);
 $dataMOT = $obj_estructura->obtMotivosDeInhabilitaciones();
 
+$htm_index->Asigna("DATE_TODAY", date("d/m/Y"));
 $htm_index->Asigna("DATE_DESDE", $desde);
 $htm_index->Asigna("DATE_DESDE_TEXT", implode("/", array_reverse(explode("-", $desde))));
 $htm_index->Asigna("DATE_HASTA", $hasta);

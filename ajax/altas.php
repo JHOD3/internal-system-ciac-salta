@@ -3,6 +3,8 @@ require_once("../engine/config.php");
 require_once("../engine/restringir_acceso.php");
 requerir_class("tpl","querys","mysql","estructura");
 
+#var_dump($_POST); die;
+
 $tabla = $_POST["tabla"];
 
 if(isset($_POST['variables']))
@@ -673,24 +675,59 @@ SQL;
 
 		$columnas = "(id_medicos, id_especialidades, fecha, desde, hasta, estado, id_horarios_inhabilitados_motivos, horarios_inhabilitados_motivos)";
 
-		$valores = "(
-			".$medico.",
-			".$especialidad.",
-			'".$fecha."',
-			'".$desde."',
-			'".$hasta."',
-			1,
-			'".$id_horarios_inhabilitados_motivos."',
-			'".utf8_encode($horarios_inhabilitados_motivos)."'
-            )";
+        $fdesde = implode("-", array_reverse(explode("/", $fdesde)));
+        $fhasta = implode("-", array_reverse(explode("/", $fhasta)));
+        print "{$fdesde} a {$fhasta}<br />";
 
-		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
-		//error_log($query_string);
-		if ($obj->db->consulta($query_string)){
-			$ultimo_id_insertado = $obj->db->ultimo_id_insertado();
-			$rta = $ultimo_id_insertado;
-		}else
-			$rta = false;
+        $query_string = <<<SQL
+            SELECT
+                id_dias_semana
+            FROM
+                medicos_horarios
+            WHERE
+                id_especialidades = '{$especialidad}' AND
+                id_medicos = '{$medico}' AND
+                estado = '1' AND
+                id_turnos_tipos NOT IN (9, 10)
+            GROUP BY
+                id_dias_semana
+            ORDER BY
+                id_dias_semana
+SQL;
+        $query = $obj->db->consulta($query_string);
+        $dds = array();
+        while ($row = $obj->db->fetch_array($query)) {
+            $dds[] = $row['id_dias_semana'];
+        }
+
+		$rta = false;
+        for ($f = $fdesde; $f <= $fhasta; $f = date("Y-m-d", strtotime('+1 day', strtotime($f)))) {
+            $id_dias_semana = date('w', strtotime($f));
+            if ($id_dias_semana == 7) {
+                $id_dias_semana = 1;
+            } else {
+                $id_dias_semana++;
+            }
+            if (in_array($id_dias_semana, $dds)) {
+        		$valores = "(
+        			".$medico.",
+        			".$especialidad.",
+        			'".$f."',
+        			'".$desde."',
+        			'".$hasta."',
+        			1,
+        			'".$id_horarios_inhabilitados_motivos."',
+        			'".utf8_encode($horarios_inhabilitados_motivos)."'
+                    )";
+
+        		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+        		#error_log($query_string);
+        		if ($obj->db->consulta($query_string)){
+        			$ultimo_id_insertado = $obj->db->ultimo_id_insertado();
+        			$rta = $ultimo_id_insertado;
+                }
+            }
+        }
 	break;
 	case "mensajes":
 		parse_str(stripslashes($datos));
