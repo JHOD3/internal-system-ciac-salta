@@ -1,3 +1,11 @@
+<style>
+.tAC {
+    text-align: center;
+}
+.tAR {
+    text-align: right;
+}
+</style>
 <h1>Diagnóstico por Imágenes <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a></h1>
 <form id="frmInpSrcFilter">
     <table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
@@ -23,7 +31,22 @@
             <tr class="inputSearch">
                 <td><input id="spac" name="spac" type="text" value="<?=isset($spac) ? $spac : ''?>" /></td>
                 <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
-                <td><input id="srea" name="srea" type="text" value="<?=isset($srea) ? $srea : ''?>" /></td>
+                <td>
+                    <select id="srea" name="srea">
+                        <?php
+                        for ($i = 0; $i < count($medicos); $i++):
+                            $m = strtoupper(
+                                $medicos[$i]['saludo']." ".
+                                $medicos[$i]['apellidos'].", ".
+                                $medicos[$i]['nombres']
+                            );
+                            ?>
+                            <option value="<?=$m?>"<?=(isset($srea) and $srea == $m) ? ' selected="selected"' : ''?>><?=$m?></option>
+                            <?php
+                        endfor;
+                        ?>
+                    </select>
+                </td>
                 <td><input id="soso" name="soso" type="text" value="<?=isset($soso) ? $soso : ''?>" /></td>
                 <td>&nbsp;</td>
                 <td><input id="snor" name="snor" type="text" value="<?=isset($snor) ? $snor : ''?>" /></td>
@@ -53,41 +76,41 @@
                 <td>Derivador</td>
                 <td>Acciones</td>
             </tr>
-            <?php if (count($listado) > 0) : ?>
-                <?php foreach($listado as $item):?>
-                    <?php
-                    $coln = " style=\"color:#{$item['color']};\"";
-                    $colc = " style=\"color:#{$item['color']};text-align:center;\"";
-                    $colr = " style=\"color:#{$item['color']};text-align:right;\"";
-                    $idme = 'class="tdTab" data-id="'.$item['id_turnos_estudios'].'" data-method=';
-                    ?>
-                    <tr class="tsEst<?=$item['estado']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
-                        <td<?=$coln?>><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
-                        <td<?=$coln.$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
-                        <td<?=$coln.$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
-                        <td<?=$coln.$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
-                        <td<?=$coln.$idme?>"fecha_presentacion"><?=$item['fecha_presentacion'] ? date("d/m/Y", strtotime($item['fecha_presentacion'])) : '---'?></td>
-                        <td<?=$coln.$idme?>"nro_orden"><?=$item['nro_orden'] ? $item['nro_orden'] : '---'?></td>
-                        <td<?=$coln.$idme?>"nro_afiliado"><?=$item['nro_afiliado'] ? $item['nro_afiliado'] : '---'?></td>
-                        <td<?=$colc.$idme?>"cantidad"><?=$item['cantidad'] ? $item['cantidad'] : '---'?></td>
-                        <td<?=$coln.$idme?>"tipo"><?=$item['tipo'] == '1' ? 'A' : ($item['tipo'] == '2' ? 'I' : '---')?></td>
-                        <td<?=$colc.$idme?>"trajo_pedido"><?=$item['trajo_pedido'] == '1' ? 'TP' : ($item['trajo_pedido'] == '2' ? 'No' : '---')?></td>
-                        <td<?=$colc.$idme?>"trajo_orden"><?=$item['trajo_orden'] == '1' ? 'TO' : ($item['trajo_orden'] == '2' ? 'No' : '---')?></td>
-                        <td<?=$colr.$idme?>"trajo_arancel"><?=$item['trajo_arancel'] > 0 ? "\$&nbsp;{$item['trajo_arancel']}" : '---'?></td>
-                        <td<?=$colr.$idme?>"deja_deposito"><?=$item['deja_deposito'] > 0 ? "\$&nbsp;{$item['deja_deposito']}" : '---'?></td>
-                        <td<?=$colr.$idme?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
-                        <td<?=$colr.$idme?>"save"></td>
-                    </tr>
-                <?php endforeach;?>
-            <?php else: ?>
+            <?php
+            if (count($listado) > 0) :
+                foreach($listado as $item):
+                    $idmec = ' class="tdTab tAC" data-mth=';;
+                    $idmer = ' class="tdTab tAR" data-mth=';;
+                    $idme = ' class="tdTab" data-mth=';
+?>
+<tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>" style="color:#<?=$item['color']?>;">
+    <td><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
+    <td<?=$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
+    <td<?=$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
+    <td<?=$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
+    <td<?=$idme?>"fecha_presentacion"><?=$item['fecha_presentacion'] ? date("d/m/Y", strtotime($item['fecha_presentacion'])) : '---'?></td>
+    <td<?=$idme?>"nro_orden"><?=$item['nro_orden'] ? $item['nro_orden'] : '---'?></td>
+    <td<?=$idme?>"nro_afiliado"><?=$item['nro_afiliado'] ? $item['nro_afiliado'] : '---'?></td>
+    <td<?=$idmec?>"cantidad"><?=$item['cantidad'] ? $item['cantidad'] : '---'?></td>
+    <td<?=$idme?>"tipo"><?=$item['tipo'] == '1' ? 'A' : ($item['tipo'] == '2' ? 'I' : '---')?></td>
+    <td<?=$idmec?>"trajo_pedido"><?=$item['trajo_pedido'] == '1' ? 'TP' : ($item['trajo_pedido'] == '2' ? 'No' : '---')?></td>
+    <td<?=$idmec?>"trajo_orden"><?=$item['trajo_orden'] == '1' ? 'TO' : ($item['trajo_orden'] == '2' ? 'No' : '---')?></td>
+    <td<?=$idmer?>"trajo_arancel"><?=$item['trajo_arancel'] > 0 ? "\$&nbsp;{$item['trajo_arancel']}" : '---'?></td>
+    <td<?=$idmer?>"deja_deposito"><?=$item['deja_deposito'] > 0 ? "\$&nbsp;{$item['deja_deposito']}" : '---'?></td>
+    <td<?=$idmer?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
+    <td<?=$idmer?>"save"></td>
+</tr>
+<?php
+                endforeach;
+            else:
+                ?>
                 <tr>
                     <td colspan="100%">No se encontró ningún turno</td>
                 </tr>
-            <?php endif; ?>
+                <?php
+            endif;
+            ?>
         </tbody>
-        <tfoot>
-            <th colspan="100%">Total: <?='-'?></th>
-        </tfoot>
     </table>
 </form>
 
@@ -232,7 +255,7 @@ $(document).ready(function(){
             $(this).parent().find('.tdTab').each(function(){
                 var valDefault = $(this).html().replace('$&nbsp;', '').replace('---', '');
                 if (valDefault[0] != '<') {
-                    $(this).html($('#tab_' + $(this).data('method')).html().replace('date_picker', 'datepicker'));
+                    $(this).html($('#tab_' + $(this).data('mth')).html().replace('date_picker', 'datepicker'));
                     switch ($(this).find('input, select').prop('tagName')) {
                         case 'INPUT':
                             if ($(this).find('input').attr('type') != 'button') {
@@ -250,10 +273,10 @@ $(document).ready(function(){
                     $(this).find('.ac_matricula_derivacion').autocomplete({
                         source: tagsACMD
                     });
-                    $(this).find('input[type="button"]').attr('data-id', $(this).data('id'));
+                    $(this).find('input[type="button"]').attr('data-id', $(this).parent().data('id'));
                     $(this).find('input[type="button"]').click(function(){
                         $(this).parent().html('');
-                        var pre_d = '#id_te_' + $(this).data('id') + ' *[data-method="';
+                        var pre_d = '#id_te_' + $(this).data('id') + ' *[data-mth="';
                         var pre_i = '#id_te_' + $(this).data('id') + ' input[name="';
                         var pre_s = '#id_te_' + $(this).data('id') + ' select[name="';
                         var pos = '"]';
