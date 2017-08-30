@@ -33,6 +33,7 @@
                 <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
                 <td>
                     <select id="srea" name="srea">
+                        <option value=""></option>
                         <?php
                         for ($i = 0; $i < count($medicos); $i++):
                             $m = strtoupper(
