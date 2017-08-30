@@ -1343,4 +1343,9 @@ tr.even td:last-child{
     box-shadow: none!important;
     text-shadow: none!important;
     border-radius: 5px!important;
+    height: 19px!important;
+}
+
+#tblDxI tr.inputSearch > td > select {
+    height: 23px!important;
 }
