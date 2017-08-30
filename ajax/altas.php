@@ -717,7 +717,7 @@ SQL;
         			'".$hasta."',
         			1,
         			'".$id_horarios_inhabilitados_motivos."',
-        			'".utf8_encode($horarios_inhabilitados_motivos)."'
+        			'".$horarios_inhabilitados_motivos."'
                     )";
 
         		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
