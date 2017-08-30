@@ -140,7 +140,7 @@ class Estructura{
 					$query_string = $this->querys->TodosRegistros($this->nombre_tabla,$orden);
 		}
 
-		$query = $this->db->consulta($query_string);
+        $query = $this->db->consulta($query_string);
 		$cant_registros = $this->db->num_rows($query);
 		if ($multiple != ""){
 			$drop->Asigna("MULTIPLE",'multiple="multiple"');
@@ -149,19 +149,21 @@ class Estructura{
 		}
 		if ($cant_registros != 0){
 			while ($row = $this->db->fetch_array($query)){
+                $parent_id = '';
+
 				if ($id == $row["id_".$this->nombre_tabla]){
 					$row["SELECTED"] = "selected='selected'";
 				}else{
 					$row["SELECTED"] = "";
 				}
 
-				switch($this->nombre_tabla){
+				$texto = $row["nombre"];
 
-					default:
-						$texto = $row["nombre"];
-				}
-
-				switch($this->nombre_tabla){
+                switch($this->nombre_tabla){
+                    case "subsectores":
+                        $parent_id = ' data-pid="'.$row['id_sectores'].'"';
+						$valor = $row["id_".$this->nombre_tabla];
+                    break;
 					case "medicos_especialidades":
 						$valor = $row["id_especialidades"];
 						$texto = utf8_encode($row["nombre"]);
@@ -190,6 +192,7 @@ class Estructura{
 				}
 				$row["VALUE"] = $valor;
 				$row["TEXTO_OPTION"] = $texto;
+                $row["PARENT_ID"] = $parent_id;
 				$drop->AsignaBloque('block_option',$row);
 			}
 		}else{

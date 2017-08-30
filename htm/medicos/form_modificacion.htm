@@ -82,6 +82,22 @@
 				});
 			}
 		});
+
+        $('#sectores').change(function(){
+            var pid = $(this).val();
+            if (console && console.log) console.log(pid);
+            $('#subsectores option').each(function() {
+                if ($(this).data('pid') == pid) {
+                    $(this).removeAttr('disabled');
+                    $(this).removeAttr('style');
+                } else {
+                    $(this).attr('disabled', 'disabled');
+                    $(this).attr('style', 'display:none;');
+                    $(this).removeAttr('selected');
+                }
+            })
+        });
+        $('#sectores').change();
 	});
 </script>
 [block: block_registros]
@@ -129,8 +145,12 @@
                 <input type="text" class="text-long" name="particular_consulta" value="[particular_consulta]" />
             </div>
             <div class="bloque">
-                <label>Tipo Sector: </label>
+                <label>Sector: </label>
                 [DROP_SECTORES]
+            </div>
+            <div class="bloque">
+                <label>Subsector: </label>
+                [DROP_SUBSECTORES]
             </div>
             <div class="bloque">
                 <label>Nro. Consultorio: </label>

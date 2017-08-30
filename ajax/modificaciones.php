@@ -57,6 +57,9 @@ switch ($tabla){
 		if (!isset($sectores) || $sectores == "")
 			$sectores = 0;
 
+		if (!isset($subsectores) || $subsectores == "")
+			$subsectores = 0;
+
 		if (!isset($nro_sector) || $nro_sector == "")
 			$nro_sector = "-";
 
@@ -79,6 +82,7 @@ switch ($tabla){
 					email = '".strtoupper($email)."',
 					particular_consulta = '".$particular_consulta."',
 					id_sectores = ".$sectores.",
+					id_subsectores = ".$subsectores.",
 					nro_sector = '".strtoupper(utf8_decode($nro_sector))."',
 					id_plantas = ".$plantas.",
 					interno = ".$interno.",

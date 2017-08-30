@@ -38,7 +38,7 @@ switch ($tabla){
 		$aColumns = array('id_pacientes', 'nro_documento', 'apellidos', 'nombres', 'id_obras_sociales');
 	break;
 	case "medicos":
-		$aColumns = array('id_medicos', 'saludo', 'apellidos', 'nombres', 'nro_documento', 'email', 'telefonos', 'id_sectores', 'interno', 'id_plantas', 'matricula');
+		$aColumns = array('id_medicos', 'saludo', 'apellidos', 'nombres', 'nro_documento', 'email', 'telefonos', 'id_sectores', 'id_subsectores', 'interno', 'id_plantas', 'matricula');
 	break;
 	case "especialidades":
 		$aColumns = array('id_especialidades', 'nombre');
@@ -414,6 +414,31 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 					switch($aColumns[$i]){
 						case "id_sectores":
 							$obj = new Sectores();
+							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
+
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
+						break;
+						case "id_subsectores":
+							$obj = new Subsectores();
 							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
 
 							$cant = $obj->db->num_rows($query);
@@ -1045,11 +1070,12 @@ if ($cant_registros != 0){
 					$row[5] = strtolower(utf8_encode($aRow["email"]));
 					$row[6] = utf8_encode($aRow["telefonos"]);
 					$row[7] = utf8_encode($sector);
-					$row[8] = utf8_encode($aRow["interno"]);
-					$row[9] = utf8_encode($planta);
-					$row[10] = utf8_encode($aRow["matricula"]);
+					$row[8] = utf8_encode($subsector);
+					$row[9] = utf8_encode($aRow["interno"]);
+					$row[10] = utf8_encode($planta);
+					$row[11] = utf8_encode($aRow["matricula"]);
                     if ($_SESSION['ID_USUARIO'] === '0') {
-                        $row[11] =
+                        $row[12] =
                             $editar.''.
                             $especialidades.''.
                             $obras_sociales_planes.''.
@@ -1057,7 +1083,7 @@ if ($cant_registros != 0){
                             $eliminar.''
                         ;
                     } else {
-                        $row[11] =
+                        $row[12] =
                             $especialidades.''.
                             $obras_sociales_planes.''.
                             $estudios.''

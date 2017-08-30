@@ -77,6 +77,7 @@ switch ($tabla){
 					pass,
 					particular_consulta,
 					id_sectores,
+					id_subsectores,
 					nro_sector,
 					interno,
                     matricula,
@@ -88,6 +89,9 @@ switch ($tabla){
 
 		if (!isset($sectores) || $sectores == "")
 			$sectores = 0;
+
+		if (!isset($subsectores) || $subsectores == "")
+			$subsectores = 0;
 
 		if (!isset($nro_sector) || $nro_sector == "")
 			$nro_sector = "-";
@@ -112,6 +116,7 @@ switch ($tabla){
 					'".base64_encode($nro_documento)."',
 					'".$particular_consulta."',
 					".$sectores.",
+					".$subsectores.",
 					'".strtoupper(utf8_decode($nro_sector))."',
 					".$interno.",
 					".$matricula.",
