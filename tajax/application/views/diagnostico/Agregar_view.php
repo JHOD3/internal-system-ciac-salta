@@ -3,7 +3,7 @@ form select {
     padding: 8px 8px 9px 8px;
 }
 </style>
-<h1>Diagnóstico por Imágenes</h1>
+<h1>Prácticas Médicas</h1>
 <h2>Asignar un Turno</h2>
 
 <form id="frmAgrTur" action="../tajax/index.php/<?=$this->router->fetch_class()?>/agregar_turno/" method="post">

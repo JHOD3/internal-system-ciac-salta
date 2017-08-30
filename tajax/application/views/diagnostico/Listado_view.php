@@ -6,7 +6,7 @@
     text-align: right;
 }
 </style>
-<h1>Diagnóstico por Imágenes <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a></h1>
+<h1>Prácticas Médicas <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a></h1>
 <form id="frmInpSrcFilter">
     <table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
         <tbody>
