@@ -732,10 +732,12 @@ SQL;
 		parse_str(stripslashes($datos));
 
 		$columnas = "(
+                    id_sectores,
 					nombre
 					)";
 
 		$valores = "(
+					'".utf8_decode($sectores)."',
 					'".utf8_decode($nombre)."'
 					)";
 

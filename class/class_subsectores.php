@@ -13,10 +13,15 @@ class Subsectores extends Estructura implements iSubsectores{
 		$this->drop_label_elija = "Elija un Subsectores";
 
 		parent::__construct($id);
+
+		requerir_class("sectores");
 	}
 
 	function FormAlta(){
 		$htm = $this->Html($this->nombre_tabla."/form_alta");
+
+		$obj_sectores = new Sectores();
+		$htm->Asigna("DROP_SECTORES", $obj_sectores->Drop());
 
 		$htm->Asigna("TABLA",$this->nombre_tabla);
 
@@ -28,6 +33,9 @@ class Subsectores extends Estructura implements iSubsectores{
 	function FormModificacion(){
 		$htm = $this->Html($this->nombre_tabla."/form_modificacion");
 		$row = $this->registro;
+
+		$obj_sectores = new Sectores();
+		$htm->Asigna("DROP_SECTORES", $obj_sectores->Drop("", $row["id_sectores"]));
 
 		$htm->Asigna("TABLA",$this->nombre_tabla);
 

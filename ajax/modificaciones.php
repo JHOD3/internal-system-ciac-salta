@@ -351,7 +351,8 @@ switch ($tabla){
 		parse_str(stripslashes($datos));
 
 		$asignaciones = "
-					nombre = '".utf8_decode($nombre)."'
+					id_sectores = '".utf8_decode($sectores)."',
+                    nombre = '".utf8_decode($nombre)."'
 					";
 
         $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
