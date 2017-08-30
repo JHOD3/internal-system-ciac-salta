@@ -82,6 +82,7 @@ te.color
 */
         $aPost = array(
             'spac' => "CONCAT(p.apellidos, ', ', p.nombres)",
+            'sces' => "e.codigopractica",
             'sest' => "e.nombre",
             'srea' => "CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres)",
             'soso' => "os.abreviacion",
@@ -205,6 +206,7 @@ te.color
                 CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres) AS medicos,
                 os.abreviacion AS obras_sociales,
                 e.nombre AS estudios,
+                e.codigopractica,
                 ts.*,
                 te.nombre AS turnos_estados,
                 te.color
@@ -541,8 +543,10 @@ SQL;
                 $query[0]['id_estudios'] = utf8_encode(ucwords(lower(trim(utf8_decode(
                     $query_est[0]['nombre']
                 )))));
+                $query[0]['codigopractica'] = $query_est[0]['codigopractica'];
             } else {
                 $query[0]['id_estudios'] = '---';
+                $query[0]['codigopractica'] = '';
             }
 
             $query_med = $this->db

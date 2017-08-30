@@ -30,6 +30,7 @@
             </tr>
             <tr class="inputSearch">
                 <td><input id="spac" name="spac" type="text" value="<?=isset($spac) ? $spac : ''?>" /></td>
+                <td><input id="sces" name="sces" type="text" value="<?=isset($sces) ? $sces : ''?>" /></td>
                 <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
                 <td>
                     <select id="srea" name="srea">
@@ -62,6 +63,7 @@
             </tr>
             <tr class="trHead">
                 <td>Paciente</td>
+                <td>Cod. Est.</td>
                 <td>Estudio</td>
                 <td>Realizador</td>
                 <td>O.Social</td>
@@ -86,6 +88,7 @@
 ?>
 <tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>" style="color:#<?=$item['color']?>;">
     <td><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
+    <td data-mth="codigopractica"><?=$item['codigopractica']?></td>
     <td<?=$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
     <td<?=$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
     <td<?=$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
@@ -316,6 +319,7 @@ $(document).ready(function(){
                             context: $('#id_te_' + $(this).data('id'))
                         }).done(function(data) {
                             var dataJSON = JSON && JSON.parse(data) || $.parseJSON(data);
+                            $(pre_d + 'codigopractica' + pos).html(dataJSON['codigopractica']);
                             $(pre_d + 'estudios' + pos).html(dataJSON['id_estudios']);
                             $(pre_d + 'medicos' + pos).html(dataJSON['id_medicos']);
                             $(pre_d + 'obras_sociales' + pos).html(dataJSON['id_obras_sociales']);
