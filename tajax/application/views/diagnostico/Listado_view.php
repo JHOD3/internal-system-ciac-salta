@@ -7,7 +7,7 @@
 }
 </style>
 <h1>Prácticas Médicas <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a></h1>
-<form id="frmInpSrcFilter">
+<form id="frmInpSrcFilter" method="post">
     <table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
         <tbody>
             <tr class="trDate">
@@ -17,7 +17,7 @@
                     Hasta:
                     <input type="text" id="date2" value="<?=date("d/m/Y", strtotime($date2))?>" class="datepicker" />
                     <input type="button" id="dateok" value="ok" />
-                    <input type="button" id="dateexport" value="export" />
+                    <input type="button" id="dateexport" value="exportar" />
                     <?php
                     /*
                     <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['ayer'])?>">Anterior</a>
@@ -205,7 +205,7 @@ $(document).ready(function(){
         $('tr.inputSearch').html('');
         ajxM = $.ajax({
             type: 'POST',
-            url: '../tajax/index.php/<?=$this->router->fetch_class().'/listado/'?>'+date1+'/'+date2+'/',
+            url: '../tajax/index.php/<?=$this->router->fetch_class()?>/listado/'+date1+'/'+date2+'/',
             data: frmData,
             context: document.body
         }).done(function(data) {
@@ -219,13 +219,9 @@ $(document).ready(function(){
         var date2 = $('#date2').val();
         date2 = date2.split('/');
         date2 = date2[2] + '-' + date2[1] + '-' + date2[0];
-        window.location =
-            '../tajax/index.php/'+
-            '<?=$this->router->fetch_class()?>'+
-            '/exportar/'+
-            date1+'/'+
-            date2+'/'
-        ;
+        var frmData = $('#frmInpSrcFilter').serialize();
+        $('#frmInpSrcFilter').attr('action', '../tajax/index.php/<?=$this->router->fetch_class()?>/exportar/'+date1+'/'+date2+'/');
+        $('#frmInpSrcFilter').submit();
     });
     $('#frmInpSrcFilter input').keypress(function(e){
         if(e.which == 13) {

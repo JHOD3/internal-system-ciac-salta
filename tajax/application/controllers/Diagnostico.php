@@ -141,10 +141,11 @@ class Diagnostico extends CI_Controller {
     public function exportar($date1, $date2, $filter = '')
     {
         $this->load->library('table');
+        $post = $this->input->post();
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
         $dataView['filter'] = utf8_encode($filter);
-        $dataView['aDiagnosticos'] = $this->Model->obtDiagnosticosExport($date1, $date2, $filter);
+        $dataView['aDiagnosticos'] = $this->Model->obtDiagnosticosExport($date1, $date2, $post);
         $this->table->set_heading(
             'Nro de Paciente',
             'Paciente',
