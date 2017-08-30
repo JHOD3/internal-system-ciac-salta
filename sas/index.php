@@ -30,7 +30,7 @@ $d = implode("-", array_reverse(explode("/", $desde)));
 $h = implode("-", array_reverse(explode("/", $hasta)));
 
 $obj_medicos = new Medicos();
-$htm_index->Asigna("DROP_MEDICOS", $obj_medicos->Drop("", $_GET['id_medicos']));
+$htm_index->Asigna("DROP_MEDICOS", utf8_encode($obj_medicos->Drop("", $_GET['id_medicos'])));
 
 $htm_index->Asigna("DATE_TODAY", date("d/m/Y"));
 $htm_index->Asigna("DATE_DESDE", $desde);
