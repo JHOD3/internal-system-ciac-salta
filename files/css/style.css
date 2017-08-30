@@ -1327,13 +1327,15 @@ tr.even td:last-child{
 
 #tblDxI tr.inputSearch,
 #tblDxI tr.inputSearch *,
-#tblDxI tr.inputSearch td input {
+#tblDxI tr.inputSearch td input,
+#tblDxI tr.inputSearch td select {
     background-color: #ffffff!important;
     padding: 0!important;
     margin: 0!important;
 }
 
-#tblDxI tr.inputSearch > td > input {
+#tblDxI tr.inputSearch > td > input,
+#tblDxI tr.inputSearch > td > select {
     width: 90%!important;
     padding: 1px 2%!important;
     margin: 0 0 2px 0!important;
