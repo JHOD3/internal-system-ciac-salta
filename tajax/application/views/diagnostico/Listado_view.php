@@ -1,85 +1,95 @@
-<h1>Diagnóstico por Imágenes</h1>
-<table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
-    <tbody>
-        <tr class="trDate">
-            <td colspan="100%" class="aBtnL">
-                Filtro:
-                <input type="text" id="filtro" name="filtro" value="<?=$filtro?>" style="text-transform: none!important;" /> -
-                Desde:
-                <input type="text" id="date1" value="<?=date("d/m/Y", strtotime($date1))?>" class="datepicker" /> -
-                Hasta:
-                <input type="text" id="date2" value="<?=date("d/m/Y", strtotime($date2))?>" class="datepicker" />
-                <input type="button" id="dateok" value="ok" />
-                <?php
-                /*
-                <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['ayer'])?>">Anterior</a>
-                <strong style="margin:0 10px;"><?=utf8_encode(dateLegible($date))?></strong>
-                <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['mana'])?>">Siguiente</a>
-                */
-                ?>
-            </td>
-        </tr>
-        <tr class="trHead">
-            <td>Paciente</td>
-            <td>Estudio</td>
-            <td>Realizador</td>
-            <td>O.Social</td>
-            <td>Presentación</td>
-            <td>Nro.Orden</td>
-            <td>Nro.Afiliado</td>
-            <td>Cant.</td>
-            <td>Tipo</td>
-            <td>TP</td>
-            <td>TO</td>
-            <td>TA</td>
-            <td>DD</td>
-            <td>Derivador</td>
-            <td>Acciones</td>
-        </tr>
-        <tr><td colspan="100%" class="aBtnL"><?=$pagination_links;?></td></tr>
-        <?php if (count($listado) > 0) : ?>
-            <?php foreach($listado as $item):?>
-                <?php
-                $coln = " style=\"color:#{$item['color']};\"";
-                $colc = " style=\"color:#{$item['color']};text-align:center;\"";
-                $colr = " style=\"color:#{$item['color']};text-align:right;\"";
-                $idme = 'class="tdTab" data-id="'.$item['id_turnos_estudios'].'" data-method=';
-                ?>
-                <tr class="tsEst<?=$item['estado']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
-                    <td<?=$coln?>><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
-                    <td<?=$coln.$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
-                    <td<?=$coln.$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
-                    <td<?=$coln.$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
-                    <td<?=$coln.$idme?>"fecha_presentacion"><?=$item['fecha_presentacion'] ? date("d/m/Y", strtotime($item['fecha_presentacion'])) : '---'?></td>
-                    <td<?=$coln.$idme?>"nro_orden"><?=$item['nro_orden'] ? $item['nro_orden'] : '---'?></td>
-                    <td<?=$coln.$idme?>"nro_afiliado"><?=$item['nro_afiliado'] ? $item['nro_afiliado'] : '---'?></td>
-                    <td<?=$colc.$idme?>"cantidad"><?=$item['cantidad'] ? $item['cantidad'] : '---'?></td>
-                    <td<?=$coln.$idme?>"tipo"><?=$item['tipo'] == '1' ? 'A' : ($item['tipo'] == '2' ? 'I' : '---')?></td>
-                    <td<?=$colc.$idme?>"trajo_pedido"><?=$item['trajo_pedido'] == '1' ? 'TP' : ($item['trajo_pedido'] == '2' ? 'No' : '---')?></td>
-                    <td<?=$colc.$idme?>"trajo_orden"><?=$item['trajo_orden'] == '1' ? 'TO' : ($item['trajo_orden'] == '2' ? 'No' : '---')?></td>
-                    <td<?=$colr.$idme?>"trajo_arancel"><?=$item['trajo_arancel'] > 0 ? "\$&nbsp;{$item['trajo_arancel']}" : '---'?></td>
-                    <td<?=$colr.$idme?>"deja_deposito"><?=$item['deja_deposito'] > 0 ? "\$&nbsp;{$item['deja_deposito']}" : '---'?></td>
-                    <td<?=$colr.$idme?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
-                    <td<?=$colr.$idme?>"save"></td>
-                </tr>
-            <?php endforeach;?>
-        <?php else: ?>
-            <tr>
-                <td colspan="100%">No se encontró ningún turno</td>
+<h1>Diagnóstico por Imágenes <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a></h1>
+<form id="frmInpSrcFilter">
+    <table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr class="trDate">
+                <td colspan="100%" class="aBtnL">
+                    Desde:
+                    <input type="text" id="date1" value="<?=date("d/m/Y", strtotime($date1))?>" class="datepicker" /> -
+                    Hasta:
+                    <input type="text" id="date2" value="<?=date("d/m/Y", strtotime($date2))?>" class="datepicker" />
+                    <input type="button" id="dateok" value="ok" />
+                    <input type="button" id="dateexport" value="export" />
+                    <?php
+                    /*
+                    <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['ayer'])?>">Anterior</a>
+                    <strong style="margin:0 10px;"><?=utf8_encode(dateLegible($date))?></strong>
+                    <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['mana'])?>">Siguiente</a>
+                    */
+                    ?>
+                    Total en Caja:&nbsp;$&nbsp;<?=number_format($deja_deposito_suma, 2, ",", ".")?>
+                </td>
             </tr>
-        <?php endif; ?>
-        <tr><td colspan="100%" class="aBtnL"><?=$pagination_links;?></td></tr>
-    </tbody>
-    <tfoot>
-        <th colspan="100%">Total: <?=$pagination_config['total_rows']?></th>
-    </tfoot>
-</table>
-<div>Total en Caja:&nbsp;$&nbsp;<?=number_format($deja_deposito_suma, 2, ",", ".")?></div>
-<div>
-    <a href="../tajax/index.php/<?=$this->router->fetch_class().'/exportar/'.$date1.'/'.$date2.'/'.$filtro?>">Exportar Listado</a>
-    |
-    <a class="dmBtnA" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a>
-</div>
+            <tr class="inputSearch">
+                <td><input id="spac" name="spac" type="text" value="<?=isset($spac) ? $spac : ''?>" /></td>
+                <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
+                <td><input id="srea" name="srea" type="text" value="<?=isset($srea) ? $srea : ''?>" /></td>
+                <td><input id="soso" name="soso" type="text" value="<?=isset($soso) ? $soso : ''?>" /></td>
+                <td>&nbsp;</td>
+                <td><input id="snor" name="snor" type="text" value="<?=isset($snor) ? $snor : ''?>" /></td>
+                <td><input id="snaf" name="snaf" type="text" value="<?=isset($snaf) ? $snaf : ''?>" /></td>
+                <td><input id="scan" name="scan" type="text" value="<?=isset($scan) ? $scan : ''?>" /></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
+            </tr>
+            <tr class="trHead">
+                <td>Paciente</td>
+                <td>Estudio</td>
+                <td>Realizador</td>
+                <td>O.Social</td>
+                <td>Presentación</td>
+                <td>Nro.Orden</td>
+                <td>Nro.Afiliado</td>
+                <td>Cant.</td>
+                <td>Tipo</td>
+                <td>TP</td>
+                <td>TO</td>
+                <td>TA</td>
+                <td>DD</td>
+                <td>Derivador</td>
+                <td>Acciones</td>
+            </tr>
+            <?php if (count($listado) > 0) : ?>
+                <?php foreach($listado as $item):?>
+                    <?php
+                    $coln = " style=\"color:#{$item['color']};\"";
+                    $colc = " style=\"color:#{$item['color']};text-align:center;\"";
+                    $colr = " style=\"color:#{$item['color']};text-align:right;\"";
+                    $idme = 'class="tdTab" data-id="'.$item['id_turnos_estudios'].'" data-method=';
+                    ?>
+                    <tr class="tsEst<?=$item['estado']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
+                        <td<?=$coln?>><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
+                        <td<?=$coln.$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
+                        <td<?=$coln.$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
+                        <td<?=$coln.$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
+                        <td<?=$coln.$idme?>"fecha_presentacion"><?=$item['fecha_presentacion'] ? date("d/m/Y", strtotime($item['fecha_presentacion'])) : '---'?></td>
+                        <td<?=$coln.$idme?>"nro_orden"><?=$item['nro_orden'] ? $item['nro_orden'] : '---'?></td>
+                        <td<?=$coln.$idme?>"nro_afiliado"><?=$item['nro_afiliado'] ? $item['nro_afiliado'] : '---'?></td>
+                        <td<?=$colc.$idme?>"cantidad"><?=$item['cantidad'] ? $item['cantidad'] : '---'?></td>
+                        <td<?=$coln.$idme?>"tipo"><?=$item['tipo'] == '1' ? 'A' : ($item['tipo'] == '2' ? 'I' : '---')?></td>
+                        <td<?=$colc.$idme?>"trajo_pedido"><?=$item['trajo_pedido'] == '1' ? 'TP' : ($item['trajo_pedido'] == '2' ? 'No' : '---')?></td>
+                        <td<?=$colc.$idme?>"trajo_orden"><?=$item['trajo_orden'] == '1' ? 'TO' : ($item['trajo_orden'] == '2' ? 'No' : '---')?></td>
+                        <td<?=$colr.$idme?>"trajo_arancel"><?=$item['trajo_arancel'] > 0 ? "\$&nbsp;{$item['trajo_arancel']}" : '---'?></td>
+                        <td<?=$colr.$idme?>"deja_deposito"><?=$item['deja_deposito'] > 0 ? "\$&nbsp;{$item['deja_deposito']}" : '---'?></td>
+                        <td<?=$colr.$idme?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
+                        <td<?=$colr.$idme?>"save"></td>
+                    </tr>
+                <?php endforeach;?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="100%">No se encontró ningún turno</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+        <tfoot>
+            <th colspan="100%">Total: <?='-'?></th>
+        </tfoot>
+    </table>
+</form>
 
 <div id="tab_estudios" class="tab_hidden">
     <select name="id_estudios" style="width:120px;">
@@ -157,31 +167,40 @@
 $(document).ready(function(){
     $('.datepicker').datepicker();
     $('#dateok').click(function(){
-        var d1 = $('#date1').val().split('/');
-        var d2 = $('#date2').val().split('/');
-        var ft = $('#filtro').val().trim().toLowerCase();
-        ft = ft.replace('á', 'a').replace('Á', 'A');
-        ft = ft.replace('é', 'e').replace('É', 'E');
-        ft = ft.replace('í', 'i').replace('Í', 'I');
-        ft = ft.replace('ó', 'o').replace('Ó', 'O');
-        ft = ft.replace('ú', 'u').replace('Ú', 'U');
-        ft = ft.replace('ü', 'u').replace('Ü', 'U');
-        ft = ft.replace('ñ', 'n').replace('Ñ', 'N');
+        var date1 = $('#date1').val();
+        date1 = date1.split('/');
+        date1 = date1[2] + '-' + date1[1] + '-' + date1[0];
+        var date2 = $('#date2').val();
+        date2 = date2.split('/');
+        date2 = date2[2] + '-' + date2[1] + '-' + date2[0];
+        var frmData = $('#frmInpSrcFilter').serialize();
         $('#dateok').parent().parent().html('<div style="white-space: nowrap;"><img alt="" src="../files/img/ajax-loader.gif" /> Cargando los diagnósticos<br /><img alt="" src="../files/img/ajax-loader.gif" /> Espere un momento por favor</div>');
+        $('tr.inputSearch').html('');
         ajxM = $.ajax({
             type: 'POST',
-            url:
-                '../tajax/index.php/<?=$this->router->fetch_class().'/listado/'?>' +
-                d1[2] + '-' + d1[1] + '-' + d1[0] + '/' +
-                d2[2] + '-' + d2[1] + '-' + d2[0] + '/' +
-                ft + '/0'
-            ,
+            url: '../tajax/index.php/<?=$this->router->fetch_class().'/listado/'?>'+date1+'/'+date2+'/',
+            data: frmData,
             context: document.body
         }).done(function(data) {
             $('#diagnosticos_medicos').html(data);
         });
     })
-    $('#date1, #date2, #filtro').keypress(function(e){
+    $('#dateexport').click(function(){
+        var date1 = $('#date1').val();
+        date1 = date1.split('/');
+        date1 = date1[2] + '-' + date1[1] + '-' + date1[0];
+        var date2 = $('#date2').val();
+        date2 = date2.split('/');
+        date2 = date2[2] + '-' + date2[1] + '-' + date2[0];
+        window.location =
+            '../tajax/index.php/'+
+            '<?=$this->router->fetch_class()?>'+
+            '/exportar/'+
+            date1+'/'+
+            date2+'/'
+        ;
+    });
+    $('#frmInpSrcFilter input').keypress(function(e){
         if(e.which == 13) {
             $('#dateok').focus().click();
         }

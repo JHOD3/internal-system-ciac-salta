@@ -1324,3 +1324,21 @@ tr.even td:last-child{
 .ui-datepicker-calendar > tbody > tr > td > span{
     padding: 3px 10px!important;
 }
+
+#tblDxI tr.inputSearch,
+#tblDxI tr.inputSearch *,
+#tblDxI tr.inputSearch td input {
+    background-color: #ffffff!important;
+    padding: 0!important;
+    margin: 0!important;
+}
+
+#tblDxI tr.inputSearch > td > input {
+    width: 90%!important;
+    padding: 1px 2%!important;
+    margin: 0 0 2px 0!important;
+    display: block!important;
+    box-shadow: none!important;
+    text-shadow: none!important;
+    border-radius: 5px!important;
+}

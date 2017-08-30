@@ -90,30 +90,28 @@ class Diagnostico extends CI_Controller {
         print "<script>setTimeout(function() {\$('#ag_fecha').change();}, 1000);</script>";
     }
 
-    public function listado($date1, $date2, $filtro = null, $offset = 0, $id_usuario = null)
+    public function listado($date1, $date2, $id_usuario = null)
     {
         #$tiempo_inicio = $this->microtime_float();
 
         if (isset($id_usuario)) {
             $this->session->set_userdata(array('ID_USUARIO' => $id_usuario));
         }
-        $dataView = $this->Model->obtenerPaginacion($date1, $date2, $filtro);
+        $post = $this->input->post();
+        $dataView = $post;
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
-        $dataView['filtro'] = $filtro == '0' ? '' : trim(str_replace('%20', ' ', $filtro));
         #$tiempo_fin = $this->microtime_float(); $tiempo = $tiempo_fin - $tiempo_inicio; echo "Tiempo empleado: " . ($tiempo_fin - $tiempo_inicio)."<br />";
         $dataView['listado'] = $this->Model->obtenerListado(
             $date1,
             $date2,
-            $filtro,
-            $dataView['pagination_config']['per_page'],
-            $offset
+            $post
         );
         #$tiempo_fin = $this->microtime_float(); $tiempo = $tiempo_fin - $tiempo_inicio; echo "Tiempo empleado: " . ($tiempo_fin - $tiempo_inicio)."<br />";
         $dataView['deja_deposito_suma'] = $this->Model->obtDejaDepositoSuma(
             $date1,
             $date2,
-            $filtro
+            $post
         );
         #$tiempo_fin = $this->microtime_float(); $tiempo = $tiempo_fin - $tiempo_inicio; echo "Tiempo empleado: " . ($tiempo_fin - $tiempo_inicio)."<br />";
         #$dataView['ds'] = $this->Model->obtDiasSemanaDiagnostico($date1, $date2);

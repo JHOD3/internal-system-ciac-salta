@@ -41,20 +41,6 @@ class Diagnostico_model extends CI_Model
         return ($this->form_validation->run() != FALSE);
     }
 
-    function obtenerPaginacion($date1, $date2, $filtro)
-    {
-        $config = array(
-            'base_url' => base_url().'index.php/'.$this->router->fetch_class().'/listado/'.$date1.'/'.$date2.'/'.$filtro.'/',
-            'total_rows' => $this->obtenerListadoCount($date1, $date2, $filtro),
-            'per_page' => 100
-        );
-        $this->pagination->initialize($config);
-        return array(
-            'pagination_config' => $config,
-            'pagination_links' => $this->pagination->create_links()
-        );
-    }
-
     function obtenerDropDownsRel()
     {
         #$this->load->model('Sexo_model', 'Sexo');
@@ -80,16 +66,47 @@ class Diagnostico_model extends CI_Model
         }
     }
 
-    protected function _filtroListado($date1, $date2, $filtro)
+    protected function _filtroListado($date1, $date2, $post)
     {
         $this->db
             ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
+            ->where_in('t.id_turnos_estados', array(2, 7))
             ->where('t.estado', 1)
             ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
         ;
-        if (trim($filtro) != '' and $filtro != '0') {
-            $filtro = str_replace('%20', ' ', $filtro);
-            $aFiltros = explode(' ', $filtro);
+/*
+LEFT(t.desde, 5) AS hora,
+ts.*,
+te.nombre AS turnos_estados,
+te.color
+*/
+        $aPost = array(
+            'spac' => "CONCAT(p.apellidos, ', ', p.nombres)",
+            'sest' => "e.nombre",
+            'srea' => "CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres)",
+            'soso' => "os.abreviacion",
+            'snor' => "ts.nro_orden",
+            'snaf' => "ts.nro_afiliado",
+            'scan' => "ts.cantidad",
+            'sder' => "ts.matricula_derivacion"
+        );
+        $cnct = "";
+        $where = "";
+        foreach ($aPost AS $kP => $rP) {
+            if (isset($post[$kP]) and trim($post[$kP])) {
+                $where.= "
+                    {$cnct} {$rP} LIKE '%{$post[$kP]}%'
+                ";
+                $cnct = "AND";
+            }
+        }
+        if (trim($where)) {
+            $this->db->where("($where)");
+        }
+        /*
+        if (trim($post) != '' and $post != '0') {
+            $post = str_replace('%20', ' ', $post);
+            $aFiltros = explode(' ', $post);
             $where = "";
             $cnct = "";
             foreach ($aFiltros AS $f) {
@@ -108,9 +125,10 @@ class Diagnostico_model extends CI_Model
             );
             #print "<pre>{$where}</pre>";
         }
+        */
     }
 
-    function obtDejaDepositoSuma($date1, $date2, $filtro)
+    function obtDejaDepositoSuma($date1, $date2, $post)
     {
         $suma = 0;
 
@@ -124,7 +142,7 @@ class Diagnostico_model extends CI_Model
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $filtro);
+        $this->_filtroListado($date1, $date2, $post);
         $query = $this->db
             ->get()
             ->result_array()
@@ -144,7 +162,7 @@ class Diagnostico_model extends CI_Model
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $filtro);
+        $this->_filtroListado($date1, $date2, $post);
         $query = $this->db
             ->get()
             ->result_array()
@@ -156,7 +174,7 @@ class Diagnostico_model extends CI_Model
         return $suma;
     }
 
-    function obtenerListadoCount($date1, $date2, $filtro)
+    function obtenerListadoCount($date1, $date2, $post)
     {
         $this->db
             ->select('COUNT(t.id_turnos) AS Count')
@@ -168,7 +186,7 @@ class Diagnostico_model extends CI_Model
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $filtro);
+        $this->_filtroListado($date1, $date2, $post);
         $query = $this->db
             ->get()
             ->result_array()
@@ -176,7 +194,7 @@ class Diagnostico_model extends CI_Model
         return $query[0]['Count'];
     }
 
-    function obtenerListado($date1, $date2, $filtro, $limit, $offset)
+    function obtenerListado($date1, $date2, $post)
     {
         $this->db
             ->select("
@@ -198,10 +216,9 @@ class Diagnostico_model extends CI_Model
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $filtro);
+        $this->_filtroListado($date1, $date2, $post);
         $this->db
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
-            ->limit($limit, $offset)
         ;
         $query = $this->db
             ->get()
@@ -370,7 +387,7 @@ SQL;
         return $this->db->query($query)->result_array();
     }
 
-    public function obtDiagnosticosExport($date1, $date2, $filtro)
+    public function obtDiagnosticosExport($date1, $date2, $post)
     {
         $this->db
             ->select("
@@ -400,7 +417,7 @@ SQL;
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $filtro);
+        $this->_filtroListado($date1, $date2, $post);
         $this->db
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
             #->limit($limit, $offset)
