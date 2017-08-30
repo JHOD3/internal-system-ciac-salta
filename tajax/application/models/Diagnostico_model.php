@@ -188,6 +188,7 @@ te.color
         ;
         $this->_filtroListado($date1, $date2, $post);
         $query = $this->db
+            ->where('ts.estado', 1)
             ->get()
             ->result_array()
         ;
@@ -217,10 +218,9 @@ te.color
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post);
-        $this->db
-            ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
-        ;
         $query = $this->db
+            ->where('ts.estado', 1)
+            ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
             ->get()
             ->result_array()
         ;
@@ -418,11 +418,9 @@ SQL;
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post);
-        $this->db
-            ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
-            #->limit($limit, $offset)
-        ;
         $query = $this->db
+            ->where('ts.estado', 1)
+            ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
             ->get()
             ->result_array()
         ;
