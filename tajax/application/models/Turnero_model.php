@@ -218,7 +218,8 @@ SQL;
             }
             if (
                 in_array($id_dias_semana, $dias_semana) and
-                $proximoTurnoDisponible <= $year."-".$month."-".($i<10?'0':'').$i
+                $proximoTurnoDisponible <= $year."-".$month."-".($i<10?'0':'').$i and
+                date("Y-m-d", strtotime('-3 months', strtotime($year."-".$month."-".($i<10?'0':'').$i))) < date("Y-m-d")
             ){
                 $result[$i] = base_url()."index.php/turnero/calendar/{$id_especialidades}/{$id_medicos}/{$year}/{$month}/".($i<10?'0':'')."{$i}/";
             }
