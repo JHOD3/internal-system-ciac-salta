@@ -164,6 +164,10 @@ class Estructura{
                         $parent_id = ' data-pid="'.$row['id_sectores'].'"';
 						$valor = $row["id_".$this->nombre_tabla];
                     break;
+                    case "medicos":
+						$valor = $row["id_".$this->nombre_tabla];
+						$texto = $row["saludo"]." ".$row["apellidos"].", ".$row["apellidos"];
+                    break;
 					case "medicos_especialidades":
 						$valor = $row["id_especialidades"];
 						$texto = utf8_encode($row["nombre"]);

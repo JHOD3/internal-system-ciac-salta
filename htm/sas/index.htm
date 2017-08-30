@@ -203,9 +203,11 @@
             $('#tb_f10_obrasocial').removeClass('f10focus');
         });
 
-        $('.datepicker').datepicker({
-            autoSize: true
+        $('form#frmGraphG > select#medicos').change(function(){
+            window.location = 'index.php?id_medicos='+$(this).val();
         });
+
+        $('.datepicker').datepicker();
 	});
 
 	jQuery(function($){
@@ -273,90 +275,101 @@
             <div class="span9">
             	<div class="row">
                     <div id="cont_grilla_turnos">
-                        <form action="index.php" method="post">
-                            Desde: <input type="date" name="desde" value="[DATE_DESDE]" style="width:150px;" />
-                            Hasta: <input type="date" name="hasta" value="[DATE_HASTA]" style="width:150px;" />
+                        <form id="frmGraphG" action="index.php" method="post">
+                            Reporte: [DROP_MEDICOS]
+                            Desde: <input type="date" name="desde" value="[DATE_DESDE]" style="width:150px;" class="datepicker" />
+                            Hasta: <input type="date" name="hasta" value="[DATE_HASTA]" style="width:150px;" class="datepicker" />
                             <input type="submit" value="ok"/>
                         </form>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
 google.charts.load('current', {'packages':['corechart']});
 
-google.charts.setOnLoadCallback(drawBar1Chart);
-function drawBar1Chart() {
-    var dataBar1 = google.visualization.arrayToDataTable([
-        ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
-        [TOT]
-    ]);
-    var options = {
-        title: 'TURNOS OTORGADOS TOTALES\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
-        legend: {position: 'none'},
-    };
-    var chart = new google.visualization.BarChart(document.getElementById('bar1chart'));
-    chart.draw(dataBar1, options);
+if ([TOT_NUMROWS] > 0) {
+    google.charts.setOnLoadCallback(drawBar1Chart);
+    function drawBar1Chart() {
+        var dataBar1 = google.visualization.arrayToDataTable([
+            ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
+            [TOT]
+        ]);
+        var options = {
+            title: 'TURNOS OTORGADOS TOTALES\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            legend: {position: 'none'},
+        };
+        var chart = new google.visualization.BarChart(document.getElementById('bar1chart'));
+        chart.draw(dataBar1, options);
+    }
 }
 
-google.charts.setOnLoadCallback(drawLineChart);
-function drawLineChart() {
-    var dataLine = google.visualization.arrayToDataTable([
-        ['', 'Otorgados', { role: 'style' }, {role: 'annotation'}]
-        [TPD]
-    ]);
-    var options = {
-        title: 'TURNOS OTORGADOS POR DÍA\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
-        legend: {position: 'none'},
-    };
-    var chart = new google.visualization.LineChart(document.getElementById('linechart'));
-    chart.draw(dataLine, options);
+if ([TPD_NUMROWS] > 0) {
+    google.charts.setOnLoadCallback(drawLineChart);
+    function drawLineChart() {
+        var dataLine = google.visualization.arrayToDataTable([
+            ['', 'Otorgados', { role: 'style' }, {role: 'annotation'}]
+            [TPD]
+        ]);
+        var options = {
+            title: 'TURNOS OTORGADOS POR DÍA\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            legend: {position: 'none'},
+        };
+        var chart = new google.visualization.LineChart(document.getElementById('linechart'));
+        chart.draw(dataLine, options);
+    }
 }
 
-google.charts.setOnLoadCallback(drawBar2Chart);
-function drawBar2Chart() {
-    var dataBar2 = google.visualization.arrayToDataTable([
-        ['', 'Otorgados', { role: 'style' }]
-        [TPM]
-    ]);
-    var options = {
-        title: 'TURNOS POR MEDICOS\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
-        legend: {position: 'none'},
-    };
-    var chart = new google.visualization.BarChart(document.getElementById('bar2chart'));
-    chart.draw(dataBar2, options);
+if ([TPM_NUMROWS] > 0) {
+    google.charts.setOnLoadCallback(drawBar2Chart);
+    function drawBar2Chart() {
+        var dataBar2 = google.visualization.arrayToDataTable([
+            ['', 'Otorgados', { role: 'style' }]
+            [TPM]
+        ]);
+        var options = {
+            title: 'TURNOS POR MEDICOS\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            legend: {position: 'none'},
+        };
+        var chart = new google.visualization.BarChart(document.getElementById('bar2chart'));
+        chart.draw(dataBar2, options);
+    }
 }
 
-google.charts.setOnLoadCallback(drawBar3Chart);
-function drawBar3Chart() {
-    var dataBar3 = google.visualization.arrayToDataTable([
-        ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
-        [OST]
-    ]);
-    var options = {
-        title: 'TURNOS OTORGADOS POR OBRA SOCIAL\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
-        legend: {position: 'none'},
-    };
-    var chart = new google.visualization.BarChart(document.getElementById('bar3chart'));
-    chart.draw(dataBar3, options);
+if ([OST_NUMROWS] > 0) {
+    google.charts.setOnLoadCallback(drawBar3Chart);
+    function drawBar3Chart() {
+        var dataBar3 = google.visualization.arrayToDataTable([
+            ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
+            [OST]
+        ]);
+        var options = {
+            title: 'TURNOS OTORGADOS POR OBRA SOCIAL\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            legend: {position: 'none'},
+        };
+        var chart = new google.visualization.BarChart(document.getElementById('bar3chart'));
+        chart.draw(dataBar3, options);
+    }
 }
 
-google.charts.setOnLoadCallback(drawBar4Chart);
-function drawBar4Chart() {
-    var dataBar4 = google.visualization.arrayToDataTable([
-        ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
-        [EST]
-    ]);
-    var options = {
-        title: 'TURNOS OTORGADOS POR ESTUDIOS REALIZADOS\nDesde [DATE_DESDE_TEXT] Hasta [DATE_HASTA_TEXT]',
-        legend: {position: 'none'},
-    };
-    var chart = new google.visualization.BarChart(document.getElementById('bar4chart'));
-    chart.draw(dataBar4, options);
+if ([EST_NUMROWS] > 0) {
+    google.charts.setOnLoadCallback(drawBar4Chart);
+    function drawBar4Chart() {
+        var dataBar4 = google.visualization.arrayToDataTable([
+            ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
+            [EST]
+        ]);
+        var options = {
+            title: 'TURNOS OTORGADOS POR ESTUDIOS REALIZADOS\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            legend: {position: 'none'},
+        };
+        var chart = new google.visualization.BarChart(document.getElementById('bar4chart'));
+        chart.draw(dataBar4, options);
+    }
 }
 
 </script>
 <div style="position:absolute;left:0;width:100%;">
 <div id="bar1chart" style="width: 100%; height: [TOT_NUMROWS]px;"></div>
-<div id="linechart" style="width: 100%; height: [TPM_NUMROWS]px;"></div>
-<div id="bar2chart" style="width: 100%; height: 2800px;"></div>
+<div id="linechart" style="width: 100%; height: [TPD_NUMROWS]px;"></div>
+<div id="bar2chart" style="width: 100%; height: [TPM_NUMROWS]px;"></div>
 <div id="bar3chart" style="width: 100%; height: [OST_NUMROWS]px;"></div>
 <div id="bar4chart" style="width: 100%; height: [EST_NUMROWS]px;"></div>
 </div>

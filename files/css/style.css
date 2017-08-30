@@ -1351,6 +1351,7 @@ tr.even td:last-child{
 }
 
 #ui-datepicker-div{
-    max-width: 300px;
+    max-width: 300px!important;
+    width: auto!important;
     background-color: #ffffff;
 }
