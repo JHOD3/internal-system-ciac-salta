@@ -29,9 +29,17 @@ if (!$d or $d->format($format) != $date or strlen($hasta) != 10) {
 $d = implode("-", array_reverse(explode("/", $desde)));
 $h = implode("-", array_reverse(explode("/", $hasta)));
 
-$obj_medicos = new Medicos();
-$htm_index->Asigna("DROP_MEDICOS", utf8_encode($obj_medicos->Drop("", $_GET['id_medicos'])));
-
+if ($_SESSION['ID_USUARIO'] === '0') {
+    $obj_medicos = new Medicos();
+    $htm_index->Asigna(
+        "DROP_MEDICOS",
+        "Reporte: ".
+        utf8_encode($obj_medicos->Drop("", $_GET['id_medicos'])).
+        "<br /><br />"
+    );
+} else {
+    $htm_index->Asigna("DROP_MEDICOS", "");
+}
 $htm_index->Asigna("DATE_TODAY", date("d/m/Y"));
 $htm_index->Asigna("DATE_DESDE", $desde);
 $htm_index->Asigna("DATE_HASTA", $hasta);
@@ -40,6 +48,17 @@ $dataMOT = $obj_estructura->obtMotivosDeInhabilitaciones();
 $htm_index->Asigna("MOTIVOS", $dataMOT);
 
 if ($_GET['id_medicos']) {
+    $ses_id_medico = $_GET['id_medicos'];
+    $this_db = new MySQL();
+    $html_graph.= '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>';
+    $desde_text = $desde;
+    $hasta_text = $hasta;
+    $desde = $d;
+    $hasta = $h;
+    include("../sam/estadisticas.medicos.inc.php");
+    $htm_index->Asigna("ESTADISTICAS_GRAPH", utf8_encode($html_graph));
+    $htm_index->Asigna("get_id_medicos", "?id_medicos={$_GET['id_medicos']}");
+
     $htm_index->Asigna("TOT_NUMROWS", 0);
     $htm_index->Asigna("TPM_NUMROWS", 0);
     $htm_index->Asigna("TPD_NUMROWS", 0);
@@ -57,10 +76,13 @@ if ($_GET['id_medicos']) {
     $htm_index->Asigna("OST", $dataOST[0]);
     $htm_index->Asigna("EST", $dataEST[0]);
     $htm_index->Asigna("TOT_NUMROWS", 100 + ($dataTOT[1] * 40));
-    $htm_index->Asigna("TPM_NUMROWS", 400 + ($dataTPD[1] * 100));
-    $htm_index->Asigna("TPD_NUMROWS", 240);
+    $htm_index->Asigna("TPM_NUMROWS", 100 + ($dataOST[1] * 40));
+    $htm_index->Asigna("TPD_NUMROWS", 100 + ($dataOST[1] * 40));
     $htm_index->Asigna("OST_NUMROWS", 100 + ($dataOST[1] * 40));
     $htm_index->Asigna("EST_NUMROWS", 100 + ($dataEST[1] * 40));
+
+    $htm_index->Asigna("ESTADISTICAS_GRAPH", '');
+    $htm_index->Asigna("get_id_medicos", '');
 }
 
 $htm_index->Asigna("FECHA", ucfirst(strftime("%A %d de ")).ucfirst(strftime("%B del %Y")));

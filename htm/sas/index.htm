@@ -204,7 +204,7 @@
         });
 
         $('form#frmGraphG > select#medicos').change(function(){
-            window.location = 'index.php?id_medicos='+$(this).val();
+            $('#frmGraphG').attr('action', 'index.php?id_medicos='+$(this).val());
         });
 
         $('.datepicker').datepicker();
@@ -275,12 +275,15 @@
             <div class="span9">
             	<div class="row">
                     <div id="cont_grilla_turnos">
-                        <form id="frmGraphG" action="index.php" method="post">
-                            Reporte: [DROP_MEDICOS]
+                        <form id="frmGraphG" action="index.php[get_id_medicos]" method="post">
+                            [DROP_MEDICOS]
                             Desde: <input type="date" name="desde" value="[DATE_DESDE]" style="width:150px;" class="datepicker" />
                             Hasta: <input type="date" name="hasta" value="[DATE_HASTA]" style="width:150px;" class="datepicker" />
                             <input type="submit" value="ok"/>
                         </form>
+
+[ESTADISTICAS_GRAPH]
+
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
 google.charts.load('current', {'packages':['corechart']});
@@ -368,7 +371,7 @@ if ([EST_NUMROWS] > 0) {
 </script>
 <div style="position:absolute;left:0;width:100%;">
 <div id="bar1chart" style="width: 100%; height: [TOT_NUMROWS]px;"></div>
-<div id="linechart" style="width: 100%; height: [TPD_NUMROWS]px;"></div>
+<div id="linechart" style="width: 100%; height: 280px;"></div>
 <div id="bar2chart" style="width: 100%; height: [TPM_NUMROWS]px;"></div>
 <div id="bar3chart" style="width: 100%; height: [OST_NUMROWS]px;"></div>
 <div id="bar4chart" style="width: 100%; height: [EST_NUMROWS]px;"></div>
