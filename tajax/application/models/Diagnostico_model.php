@@ -469,10 +469,10 @@ SQL;
                 default: $query[$i]['trajo_orden'] = ''; break;
             }
             if ($query[$i]['trajo_arancel'] > 0) {
-                $query[$i]['trajo_arancel'] = "\$&nbsp;{$query[$i]['trajo_arancel']}";
+                $query[$i]['trajo_arancel'] = "{$query[$i]['trajo_arancel']}";
             }
             if ($query[$i]['deja_deposito'] > 0) {
-                $query[$i]['deja_deposito'] = "\$&nbsp;{$query[$i]['deja_deposito']}";
+                $query[$i]['deja_deposito'] = "{$query[$i]['deja_deposito']}";
             }
         }
         return $query;

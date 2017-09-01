@@ -142,13 +142,12 @@ class Diagnostico extends CI_Controller {
 
     public function exportar($date1, $date2, $filter = '')
     {
-        $this->load->library('table');
         $post = $this->input->post();
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
         $dataView['filter'] = utf8_encode($filter);
         $dataView['aDiagnosticos'] = $this->Model->obtDiagnosticosExport($date1, $date2, $post);
-        $this->table->set_heading(
+        $dataView['set_heading'] = array(
             'Nro de Paciente',
             'Paciente',
             'Presentador',
@@ -167,7 +166,7 @@ class Diagnostico extends CI_Controller {
             'DD',
             'Derivador'
         );
-        $this->load->view($this->router->fetch_class().'/Exportar_view', $dataView);
+        print utf8_decode($this->load->view($this->router->fetch_class().'/Exportar_view', $dataView, true));
     }
 
 }
