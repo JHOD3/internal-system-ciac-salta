@@ -677,7 +677,7 @@ SQL;
 
         $fdesde = implode("-", array_reverse(explode("/", $fdesde)));
         $fhasta = implode("-", array_reverse(explode("/", $fhasta)));
-        print "{$fdesde} a {$fhasta}<br />";
+        #print "{$fdesde} a {$fhasta}<br />";
 
         $query_string = <<<SQL
             SELECT
@@ -687,8 +687,7 @@ SQL;
             WHERE
                 id_especialidades = '{$especialidad}' AND
                 id_medicos = '{$medico}' AND
-                estado = '1' AND
-                id_turnos_tipos NOT IN (9, 10)
+                estado = '1'
             GROUP BY
                 id_dias_semana
             ORDER BY
