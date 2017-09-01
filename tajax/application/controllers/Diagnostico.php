@@ -92,8 +92,6 @@ class Diagnostico extends CI_Controller {
 
     public function listado($date1, $date2, $id_usuario = null)
     {
-        #$tiempo_inicio = $this->microtime_float();
-
         if (isset($id_usuario)) {
             $this->session->set_userdata(array('ID_USUARIO' => $id_usuario));
         }
@@ -101,20 +99,26 @@ class Diagnostico extends CI_Controller {
         $dataView = $post;
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
-        #$tiempo_fin = $this->microtime_float(); $tiempo = $tiempo_fin - $tiempo_inicio; echo "Tiempo empleado: " . ($tiempo_fin - $tiempo_inicio)."<br />";
         $dataView['listado'] = $this->Model->obtenerListado(
             $date1,
             $date2,
             $post
         );
-        #$tiempo_fin = $this->microtime_float(); $tiempo = $tiempo_fin - $tiempo_inicio; echo "Tiempo empleado: " . ($tiempo_fin - $tiempo_inicio)."<br />";
         $dataView['deja_deposito_suma'] = $this->Model->obtDejaDepositoSuma(
             $date1,
             $date2,
             $post
         );
-        #$tiempo_fin = $this->microtime_float(); $tiempo = $tiempo_fin - $tiempo_inicio; echo "Tiempo empleado: " . ($tiempo_fin - $tiempo_inicio)."<br />";
-        #$dataView['ds'] = $this->Model->obtDiasSemanaDiagnostico($date1, $date2);
+        $dataView['cantidad_de_ordenes'] = $this->Model->obtCantidadDeOrdenes(
+            $date1,
+            $date2,
+            $post
+        );
+        $dataView['listado_count'] = $this->Model->obtenerListadoCount(
+            $date1,
+            $date2,
+            $post
+        );
 
         $dataView['medicos'] = $this->Model->obtMedicos();
         $dataView['estudios'] = $this->Model->obtEstudios();
@@ -122,8 +126,6 @@ class Diagnostico extends CI_Controller {
         $dataView['obras_sociales'] = $this->Model->obtObrasSociales();
 
         $this->load->view($this->router->fetch_class().'/Listado_view', $dataView);
-
-        #$tiempo_fin = $this->microtime_float(); $tiempo = $tiempo_fin - $tiempo_inicio; echo "Tiempo empleado: " . ($tiempo_fin - $tiempo_inicio)."<br />";
     }
 
     public function savediagnostico()

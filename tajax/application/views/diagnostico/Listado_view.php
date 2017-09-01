@@ -25,7 +25,8 @@
                     <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['mana'])?>">Siguiente</a>
                     */
                     ?>
-                    Total en Caja:&nbsp;$&nbsp;<?=number_format($deja_deposito_suma, 2, ",", ".")?>
+                    Caja:&nbsp;$<?=number_format($deja_deposito_suma, 0, "", ".")?> |
+                    Órdenes:&nbsp;<?=$cantidad_de_ordenes?> de <?=$listado_count?>
                 </td>
             </tr>
             <tr class="inputSearch">
