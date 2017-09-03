@@ -465,7 +465,7 @@ $(document).on("click", "#btn_agregar_estudio", function(){
                     		success: function(requestData){
                     			var rta = requestData;
                     			$(ventana_diagnostico).html(rta);
-                    			$(ventana_diagnostico).dialog('option', 'title', 'Diagnóstico por Imagen')
+                    			$(ventana_diagnostico).dialog('option', 'title', 'Prácticas Médicas')
                     			$(ventana_diagnostico).dialog( "open" );
                     		},
                     		complete: function(requestData, exito){
@@ -530,7 +530,7 @@ $(document).on("click", "#btn_modificar_estudio", function(){
         		success: function(requestData){
         			var rta = requestData;
         			$(ventana_diagnostico).html(rta);
-        			$(ventana_diagnostico).dialog('option', 'title', 'Diagnóstico por Imagen')
+        			$(ventana_diagnostico).dialog('option', 'title', 'Prácticas Médicas')
         			$(ventana_diagnostico).dialog( "open" );
         		},
         		complete: function(requestData, exito){

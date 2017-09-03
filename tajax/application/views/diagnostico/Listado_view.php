@@ -13,9 +13,9 @@
             <tr class="trDate">
                 <td colspan="100%" class="aBtnL">
                     Desde:
-                    <input type="text" id="date1" value="<?=date("d/m/Y", strtotime($date1))?>" class="datepicker" /> -
+                    <input type="text" id="date1" value="<?=date("d/m/Y", strtotime($date1))?>" class="datepicker" style="width: 74px;" /> -
                     Hasta:
-                    <input type="text" id="date2" value="<?=date("d/m/Y", strtotime($date2))?>" class="datepicker" />
+                    <input type="text" id="date2" value="<?=date("d/m/Y", strtotime($date2))?>" class="datepicker" style="width: 74px;" />
                     <input type="button" id="dateok" value="ok" />
                     <input type="button" id="dateexport" value="exportar" />
                     <?php
@@ -30,6 +30,8 @@
                 </td>
             </tr>
             <tr class="inputSearch">
+                <td></td>
+                <td></td>
                 <td><input id="spac" name="spac" type="text" value="<?=isset($spac) ? $spac : ''?>" /></td>
                 <td><input id="sces" name="sces" type="text" value="<?=isset($sces) ? $sces : ''?>" /></td>
                 <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
@@ -63,6 +65,8 @@
                 <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
             </tr>
             <tr class="trHead">
+                <td>Fecha</td>
+                <td>Hora</td>
                 <td>Paciente</td>
                 <td>Cod. Est.</td>
                 <td>Estudio</td>
@@ -88,6 +92,8 @@
                     $idme = ' class="tdTab" data-mth=';
 ?>
 <tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>" style="color:#<?=$item['color']?>;">
+    <td><?=date("d/m/Y", strtotime($item['fecha']))?></td>
+    <td><?=substr($item['desde'], 0, 5)?></td>
     <td><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
     <td data-mth="codigopractica"><?=$item['codigopractica']?></td>
     <td<?=$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
@@ -202,7 +208,7 @@ $(document).ready(function(){
         date2 = date2.split('/');
         date2 = date2[2] + '-' + date2[1] + '-' + date2[0];
         var frmData = $('#frmInpSrcFilter').serialize();
-        $('#dateok').parent().parent().html('<div style="white-space: nowrap;"><img alt="" src="../files/img/ajax-loader.gif" /> Cargando los diagnósticos<br /><img alt="" src="../files/img/ajax-loader.gif" /> Espere un momento por favor</div>');
+        $('#dateok').parent().parent().html('<div style="white-space: nowrap;"><img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Prácticas Médicas<br /><img alt="" src="../files/img/ajax-loader.gif" /> Espere un momento por favor</div>');
         $('tr.inputSearch').html('');
         ajxM = $.ajax({
             type: 'POST',
