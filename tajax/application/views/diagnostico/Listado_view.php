@@ -92,7 +92,7 @@
                     $idme = ' class="tdTab" data-mth=';
 ?>
 <tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>" style="color:#<?=$item['color']?>;">
-    <td><?=date("d/m/Y", strtotime($item['fecha']))?></td>
+    <td><?=date("d/m", strtotime($item['fecha']))?></td>
     <td><?=substr($item['desde'], 0, 5)?></td>
     <td><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
     <td data-mth="codigopractica"><?=$item['codigopractica']?></td>
