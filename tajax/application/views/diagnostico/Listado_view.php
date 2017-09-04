@@ -203,13 +203,13 @@ $(document).ready(function(){
         $(this).select();
     });
     $('#frmInpSrcFilter .formathour').keydown(function(event){
-        if (
+        if (event.keyCode == 13) {
+            $('#dateok').focus().click();
+        } else if (
             (event.keyCode < 48 || event.keyCode > 57) &&
             (event.keyCode < 96 || event.keyCode > 105) &&
             (event.keyCode < 9  || event.keyCode > 9)
         ) {
-            if (console && console.log) console.log(event.keyCode);
-            event.preventDefault();
             return false;
         }
     });
