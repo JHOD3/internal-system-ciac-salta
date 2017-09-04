@@ -17,25 +17,21 @@
             <tr class="trDate">
                 <td colspan="100%" class="aBtnL">
                     Desde:
-                    <input type="text" id="date1" value="<?=date("d/m/Y", strtotime($date1))?>" class="datepicker" style="width: 74px;" /> -
+                    <input type="text" id="date1" value="<?=date("d/m/Y", strtotime($date1))?>" class="datepicker" style="width: 74px;" />
+                    <input type="text" id="hour1" name="hour1" value="<?=$hour1?>" class="formathour" style="width: 38px;" placeholder="__:__" />
+                    &nbsp;
                     Hasta:
                     <input type="text" id="date2" value="<?=date("d/m/Y", strtotime($date2))?>" class="datepicker" style="width: 74px;" />
+                    <input type="text" id="hour2" name="hour2" value="<?=$hour2?>" class="formathour" style="width: 38px;" placeholder="__:__" />
                     <input type="button" id="dateok" value="ok" />
                     <input type="button" id="dateexport" value="exportar" />
-                    <?php
-                    /*
-                    <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['ayer'])?>">Anterior</a>
-                    <strong style="margin:0 10px;"><?=utf8_encode(dateLegible($date))?></strong>
-                    <a class="clickHidden" href="<?=base_url().$this->router->fetch_class().'/listado/'.dateLegiblePlus($date, $ds['mana'])?>">Siguiente</a>
-                    */
-                    ?>
+                    &nbsp;
                     Caja:&nbsp;$<?=number_format($deja_deposito_suma, 0, "", ".")?> |
                     Órdenes:&nbsp;<?=$cantidad_de_ordenes?> de <?=$listado_count?>
                 </td>
             </tr>
             <tr class="inputSearch">
-                <td></td>
-                <td></td>
+                <td>&nbsp;</td>
                 <td><input id="spac" name="spac" type="text" value="<?=isset($spac) ? $spac : ''?>" /></td>
                 <td><input id="sces" name="sces" type="text" value="<?=isset($sces) ? $sces : ''?>" /></td>
                 <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
@@ -69,10 +65,9 @@
                 <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
             </tr>
             <tr class="trHead">
-                <td>Fecha</td>
-                <td>Hora</td>
+                <td>Turno</td>
                 <td>Paciente</td>
-                <td>Cod. Est.</td>
+                <td>Cod.Est.</td>
                 <td>Estudio</td>
                 <td>Realizador</td>
                 <td>O.Social</td>
@@ -86,7 +81,7 @@
                 <td>TA</td>
                 <td>DD</td>
                 <td>Derivador</td>
-                <td>Acciones</td>
+                <td>&nbsp;</td>
             </tr>
             <?php
             if (count($listado) > 0) :
@@ -95,9 +90,8 @@
                     $idmer = ' class="tdTab tAR" data-mth=';;
                     $idme = ' class="tdTab" data-mth=';
 ?>
-<tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>" style="color:#<?=$item['color']?>;">
-    <td><?=date("d/m", strtotime($item['fecha']))?></td>
-    <td><?=substr($item['desde'], 0, 5)?></td>
+<tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
+    <td style="text-align:center;"><?=date("d/m", strtotime($item['fecha']))?><br /><?=substr($item['desde'], 0, 5)?></td>
     <td><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
     <td data-mth="codigopractica"><?=$item['codigopractica']?></td>
     <td<?=$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
@@ -204,6 +198,27 @@
 <script>
 $(document).ready(function(){
     $('.datepicker').datepicker();
+
+    $('#frmInpSrcFilter .formathour').bind('click focusin', function(){
+        $(this).select();
+    });
+    $('#frmInpSrcFilter .formathour').keydown(function(event){
+        if (
+            (event.keyCode < 48 || event.keyCode > 57) &&
+            (event.keyCode < 96 || event.keyCode > 105) &&
+            (event.keyCode < 9  || event.keyCode > 9)
+        ) {
+            if (console && console.log) console.log(event.keyCode);
+            event.preventDefault();
+            return false;
+        }
+    });
+    $('#frmInpSrcFilter .formathour').keyup(function(){
+        if ($(this).val().length == 2) {
+            $(this).val($(this).val() + ':');
+        }
+    });
+
     $('#dateok').click(function(){
         var date1 = $('#date1').val();
         date1 = date1.split('/');

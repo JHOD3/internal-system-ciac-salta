@@ -72,14 +72,8 @@ class Diagnostico_model extends CI_Model
             ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
             ->where_in('t.id_turnos_estados', array(2, 7))
             ->where('t.estado', 1)
-            ->where("t.fecha BETWEEN '{$date1}' AND '{$date2}'")
+            ->where("CONCAT(t.fecha, ' ', t.desde) BETWEEN '{$date1} {$post['hour1']}:00' AND '{$date2} {$post['hour2']}:00'")
         ;
-/*
-LEFT(t.desde, 5) AS hora,
-ts.*,
-te.nombre AS turnos_estados,
-te.color
-*/
         $aPost = array(
             'spac' => "CONCAT(p.apellidos, ', ', p.nombres)",
             'sces' => "e.codigopractica",
@@ -233,8 +227,7 @@ te.color
                 e.nombre AS estudios,
                 e.codigopractica,
                 ts.*,
-                te.nombre AS turnos_estados,
-                te.color
+                te.nombre AS turnos_estados
             ")
             ->from('turnos AS t')
             ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')

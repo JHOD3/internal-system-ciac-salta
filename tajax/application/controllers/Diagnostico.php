@@ -96,6 +96,12 @@ class Diagnostico extends CI_Controller {
             $this->session->set_userdata(array('ID_USUARIO' => $id_usuario));
         }
         $post = $this->input->post();
+        if (!isset($post['hour1']) or !$post['hour1']) {
+            $post['hour1'] = '00:00';
+        }
+        if (!isset($post['hour2']) or !$post['hour2']) {
+            $post['hour2'] = '23:59';
+        }
         $dataView = $post;
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
