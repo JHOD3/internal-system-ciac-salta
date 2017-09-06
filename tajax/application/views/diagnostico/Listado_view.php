@@ -65,22 +65,22 @@
                 <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
             </tr>
             <tr class="trHead">
-                <td>Turno</td>
+                <td style="width:36px;">Turno</td>
                 <td>Paciente</td>
-                <td>Cod.Est.</td>
+                <td style="width:51px;">Cod.Est.</td>
                 <td>Estudio</td>
                 <td>Realizador</td>
                 <td>O.Social</td>
-                <td>Presentación</td>
-                <td>Nro.Orden</td>
+                <td style="width:80px;">Presentación</td>
+                <td style="width:70px;">Nro.Orden</td>
                 <td>Nro.Afiliado</td>
-                <td>Cant.</td>
-                <td>Tipo</td>
-                <td>TP</td>
-                <td>TO</td>
-                <td>TA</td>
-                <td>DD</td>
-                <td>Derivador</td>
+                <td style="width:33px;">Cant.</td>
+                <td style="width:27px;">Tipo</td>
+                <td style="width:16px;">TP</td>
+                <td style="width:16px;">TO</td>
+                <td style="width:32px;">TA</td>
+                <td style="width:32px;">DD</td>
+                <td style="width:60px;">Derivador</td>
                 <td>&nbsp;</td>
             </tr>
             <?php
