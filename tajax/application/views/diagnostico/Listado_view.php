@@ -9,13 +9,18 @@
     width: 98%;
     margin: 0 1%;
 }
+.tot {
+    text-align: center!important;
+    font-size: 14px!important;
+    font-weight: bold!important;
+}
 </style>
 <h1>Prácticas Médicas <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a></h1>
 <form id="frmInpSrcFilter" method="post">
     <table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
         <tbody>
             <tr class="trDate">
-                <td colspan="100%" class="aBtnL">
+                <td colspan="100%">
                     Desde:
                     <input type="text" id="date1" value="<?=date("d/m/Y", strtotime($date1))?>" class="datepicker" style="width: 74px;" />
                     <input type="text" id="hour1" name="hour1" value="<?=$hour1?>" class="formathour" style="width: 38px;" placeholder="__:__" />
@@ -26,8 +31,7 @@
                     <input type="button" id="dateok" value="ok" />
                     <input type="button" id="dateexport" value="exportar" />
                     &nbsp;
-                    Caja:&nbsp;$<?=number_format($deja_deposito_suma, 0, "", ".")?> |
-                    Órdenes:&nbsp;<?=$cantidad_de_ordenes?> de <?=$listado_count?>
+                    Total:&nbsp; <?=$listado_count?>
                 </td>
             </tr>
             <tr class="inputSearch">
@@ -59,9 +63,9 @@
                 <td><input id="scan" name="scan" type="text" value="<?=isset($scan) ? $scan : ''?>" /></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                <td class="tot"><?=$cantidad_de_ordenes?></td>
+                <td class="tot">$<?=number_format($deja_deposito_suma[0], 0, "", ".")?></td>
+                <td class="tot">$<?=number_format($deja_deposito_suma[1], 0, "", ".")?></td>
                 <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
             </tr>
             <tr class="trHead">

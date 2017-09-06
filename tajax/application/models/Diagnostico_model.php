@@ -125,8 +125,7 @@ class Diagnostico_model extends CI_Model
 
     function obtDejaDepositoSuma($date1, $date2, $post)
     {
-        $suma = 0;
-
+        $suma1 = 0;
         $this->db
             ->select('SUM(ts.trajo_arancel) AS Suma')
             ->from('turnos AS t')
@@ -144,9 +143,10 @@ class Diagnostico_model extends CI_Model
         ;
         #print "<pre>".$this->db->last_query()."</pre>";
         if (count($query) > 0) {
-            $suma+= $query[0]['Suma'];
+            $suma1+= $query[0]['Suma'];
         }
 
+        $suma2 = 0;
         $this->db
             ->select('SUM(ts.deja_deposito) AS Suma')
             ->from('turnos AS t')
@@ -163,10 +163,10 @@ class Diagnostico_model extends CI_Model
             ->result_array()
         ;
         if (count($query) > 0) {
-            $suma+= $query[0]['Suma'];
+            $suma2+= $query[0]['Suma'];
         }
 
-        return $suma;
+        return array($suma1, $suma2);
     }
 
     function obtenerListadoCount($date1, $date2, $post)
