@@ -62,8 +62,8 @@
                 <td><input id="snaf" name="snaf" type="text" value="<?=isset($snaf) ? $snaf : ''?>" /></td>
                 <td><input id="scan" name="scan" type="text" value="<?=isset($scan) ? $scan : ''?>" /></td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td class="tot"><?=$cantidad_de_ordenes?></td>
+                <td class="tot"><?=$cantidad_de_ordenes[1]?></td>
+                <td class="tot"><?=$cantidad_de_ordenes[0]?></td>
                 <td class="tot">$<?=number_format($deja_deposito_suma[0], 0, "", ".")?></td>
                 <td class="tot">$<?=number_format($deja_deposito_suma[1], 0, "", ".")?></td>
                 <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>

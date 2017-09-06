@@ -205,14 +205,36 @@ class Diagnostico_model extends CI_Model
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post);
-        $query = $this->db
+        $query1 = $this->db
             ->where('ts.trajo_orden', 1)
             ->where('ts.estado', 1)
             ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
             ->get()
             ->result_array()
         ;
-        return $query[0]['Count'];
+
+        $this->db
+            ->select("
+                COUNT(ts.trajo_pedido) AS Count
+            ")
+            ->from('turnos AS t')
+            ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
+            ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
+            ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
+            ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
+            ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
+            ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
+        ;
+        $this->_filtroListado($date1, $date2, $post);
+        $query2 = $this->db
+            ->where('ts.trajo_pedido', 1)
+            ->where('ts.estado', 1)
+            ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
+            ->get()
+            ->result_array()
+        ;
+
+        return array($query1[0]['Count'], $query2[0]['Count']);
     }
 
     function obtenerListado($date1, $date2, $post)
