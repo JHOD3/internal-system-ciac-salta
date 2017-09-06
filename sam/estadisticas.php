@@ -16,8 +16,8 @@ $hasta_text = date('d/m/Y', strtotime($hasta));
 
 $html_graph = <<<EOT
     <form style="margin: 0 auto;width:480px;" action="index.php?show=estadisticas" method="post">
-        Desde: <input type="date" name="desde" value="{$desde}" style="width:150px;" />
-        Hasta: <input type="date" name="hasta" value="{$hasta}" style="width:150px;" />
+        Desde: <input type="text" name="desde" value="{$desde}" style="width:150px;" />
+        Hasta: <input type="text" name="hasta" value="{$hasta}" style="width:150px;" />
         <input type="submit" value="ok"/>
     </form>
 EOT;
