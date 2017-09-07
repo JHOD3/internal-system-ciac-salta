@@ -326,7 +326,8 @@ class Diagnostico_model extends CI_Model
             WHERE
                 m.estado = 1 AND
                 me.estado = 1 AND
-                me.id_especialidades IN ({$ID_ESPECIALIDADES})
+                me.id_especialidades IN ({$ID_ESPECIALIDADES}) AND
+                me.id_medicos != 205
             GROUP BY
                 m.id_medicos
             ORDER BY
