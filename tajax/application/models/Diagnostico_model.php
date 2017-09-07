@@ -75,10 +75,10 @@ class Diagnostico_model extends CI_Model
             ->where("CONCAT(t.fecha, ' ', t.desde) BETWEEN '{$date1} {$post['hour1']}:00' AND '{$date2} {$post['hour2']}:00'")
         ;
         $aPost = array(
-            'spac' => "CONCAT(p.apellidos, ', ', p.nombres)",
+            'spac' => "CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres))",
             'sces' => "e.codigopractica",
             'sest' => "e.nombre",
-            'srea' => "CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres)",
+            'srea' => "CONCAT(TRIM(m.saludo), ' ', TRIM(m.apellidos), ', ', TRIM(m.nombres))",
             'soso' => "os.abreviacion",
             'snor' => "ts.nro_orden",
             'snaf' => "ts.nro_afiliado",
