@@ -78,7 +78,7 @@ class Diagnostico_model extends CI_Model
             'spac' => "CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres))",
             'sces' => "e.codigopractica",
             'sest' => "e.nombre",
-            'srea' => "CONCAT(TRIM(m.saludo), ' ', TRIM(m.apellidos), ', ', TRIM(m.nombres))",
+            'srea' => "m.id_medicos",
             'soso' => "os.abreviacion",
             'snor' => "ts.nro_orden",
             'snaf' => "ts.nro_afiliado",

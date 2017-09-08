@@ -45,12 +45,12 @@
                         <?php
                         for ($i = 0; $i < count($medicos); $i++):
                             $m = strtoupper(
-                                $medicos[$i]['saludo']." ".
-                                $medicos[$i]['apellidos'].", ".
-                                $medicos[$i]['nombres']
+                                trim($medicos[$i]['saludo'])." ".
+                                trim($medicos[$i]['apellidos']).", ".
+                                trim($medicos[$i]['nombres'])
                             );
                             ?>
-                            <option value="<?=$m?>"<?=(isset($srea) and $srea == $m) ? ' selected="selected"' : ''?>><?=$m?></option>
+                            <option value="<?=$medicos['id_medicos']?>"<?=(isset($srea) and $srea == $medicos['id_medicos']) ? ' selected="selected"' : ''?>><?=$m?></option>
                             <?php
                         endfor;
                         ?>
