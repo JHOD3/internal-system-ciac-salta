@@ -50,7 +50,7 @@
                                 trim($medicos[$i]['nombres'])
                             );
                             ?>
-                            <option value="<?=$medicos['id_medicos']?>"<?=(isset($srea) and $srea == $medicos['id_medicos']) ? ' selected="selected"' : ''?>><?=$m?></option>
+                            <option value="<?=$medicos[$i]['id_medicos']?>"<?=(isset($srea) and $srea == $medicos[$i]['id_medicos']) ? ' selected="selected"' : ''?>><?=$m?></option>
                             <?php
                         endfor;
                         ?>
