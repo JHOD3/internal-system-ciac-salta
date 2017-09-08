@@ -597,7 +597,7 @@ SQL;
                 ->result_array()
             ;
             if (count($query_med) > 0) {
-                $query[0]['id_medicos'] = utf8_encode(ucwords(upper(trim(utf8_decode(
+                $query[0]['id_medicos'] = utf8_encode(ucwords(lower(trim(utf8_decode(
                     $query_med[0]['saludo'].' '.$query_med[0]['apellidos'].', '.$query_med[0]['nombres']
                 )))));
             } else {
