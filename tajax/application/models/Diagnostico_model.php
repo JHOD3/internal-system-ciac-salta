@@ -89,9 +89,15 @@ class Diagnostico_model extends CI_Model
         $where = "";
         foreach ($aPost AS $kP => $rP) {
             if (isset($post[$kP]) and trim($post[$kP])) {
-                $where.= "
-                    {$cnct} {$rP} LIKE '%{$post[$kP]}%'
-                ";
+                if ($kP == 'srea') {
+                    $where.= "
+                        {$cnct} {$rP} = '{$post[$kP]}'
+                    ";
+                } else {
+                    $where.= "
+                        {$cnct} {$rP} LIKE '%{$post[$kP]}%'
+                    ";
+                }
                 $cnct = "AND";
             }
         }
