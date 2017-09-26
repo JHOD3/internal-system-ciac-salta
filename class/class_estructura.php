@@ -166,7 +166,7 @@ class Estructura{
                     break;
                     case "medicos":
 						$valor = $row["id_".$this->nombre_tabla];
-						$texto = $row["saludo"]." ".$row["apellidos"].", ".$row["apellidos"];
+						$texto = $row["saludo"]." ".$row["apellidos"].", ".$row["nombres"];
                     break;
 					case "medicos_especialidades":
 						$valor = $row["id_especialidades"];
