@@ -209,6 +209,8 @@ $sql = "
         t.fecha BETWEEN '{$desde}' AND '{$hasta}'
     GROUP BY
         t.id_usuarios
+    ORDER BY
+        COUNT(t.id_turnos) DESC
 ";
 $query = $this_db->consulta($sql);
 

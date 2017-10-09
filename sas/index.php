@@ -56,7 +56,7 @@ if ($_GET['id_medicos']) {
     $desde = $d;
     $hasta = $h;
     include("../sam/estadisticas.medicos.inc.php");
-    $htm_index->Asigna("ESTADISTICAS_GRAPH", utf8_encode($html_graph));
+    $htm_index->Asigna("ESTADISTICAS_GRAPH", ($html_graph));
     $htm_index->Asigna("get_id_medicos", "?id_medicos={$_GET['id_medicos']}");
 
     $htm_index->Asigna("TOT_NUMROWS", 0);
