@@ -346,8 +346,12 @@ SQL;
         $day
     ) {
         $query = $this->db
-            ->select('desde, hasta')
-            ->from('horarios_inhabilitados')
+            ->select('hi.desde, hi.hasta, him.motivo_descripcion, hi.horarios_inhabilitados_motivos')
+            ->from('horarios_inhabilitados AS hi')
+            ->join(
+                'horarios_inhabilitados_motivos AS him',
+                'hi.id_horarios_inhabilitados_motivos = him.id_horarios_inhabilitados_motivos'
+            )
             ->where('id_especialidades', $id_especialidades)
             ->where('id_medicos', $id_medicos)
             ->where('estado', 1)

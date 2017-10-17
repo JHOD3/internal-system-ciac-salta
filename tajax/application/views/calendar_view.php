@@ -7,6 +7,21 @@
         <?php else: ?>
             <br />No hay Horarios disponibles para el <span><?=$day?>/<?=$month?>/<?=$year?></span>
         <?php endif; ?>
+        <?php if (count($aHorariosInhabilitados) > 0): ?>
+            <br />
+            <span style="font-weight: normal;">Los horarios Ocupados se encuentran reservados y no pueden ser otorgados</span>
+            <br />
+            <?php $cnct = 'Motivo: '; ?>
+            <?php foreach ($aHorariosInhabilitados AS $rsHI): ?>
+                <?php if ($rsHI['motivo_descripcion'] != 'Otro'): ?>
+                    <?=$cnct?><?=$rsHI['motivo_descripcion']?>
+                    <?php $cnct = '<span style="font-weight: normal;">,</span> '; ?>
+                <?php else: ?>
+                    <?=$cnct?>El Médico no puede asistir
+                    <?php $cnct = '<span style="font-weight: normal;">,</span> '; ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
     <?php if (is_array($aHorarios) and isset($aHorarios[0])): ?>
         <div class="atencion">
