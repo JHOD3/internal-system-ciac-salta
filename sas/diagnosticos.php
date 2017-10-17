@@ -10,7 +10,7 @@ $obj_estructura = new Estructura();
 
 $htm_gral = $obj_estructura->html("sas/gral");
 $htm_index = $obj_estructura->html("sas/diagnosticos");
-$htm_menu_tablas = $obj_estructura->html("menu/tablas_sas");
+$htm_menu_tablas = $obj_estructura->html("menu/tablas_sas_{$_SESSION['SUPERUSER']}");
 
 /*$htm_index->Asigna("FORM_HORARIOS", $obj_dias_semana->FormHorarios());*/
 
