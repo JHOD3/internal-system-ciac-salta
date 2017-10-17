@@ -151,6 +151,7 @@ $query = $this_db->consulta($SQL_Estudios);
                     <th>($) TA</th>
                     <th>($) DD</th>
                     <th>Derivador</th>
+                    <th>Observaciones</th>
                     <th>Acciones</th>
                 </thead>
                 <tbody>
@@ -239,6 +240,7 @@ $query = $this_db->consulta($SQL_Estudios);
                             <td><input type="number" name="trajo_arancel[]" value="<?=$row['trajo_arancel']?>" style="width:40px;text-align:right;" /></td>
                             <td><input type="number" name="deja_deposito[]" value="<?=$row['deja_deposito']?>" style="width:40px;text-align:right;" /></td>
                             <td><input type="text" name="matricula_derivacion[]" value="<?=$row['matricula_derivacion']?>" style="width:70px;text-align:right;" class="ac_matricula_derivacion" /></td>
+                            <td><input type="text" name="observaciones[]" value="<?=$row['observaciones']?>" style="width:100px;" /></td>
                             <td>
                                 <select class="copy_id_medicos" id="copy_id_medicos_<?=$row['id_estudios']?>" style="width:120px;">
                                     <option value="">---</option>
@@ -327,6 +329,7 @@ $query = $this_db->consulta($SQL_Estudios);
             $(trhi + '[name="trajo_arancel[]"]').val($(trdi + '[name="trajo_arancel[]"]').val());
             $(trhi + '[name="deja_deposito[]"]').val($(trdi + '[name="deja_deposito[]"]').val());
             $(trhi + '[name="matricula_derivacion[]"]').val($(trdi + '[name="matricula_derivacion[]"]').val());
+            $(trhi + '[name="observaciones[]"]').val($(trdi + '[name="observaciones[]"]').val());
             $(this).val('');
         }
     });

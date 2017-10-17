@@ -67,6 +67,7 @@
                 <td class="tot"><?=isset($deja_deposito_suma[0]) ? '$'.number_format($deja_deposito_suma[0], 0, "", ".") : ''?></td>
                 <td class="tot"><?=isset($deja_deposito_suma[1]) ? '$'.number_format($deja_deposito_suma[1], 0, "", ".") : ''?></td>
                 <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
+                <td>&nbsp;</td>
             </tr>
             <tr class="trHead">
                 <td style="width:36px;">Turno</td>
@@ -85,6 +86,7 @@
                 <td style="width:32px;">TA</td>
                 <td style="width:32px;">DD</td>
                 <td style="width:60px;">Derivador</td>
+                <td style="width:100px;">Observaciones</td>
                 <td>&nbsp;</td>
             </tr>
             <?php
@@ -111,6 +113,7 @@
     <td<?=$idmer?>"trajo_arancel"><?=$item['trajo_arancel'] > 0 ? "\$&nbsp;{$item['trajo_arancel']}" : '---'?></td>
     <td<?=$idmer?>"deja_deposito"><?=$item['deja_deposito'] > 0 ? "\$&nbsp;{$item['deja_deposito']}" : '---'?></td>
     <td<?=$idmer?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
+    <td<?=$idmer?>"observaciones"><?=$item['observaciones']?></td>
     <td<?=$idmer?>"save"></td>
 </tr>
 <?php
@@ -197,6 +200,7 @@
 <div id="tab_trajo_arancel" class="tab_hidden"><input type="number" name="trajo_arancel" value="" style="width:40px;text-align:right;" /></div>
 <div id="tab_deja_deposito" class="tab_hidden"><input type="number" name="deja_deposito" value="" style="width:40px;text-align:right;" /></div>
 <div id="tab_matricula_derivacion" class="tab_hidden"><input type="text" name="matricula_derivacion" value="" style="width:70px;text-align:right;" class="ac_matricula_derivacion" /></div>
+<div id="tab_observaciones" class="tab_hidden"><input type="text" name="observaciones" value="" style="width:100px;" /></div>
 <div id="tab_save" class="tab_hidden"><input type="button" value="Guardar" /></div>
 
 <script>
@@ -325,6 +329,7 @@ $(document).ready(function(){
                         serialized+= '&trajo_arancel=' + $(pre_i + 'trajo_arancel' + pos).val();
                         serialized+= '&deja_deposito=' + $(pre_i + 'deja_deposito' + pos).val();
                         serialized+= '&matricula_derivacion=' + $(pre_i + 'matricula_derivacion' + pos).val();
+                        serialized+= '&observaciones=' + $(pre_i + 'observaciones' + pos).val();
                         $(pre_d + 'estudios' + pos).html('&#8634;');
                         $(pre_d + 'medicos' + pos).html('&#8634;');
                         $(pre_d + 'obras_sociales' + pos).html('&#8634;');
@@ -338,6 +343,7 @@ $(document).ready(function(){
                         $(pre_d + 'trajo_arancel' + pos).html('&#8634;');
                         $(pre_d + 'deja_deposito' + pos).html('&#8634;');
                         $(pre_d + 'matricula_derivacion' + pos).html('&#8634;');
+                        $(pre_d + 'observaciones' + pos).html('&#8634;');
                         ajxM = $.ajax({
                             type: 'POST',
                             data: serialized,
@@ -359,6 +365,7 @@ $(document).ready(function(){
                             $(pre_d + 'trajo_arancel' + pos).html(dataJSON['trajo_arancel']);
                             $(pre_d + 'deja_deposito' + pos).html(dataJSON['deja_deposito']);
                             $(pre_d + 'matricula_derivacion' + pos).html(dataJSON['matricula_derivacion']);
+                            $(pre_d + 'observaciones' + pos).html(dataJSON['observaciones']);
                         });
                     });
                 }

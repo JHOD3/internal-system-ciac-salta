@@ -468,7 +468,8 @@ SQL;
                 ts.trajo_orden,
                 ts.trajo_arancel,
                 ts.deja_deposito,
-                ts.matricula_derivacion
+                ts.matricula_derivacion,
+                ts.observaciones
             ")
             ->from('turnos AS t')
             ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
@@ -746,6 +747,7 @@ SQL;
         $dataInsertTurnosEstudios['trajo_arancel'] = $post['trajo_arancel'];
         $dataInsertTurnosEstudios['deja_deposito'] = $post['deja_deposito'];
         $dataInsertTurnosEstudios['matricula_derivacion'] = $post['matricula_derivacion'];
+        $dataInsertTurnosEstudios['observaciones'] = $post['observaciones'];
         $this->db->insert('turnos_estudios', $dataInsertTurnosEstudios);
     }
 
