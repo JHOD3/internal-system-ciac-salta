@@ -64,8 +64,8 @@
                 <td>&nbsp;</td>
                 <td class="tot"><?=$cantidad_de_ordenes[1]?></td>
                 <td class="tot"><?=$cantidad_de_ordenes[0]?></td>
-                <td class="tot">$<?=number_format($deja_deposito_suma[0], 0, "", ".")?></td>
-                <td class="tot">$<?=number_format($deja_deposito_suma[1], 0, "", ".")?></td>
+                <td class="tot"><?=isset($deja_deposito_suma[0]) ? '$'.number_format($deja_deposito_suma[0], 0, "", ".") : ''?></td>
+                <td class="tot"><?=isset($deja_deposito_suma[1]) ? '$'.number_format($deja_deposito_suma[1], 0, "", ".") : ''?></td>
                 <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
             </tr>
             <tr class="trHead">

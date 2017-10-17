@@ -93,7 +93,11 @@ class Diagnostico extends CI_Controller {
     public function listado($date1, $date2, $id_usuario = null)
     {
         if (isset($id_usuario)) {
-            $this->session->set_userdata(array('ID_USUARIO' => $id_usuario));
+            $aUsuario = $this->Model->getUsuario($id_usuario);
+            $this->session->set_userdata(array(
+                'ID_USUARIO' => $id_usuario,
+                'SUPERUSER' => $aUsuario['superuser']
+            ));
         }
         $post = $this->input->post();
         if (!isset($post['hour1']) or !$post['hour1']) {
@@ -110,11 +114,18 @@ class Diagnostico extends CI_Controller {
             $date2,
             $post
         );
-        $dataView['deja_deposito_suma'] = $this->Model->obtDejaDepositoSuma(
-            $date1,
-            $date2,
-            $post
-        );
+        if (
+            $this->session->userdata('SUPERUSER') > 0 or
+            $date1 >= date("Y-m-d", strtotime("-2 days"))
+        ) {
+            $dataView['deja_deposito_suma'] = $this->Model->obtDejaDepositoSuma(
+                $date1,
+                $date2,
+                $post
+            );
+        } else {
+            $dataView['deja_deposito_suma'] = array(null, null);
+        }
         $dataView['cantidad_de_ordenes'] = $this->Model->obtCantidadDeOrdenes(
             $date1,
             $date2,

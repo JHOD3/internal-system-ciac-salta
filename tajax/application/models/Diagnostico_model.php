@@ -737,6 +737,19 @@ SQL;
         $this->db->insert('turnos_estudios', $dataInsertTurnosEstudios);
     }
 
+    public function getUsuario($id_usuarios)
+    {
+        $query = $this->db
+            ->from('usuarios')
+            ->where('id_usuarios', $id_usuarios)
+            ->limit(1)
+            ->get()
+            ->result_array()
+        ;
+        return $query[0];
+
+    }
+
 }
 
 //EOF Diagnostico_model.php
