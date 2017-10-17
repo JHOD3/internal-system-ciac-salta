@@ -435,7 +435,11 @@ class Medicos extends Estructura implements iMedicos{
 							foreach ($inhabilitadosv as $clave => $valor){
 								if (($inicio >= $valor['desde']) && ($inicio < $valor['hasta'])){
 									$es_inhabilitado = true;
-                                    $es_inhabilitado_mot = $valor['motivo_descripcion'];
+                                    if ($valor['motivo_descripcion'] != 'Otro') {
+                                        $es_inhabilitado_mot = $valor['motivo_descripcion'];
+                                    } else {
+                                        $es_inhabilitado_mot = '';
+                                    }
                                     $es_inhabilitado_txt = $valor['horarios_inhabilitados_motivos'];
 								}
 							}
@@ -697,7 +701,11 @@ class Medicos extends Estructura implements iMedicos{
 							foreach ($inhabilitadosv as $clave => $valor){
 								if (($inicio >= $valor['desde']) && ($inicio < $valor['hasta'])){
 									$es_inhabilitado = true;
-                                    $es_inhabilitado_mot = $valor['motivo_descripcion'];
+                                    if ($valor['motivo_descripcion'] != 'Otro') {
+                                        $es_inhabilitado_mot = $valor['motivo_descripcion'];
+                                    } else {
+                                        $es_inhabilitado_mot = '';
+                                    }
                                     $es_inhabilitado_txt = $valor['horarios_inhabilitados_motivos'];
 								}
 							}
@@ -1094,7 +1102,11 @@ class Medicos extends Estructura implements iMedicos{
 			$htm->Asigna('NOMBRE_SELECT', 'horarios_inhabilitados');
 			$htm->Asigna('LABEL_ELIJA', 'Seleccione Horario');
 			while ($row = $this->db->fetch_array($query)){
-				$row['TEXTO_OPTION'] = $row['desde']." - ".$row['hasta']." | ".$row['motivo_descripcion'].$row['horarios_inhabilitados_motivos'];
+                if ($row['motivo_descripcion'] != 'Otro') {
+    				$row['TEXTO_OPTION'] = $row['desde']." - ".$row['hasta']." | ".$row['motivo_descripcion'];
+                } else {
+    				$row['TEXTO_OPTION'] = $row['desde']." - ".$row['hasta']." | ".$row['motivo_descripcion'].': '.$row['horarios_inhabilitados_motivos'];
+                }
 				$row['VALUE'] = $row['id_horarios_inhabilitados'];
 				$htm->AsignaBloque('block_option',$row);
 			}
