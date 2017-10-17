@@ -393,7 +393,11 @@ class Medicos extends Estructura implements iMedicos{
 
 
 						}
-						$grillav[$row["desde"]] = $linea;
+                        $cnct = '';
+                        while (isset($grillav[$row["desde"].$cnct])) {
+                            $cnct.= '0';
+                        }
+						$grillav[$row["desde"].$cnct] = $linea;
 					}
 				}
 

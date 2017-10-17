@@ -747,7 +747,7 @@ SQL;
         $dataInsertTurnosEstudios['trajo_arancel'] = $post['trajo_arancel'];
         $dataInsertTurnosEstudios['deja_deposito'] = $post['deja_deposito'];
         $dataInsertTurnosEstudios['matricula_derivacion'] = $post['matricula_derivacion'];
-        $dataInsertTurnosEstudios['observaciones'] = $post['observaciones'];
+        $dataInsertTurnosEstudios['observaciones'] = isset($post['observaciones']) ? $post['observaciones'] : '';
         $this->db->insert('turnos_estudios', $dataInsertTurnosEstudios);
     }
 
