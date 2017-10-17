@@ -412,6 +412,8 @@ class Medicos extends Estructura implements iMedicos{
 					}
 				}
 
+                $ultimo_segundo = str_pad(substr(max(array_keys($grillav)), 6, 2) + 1, 2, "0", STR_PAD_LEFT);
+
 				//VOY A ARMAR EL LISTADO DE LIBRES
 				while ($row2 = $this->db->fetch_array($query)){
 
@@ -453,7 +455,6 @@ class Medicos extends Estructura implements iMedicos{
 											<div class='bloque'>
 												<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><strong>".substr($inicio, 0, 5)." &raquo; Inhabilitado: ".$es_inhabilitado_mot." ".$es_inhabilitado_txt."</strong>
 											</div>
-
 										</span>";
 							}else{
 								switch ($_SESSION['SISTEMA']){
@@ -462,15 +463,21 @@ class Medicos extends Estructura implements iMedicos{
 											<div class='bloque'>
 												<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".substr($inicio, 0, 5)." &raquo; <strong>Libre</strong>
 											</div>
-
 										</span>";
+
+                                        if ($ultimo_segundo <= 30) {
+                                            $sobreturno = "<span class='reservar libre' data-desde='21:15:{$ultimo_segundo}' data-hasta='21:30:{$ultimo_segundo}' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
+    											<div class='bloque'>
+    												<img src='".IMG."btns/tipo_".$tipo_turno.".png' />21:15 &raquo; <strong>ASIGNAR UN SOBRETURNO</strong>
+    											</div>
+    										</span>";
+                                        }
 									break;
 									case 'sam':
 										$linea = "<span href='#' class='reservar libre' data-desde='".$inicio."' data-hasta='".$fin."' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
 											<div class='bloque'>
 												<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".substr($inicio, 0, 5)." &raquo; <strong>Libre</strong>
 											</div>
-
 										</span>";
 									break;
 
@@ -494,6 +501,10 @@ class Medicos extends Estructura implements iMedicos{
 				foreach ($grillav as $clave => $valor) {
 					$listado .= $valor;
 				}
+
+                if (isset($sobreturno)) {
+                    $listado .= $sobreturno;
+                }
 
 			}else{
 				$listado = '';
