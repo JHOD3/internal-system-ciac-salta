@@ -89,14 +89,26 @@ class Diagnostico_model extends CI_Model
         $where = "";
         foreach ($aPost AS $kP => $rP) {
             if (isset($post[$kP]) and trim($post[$kP])) {
-                if ($kP == 'srea') {
-                    $where.= "
-                        {$cnct} {$rP} = '{$post[$kP]}'
-                    ";
-                } else {
-                    $where.= "
-                        {$cnct} {$rP} LIKE '%{$post[$kP]}%'
-                    ";
+                switch ($kP) {
+                    case "srea":
+                        $where.= "
+                            {$cnct} {$rP} = '{$post[$kP]}'
+                        ";
+                        break;
+                    case "spac":
+                        $Palabras = explode(' ', $post[$kP]);
+                        foreach ($Palabras AS $pal) {
+                            $where.= "
+                                {$cnct} {$rP} LIKE '%{$pal}%'
+                            ";
+                            $cnct = "AND";
+                        }
+                        break;
+                    default:
+                        $where.= "
+                            {$cnct} {$rP} LIKE '%{$post[$kP]}%'
+                        ";
+                        break;
                 }
                 $cnct = "AND";
             }
