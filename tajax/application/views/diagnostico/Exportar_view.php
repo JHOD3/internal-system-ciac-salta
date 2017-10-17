@@ -26,8 +26,8 @@ header("Content-Disposition: attachment; filename=Practicas-Medicas-Exportado-{$
                 <td><?=$rsD['tipo']?></td>
                 <td><?=$rsD['trajo_pedido']?></td>
                 <td><?=$rsD['trajo_orden']?></td>
-                <td style="mso-number-format: 'Currency';"><?=$rsD['trajo_arancel']?></td>
-                <td style="mso-number-format: 'Currency';"><?=$rsD['deja_deposito']?></td>
+                <td style="mso-number-format: 'Currency';"><?=isset($rsD['trajo_arancel']) ? "\$ {$rsD['trajo_arancel']},00": ''?></td>
+                <td style="mso-number-format: 'Currency';"><?=isset($rsD['deja_deposito']) ? "\$ {$rsD['deja_deposito']},00": ''?></td>
                 <td><?=$rsD['matricula_derivacion']?></td>
             </tr>
         <?php endforeach; ?>
