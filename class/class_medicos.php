@@ -464,14 +464,6 @@ class Medicos extends Estructura implements iMedicos{
 												<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".substr($inicio, 0, 5)." &raquo; <strong>Libre</strong>
 											</div>
 										</span>";
-
-                                        if ($ultimo_segundo <= 30) {
-                                            $sobreturno = "<span class='reservar libre' data-desde='21:15:{$ultimo_segundo}' data-hasta='21:30:{$ultimo_segundo}' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
-    											<div class='bloque'>
-    												<img src='".IMG."btns/tipo_".$tipo_turno.".png' />21:15 &raquo; <strong>ASIGNAR UN SOBRETURNO</strong>
-    											</div>
-    										</span>";
-                                        }
 									break;
 									case 'sam':
 										$linea = "<span href='#' class='reservar libre' data-desde='".$inicio."' data-hasta='".$fin."' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
@@ -502,7 +494,14 @@ class Medicos extends Estructura implements iMedicos{
 					$listado .= $valor;
 				}
 
-                if (isset($sobreturno)) {
+                if ($_SESSION['SISTEMA'] == 'sas') {
+                    if ($ultimo_segundo <= 30) {
+                        $sobreturno = "<span class='reservar libre' data-desde='21:15:{$ultimo_segundo}' data-hasta='21:30:{$ultimo_segundo}' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
+							<div class='bloque'>
+								<img src='".IMG."btns/tipo_".$tipo_turno.".png' />21:15 &raquo; <strong>ASIGNAR UN SOBRETURNO</strong>
+							</div>
+						</span>";
+                    }
                     $listado .= $sobreturno;
                 }
 
