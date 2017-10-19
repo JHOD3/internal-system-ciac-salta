@@ -764,6 +764,59 @@ SQL;
 
     }
 
+    public function obtUltimoHorReal(
+        $fecha,
+        $id_medicos,
+        $id_especialidades
+    ) {
+        $id_dias_semana = date("N", strtotime($fecha)) + 1;
+        if ($id_dias_semana > 7) {
+            $id_dias_semana = 1;
+        }
+        $ultimo_horreal = '';
+
+    	//VERIFICO LOS HORARIOS QUE TIENE CARGADO EL MEDICO PARA UN DIA DETERMINADO
+    	$query = $this->db
+            ->from('medicos_horarios')
+            ->where('id_medicos', $id_medicos)
+            ->where('id_especialidades', $id_especialidades)
+            ->where('id_dias_semana', $id_dias_semana)
+            ->where('estado', 1)
+            ->order_by('desde', 'ASC')
+            ->get()
+            ->result_array()
+        ;
+    	foreach ($query AS $row){
+            $ultimo_horreal = max($ultimo_horreal, $row['hasta']);
+        }
+
+    	//TRAIGO TODOS LOS TURNOS RESERVADOS
+		$query = "SELECT t.desde
+				FROM turnos T
+				INNER JOIN turnos_estados TE
+				ON T.id_turnos_estados = TE.id_turnos_estados
+				INNER JOIN pacientes P
+				ON T.id_pacientes = P.id_pacientes
+				LEFT JOIN obras_sociales OS
+				ON P.id_obras_sociales = OS.id_obras_sociales
+				WHERE T.id_medicos = '{$id_medicos}' AND T.id_especialidades = '{$id_especialidades}' AND T.fecha = '{$fecha}' AND T.estado = 1 AND (T.id_turnos_estados = 1 OR T.id_turnos_estados = 2 OR T.id_turnos_estados = 4 OR T.id_turnos_estados = 7)
+				ORDER BY T.desde ASC";
+        $query = $this->db->query($query)->result_array();
+    	foreach ($query AS $row){
+            $ultimo_horreal = max($ultimo_horreal, $row['desde']);
+        }
+
+        //OBTENER DURACION DEL TURNO
+		$query = "SELECT * FROM medicos_especialidades WHERE id_medicos = '{$id_medicos}' AND id_especialidades = '{$id_especialidades}' ORDER BY id_medicos_especialidades DESC LIMIT 0,1";
+        $query = $this->db->query($query)->result_array();
+        if (count($query) > 0) {
+        	$vcDuracionTurno = $query[0]['duracion_turno'];
+            $ultimo_horreal = horaMM($ultimo_horreal, $vcDuracionTurno);
+        }
+
+        return $ultimo_horreal;
+    }
+
 }
 
 //EOF Diagnostico_model.php

@@ -300,8 +300,19 @@ class Medicos extends Estructura implements iMedicos{
 		requerir_class("dias_semana");
 		$obj_dia_semana = new Dias_semana($diaSemana);
 
+        $ultimo_horario = '';
+
 		if ($fecha >= date('y-m-d')){
 			$htm = $this->Html($this->nombre_tabla."/grilla_turnos_".$_SESSION['SISTEMA']);
+
+    		//VERIFICO LOS HORARIOS QUE TIENE CARGADO EL MEDICO PARA UN DIA DETERMINADO
+    		$query_string = $this->querys->GrillaTurnos($id_medico, $id_especialidad, $id_dia);
+    		$query = $this->db->consulta($query_string);
+    		$cant = $this->db->num_rows($query);
+            $ultimo_horreal = '';
+    		while ($row2 = $this->db->fetch_array($query)){
+                $ultimo_horreal = max($ultimo_horreal, $row2['hasta']);
+            }
 
 			//VERIFICO LOS HORARIOS QUE TIENE CARGADO EL MEDICO PARA UN DIA DETERMINADO
 			$query_string = $this->querys->GrillaTurnos($id_medico, $id_especialidad, $id_dia);
@@ -328,6 +339,9 @@ class Medicos extends Estructura implements iMedicos{
 
 				if ($cant2 > 0){
 					while ($row = $this->db->fetch_array($query2)){
+                        $ultimo_horario = max($ultimo_horario, $row['desde']);
+                        $clasm = ($row['desde'] > $ultimo_horreal) ? ' sobreturno2' : '';
+
 						//ES ESTUDIO O CONSULTA
 						if(isset($row["id_turnos_tipos"]) && (2 - ($row["id_turnos_tipos"] % 2)) == 2){
 							$tipo_turno = "estudios";
@@ -346,7 +360,7 @@ class Medicos extends Estructura implements iMedicos{
 								$query_estudios = $this->db->consulta($query_string_estudios);
 								$cant_estudios = $this->db->num_rows($query_estudios);
 
-								$linea = " <span style='color:#".$row["color"]."' class='btn_estado_turno' data-id='".$row["id_turnos"]."' data-id_turnos_tipos='".$row["id_turnos_tipos"]."' data-id_turnos_estados='".$row["id_turnos_estados"]."' data-tipo='turno'>
+								$linea = " <span style='color:#".$row["color"]."' class='btn_estado_turno".$clasm."' data-id='".$row["id_turnos"]."' data-id_turnos_tipos='".$row["id_turnos_tipos"]."' data-id_turnos_estados='".$row["id_turnos_estados"]."' data-tipo='turno'>
 									<div class='bloque'>
 										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 										<div class='dat_paciente'>".
@@ -371,7 +385,7 @@ class Medicos extends Estructura implements iMedicos{
 								$query_estudios = $this->db->consulta($query_string_estudios);
 								$cant_estudios = $this->db->num_rows($query_estudios);
 
-								$linea = " <a href='#' style='color:#".$row["color"]."' class='btn_estado_turno' data-id='".$row["id_turnos"]."' data-id_turnos_tipos='".$row["id_turnos_tipos"]."' data-id_turnos_estados='".$row["id_turnos_estados"]."'>
+								$linea = " <a href='#' style='color:#".$row["color"]."' class='btn_estado_turno".$clasm."' data-id='".$row["id_turnos"]."' data-id_turnos_tipos='".$row["id_turnos_tipos"]."' data-id_turnos_estados='".$row["id_turnos_estados"]."'>
 									<div class='bloque'>
 											<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 											<div class='dat_paciente'>".
@@ -412,10 +426,9 @@ class Medicos extends Estructura implements iMedicos{
 					}
 				}
 
-                $ultimo_segundo = str_pad(substr(max(array_keys($grillav)), 6, 2) + 1, 2, "0", STR_PAD_LEFT);
-
 				//VOY A ARMAR EL LISTADO DE LIBRES
 				while ($row2 = $this->db->fetch_array($query)){
+                    $ultimo_horario = max($ultimo_horario, $row2['hasta']);
 
 					//ES ESTUDIO O CONSULTA
 					if(isset($row2["id_turnos_tipos"]) && (2 - ($row2["id_turnos_tipos"] % 2)) == 2){
@@ -495,10 +508,11 @@ class Medicos extends Estructura implements iMedicos{
 				}
 
                 if ($_SESSION['SISTEMA'] == 'sas') {
-                    if ($ultimo_segundo <= 30) {
-                        $sobreturno = "<span class='reservar libre' data-desde='21:15:{$ultimo_segundo}' data-hasta='21:30:{$ultimo_segundo}' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
+                    $ultimo_horario = $this->SumarHorasTime($ultimo_horario, $duracion_turno);
+                    if ($ultimo_horario != '') {
+                        $sobreturno = "<span class='reservar libre sobreturno' data-desde='{$ultimo_horario}' data-hasta='{$ultimo_horario}' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
 							<div class='bloque'>
-								<img src='".IMG."btns/tipo_".$tipo_turno.".png' />21:15 &raquo; <strong>ASIGNAR UN SOBRETURNO</strong>
+								<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".substr($ultimo_horario, 0, 5)." &raquo; <strong>ASIGNAR UN SOBRETURNO</strong>
 							</div>
 						</span>";
                     }

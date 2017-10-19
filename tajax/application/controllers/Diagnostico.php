@@ -71,6 +71,13 @@ class Diagnostico extends CI_Controller {
                 $dataView['obras_sociales'] = $this->Model->obtObrasSociales();
             }
         }
+
+        $dataView['ultimo_horreal'] = $this->Model->obtUltimoHorReal(
+            $fecha,
+            $id_medicos,
+            $id_especialidades
+        );
+
         $this->load->view('diagnostico/Agregar_grilla_view', $dataView);
     }
 

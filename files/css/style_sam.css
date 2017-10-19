@@ -1356,3 +1356,7 @@ input[type=text].arancel, input[type=text].particular{
     padding: 0 6px 6px 6px;
     border-bottom: 2px solid #CCCCCC;
 }
+
+.sobreturno2 > div{
+    background-color: #e9e9e9;
+}
