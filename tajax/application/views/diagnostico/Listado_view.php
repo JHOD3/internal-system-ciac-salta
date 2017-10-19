@@ -72,11 +72,11 @@
             <tr class="trHead">
                 <td style="width:36px;">Turno</td>
                 <td>Paciente</td>
-                <td style="width:51px;">Cod.Est.</td>
+                <td style="width:51px;">Cod.Pra.</td>
                 <td>Estudio</td>
                 <td>Realizador</td>
                 <td>O.Social</td>
-                <td style="width:80px;">Presentación</td>
+                <td style="width:80px;">Prestación</td>
                 <td style="width:70px;">Nro.Orden</td>
                 <td>Nro.Afiliado</td>
                 <td style="width:33px;">Cant.</td>

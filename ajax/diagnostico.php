@@ -141,7 +141,7 @@ $query = $this_db->consulta($SQL_Estudios);
                     <th>Estudio</th>
                     <th>Realizador</th>
                     <th>O.Social</th>
-                    <th>Presentación</th>
+                    <th>Prestaci&oacute;n</th>
                     <th>#Orden</th>
                     <th>#Afiliado</th>
                     <th>Cant.</th>

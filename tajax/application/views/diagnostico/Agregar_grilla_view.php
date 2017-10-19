@@ -122,7 +122,7 @@ input[type="number"] {
         </select>
     </div>
     <div class="tab_float">
-        Fecha de Presentación:<br />
+        Fecha de Prestaci&oacute;n:<br />
         <input type="text" name="fecha_presentacion" value="" class="datepicker" />
     </div>
     <div class="tab_float">
