@@ -250,7 +250,7 @@
 
 	$("form#datos_turnos #btn_cancelar_turno").on("click", function(e) {
         e.preventDefault();
-        if (confirm('Seguro que desea Cancelar el turno?\nSe lo pondrá; en estado: "Cancelado por el paciente"')) {
+        if (confirm(unescape(encodeURIComponent('Seguro que desea Cancelar el turno?\nEstado a poner: "Cancelado por el paciente"')))) {
             $('#turnos_estados').val(5);
             $('#btn_aceptar').click();
         }
