@@ -115,6 +115,8 @@ $SQL_Estudios = <<<SQL
     SELECT
         te.*,
         e.nombre AS estudios,
+        e.importe,
+        e.arancel,
         t.id_medicos AS turnos_id_medicos
     FROM
         turnos_estudios AS te
@@ -208,6 +210,7 @@ $query = $this_db->consulta($SQL_Estudios);
                                             <?php if ($row_os['id_obras_sociales'] == $row['id_obras_sociales']): ?>
                                                 selected="selected"
                                             <?php endif; ?>
+                                            data-ta="<?=($row_os['id_obras_sociales'] == 51) ? $row['importe'] : $row['arancel']?>"
                                         ><?=utf8_encode($row_os['abreviacion'])?></option>
                                     <?php endwhile; ?>
                                 </select>
@@ -237,7 +240,7 @@ $query = $this_db->consulta($SQL_Estudios);
                                     <option value="2"<?=$row['trajo_orden'] == '2' ? ' selected="selected"' : ''?>>No</option>
                                 </select>
                             </td>
-                            <td><input type="number" name="trajo_arancel[]" value="<?=$row['trajo_arancel']?>" style="width:40px;text-align:right;" /></td>
+                            <td><input type="number" name="trajo_arancel[]" value="<?=$row['trajo_arancel']?>" alt="<?=$row['trajo_arancel'] ? 'Viejo valor: $'.$row['trajo_arancel'] : ''?>" title="<?=$row['trajo_arancel'] ? 'Viejo valor: $'.$row['trajo_arancel'] : ''?>" style="width:40px;text-align:right;" /></td>
                             <td><input type="number" name="deja_deposito[]" value="<?=$row['deja_deposito']?>" style="width:40px;text-align:right;" /></td>
                             <td><input type="text" name="matricula_derivacion[]" value="<?=$row['matricula_derivacion']?>" style="width:70px;text-align:right;" class="ac_matricula_derivacion" /></td>
                             <td><input type="text" name="observaciones[]" value="<?=$row['observaciones']?>" style="width:100px;" /></td>
@@ -332,6 +335,11 @@ $query = $this_db->consulta($SQL_Estudios);
             $(trhi + '[name="observaciones[]"]').val($(trdi + '[name="observaciones[]"]').val());
             $(this).val('');
         }
+    });
+    $('select[name="id_obras_sociales[]"]').change(function(){
+        var new_value = $(this).find('option[value="'+$(this).val()+'"]').data('ta');
+        var ta_input = $(this).parent().parent().find('input[name="trajo_arancel[]"]');
+        ta_input.val(new_value);
     });
 //});
 </script>
