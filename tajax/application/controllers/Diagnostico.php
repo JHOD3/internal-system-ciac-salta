@@ -148,7 +148,7 @@ class Diagnostico extends CI_Controller {
         $dataView['estudios'] = $this->Model->obtEstudios();
         $dataView['medicos_cm'] = $this->Model->obtMedicosConMatriculas();
         $dataView['obras_sociales'] = $this->Model->obtObrasSociales();
-
+        $dataView['SUPERUSER'] = $this->session->userdata('SUPERUSER');
         $this->load->view($this->router->fetch_class().'/Listado_view', $dataView);
     }
 
@@ -157,6 +157,18 @@ class Diagnostico extends CI_Controller {
         print utf8_encode(
             json_encode(
                 $this->Model->guardarDiagnostico(
+                    $this->input->post(),
+                    $this->session->userdata('ID_USUARIO')
+                )
+            )
+        );
+    }
+
+    public function delediagnostico()
+    {
+        print utf8_encode(
+            json_encode(
+                $this->Model->borrarDiagnostico(
                     $this->input->post(),
                     $this->session->userdata('ID_USUARIO')
                 )

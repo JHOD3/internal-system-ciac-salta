@@ -694,6 +694,28 @@ SQL;
         }
     }
 
+    function borrarDiagnostico($post, $id_usuario = null)
+    {
+        $query = $this->db
+            ->select('id_turnos')
+            ->from('turnos_estudios')
+            ->where('id_turnos_estudios', $post['id_turnos_estudios'])
+            ->get()
+            ->result_array()
+        ;
+        if (count($query) == 1) {
+            $id_turnos = $query[0]['id_turnos'];
+            $query = $this->db
+                ->where('id_turnos', $id_turnos)
+                ->update('turnos', array('id_turnos_estados' => '6'))
+            ;
+            return $query;
+
+        }
+
+        return $id_turnos;
+    }
+
     public function agregarTurno($vcDuracionTurno, $post)
     {
         if ($post['fecha'] != '') {

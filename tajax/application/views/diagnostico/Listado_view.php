@@ -68,6 +68,7 @@
                 <td class="tot"><?=isset($deja_deposito_suma[1]) ? '$'.number_format($deja_deposito_suma[1], 0, "", ".") : ''?></td>
                 <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
                 <td>&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
             <tr class="trHead">
                 <td style="width:36px;">Turno</td>
@@ -87,6 +88,7 @@
                 <td style="width:32px;">DD</td>
                 <td style="width:60px;">Derivador</td>
                 <td style="width:100px;">Observaciones</td>
+                <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
             <?php
@@ -115,6 +117,9 @@
     <td<?=$idmer?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
     <td<?=$idmer?>"observaciones"><?=$item['observaciones']?></td>
     <td<?=$idmer?>"save"></td>
+    <?php if ($SUPERUSER > 0): ?>
+        <td<?=$idmer?>"dele"></td>
+    <?php endif; ?>
 </tr>
 <?php
                 endforeach;
@@ -131,7 +136,7 @@
 </form>
 
 <div id="tab_estudios" class="tab_hidden">
-    <select name="id_estudios" style="width:120px;">
+    <select name="id_estudios" style="width:80px;">
         <option value="">---</option>
         <?php foreach ($estudios AS $row_est): ?>
             <option
@@ -145,7 +150,7 @@
     </select>
 </div>
 <div id="tab_medicos" class="tab_hidden">
-    <select name="id_medicos" style="width:120px;">
+    <select name="id_medicos" style="width:80px;">
         <option value="">---</option>
         <?php foreach ($medicos AS $row_med): ?>
             <option
@@ -202,6 +207,9 @@
 <div id="tab_matricula_derivacion" class="tab_hidden"><input type="text" name="matricula_derivacion" value="" style="width:70px;text-align:right;" class="ac_matricula_derivacion" /></div>
 <div id="tab_observaciones" class="tab_hidden"><input type="text" name="observaciones" value="" style="width:100px;" /></div>
 <div id="tab_save" class="tab_hidden"><input type="button" value="Guardar" /></div>
+<?php if ($SUPERUSER > 0): ?>
+    <div id="tab_dele" class="tab_hidden"><a href="#" class="dele">Eliminar</a></div>
+<?php endif; ?>
 
 <script>
 $(document).ready(function(){
@@ -368,6 +376,22 @@ $(document).ready(function(){
                             $(pre_d + 'observaciones' + pos).html(dataJSON['observaciones']);
                         });
                     });
+                    <?php if ($SUPERUSER > 0): ?>
+                        $(this).find('a.dele').click(function(event){
+                            event.preventDefault();
+                            if (confirm('Seguro que desea Eliminar?')) {
+                                dId = $(this).parent().parent().data('id');
+                                ajxM = $.ajax({
+                                    type: 'POST',
+                                    data: {id_turnos_estudios: dId},
+                                    url: '../tajax/index.php/<?=$this->router->fetch_class()?>/delediagnostico',
+                                    context: $('#id_te_' + dId)
+                                }).done(function() {
+                                    $('#id_te_' + dId).remove();
+                                });
+                            }
+                        });
+                    <?php endif; ?>
                 }
             });
         }
