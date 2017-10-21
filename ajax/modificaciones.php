@@ -100,6 +100,27 @@ switch ($tabla){
 			$rta = false;
 
 	break;
+	case "medicosext":
+		parse_str(stripslashes($datos));
+
+		if (!isset($matricula) || $matricula == "")
+			$matricula = 0;
+
+		$asignaciones = "
+			apellidos = '".strtoupper(utf8_decode($apellidos))."',
+			nombres = '".strtoupper(utf8_decode($nombres))."',
+			matricula = ".$matricula.",
+            saludo = '".$saludo."'
+		";
+
+		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
+
+		if ($obj->db->consulta($query_string))
+			$rta = true;
+		else
+			$rta = false;
+
+	break;
 	case "medicos_horarios":
 		parse_str(stripslashes($datos));
 

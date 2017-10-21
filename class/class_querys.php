@@ -93,6 +93,7 @@ class Querys implements iQuerys{
 			case "mensajes":
 			case "pacientes":
 			case "medicos":
+			case "medicosext":
 			case "cobros":
 			case "egresos":
 			case "especialidades":
@@ -137,6 +138,7 @@ class Querys implements iQuerys{
 		switch ($tabla){
 			case "pacientes":
 			case "medicos":
+			case "medicosext":
 			case 'medicos_horarios':
 			case 'medicos_estudios':
 			case 'medicos_obras_sociales':
@@ -750,6 +752,22 @@ class Querys implements iQuerys{
             WHERE
                 M.estado = 1 AND
                 ME.estado = 1
+        ";
+		return $query;
+	}
+
+	function MedicosextSAM(){
+		$query = "
+            SELECT
+                DISTINCT
+                dx.id_medicosext,
+                dx.nombres,
+                dx.apellidos,
+                dx.matricula
+            FROM
+                medicosext dx
+            WHERE
+                dx.estado = 1
         ";
 		return $query;
 	}

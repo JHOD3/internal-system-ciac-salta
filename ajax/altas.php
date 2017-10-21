@@ -133,6 +133,36 @@ switch ($tabla){
 			$rta = false;
 
 	break;
+	case "medicosext":
+		parse_str(stripslashes($datos));
+
+		$columnas = "(
+			apellidos,
+			nombres,
+            matricula,
+            saludo,
+            estado
+		)";
+
+		if (!isset($matricula) || $matricula == "")
+			$matricula = 0;
+
+		$valores = "(
+    		'".strtoupper(utf8_decode($apellidos))."',
+    		'".strtoupper(utf8_decode($nombres))."',
+    		".$matricula.",
+            '".$saludo."',
+            '1'
+		)";
+
+		print $query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+		if ($obj->db->consulta($query_string))
+			$rta = $obj->db->ultimo_id_insertado();
+		else
+			$rta = false;
+
+	break;
 	case "especialidades":
 		parse_str(stripslashes($datos));
 

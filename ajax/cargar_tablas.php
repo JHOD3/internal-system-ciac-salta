@@ -6,6 +6,7 @@ requerir_class("tpl","querys","mysql","estructura");
 
 requerir_class(
     'medicos',
+    'medicosext',
     'obras_sociales',
     'obras_sociales_planes',
     'especialidades',
@@ -39,6 +40,9 @@ switch ($tabla){
 	break;
 	case "medicos":
 		$aColumns = array('id_medicos', 'saludo', 'apellidos', 'nombres', 'nro_documento', 'email', 'telefonos', 'id_sectores', 'id_subsectores', 'interno', 'id_plantas', 'matricula');
+	break;
+	case "medicosext":
+		$aColumns = array('id_medicosext', 'saludo', 'apellidos', 'nombres', 'matricula');
 	break;
 	case "especialidades":
 		$aColumns = array('id_especialidades', 'nombre');
@@ -1088,6 +1092,19 @@ if ($cant_registros != 0){
                             $obras_sociales_planes.''.
                             $estudios.''
                         ;
+                    }
+
+				break;
+				case "medicosext":
+					$row[0] = $aRow["id_medicosext"];
+					$row[1] = utf8_encode($aRow["saludo"]);
+					$row[2] = utf8_encode($aRow["apellidos"]);
+					$row[3] = utf8_encode($aRow["nombres"]);
+					$row[4] = utf8_encode($aRow["matricula"]);
+                    if ($_SESSION['ID_USUARIO'] === '0') {
+                        $row[5] = $editar.''.$eliminar.'';
+                    } else {
+                        $row[5] = $editar.'';
                     }
 
 				break;

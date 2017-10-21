@@ -261,12 +261,14 @@ class Diagnostico_model extends CI_Model
             ->select("
                 t.*,
                 LEFT(t.desde, 5) AS hora,
-                CONCAT(p.apellidos, ', ', p.nombres) AS pacientes,
+                CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres)) AS pacientes,
                 CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres) AS medicos,
                 os.abreviacion AS obras_sociales,
                 e.nombre AS estudios,
                 e.codigopractica,
                 ts.*,
+                CONCAT(d.saludo, ' ', d.apellidos, ', ', d.nombres) AS medicos_derivacion,
+                CONCAT(dx.saludo, ' ', dx.apellidos, ', ', dx.nombres, ' (Externo)') AS medicosext_derivacion,
                 te.nombre AS turnos_estados
             ")
             ->from('turnos AS t')
@@ -274,6 +276,8 @@ class Diagnostico_model extends CI_Model
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
+            ->join('medicos AS d', 'ts.matricula_derivacion = d.matricula', 'left')
+            ->join('medicosext AS dx', 'ts.matricula_derivacion = dx.matricula AND dx.estado = 1', 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
@@ -285,9 +289,6 @@ class Diagnostico_model extends CI_Model
             ->result_array()
         ;
         #print "<pre>".($this->db->last_query())."</pre>";
-        for ($i = 0; $i < count($query); $i++) {
-            #$query[$i]['fechanac'] = date_view($query[$i]['fechanac']);
-        }
         return $query;
     }
 /*
@@ -414,7 +415,10 @@ SQL;
     {
         $query = <<<SQL
             SELECT
-                m.*
+                m.apellidos,
+                m.nombres,
+                m.matricula,
+                '0' AS externo
             FROM
                 medicos AS m
             INNER JOIN
@@ -426,9 +430,19 @@ SQL;
                 me.estado = 1
             GROUP BY
                 m.id_medicos
+            UNION
+                SELECT
+                    dx.apellidos,
+                    dx.nombres,
+                    dx.matricula,
+                    '1' AS externo
+                FROM
+                    medicosext AS dx
+                WHERE
+                    dx.estado = 1
             ORDER BY
-                m.apellidos,
-                m.nombres
+                apellidos,
+                nombres
 SQL;
         return $this->db->query($query)->result_array();
     }
@@ -453,7 +467,7 @@ SQL;
         $this->db
             ->select("
                 '0' AS orden,
-                CONCAT(p.apellidos, ', ', p.nombres) AS pacientes,
+                CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres)) AS pacientes,
                 'CIAC' AS presentador,
                 CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres) AS medicos,
                 os.abreviacion AS obras_sociales,
@@ -469,6 +483,8 @@ SQL;
                 ts.trajo_arancel,
                 ts.deja_deposito,
                 ts.matricula_derivacion,
+                CONCAT(d.saludo, ' ', d.apellidos, ', ', d.nombres) AS medicos_derivacion,
+                CONCAT(dx.saludo, ' ', dx.apellidos, ', ', dx.nombres, ' (Externo)') AS medicosext_derivacion,
                 ts.observaciones
             ")
             ->from('turnos AS t')
@@ -476,6 +492,8 @@ SQL;
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
+            ->join('medicos AS d', 'ts.matricula_derivacion = d.matricula', 'left')
+            ->join('medicosext AS dx', 'ts.matricula_derivacion = dx.matricula AND dx.estado = 1', 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
@@ -687,7 +705,36 @@ SQL;
 
             if (trim($query[0]['matricula_derivacion']) == '') {
                 $query[0]['matricula_derivacion'] = '---';
+                $query[0]['medicos_derivacion'] = '---';
+            } else {
+                $query_md = $this->db
+                    ->select("CONCAT(saludo, ' ', apellidos, ', ', nombres) AS medicos_derivacion")
+                    ->from('medicos')
+                    ->where('estado', 1)
+                    ->where('matricula', $query[0]['matricula_derivacion'])
+                    ->limit(1)
+                    ->get()
+                    ->result_array()
+                ;
+                if (count($query_md) == 1) {
+                    $query[0]['medicos_derivacion'] = $query_md[0]['medicos_derivacion'];
+                } else {
+                    $query_md = $this->db
+                        ->select("CONCAT(saludo, ' ', apellidos, ', ', nombres, ' (Externo)') AS medicos_derivacion")
+                        ->from('medicosext')
+                        ->where('estado', 1)
+                        ->where('matricula', $query[0]['matricula_derivacion'])
+                        ->limit(1)
+                        ->get()
+                        ->result_array()
+                    ;
+                    if (count($query_md) == 1) {
+                        $query[0]['medicos_derivacion'] = $query_md[0]['medicos_derivacion'];
+                    }
+                }
             }
+
+            #$item['medicos_derivacion'] ? $item['medicos_derivacion'] : $item['medicosext_derivacion']
             return $query[0];
         } else {
             return array();

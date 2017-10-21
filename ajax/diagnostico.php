@@ -82,7 +82,10 @@ SQL;
 
 $SQL_med_cm = <<<SQL
     SELECT
-        m.*
+        m.apellidos,
+        m.nombres,
+        m.matricula,
+        '0' AS externo
     FROM
         medicos AS m
     INNER JOIN
@@ -94,9 +97,19 @@ $SQL_med_cm = <<<SQL
         me.estado = 1
     GROUP BY
         m.id_medicos
+    UNION
+        SELECT
+            dx.apellidos,
+            dx.nombres,
+            dx.matricula,
+            '1' AS externo
+        FROM
+            medicosext AS dx
+        WHERE
+            dx.estado = 1
     ORDER BY
-        m.apellidos,
-        m.nombres
+        apellidos,
+        nombres
 SQL;
 
 $SQL_os = <<<SQL
@@ -307,7 +320,7 @@ $query = $this_db->consulta($SQL_Estudios);
         ?>
         <?php $cnct = ''; ?>
         <?php while ($row_med_cm = $this_db->fetch_array($query_med_cm)): ?>
-            <?=$cnct?>{label: '<?=utf8_encode(trim($row_med_cm['apellidos']))?>, <?=utf8_encode(trim($row_med_cm['nombres']))?> - <?=$row_med_cm['matricula']?>', value: '<?=$row_med_cm['matricula']?>'}
+            <?=$cnct?>{label: '<?=utf8_encode(trim($row_med_cm['apellidos']))?>, <?=utf8_encode(trim($row_med_cm['nombres']))?><?=($row_med_cm['externo'] == 1 ? ' (Externo)' : '')?> - <?=$row_med_cm['matricula']?>', value: '<?=$row_med_cm['matricula']?>'}
             <?php $cnct = ','; ?>
         <?php endwhile; ?>
     ];

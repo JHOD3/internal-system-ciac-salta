@@ -201,6 +201,7 @@ class Diagnostico extends CI_Controller {
             'TA',
             'DD',
             'Derivador',
+            'Nombre',
             'Observaciones'
         );
         print utf8_decode($this->load->view($this->router->fetch_class().'/Exportar_view', $dataView, true));
