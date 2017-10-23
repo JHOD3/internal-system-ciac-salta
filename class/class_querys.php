@@ -925,6 +925,29 @@ class Querys implements iQuerys{
 		return $query;
     }
 
+    function dataTurnosOtorgadosPorENC($desde, $hasta, $id_usuarios){
+		$query = "
+            SELECT
+            	ep.pregunta,
+            	COUNT(t.id_turnos) AS `count`
+            FROM
+            	turnos AS t
+            INNER JOIN
+            	encuestas_respuestas AS er
+                ON er.id_turnos = t.id_turnos
+            INNER JOIN
+                encuestas_preguntas AS ep
+                ON er.id_encuestas_preguntas = ep.id_encuestas_preguntas
+            WHERE
+                t.fecha_alta BETWEEN '{$desde}' AND '{$hasta}'
+            GROUP BY
+            	ep.pregunta
+            ORDER BY
+            	COUNT(t.id_turnos) DESC
+        ";
+		return $query;
+    }
+
     function obtMotivosDeInhabilitaciones(){
         $query = "
             SELECT

@@ -1733,6 +1733,21 @@ class Estructura{
         return array(utf8_encode($data), $i);
     }
 
+    function obtTurnosOtorgadosPorENC($desde, $hasta, $id_usuarios){
+		$query_string = $this->querys->dataTurnosOtorgadosPorENC($desde, $hasta, $id_usuarios);
+
+		$query = $this->db->consulta($query_string);
+        $data = "";
+        $color = array('#007FA6');
+        $i = 0;
+        while ($row = $this->db->fetch_array($query)) {
+            $style = $color[$i % count($color)];
+            $data.= ",['{$row['pregunta']}', {$row['count']}, '{$style}', '{$row['count']}']\n";
+            $i++;
+        }
+        return array(utf8_encode($data), $i);
+    }
+
     function obtTurnosPorMedicos($desde, $hasta, $id_usuarios){
 		$query_string = $this->querys->dataTurnosPorMedicos($desde, $hasta, $id_usuarios);
 		$query = $this->db->consulta($query_string);

@@ -368,6 +368,22 @@ if ([EST_NUMROWS] > 0) {
     }
 }
 
+if ([ENC_NUMROWS] > 0) {
+    google.charts.setOnLoadCallback(drawBar5Chart);
+    function drawBar5Chart() {
+        var dataBar5 = google.visualization.arrayToDataTable([
+            ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
+            [ENC]
+        ]);
+        var options = {
+            title: 'CONTANOS DÓNDE NOS CONOCISTE | TURNERO WEB\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            legend: {position: 'none'},
+        };
+        var chart = new google.visualization.BarChart(document.getElementById('bar5chart'));
+        chart.draw(dataBar5, options);
+    }
+}
+
 </script>
 <div style="position:absolute;left:0;width:100%;">
 <div id="bar1chart" style="width: 100%; height: [TOT_NUMROWS]px;"></div>
@@ -375,6 +391,7 @@ if ([EST_NUMROWS] > 0) {
 <div id="bar2chart" style="width: 100%; height: [TPM_NUMROWS]px;"></div>
 <div id="bar3chart" style="width: 100%; height: [OST_NUMROWS]px;"></div>
 <div id="bar4chart" style="width: 100%; height: [EST_NUMROWS]px;"></div>
+<div id="bar5chart" style="width: 100%; height: [ENC_NUMROWS]px;"></div>
 </div>
                     </div>
                     <div class="span3 contenedor" id="habilitar_inhabilitar" >
