@@ -276,8 +276,8 @@ class Diagnostico_model extends CI_Model
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
-            ->join('medicos AS d', 'ts.matricula_derivacion = d.matricula', 'left')
-            ->join('medicosext AS dx', 'ts.matricula_derivacion = dx.matricula AND dx.estado = 1', 'left')
+            ->join('medicos AS d', "ts.matricula_derivacion = d.matricula AND d.matricula != ''", 'left')
+            ->join('medicosext AS dx', "ts.matricula_derivacion = dx.matricula AND dx.estado = 1 AND dx.matricula != ''", 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
@@ -492,8 +492,8 @@ SQL;
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
-            ->join('medicos AS d', 'ts.matricula_derivacion = d.matricula', 'left')
-            ->join('medicosext AS dx', 'ts.matricula_derivacion = dx.matricula AND dx.estado = 1', 'left')
+            ->join('medicos AS d', "ts.matricula_derivacion = d.matricula AND d.matricula != ''", 'left')
+            ->join('medicosext AS dx', "ts.matricula_derivacion = dx.matricula AND dx.estado = 1 AND dx.matricula != ''", 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
