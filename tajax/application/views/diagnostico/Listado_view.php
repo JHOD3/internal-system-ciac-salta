@@ -134,7 +134,7 @@
         <?php if (isset($sche) and $sche != ''): ?>
             <td<?=$idmer?>"checked"><input type="checkbox" class="checked"<?=$item['checked'] == '1' ? ' checked="checked"' : ''?> /></td>
         <?php else: ?>
-            <td<?=$idmer?>"checked"><?=$item['checked'] == '1' ? 'Si' : '&nbsp;'?></td>
+            <td<?=$idmer?>"checked"><?=$item['checked'] == '1' ? '✓' : '&nbsp;'?></td>
         <?php endif; ?>
     <?php endif; ?>
     <td<?=$idmer?>"save"></td>
