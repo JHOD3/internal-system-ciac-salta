@@ -176,6 +176,30 @@ class Diagnostico extends CI_Controller {
         );
     }
 
+    public function check()
+    {
+        print utf8_encode(
+            json_encode(
+                $this->Model->checkDiagnostico(
+                    $this->input->post(),
+                    $this->session->userdata('ID_USUARIO')
+                )
+            )
+        );
+    }
+
+    public function uncheck()
+    {
+        print utf8_encode(
+            json_encode(
+                $this->Model->uncheckDiagnostico(
+                    $this->input->post(),
+                    $this->session->userdata('ID_USUARIO')
+                )
+            )
+        );
+    }
+
     public function exportar($date1, $date2, $filter = '')
     {
         $post = $this->input->post();

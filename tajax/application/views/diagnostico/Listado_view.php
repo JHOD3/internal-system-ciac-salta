@@ -67,6 +67,17 @@
                 <td class="tot"><?=isset($deja_deposito_suma[0]) ? '$'.number_format($deja_deposito_suma[0], 0, "", ".") : ''?></td>
                 <td class="tot"><?=isset($deja_deposito_suma[1]) ? '$'.number_format($deja_deposito_suma[1], 0, "", ".") : ''?></td>
                 <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <?php if ($SUPERUSER > 0): ?>
+                    <td colspan="2">
+                        <select id="sche" name="sche">
+                            <option value=""<?=(!isset($sche) or !in_array($sche, array('1', '2'))) ? ' selected="selected"' : ''?>>Todo</option>
+                            <option value="1"<?=(isset($sche) and $sche == '1') ? ' selected="selected"' : ''?>>No chequeado</option>
+                            <option value="2"<?=(isset($sche) and $sche == '2') ? ' selected="selected"' : ''?>>Chequeado</option>
+                        </select>
+                    </td>
+                <?php endif; ?>
             </tr>
             <tr class="trHead">
                 <td style="width:36px;">Turno</td>
@@ -88,7 +99,10 @@
                 <td style="width:120px;">Nombre</td>
                 <td style="width:100px;">Observaciones</td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                <?php if ($SUPERUSER > 0): ?>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                <?php endif; ?>
             </tr>
             <?php
             if (count($listado) > 0) :
@@ -116,6 +130,13 @@
     <td<?=$idmer?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
     <td data-mth="medicos_derivacion"><?=$item['medicos_derivacion'] ? $item['medicos_derivacion'] : $item['medicosext_derivacion']?></td>
     <td<?=$idmer?>"observaciones"><?=$item['observaciones']?></td>
+    <?php if ($SUPERUSER > 0): ?>
+        <?php if (isset($sche) and $sche != ''): ?>
+            <td<?=$idmer?>"checked"><input type="checkbox" class="checked"<?=$item['checked'] == '1' ? ' checked="checked"' : ''?> /></td>
+        <?php else: ?>
+            <td<?=$idmer?>"checked"><?=$item['checked'] == '1' ? 'Si' : '&nbsp;'?></td>
+        <?php endif; ?>
+    <?php endif; ?>
     <td<?=$idmer?>"save"></td>
     <?php if ($SUPERUSER > 0): ?>
         <td<?=$idmer?>"dele"></td>
@@ -398,6 +419,24 @@ $(document).ready(function(){
                 }
             });
         }
+    });
+    $('#frmInpSrcFilter input[type="checkbox"].checked').change(function(){
+        var trRemove = $(this).parent().parent();
+        dId = $(this).parent().parent().data('id');
+        var vUrl;
+        if ($(this)[0].checked) {
+            vUrl = '../tajax/index.php/<?=$this->router->fetch_class()?>/check/';
+        } else {
+            vUrl = '../tajax/index.php/<?=$this->router->fetch_class()?>/uncheck/';
+        }
+        ajxM = $.ajax({
+            type: 'POST',
+            url: vUrl,
+            data: {id_turnos_estudios: dId},
+            context: document.body
+        }).done(function(data) {
+            trRemove.remove();
+        });
     });
     $('body').on('focus',".datepicker", function(){
 

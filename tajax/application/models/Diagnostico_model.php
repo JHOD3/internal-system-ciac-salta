@@ -83,7 +83,8 @@ class Diagnostico_model extends CI_Model
             'snor' => "ts.nro_orden",
             'snaf' => "ts.nro_afiliado",
             'scan' => "ts.cantidad",
-            'sder' => "ts.matricula_derivacion"
+            'sder' => "ts.matricula_derivacion",
+            'sche' => "ts.checked"
         );
         $cnct = "";
         $where = "";
@@ -94,6 +95,7 @@ class Diagnostico_model extends CI_Model
                         $where.= "
                             {$cnct} {$rP} = '{$post[$kP]}'
                         ";
+                        $cnct = "AND";
                         break;
                     case "spac":
                         $Palabras = explode(' ', $post[$kP]);
@@ -104,13 +106,27 @@ class Diagnostico_model extends CI_Model
                             $cnct = "AND";
                         }
                         break;
+                    case "sche":
+                        if (in_array($post[$kP], array('1', '2'))) {
+                            if ($post[$kP] == '1') {
+                                $where.= "
+                                    {$cnct} {$rP} IS NULL
+                                ";
+                            } else {
+                                $where.= "
+                                    {$cnct} {$rP} = '1'
+                                ";
+                            }
+                            $cnct = "AND";
+                        }
+                        break;
                     default:
                         $where.= "
                             {$cnct} {$rP} LIKE '%{$post[$kP]}%'
                         ";
+                        $cnct = "AND";
                         break;
                 }
-                $cnct = "AND";
             }
         }
         if (trim($where)) {
@@ -756,11 +772,27 @@ SQL;
                 ->where('id_turnos', $id_turnos)
                 ->update('turnos', array('id_turnos_estados' => '6'))
             ;
-            return $query;
-
+            return $id_turnos;
         }
+        return false;
+    }
 
-        return $id_turnos;
+    function checkDiagnostico($post, $id_usuario = null)
+    {
+        $query = $this->db
+            ->where('id_turnos_estudios', $post['id_turnos_estudios'])
+            ->update('turnos_estudios', array('checked' => '1'))
+        ;
+        return $post['id_turnos_estudios'];
+    }
+
+    function uncheckDiagnostico($post, $id_usuario = null)
+    {
+        $query = $this->db
+            ->where('id_turnos_estudios', $post['id_turnos_estudios'])
+            ->update('turnos_estudios', array('checked' => null))
+        ;
+        return $post['id_turnos_estudios'];
     }
 
     public function agregarTurno($vcDuracionTurno, $post)
