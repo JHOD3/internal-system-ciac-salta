@@ -744,5 +744,42 @@ SQL;
         return $med_esp;
     }
 
+    public function obtEncPreguntas($id_encuestas)
+    {
+        $query = $this->db
+            ->from('encuestas_preguntas')
+            ->where('id_encuestas', $id_encuestas)
+            ->order_by('orden')
+            ->get()
+            ->result_array()
+        ;
+        return $query;
+    }
+
+    public function saveEncRespuestas($id_turnos, $cdnc, $cdncabierta)
+    {
+        if ($id_turnos > 0) {
+            if (trim($cdnc) != '') {
+                $this->db->insert(
+                    'encuestas_respuestas',
+                    array(
+                        'id_turnos' => $id_turnos,
+                        'id_encuestas_preguntas' => $cdnc
+                    )
+                );
+                $id_encuestas_respuestas = $this->db->insert_id();
+                if (trim($cdncabierta) != '') {
+                    $this->db->insert(
+                        'encuestas_respuestas_abiertas',
+                        array(
+                            'id_encuestas_respuestas' => $id_encuestas_respuestas,
+                            'respuesta' => $cdncabierta
+                        )
+                    );
+                }
+            }
+        }
+    }
+
 }
 //EOF Turnero_model.php
