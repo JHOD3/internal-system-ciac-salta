@@ -99,8 +99,8 @@
                 <td style="width:120px;">Nombre</td>
                 <td style="width:100px;">Observaciones</td>
                 <td>&nbsp;</td>
+                <td>&nbsp;</td>
                 <?php if ($SUPERUSER > 0): ?>
-                    <td>&nbsp;</td>
                     <td>&nbsp;</td>
                 <?php endif; ?>
             </tr>
@@ -130,12 +130,10 @@
     <td<?=$idmer?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
     <td data-mth="medicos_derivacion"><?=$item['medicos_derivacion'] ? $item['medicos_derivacion'] : $item['medicosext_derivacion']?></td>
     <td<?=$idmer?>"observaciones"><?=$item['observaciones']?></td>
-    <?php if ($SUPERUSER > 0): ?>
-        <?php if (isset($sche) and $sche != ''): ?>
-            <td><input type="checkbox" class="checked"<?=$item['checked'] == '1' ? ' checked="checked"' : ''?> /></td>
-        <?php else: ?>
-            <td><?=$item['checked'] == '1' ? '✓' : '&nbsp;'?></td>
-        <?php endif; ?>
+    <?php if (isset($sche) and $sche != ''): ?>
+        <td><input type="checkbox" class="checked"<?=$item['checked'] == '1' ? ' checked="checked"' : ''?> /></td>
+    <?php else: ?>
+        <td><?=$item['checked'] == '1' ? '✓' : '&nbsp;'?></td>
     <?php endif; ?>
     <td<?=$idmer?>"save"></td>
     <?php if ($SUPERUSER > 0): ?>
@@ -420,26 +418,24 @@ $(document).ready(function(){
             });
         }
     });
-    <?php if ($SUPERUSER > 0): ?>
-        $('#frmInpSrcFilter input[type="checkbox"].checked').change(function(){
-            var trRemove = $(this).parent().parent();
-            dId = $(this).parent().parent().data('id');
-            var vUrl;
-            if ($(this)[0].checked) {
-                vUrl = '../tajax/index.php/<?=$this->router->fetch_class()?>/check/';
-            } else {
-                vUrl = '../tajax/index.php/<?=$this->router->fetch_class()?>/uncheck/';
-            }
-            ajxM = $.ajax({
-                type: 'POST',
-                url: vUrl,
-                data: {id_turnos_estudios: dId},
-                context: document.body
-            }).done(function(data) {
-                trRemove.remove();
-            });
+    $('#frmInpSrcFilter input[type="checkbox"].checked').change(function(){
+        var trRemove = $(this).parent().parent();
+        dId = $(this).parent().parent().data('id');
+        var vUrl;
+        if ($(this)[0].checked) {
+            vUrl = '../tajax/index.php/<?=$this->router->fetch_class()?>/check/';
+        } else {
+            vUrl = '../tajax/index.php/<?=$this->router->fetch_class()?>/uncheck/';
+        }
+        ajxM = $.ajax({
+            type: 'POST',
+            url: vUrl,
+            data: {id_turnos_estudios: dId},
+            context: document.body
+        }).done(function(data) {
+            trRemove.remove();
         });
-    <?php endif; ?>
+    });
     $('body').on('focus',".datepicker", function(){
 
         if( $(this).hasClass('hasDatepicker') === false )  {
