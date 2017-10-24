@@ -172,6 +172,7 @@ class Diagnostico_model extends CI_Model
         ;
         $this->_filtroListado($date1, $date2, $post);
         $query = $this->db
+            ->where('ts.estado', 1)
             ->get()
             ->result_array()
         ;
