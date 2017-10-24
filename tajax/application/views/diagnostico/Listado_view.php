@@ -132,9 +132,9 @@
     <td<?=$idmer?>"observaciones"><?=$item['observaciones']?></td>
     <?php if ($SUPERUSER > 0): ?>
         <?php if (isset($sche) and $sche != ''): ?>
-            <td<?=$idmer?>"checked"><input type="checkbox" class="checked"<?=$item['checked'] == '1' ? ' checked="checked"' : ''?> /></td>
+            <td><input type="checkbox" class="checked"<?=$item['checked'] == '1' ? ' checked="checked"' : ''?> /></td>
         <?php else: ?>
-            <td<?=$idmer?>"checked"><?=$item['checked'] == '1' ? '✓' : '&nbsp;'?></td>
+            <td><?=$item['checked'] == '1' ? '✓' : '&nbsp;'?></td>
         <?php endif; ?>
     <?php endif; ?>
     <td<?=$idmer?>"save"></td>
@@ -420,24 +420,26 @@ $(document).ready(function(){
             });
         }
     });
-    $('#frmInpSrcFilter input[type="checkbox"].checked').change(function(){
-        var trRemove = $(this).parent().parent();
-        dId = $(this).parent().parent().data('id');
-        var vUrl;
-        if ($(this)[0].checked) {
-            vUrl = '../tajax/index.php/<?=$this->router->fetch_class()?>/check/';
-        } else {
-            vUrl = '../tajax/index.php/<?=$this->router->fetch_class()?>/uncheck/';
-        }
-        ajxM = $.ajax({
-            type: 'POST',
-            url: vUrl,
-            data: {id_turnos_estudios: dId},
-            context: document.body
-        }).done(function(data) {
-            trRemove.remove();
+    <?php if ($SUPERUSER > 0): ?>
+        $('#frmInpSrcFilter input[type="checkbox"].checked').change(function(){
+            var trRemove = $(this).parent().parent();
+            dId = $(this).parent().parent().data('id');
+            var vUrl;
+            if ($(this)[0].checked) {
+                vUrl = '../tajax/index.php/<?=$this->router->fetch_class()?>/check/';
+            } else {
+                vUrl = '../tajax/index.php/<?=$this->router->fetch_class()?>/uncheck/';
+            }
+            ajxM = $.ajax({
+                type: 'POST',
+                url: vUrl,
+                data: {id_turnos_estudios: dId},
+                context: document.body
+            }).done(function(data) {
+                trRemove.remove();
+            });
         });
-    });
+    <?php endif; ?>
     $('body').on('focus',".datepicker", function(){
 
         if( $(this).hasClass('hasDatepicker') === false )  {
