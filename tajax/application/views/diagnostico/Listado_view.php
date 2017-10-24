@@ -69,15 +69,13 @@
                 <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <?php if ($SUPERUSER > 0): ?>
-                    <td colspan="2">
-                        <select id="sche" name="sche">
-                            <option value=""<?=(!isset($sche) or !in_array($sche, array('1', '2'))) ? ' selected="selected"' : ''?>>Todo</option>
-                            <option value="1"<?=(isset($sche) and $sche == '1') ? ' selected="selected"' : ''?>>No chequeado</option>
-                            <option value="2"<?=(isset($sche) and $sche == '2') ? ' selected="selected"' : ''?>>Chequeado</option>
-                        </select>
-                    </td>
-                <?php endif; ?>
+                <td colspan="2">
+                    <select id="sche" name="sche">
+                        <option value=""<?=(!isset($sche) or !in_array($sche, array('1', '2'))) ? ' selected="selected"' : ''?>>Todo</option>
+                        <option value="1"<?=(isset($sche) and $sche == '1') ? ' selected="selected"' : ''?>>No chequeado</option>
+                        <option value="2"<?=(isset($sche) and $sche == '2') ? ' selected="selected"' : ''?>>Chequeado</option>
+                    </select>
+                </td>
             </tr>
             <tr class="trHead">
                 <td style="width:36px;">Turno</td>
