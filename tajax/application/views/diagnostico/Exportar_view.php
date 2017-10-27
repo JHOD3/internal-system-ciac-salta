@@ -17,7 +17,7 @@ header("Content-Disposition: attachment; filename=Practicas-Medicas-Exportado-{$
                 <td><?=$rsD['presentador']?></td>
                 <td><?=$rsD['medicos']?></td>
                 <td><?=$rsD['obras_sociales']?></td>
-                <td style="mso-number-format: 'dd/mm/yyyy';"><?=$rsD['fecha']?></td>
+                <td style="mso-number-format: 'dd/mm/yyyy';"><?=$rsD['fecha_presentacion']?></td>
                 <td style="mso-number-format: '###0';"><?=$rsD['nro_orden']?></td>
                 <td style="mso-number-format: '###0';"><?=$rsD['nro_afiliado']?></td>
                 <td><?=$rsD['nombre']?></td>

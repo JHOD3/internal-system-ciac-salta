@@ -66,13 +66,13 @@ class Diagnostico_model extends CI_Model
         }
     }
 
-    protected function _filtroListado($date1, $date2, $post)
+    protected function _filtroListado($date1, $date2, $post, $cualFecha = 't.fecha')
     {
         $this->db
             ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
             ->where_in('t.id_turnos_estados', array(2, 7))
             ->where('t.estado', 1)
-            ->where("CONCAT(t.fecha, ' ', t.desde) BETWEEN '{$date1} {$post['hour1']}:00' AND '{$date2} {$post['hour2']}:00'")
+            ->where("CONCAT({$cualFecha}, ' ', t.desde) BETWEEN '{$date1} {$post['hour1']}:00' AND '{$date2} {$post['hour2']}:00'")
         ;
         $aPost = array(
             'spac' => "CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres))",
@@ -489,7 +489,7 @@ SQL;
                 'CIAC' AS presentador,
                 CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres) AS medicos,
                 os.abreviacion AS obras_sociales,
-                t.fecha,
+                ts.fecha_presentacion,
                 ts.nro_orden,
                 ts.nro_afiliado,
                 e.nombre,
@@ -515,10 +515,10 @@ SQL;
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $post);
+        $this->_filtroListado($date1, $date2, $post, 'ts.fecha_presentacion');
         $query = $this->db
             ->where('ts.estado', 1)
-            ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
+            ->order_by('ts.estado DESC, ts.fecha_presentacion, t.desde, t.hasta, t.id_turnos')
             ->get()
             ->result_array()
         ;
