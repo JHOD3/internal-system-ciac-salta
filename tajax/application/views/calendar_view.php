@@ -26,7 +26,7 @@
     <?php if (is_array($aHorarios) and isset($aHorarios[0])): ?>
         <div class="atencion">
             <?php if (in_array($aHorarios[0]['id_turnos_tipos'], array(3, 4))): ?>
-                Estimado paciente, la anteción con <?=doSaludo($rsMedico)?> se realiza por orden de llegada.
+                Estimado paciente, la atención con <?=doSaludo($rsMedico)?> se realiza por orden de llegada.
                 Por favor diríjase a mesa de entrada
             <?php elseif (in_array($aHorarios[0]['id_turnos_tipos'], array(5, 6))): ?>
                 Estimado paciente para reserva de turno con <?=doSaludo($rsMedico)?>,
