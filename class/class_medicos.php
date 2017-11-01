@@ -371,7 +371,7 @@ class Medicos extends Estructura implements iMedicos{
 									<div class='bloque'>
 										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 										<div class='dat_paciente'>".
-											$row["apellidos"]. ", ".$row["nombres"]."
+											strtoupper($row["apellidos"]). ", ".strtoupper($row["nombres"])."
 											(".$row["nombre_estado"].")<br />
 											<small style='color:#000'>".$row["abreviacion"]."</small>";
 

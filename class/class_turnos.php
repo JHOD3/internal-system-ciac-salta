@@ -51,9 +51,9 @@ class Turnos extends Estructura implements iTurnos{
 		$obj_paciente = new Pacientes($row["id_pacientes"]);
 		$row["PACIENTE"] =
             '<strong style="color:#008A47">'.
-            trim($obj_paciente->apellidos).
+            strtoupper(trim($obj_paciente->apellidos)).
             ", ".
-            trim($obj_paciente->nombres).
+            strtoupper(trim($obj_paciente->nombres)).
             "</strong><br />"
         ;
         $row["PACIENTE"].=
