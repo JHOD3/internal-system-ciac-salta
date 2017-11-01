@@ -77,7 +77,6 @@ switch ($tabla){
 					estado,
 					usuario,
 					pass,
-					particular_consulta,
 					id_sectores,
 					id_subsectores,
 					nro_sector,
@@ -85,9 +84,6 @@ switch ($tabla){
                     matricula,
                     saludo
 					)";
-
-		if (!isset($particular_consulta) || $particular_consulta == "")
-			$particular_consulta = 0;
 
 		if (!isset($sectores) || $sectores == "")
 			$sectores = 0;
@@ -116,7 +112,6 @@ switch ($tabla){
 					1,
 					'".strtolower($obj->QuitarTildes(utf8_encode($nombres[0].$apellidos)))."',
 					'".base64_encode($nro_documento)."',
-					'".$particular_consulta."',
 					".$sectores.",
 					".$subsectores.",
 					'".strtoupper(utf8_decode($nro_sector))."',

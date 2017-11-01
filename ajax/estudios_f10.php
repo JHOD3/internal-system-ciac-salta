@@ -11,7 +11,6 @@
                     <th class="sorting">Obra Social</th>
                     <th class="sorting">Importe Consulta</th>
                     <th class="sorting">M&eacute;dico</th>
-                    <th class="sorting">Particular Cosulta</th>
                     <th class="sorting">Arancel</th>
                 </tr>
             </thead>

@@ -109,7 +109,7 @@ class Turnos extends Estructura implements iTurnos{
 				$row["CLASS_ESTUDIO"] = "oculto";
 
 				$arancel_os = $obj_medico->ArancelConsulta($obj_paciente->id_obras_sociales);
-				$particular_consulta = $obj_medico->particular_consulta;
+				$particular_consulta = '0'; //$obj_medico->particular_consulta;
 
 				$row['IMPORTE_ARANCEL_OS'] = $arancel_os;
 				$row['IMPORTE_CONSULTA_PARTICULAR'] =  $particular_consulta;
