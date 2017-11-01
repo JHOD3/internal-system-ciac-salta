@@ -114,6 +114,15 @@ class Diagnostico extends CI_Controller {
             $post['hour2'] = '23:59';
         }
         $dataView = $post;
+        if (
+            $this->session->userdata('SUPERUSER') == 0 and
+            $date1 < date("Y-m-d", strtotime("-7 days"))
+        ) {
+            $date1 = date("Y-m-d", strtotime("-7 days"));
+            $dataView['error_rol'] = '<strong style="color:red;">No es posible mostrar Prácticas Médicas anteriores al '.date("d/m/Y", strtotime("-7 days")).' por razones de seguridad.</strong>';
+        } else {
+            $dataView['error_rol'] = '';
+        }
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
         $dataView['listado'] = $this->Model->obtenerListado(
