@@ -84,6 +84,7 @@ class Diagnostico_model extends CI_Model
             'snaf' => "ts.nro_afiliado",
             'scan' => "ts.cantidad",
             'sder' => "ts.matricula_derivacion",
+            'sden' => "ts.matricula_derivacion",
             'sche' => "ts.checked"
         );
         $cnct = "";
@@ -92,6 +93,7 @@ class Diagnostico_model extends CI_Model
             if (isset($post[$kP]) and trim($post[$kP])) {
                 switch ($kP) {
                     case "srea":
+                    case "sden":
                         $where.= "
                             {$cnct} {$rP} = '{$post[$kP]}'
                         ";
@@ -433,6 +435,7 @@ SQL;
     {
         $query = <<<SQL
             SELECT
+                m.saludo,
                 m.apellidos,
                 m.nombres,
                 m.matricula,
@@ -450,6 +453,7 @@ SQL;
                 m.id_medicos
             UNION
                 SELECT
+                    dx.saludo,
                     dx.apellidos,
                     dx.nombres,
                     dx.matricula,

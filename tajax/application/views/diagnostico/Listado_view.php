@@ -68,7 +68,23 @@
                 <td class="tot"><?=isset($deja_deposito_suma[0]) ? '$'.number_format($deja_deposito_suma[0], 0, "", ".") : ''?></td>
                 <td class="tot"><?=isset($deja_deposito_suma[1]) ? '$'.number_format($deja_deposito_suma[1], 0, "", ".") : ''?></td>
                 <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
-                <td>&nbsp;</td>
+                <td>
+                    <select id="sden" name="sden">
+                        <option value=""></option>
+                        <?php
+                        foreach ($medicos_mt AS $rs_mmt):
+                            $m = strtoupper(
+                                trim($rs_mmt['saludo'])." ".
+                                trim($rs_mmt['apellidos']).", ".
+                                trim($rs_mmt['nombres'])
+                            );
+                            ?>
+                            <option value="<?=$rs_mmt['matricula']?>"<?=(isset($sden) and $sden == $rs_mmt['matricula']) ? ' selected="selected"' : ''?>><?=$m?></option>
+                            <?php
+                        endforeach;
+                        ?>
+                    </select>
+                </td>
                 <td>&nbsp;</td>
                 <td colspan="2">
                     <select id="sche" name="sche">

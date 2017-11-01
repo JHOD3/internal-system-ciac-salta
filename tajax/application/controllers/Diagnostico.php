@@ -156,6 +156,7 @@ class Diagnostico extends CI_Controller {
         $dataView['medicos'] = $this->Model->obtMedicos();
         $dataView['estudios'] = $this->Model->obtEstudios();
         $dataView['medicos_cm'] = $this->Model->obtMedicosConMatriculas();
+        $dataView['medicos_mt'] = $this->Model->obtMedicosConMatriculas();
         $dataView['obras_sociales'] = $this->Model->obtObrasSociales();
         $dataView['SUPERUSER'] = $this->session->userdata('SUPERUSER');
         $this->load->view($this->router->fetch_class().'/Listado_view', $dataView);
