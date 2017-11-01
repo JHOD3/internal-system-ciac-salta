@@ -300,24 +300,24 @@ class Medicos extends Estructura implements iMedicos{
 		requerir_class("dias_semana");
 		$obj_dia_semana = new Dias_semana($diaSemana);
 
-        $ultimo_horario = '';
-
-		if ($fecha >= date('y-m-d')){
+        if ($fecha >= date('y-m-d')){
 			$htm = $this->Html($this->nombre_tabla."/grilla_turnos_".$_SESSION['SISTEMA']);
-
-    		//VERIFICO LOS HORARIOS QUE TIENE CARGADO EL MEDICO PARA UN DIA DETERMINADO
-    		$query_string = $this->querys->GrillaTurnos($id_medico, $id_especialidad, $id_dia);
-    		$query = $this->db->consulta($query_string);
-    		$cant = $this->db->num_rows($query);
-            $ultimo_horreal = '';
-    		while ($row2 = $this->db->fetch_array($query)){
-                $ultimo_horreal = max($ultimo_horreal, $row2['hasta']);
-            }
 
 			//VERIFICO LOS HORARIOS QUE TIENE CARGADO EL MEDICO PARA UN DIA DETERMINADO
 			$query_string = $this->querys->GrillaTurnos($id_medico, $id_especialidad, $id_dia);
 			$query = $this->db->consulta($query_string);
 			$cant = $this->db->num_rows($query);
+			//VOY A ARMAR EL LISTADO DE HORARIOS DE CADA TURNO
+            $aTurnos = array();
+			while ($row2 = $this->db->fetch_array($query)){
+			    $aTurnos[$row2['desde']] = array(
+                    'desde' => $row2['desde'],
+                    'hasta' => $row2['hasta'],
+                    'id_turnos_tipos' => $row2['id_turnos_tipos']
+                );
+            }
+            $keyTurnos = array_keys($aTurnos);
+			$query = $this->db->consulta($query_string);
 
 			//PREGUNTO SI TIENE CARGADO HORARIOS PARA UN DIA DADO
 			if ($cant > 0){
@@ -339,8 +339,16 @@ class Medicos extends Estructura implements iMedicos{
 
 				if ($cant2 > 0){
 					while ($row = $this->db->fetch_array($query2)){
-                        $ultimo_horario = max($ultimo_horario, $row['desde']);
-                        $clasm = ($row['desde'] > $ultimo_horreal) ? ' sobreturno2' : '';
+                        $clasm = ' sobreturno2';
+                        for ($i = 0; $i < count($aTurnos); $i++) {
+                            if (
+                                $row['desde'] >= $aTurnos[$keyTurnos[$i]]['desde'] and
+                                $row['desde'] <= $aTurnos[$keyTurnos[$i]]['hasta']
+                            ) {
+                                $clasm = '';
+                            }
+                        }
+
 
 						//ES ESTUDIO O CONSULTA
 						if(isset($row["id_turnos_tipos"]) && (2 - ($row["id_turnos_tipos"] % 2)) == 2){
@@ -348,7 +356,6 @@ class Medicos extends Estructura implements iMedicos{
 						}else{
 							$tipo_turno	= "consultas";
 						}
-
 
 						//VOY CREANDO EL ARRAY CON LOS TURNOS RESERVADOS
 						$turnos_reservadosv[] = $row;
@@ -427,10 +434,8 @@ class Medicos extends Estructura implements iMedicos{
 				}
 
 				//VOY A ARMAR EL LISTADO DE LIBRES
-				while ($row2 = $this->db->fetch_array($query)){
-                    $ultimo_horario = max($ultimo_horario, $row2['hasta']);
-
-					//ES ESTUDIO O CONSULTA
+                while ($row2 = $this->db->fetch_array($query)){
+				    //ES ESTUDIO O CONSULTA
 					if(isset($row2["id_turnos_tipos"]) && (2 - ($row2["id_turnos_tipos"] % 2)) == 2){
 						$tipo_turno = "estudios";
 					}else{
@@ -499,6 +504,40 @@ class Medicos extends Estructura implements iMedicos{
 
 				}
 
+                $keysHorarios = array_keys($grillav);
+
+                sort($keyTurnos);
+                ksort($aTurnos);
+
+                for ($i = 0; $i < count($aTurnos); $i++) {
+                    $itmSTurno[$i] = $aTurnos[$keyTurnos[$i]]['hasta'];
+
+                    while(in_array($itmSTurno[$i], $keysHorarios)):
+                        if ($i + 1 < count($aTurnos)):
+                            if ($this->SumarHorasTime($itmSTurno[$i], $duracion_turno) < $aTurnos[$keyTurnos[$i + 1]]['desde']):
+                                $itmSTurno[$i] = $this->SumarHorasTime($itmSTurno[$i], $duracion_turno);
+                            else:
+                                $itmSTurno[$i] = null;
+                            endif;
+                        else:
+                            $itmSTurno[$i] = $this->SumarHorasTime($itmSTurno[$i], $duracion_turno);
+                        endif;
+                    endwhile;
+
+                    if ($itmSTurno[$i]):
+                        $hor_normal = $itmSTurno[$i];
+                        $hor_substr = substr($itmSTurno[$i], 0, 5);
+                        $img = IMG;
+                        $grillav[$hor_normal] = <<<HTML
+                            <span class='reservar libre sobreturno' data-desde='{$hor_normal}' data-hasta='{$hor_normal}' data-fecha='{$fecha}' data-turnos_tipos='{$aTurnos[$keyTurnos[$i]]['id_turnos_tipos']}'>
+    							<div class='bloque'>
+    								<img src='{$img}btns/tipo_{$tipo_turno}.png' />{$hor_substr} &raquo; <strong>ASIGNAR UN SOBRETURNO</strong>
+    							</div>
+    						</span>
+HTML;
+                    endif;
+                }
+
 				ksort($grillav);
 
 				$listado = "";
@@ -506,18 +545,6 @@ class Medicos extends Estructura implements iMedicos{
 				foreach ($grillav as $clave => $valor) {
 					$listado .= $valor;
 				}
-
-                if ($_SESSION['SISTEMA'] == 'sas') {
-                    $ultimo_horario = $this->SumarHorasTime($ultimo_horario, $duracion_turno);
-                    if ($ultimo_horario != '') {
-                        $sobreturno = "<span class='reservar libre sobreturno' data-desde='{$ultimo_horario}' data-hasta='{$ultimo_horario}' data-fecha='".$fecha."' data-turnos_tipos='".$tipo_turno."'>
-							<div class='bloque'>
-								<img src='".IMG."btns/tipo_".$tipo_turno.".png' />".substr($ultimo_horario, 0, 5)." &raquo; <strong>ASIGNAR UN SOBRETURNO</strong>
-							</div>
-						</span>";
-                    }
-                    $listado .= $sobreturno;
-                }
 
 			}else{
 				$listado = '';
