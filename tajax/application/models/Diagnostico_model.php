@@ -591,6 +591,10 @@ SQL;
             $post['codigoalternat'] = null;
         }
 
+        if ($post['fecha_presentacion'] == '') {
+            $post['fecha_presentacion'] = null;
+        }
+
         $deja_deposito = $this->db
             ->select('deja_deposito')
             ->from('turnos_estudios')
@@ -680,7 +684,14 @@ SQL;
                 $query[0]['id_obras_sociales'] = '---';
             }
 
-            $query[0]['fecha_presentacion'] = date("d/m/Y", strtotime($query[0]['fecha_presentacion']));
+            if (
+                isset($query[0]['fecha_presentacion']) and
+                $query[0]['fecha_presentacion'] > '0000-00-00'
+            ) {
+                $query[0]['fecha_presentacion'] = date("d/m/Y", strtotime($query[0]['fecha_presentacion']));
+            } else {
+                $query[0]['fecha_presentacion'] = '';
+            }
 
             if (trim($query[0]['nro_orden']) == '') {
                 $query[0]['nro_orden'] = '---';
