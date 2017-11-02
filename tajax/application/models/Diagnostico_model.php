@@ -78,6 +78,7 @@ class Diagnostico_model extends CI_Model
             'spac' => "CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres))",
             'sces' => "e.codigopractica",
             'sest' => "e.nombre",
+            'calt' => "ts.codigoalternat",
             'srea' => "m.id_medicos",
             'soso' => "os.abreviacion",
             'snor' => "ts.nro_orden",
@@ -498,6 +499,7 @@ SQL;
                 ts.nro_afiliado,
                 e.nombre,
                 e.codigopractica,
+                ts.codigoalternat,
                 ts.cantidad,
                 ts.tipo,
                 ts.trajo_pedido,
@@ -585,6 +587,9 @@ SQL;
         unset($post['id_turnos_estudios']);
 
         $post['fecha_presentacion'] = implode("-", array_reverse(explode("/", $post['fecha_presentacion'])));
+        if ($post['codigoalternat'] == 0) {
+            $post['codigoalternat'] = null;
+        }
 
         $deja_deposito = $this->db
             ->select('deja_deposito')

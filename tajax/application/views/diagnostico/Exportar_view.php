@@ -21,7 +21,7 @@ header("Content-Disposition: attachment; filename=Practicas-Medicas-Exportado-{$
                 <td style="mso-number-format: '###0';"><?=$rsD['nro_orden']?></td>
                 <td style="mso-number-format: '###0';"><?=$rsD['nro_afiliado']?></td>
                 <td><?=$rsD['nombre']?></td>
-                <td style="mso-number-format: '###0';"><?=$rsD['codigopractica']?></td>
+                <td style="mso-number-format: '###0';"><?=(isset($rsD['codigoalternat']) and $rsD['codigoalternat']) ? $rsD['codigoalternat'] : $rsD['codigopractica']?></td>
                 <td style="mso-number-format: '###0';"><?=$rsD['cantidad']?></td>
                 <td><?=$rsD['tipo']?></td>
                 <td><?=$rsD['trajo_pedido']?></td>

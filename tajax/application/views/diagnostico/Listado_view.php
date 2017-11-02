@@ -39,6 +39,7 @@
                 <td>&nbsp;</td>
                 <td><input id="spac" name="spac" type="text" value="<?=isset($spac) ? $spac : ''?>" /></td>
                 <td><input id="sces" name="sces" type="text" value="<?=isset($sces) ? $sces : ''?>" /></td>
+                <td><input id="calt" name="calt" type="text" value="<?=isset($calt) ? $calt : ''?>" /></td>
                 <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
                 <td>
                     <select id="srea" name="srea">
@@ -97,19 +98,20 @@
             <tr class="trHead">
                 <td style="width:36px;">Turno</td>
                 <td>Paciente</td>
-                <td style="width:51px;">Cod.Pra.</td>
+                <td style="width:51px;" title="Código de P.M. Estándar">Cod.Pra.</td>
+                <td style="width:51px;" title="Código de P.M. Alternativo">Cod.Alt.</td>
                 <td>Estudio</td>
                 <td>Realizador</td>
-                <td>O.Social</td>
+                <td title="Obra Social">O.Social</td>
                 <td style="width:80px;">Prestación</td>
                 <td style="width:70px;">Nro.Orden</td>
                 <td>Nro.Afiliado</td>
                 <td style="width:33px;">Cant.</td>
                 <td style="width:27px;">Tipo</td>
-                <td style="width:16px;">TP</td>
-                <td style="width:16px;">TO</td>
-                <td style="width:32px;">TA</td>
-                <td style="width:32px;">DD</td>
+                <td style="width:16px;" title="Trajo Pedido">TP</td>
+                <td style="width:16px;" title="Trajo Orden">TO</td>
+                <td style="width:32px;" title="Trajo Arancel">TA</td>
+                <td style="width:32px;" title="Deja Depósito">DD</td>
                 <td style="width:60px;">Derivador</td>
                 <td style="width:120px;">Nombre</td>
                 <td style="width:100px;">Observaciones</td>
@@ -130,6 +132,7 @@
     <td style="text-align:center;"><?=date("d/m", strtotime($item['fecha']))?><br /><?=substr($item['desde'], 0, 5)?></td>
     <td><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
     <td data-mth="codigopractica"><?=$item['codigopractica']?></td>
+    <td<?=$idme?>"codigoalternat"><?=$item['codigoalternat'] ? $item['codigoalternat'] : '---'?></td>
     <td<?=$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
     <td<?=$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
     <td<?=$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
@@ -169,6 +172,7 @@
     </table>
 </form>
 
+<div id="tab_codigoalternat" class="tab_hidden"><input type="text" name="codigoalternat" value="" style="width:70px;"<?=$SUPERUSER == '0' ? ' readonly="readonly"' : ''?> /></div>
 <div id="tab_estudios" class="tab_hidden">
     <select name="id_estudios" style="width:80px;">
         <option value="">---</option>
@@ -360,6 +364,7 @@ $(document).ready(function(){
                         var pos = '"]';
                         var serialized;
                         serialized = 'id_turnos_estudios=' + $(this).data('id');
+                        serialized+= '&codigoalternat=' + $(pre_i + 'codigoalternat' + pos).val();
                         serialized+= '&id_estudios=' + $(pre_s + 'id_estudios' + pos).val();
                         serialized+= '&id_medicos=' + $(pre_s + 'id_medicos' + pos).val();
                         serialized+= '&id_obras_sociales=' + $(pre_s + 'id_obras_sociales' + pos).val();
@@ -374,6 +379,7 @@ $(document).ready(function(){
                         serialized+= '&deja_deposito=' + $(pre_i + 'deja_deposito' + pos).val();
                         serialized+= '&matricula_derivacion=' + $(pre_i + 'matricula_derivacion' + pos).val();
                         serialized+= '&observaciones=' + $(pre_i + 'observaciones' + pos).val();
+                        $(pre_d + 'codigoalternat' + pos).html('&#8634;');
                         $(pre_d + 'estudios' + pos).html('&#8634;');
                         $(pre_d + 'medicos' + pos).html('&#8634;');
                         $(pre_d + 'obras_sociales' + pos).html('&#8634;');
@@ -396,6 +402,7 @@ $(document).ready(function(){
                         }).done(function(data) {
                             var dataJSON = JSON && JSON.parse(data) || $.parseJSON(data);
                             $(pre_d + 'codigopractica' + pos).html(dataJSON['codigopractica']);
+                            $(pre_d + 'codigoalternat' + pos).html(dataJSON['codigoalternat']);
                             $(pre_d + 'estudios' + pos).html(dataJSON['id_estudios']);
                             $(pre_d + 'medicos' + pos).html(dataJSON['id_medicos']);
                             $(pre_d + 'obras_sociales' + pos).html(dataJSON['id_obras_sociales']);
