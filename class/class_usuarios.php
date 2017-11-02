@@ -26,7 +26,7 @@ class Usuarios extends Estructura implements iUsuarios{
 			{
                 #print $_SERVER['HTTP_HOST'];
                 if (
-                    $_SERVER['HTTP_HOST'] != 'http://ciacsaltadb.ddns.net/' or
+                    $_SERVER['HTTP_HOST'] != 'ciacsaltadb.ddns.net ' or
                     $usr[8] > 0
                 ) {
     				//variable para controlar tiempo que esta conectado

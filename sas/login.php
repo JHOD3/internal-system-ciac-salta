@@ -1,7 +1,7 @@
 <?php
 require_once ("../engine/config.php");
 requerir_class("tpl","mysql","querys","estructura");
-print $_SERVER['HTTP_HOST'];
+
 unset($_SESSION["USUARIO"]);
 session_destroy();
 
