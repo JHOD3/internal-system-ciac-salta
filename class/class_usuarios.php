@@ -24,18 +24,26 @@ class Usuarios extends Estructura implements iUsuarios{
 		if ($cant_usr == 1){
 			while ($usr = $this->db->fetch_array($query))
 			{
-				//variable para controlar tiempo que esta conectado
-				$ultimo_acceso = date("Y-n-j H:i:s");
+                #print $_SERVER['HTTP_HOST'];
+                if (
+                    $_SERVER['HTTP_HOST'] != 'http://ciacsaltadb.ddns.net/' or
+                    $usr[8] > 0
+                ) {
+    				//variable para controlar tiempo que esta conectado
+    				$ultimo_acceso = date("Y-n-j H:i:s");
 
-				$_SESSION['ID_USUARIO'] = $usr[0];
-				$_SESSION['TIPO_USR'] = "U";
-				$_SESSION['APELLIDOS'] = $usr['apellidos'];
-				$_SESSION['NOMBRES'] = $usr['nombres'];
-				$_SESSION['USUARIO'] = $usr[3];
-				$_SESSION['SUPERUSER'] = $usr[8];
-				$_SESSION['SISTEMA'] = 'sas';
-				$_SESSION['EMISOR'] = $_SESSION['TIPO_USR']."-".$_SESSION["ID_USUARIO"];
-				$_SESSION['ULTIMO_ACCESO'] = $ultimo_acceso;
+    				$_SESSION['ID_USUARIO'] = $usr[0];
+    				$_SESSION['TIPO_USR'] = "U";
+    				$_SESSION['APELLIDOS'] = $usr['apellidos'];
+    				$_SESSION['NOMBRES'] = $usr['nombres'];
+    				$_SESSION['USUARIO'] = $usr[3];
+    				$_SESSION['SUPERUSER'] = $usr[8];
+    				$_SESSION['SISTEMA'] = 'sas';
+    				$_SESSION['EMISOR'] = $_SESSION['TIPO_USR']."-".$_SESSION["ID_USUARIO"];
+    				$_SESSION['ULTIMO_ACCESO'] = $ultimo_acceso;
+                } else {
+                    return ("4"); //No autorizado vía remota dyndns
+                }
 			}
 			return ("1"); //Login Correcto
 		}
