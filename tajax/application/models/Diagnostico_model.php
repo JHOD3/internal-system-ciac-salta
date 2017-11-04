@@ -303,9 +303,30 @@ class Diagnostico_model extends CI_Model
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post);
+        $post['orderby_field'] = isset($post['orderby_field']) ? $post['orderby_field'] : '1';
+        $post['orderby_order'] = isset($post['orderby_order']) ? $post['orderby_order'] : 'ASC';
+        $ord = $post['orderby_order'];
+        switch ($post['orderby_field']) {
+            case "1": $orderby_field = "CONCAT(t.fecha, t.desde, t.hasta) {$ord}, t.id_turnos {$ord}"; break;
+            case "2": $orderby_field = "CONCAT(TRIM(p.apellidos), TRIM(p.nombres)) {$ord}, t.id_turnos {$ord}"; break;
+            case "3": $orderby_field = "TRIM(e.codigopractica) {$ord}, t.id_turnos {$ord}"; break;
+            case "4": $orderby_field = "e.nombre {$ord}, t.id_turnos {$ord}"; break;
+            case "5": $orderby_field = "CONCAT(TRIM(m.apellidos), TRIM(m.nombres)) {$ord}, t.id_turnos {$ord}"; break;
+            case "6": $orderby_field = "os.abreviacion {$ord}, t.id_turnos {$ord}"; break;
+            case "7": $orderby_field = "ts.fecha_presentacion {$ord}, t.id_turnos {$ord}"; break;
+            case "8": $orderby_field = "(ts.nro_orden * 1) {$ord}, t.id_turnos {$ord}"; break;
+            case "9": $orderby_field = "(ts.nro_afiliado * 1) {$ord}, t.id_turnos {$ord}"; break;
+            case "10": $orderby_field = "ts.cantidad {$ord}, t.id_turnos {$ord}"; break;
+            case "11": $orderby_field = "ts.tipo {$ord}, t.id_turnos {$ord}"; break;
+            case "12": $orderby_field = "ts.trajo_pedido {$ord}, t.id_turnos {$ord}"; break;
+            case "13": $orderby_field = "ts.trajo_orden {$ord}, t.id_turnos {$ord}"; break;
+            case "14": $orderby_field = "ts.trajo_arancel {$ord}, t.id_turnos {$ord}"; break;
+            case "15": $orderby_field = "ts.deja_deposito {$ord}, t.id_turnos {$ord}"; break;
+            case "16": $orderby_field = "ts.matricula_derivacion {$ord}, t.id_turnos {$ord}"; break;
+        }
         $query = $this->db
             ->where('ts.estado', 1)
-            ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
+            ->order_by($orderby_field)
             ->get()
             ->result_array()
         ;
