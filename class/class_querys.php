@@ -955,7 +955,8 @@ class Querys implements iQuerys{
             FROM
                 `horarios_inhabilitados_motivos`
             WHERE
-                `id_horarios_inhabilitados_motivos` > 1
+                `id_horarios_inhabilitados_motivos` > 1 AND
+                `id_horarios_inhabilitados_motivos` != 5
             ORDER BY
                 `motivo_orden`, `motivo_descripcion`
         ";
