@@ -528,6 +528,11 @@ class Medicos extends Estructura implements iMedicos{
                         $hor_normal = $itmSTurno[$i];
                         $hor_substr = substr($itmSTurno[$i], 0, 5);
                         $img = IMG;
+                        if ($aTurnos[$keyTurnos[$i]]['id_turnos_tipos'] % 2 == 0) {
+                            $aTurnos[$keyTurnos[$i]]['id_turnos_tipos'] = 2;
+                        } else {
+                            $aTurnos[$keyTurnos[$i]]['id_turnos_tipos'] = 1;
+                        }
                         $grillav[$hor_normal] = <<<HTML
                             <span class='reservar libre sobreturno' data-desde='{$hor_normal}' data-hasta='{$hor_normal}' data-fecha='{$fecha}' data-turnos_tipos='{$aTurnos[$keyTurnos[$i]]['id_turnos_tipos']}'>
     							<div class='bloque'>
