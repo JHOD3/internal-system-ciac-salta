@@ -71,18 +71,21 @@ if ($_GET['id_medicos']) {
     $dataOST = $obj_estructura->obtTurnosOtorgadosPorOS($d, $h, $_SESSION['ID_USUARIO']);
     $dataEST = $obj_estructura->obtTurnosOtorgadosPorEST($d, $h, $_SESSION['ID_USUARIO']);
     $dataENC = $obj_estructura->obtTurnosOtorgadosPorENC($d, $h, $_SESSION['ID_USUARIO']);
+    $dataDER = $obj_estructura->obtTurnosOtorgadosPorDER($d, $h, $_SESSION['ID_USUARIO']);
     $htm_index->Asigna("TOT", $dataTOT[0]);
     $htm_index->Asigna("TPM", $dataTPM[0]);
     $htm_index->Asigna("TPD", $dataTPD[0]);
     $htm_index->Asigna("OST", $dataOST[0]);
     $htm_index->Asigna("EST", $dataEST[0]);
     $htm_index->Asigna("ENC", $dataENC[0]);
+    $htm_index->Asigna("DER", $dataDER[0]);
     $htm_index->Asigna("TOT_NUMROWS", 100 + ($dataTOT[1] * 40));
     $htm_index->Asigna("TPM_NUMROWS", 100 + ($dataOST[1] * 40));
     $htm_index->Asigna("TPD_NUMROWS", 100 + ($dataOST[1] * 40));
     $htm_index->Asigna("OST_NUMROWS", 100 + ($dataOST[1] * 40));
     $htm_index->Asigna("EST_NUMROWS", 100 + ($dataEST[1] * 40));
     $htm_index->Asigna("ENC_NUMROWS", 200);
+    $htm_index->Asigna("DER_NUMROWS", 100 + ($dataEST[1] * 40));
 
     $htm_index->Asigna("ESTADISTICAS_GRAPH", '');
     $htm_index->Asigna("get_id_medicos", '');

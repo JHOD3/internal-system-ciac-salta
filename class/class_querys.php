@@ -948,6 +948,36 @@ class Querys implements iQuerys{
 		return $query;
     }
 
+    function dataTurnosOtorgadosPorDER($desde, $hasta, $id_usuarios){
+		$query = "
+            SELECT
+                CONCAT(d.saludo, ' ', d.apellidos, ', ', d.nombres) AS medicos_derivacion,
+                CONCAT(dx.saludo, ' ', dx.apellidos, ', ', dx.nombres, ' (Externo)') AS medicosext_derivacion,
+            	COUNT(ts.id_turnos_estudios) AS `count`
+            FROM
+            	turnos_estudios AS ts
+            LEFT JOIN
+                medicos AS d
+                ON
+                    ts.matricula_derivacion = d.matricula AND
+                    d.matricula != ''
+            LEFT JOIN
+                medicosext AS dx
+                ON
+                    ts.matricula_derivacion = dx.matricula AND
+                    dx.estado = 1 AND dx.matricula != ''
+            WHERE
+                ts.matricula_derivacion > 0
+            GROUP BY
+            	ts.matricula_derivacion
+            HAVING
+                COUNT(ts.id_turnos_estudios) > 30
+            ORDER BY
+            	COUNT(ts.id_turnos_estudios) DESC
+        ";
+		return $query;
+    }
+
     function obtMotivosDeInhabilitaciones(){
         $query = "
             SELECT

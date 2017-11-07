@@ -1754,6 +1754,28 @@ class Estructura{
         return array(utf8_encode($data), $i);
     }
 
+    function obtTurnosOtorgadosPorDER($desde, $hasta, $id_usuarios){
+		$query_string = $this->querys->dataTurnosOtorgadosPorDER($desde, $hasta, $id_usuarios);
+
+		$query = $this->db->consulta($query_string);
+        $data = "";
+        $color = array('#007FA6');
+        $i = 0;
+        while ($row = $this->db->fetch_array($query)) {
+            if ($row['medicos_derivacion']) {
+                $color = array('#007FA6');
+                $style = $color[$i % count($color)];
+                $data.= ",['{$row['medicos_derivacion']}', {$row['count']}, '{$style}', '{$row['count']}']\n";
+            } else {
+                $color = array('#CC0000');
+                $style = $color[$i % count($color)];
+                $data.= ",['{$row['medicosext_derivacion']}', {$row['count']}, '{$style}', '{$row['count']}']\n";
+            }
+            $i++;
+        }
+        return array(utf8_encode($data), $i);
+    }
+
     function obtTurnosPorMedicos($desde, $hasta, $id_usuarios){
 		$query_string = $this->querys->dataTurnosPorMedicos($desde, $hasta, $id_usuarios);
 		$query = $this->db->consulta($query_string);
