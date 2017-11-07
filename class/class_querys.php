@@ -952,7 +952,7 @@ class Querys implements iQuerys{
 		$query = "
             SELECT
                 CONCAT(d.saludo, ' ', d.apellidos, ', ', d.nombres) AS medicos_derivacion,
-                CONCAT(dx.saludo, ' ', dx.apellidos, ', ', dx.nombres, ' (Externo)') AS medicosext_derivacion,
+                CONCAT(dx.saludo, ' ', dx.apellidos, ', ', dx.nombres) AS medicosext_derivacion,
             	COUNT(ts.id_turnos_estudios) AS `count`
             FROM
             	turnos_estudios AS ts
