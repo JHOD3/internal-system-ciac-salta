@@ -607,10 +607,30 @@ SQL;
         $id_turnos_estudios = $post['id_turnos_estudios'];
         unset($post['id_turnos_estudios']);
 
-        $post['fecha_presentacion'] = implode("-", array_reverse(explode("/", $post['fecha_presentacion'])));
+        $query = $this->db
+            ->from('turnos_estudios')
+            ->where('id_turnos_estudios', $id_turnos_estudios)
+            ->limit(1)
+            ->get()
+            ->result_array()
+        ;
+
         if ($post['codigoalternat'] == 0) {
             $post['codigoalternat'] = null;
         }
+        if (count($query) == 1) {
+            $query_est = $this->db
+                ->from('estudios')
+                ->where('id_estudios', $query[0]['id_estudios'])
+                ->get()
+                ->result_array()
+            ;
+            if ($post['codigoalternat'] == $query_est[0]['codigopractica']) {
+                $post['codigoalternat'] = null;
+            }
+        }
+
+        $post['fecha_presentacion'] = implode("-", array_reverse(explode("/", $post['fecha_presentacion'])));
 
         if ($post['fecha_presentacion'] == '') {
             $post['fecha_presentacion'] = null;
@@ -673,10 +693,18 @@ SQL;
                 $query[0]['id_estudios'] = utf8_encode(ucwords(lower(trim(utf8_decode(
                     $query_est[0]['nombre']
                 )))));
-                $query[0]['codigopractica'] = $query_est[0]['codigopractica'];
+                $query[0]['codigoalternat'] =
+                    $query[0]['codigoalternat'] > 0
+                        ? $query[0]['codigoalternat']
+                        : $query_est[0]['codigopractica']
+                ;
             } else {
                 $query[0]['id_estudios'] = '---';
-                $query[0]['codigopractica'] = '';
+                $query[0]['codigopractica'] =
+                    $query[0]['codigoalternat'] > 0
+                        ? $query[0]['codigoalternat']
+                        : ''
+                ;
             }
 
             $query_med = $this->db

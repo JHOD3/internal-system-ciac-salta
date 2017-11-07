@@ -130,8 +130,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
             <tr class="trHead">
                 <td class="dOrder" data-order="1" style="width:36px;">Turno</td>
                 <td class="dOrder" data-order="2">Paciente</td>
-                <td class="dOrder" data-order="3" style="width:51px;" title="Código de P.M. Estándar">Cod.Pra.</td>
-                <td class="dOrder" data-order="3" style="width:51px;" title="Código de P.M. Alternativo">Cod.Alt.</td>
+                <td class="dOrder" data-order="3" style="width:51px;" title="Código de P.M.">Cod.Pra.</td>
                 <td class="dOrder" data-order="4">Estudio</td>
                 <td class="dOrder" data-order="5">Realizador</td>
                 <td class="dOrder" data-order="6" title="Obra Social">O.Social</td>
@@ -163,8 +162,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
 <tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
     <td style="text-align:center;"><?=date("d/m", strtotime($item['fecha']))?><br /><?=substr($item['desde'], 0, 5)?></td>
     <td><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
-    <td data-mth="codigopractica"><?=$item['codigopractica']?></td>
-    <td<?=$idme?>"codigoalternat"><?=$item['codigoalternat'] ? $item['codigoalternat'] : '---'?></td>
+    <td<?=$idme?>"codigoalternat<?=$item['codigoalternat'] > 0? '" style="color:#C66;' : ''?>"><?=$item['codigoalternat'] ? $item['codigoalternat'] : $item['codigopractica']?></td>
     <td<?=$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
     <td<?=$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
     <td<?=$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
@@ -433,7 +431,6 @@ $(document).ready(function(){
                             context: $('#id_te_' + $(this).data('id'))
                         }).done(function(data) {
                             var dataJSON = JSON && JSON.parse(data) || $.parseJSON(data);
-                            $(pre_d + 'codigopractica' + pos).html(dataJSON['codigopractica']);
                             $(pre_d + 'codigoalternat' + pos).html(dataJSON['codigoalternat']);
                             $(pre_d + 'estudios' + pos).html(dataJSON['id_estudios']);
                             $(pre_d + 'medicos' + pos).html(dataJSON['id_medicos']);
