@@ -166,7 +166,12 @@ class Turnos extends Estructura implements iTurnos{
 		switch ($sistema){
 			case "sas":
 				$obj_turnos_estados = new Turnos_estados();
-				$row["DROP_TURNOS_ESTADOS"] =  $obj_turnos_estados->Drop("",$row["id_turnos_estados"]);
+				$row["DROP_TURNOS_ESTADOS"] =  $obj_turnos_estados->Drop("",$row["id_turnos_estados"], null, null, null, null, 8);
+                $row["DROP_TURNOS_ESTADOS"] = str_replace(
+                    '<option value="">Elija un Estado de Turno</option>',
+                    '',
+                    $row["DROP_TURNOS_ESTADOS"]
+                );
 			break;
 			case "sam":
 				//$datos = array('label_elija' => 'Elija un Estado de Turno', '2' => 'LLEGO EL PACIENTE', '4' => 'CANCELADO POR EL MEDICO', '7' => 'YA ATENDIDO');

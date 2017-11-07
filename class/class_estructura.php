@@ -101,7 +101,7 @@ class Estructura{
         return $lafecha;
     }
 
-	function Drop($ordenar = "",$id = "",$id_padre = "", $nombre = "", $orden = "", $multiple = ""){
+	function Drop($ordenar = "",$id = "",$id_padre = "", $nombre = "", $orden = "", $multiple = "", $size = ""){
 
 		switch($this->nombre_tabla){
 			case "medicos_especialidades":
@@ -146,6 +146,11 @@ class Estructura{
 			$drop->Asigna("MULTIPLE",'multiple="multiple"');
 		}else{
 			$drop->Asigna("MULTIPLE",'');
+		}
+		if ($size > 1){
+			$drop->Asigna("SIZE",'size="'.$size.'"');
+		}else{
+			$drop->Asigna("SIZE",'');
 		}
 		if ($cant_registros != 0){
 			while ($row = $this->db->fetch_array($query)){
@@ -197,6 +202,7 @@ class Estructura{
 				$row["VALUE"] = $valor;
 				$row["TEXTO_OPTION"] = $texto;
                 $row["PARENT_ID"] = $parent_id;
+                #var_dump($row);
 				$drop->AsignaBloque('block_option',$row);
 			}
 		}else{
