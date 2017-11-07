@@ -971,7 +971,7 @@ class Querys implements iQuerys{
             GROUP BY
             	ts.matricula_derivacion
             HAVING
-                COUNT(ts.id_turnos_estudios) > 30
+                COUNT(ts.id_turnos_estudios) > 10
             ORDER BY
             	COUNT(ts.id_turnos_estudios) DESC
         ";
