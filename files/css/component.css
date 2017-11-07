@@ -74,8 +74,8 @@
 .dl-menuwrapper li a {
 	display: block;
 	position: relative;
-	padding: 15px 20px;
-	line-height: 20px;
+	padding: 8px 16px;
+	line-height: 16px;
 	color: #fff;
 	outline: none;
 }
