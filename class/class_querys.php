@@ -970,10 +970,9 @@ class Querys implements iQuerys{
                 ts.matricula_derivacion > 0
             GROUP BY
             	ts.matricula_derivacion
-            HAVING
-                COUNT(ts.id_turnos_estudios) > 10
             ORDER BY
             	COUNT(ts.id_turnos_estudios) DESC
+            LIMIT 50
         ";
 		return $query;
     }
