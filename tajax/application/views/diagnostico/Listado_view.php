@@ -71,7 +71,6 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                 <td>&nbsp;</td>
                 <td><input id="spac" name="spac" type="text" value="<?=isset($spac) ? $spac : ''?>" /></td>
                 <td><input id="sces" name="sces" type="text" value="<?=isset($sces) ? $sces : ''?>" /></td>
-                <td><input id="calt" name="calt" type="text" value="<?=isset($calt) ? $calt : ''?>" /></td>
                 <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
                 <td>
                     <select id="srea" name="srea">
