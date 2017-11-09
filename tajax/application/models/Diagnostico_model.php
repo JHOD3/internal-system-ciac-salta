@@ -66,24 +66,26 @@ class Diagnostico_model extends CI_Model
         }
     }
 
-    protected function _filtroListado($date1, $date2, $post)
+    protected function _filtroListado($date1, $date2, $post, $cualFecha = 't.fecha')
     {
         $this->db
             ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
             ->where_in('t.id_turnos_estados', array(2, 7))
             ->where('t.estado', 1)
-            ->where("CONCAT(t.fecha, ' ', t.desde) BETWEEN '{$date1} {$post['hour1']}:00' AND '{$date2} {$post['hour2']}:00'")
+            ->where("CONCAT({$cualFecha}, ' ', t.desde) BETWEEN '{$date1} {$post['hour1']}:00' AND '{$date2} {$post['hour2']}:00'")
         ;
         $aPost = array(
             'spac' => "CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres))",
             'sces' => "e.codigopractica",
             'sest' => "e.nombre",
+            'calt' => "ts.codigoalternat",
             'srea' => "m.id_medicos",
             'soso' => "os.abreviacion",
             'snor' => "ts.nro_orden",
             'snaf' => "ts.nro_afiliado",
             'scan' => "ts.cantidad",
             'sder' => "ts.matricula_derivacion",
+            'sden' => "ts.matricula_derivacion",
             'sche' => "ts.checked"
         );
         $cnct = "";
@@ -92,6 +94,7 @@ class Diagnostico_model extends CI_Model
             if (isset($post[$kP]) and trim($post[$kP])) {
                 switch ($kP) {
                     case "srea":
+                    case "sden":
                         $where.= "
                             {$cnct} {$rP} = '{$post[$kP]}'
                         ";
@@ -300,9 +303,30 @@ class Diagnostico_model extends CI_Model
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post);
+        $post['orderby_field'] = isset($post['orderby_field']) ? $post['orderby_field'] : '1';
+        $post['orderby_order'] = isset($post['orderby_order']) ? $post['orderby_order'] : 'ASC';
+        $ord = $post['orderby_order'];
+        switch ($post['orderby_field']) {
+            case "1": $orderby_field = "CONCAT(t.fecha, t.desde, t.hasta) {$ord}, t.id_turnos {$ord}"; break;
+            case "2": $orderby_field = "CONCAT(TRIM(p.apellidos), TRIM(p.nombres)) {$ord}, t.id_turnos {$ord}"; break;
+            case "3": $orderby_field = "TRIM(e.codigopractica) {$ord}, t.id_turnos {$ord}"; break;
+            case "4": $orderby_field = "e.nombre {$ord}, t.id_turnos {$ord}"; break;
+            case "5": $orderby_field = "CONCAT(TRIM(m.apellidos), TRIM(m.nombres)) {$ord}, t.id_turnos {$ord}"; break;
+            case "6": $orderby_field = "os.abreviacion {$ord}, t.id_turnos {$ord}"; break;
+            case "7": $orderby_field = "ts.fecha_presentacion {$ord}, t.id_turnos {$ord}"; break;
+            case "8": $orderby_field = "(ts.nro_orden * 1) {$ord}, t.id_turnos {$ord}"; break;
+            case "9": $orderby_field = "(ts.nro_afiliado * 1) {$ord}, t.id_turnos {$ord}"; break;
+            case "10": $orderby_field = "ts.cantidad {$ord}, t.id_turnos {$ord}"; break;
+            case "11": $orderby_field = "ts.tipo {$ord}, t.id_turnos {$ord}"; break;
+            case "12": $orderby_field = "ts.trajo_pedido {$ord}, t.id_turnos {$ord}"; break;
+            case "13": $orderby_field = "ts.trajo_orden {$ord}, t.id_turnos {$ord}"; break;
+            case "14": $orderby_field = "ts.trajo_arancel {$ord}, t.id_turnos {$ord}"; break;
+            case "15": $orderby_field = "ts.deja_deposito {$ord}, t.id_turnos {$ord}"; break;
+            case "16": $orderby_field = "ts.matricula_derivacion {$ord}, t.id_turnos {$ord}"; break;
+        }
         $query = $this->db
             ->where('ts.estado', 1)
-            ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
+            ->order_by($orderby_field)
             ->get()
             ->result_array()
         ;
@@ -433,6 +457,7 @@ SQL;
     {
         $query = <<<SQL
             SELECT
+                m.saludo,
                 m.apellidos,
                 m.nombres,
                 m.matricula,
@@ -450,6 +475,7 @@ SQL;
                 m.id_medicos
             UNION
                 SELECT
+                    dx.saludo,
                     dx.apellidos,
                     dx.nombres,
                     dx.matricula,
@@ -489,11 +515,12 @@ SQL;
                 'CIAC' AS presentador,
                 CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres) AS medicos,
                 os.abreviacion AS obras_sociales,
-                t.fecha,
+                ts.fecha_presentacion,
                 ts.nro_orden,
                 ts.nro_afiliado,
                 e.nombre,
                 e.codigopractica,
+                ts.codigoalternat,
                 ts.cantidad,
                 ts.tipo,
                 ts.trajo_pedido,
@@ -515,10 +542,10 @@ SQL;
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $post);
+        $this->_filtroListado($date1, $date2, $post, 'ts.fecha_presentacion');
         $query = $this->db
             ->where('ts.estado', 1)
-            ->order_by('ts.estado DESC, t.fecha, t.desde, t.hasta, t.id_turnos')
+            ->order_by('ts.estado DESC, ts.fecha_presentacion, t.desde, t.hasta, t.id_turnos')
             ->get()
             ->result_array()
         ;
@@ -580,7 +607,34 @@ SQL;
         $id_turnos_estudios = $post['id_turnos_estudios'];
         unset($post['id_turnos_estudios']);
 
+        $query = $this->db
+            ->from('turnos_estudios')
+            ->where('id_turnos_estudios', $id_turnos_estudios)
+            ->limit(1)
+            ->get()
+            ->result_array()
+        ;
+
+        if ($post['codigoalternat'] == 0) {
+            $post['codigoalternat'] = null;
+        }
+        if (count($query) == 1) {
+            $query_est = $this->db
+                ->from('estudios')
+                ->where('id_estudios', $query[0]['id_estudios'])
+                ->get()
+                ->result_array()
+            ;
+            if ($post['codigoalternat'] == $query_est[0]['codigopractica']) {
+                $post['codigoalternat'] = null;
+            }
+        }
+
         $post['fecha_presentacion'] = implode("-", array_reverse(explode("/", $post['fecha_presentacion'])));
+
+        if ($post['fecha_presentacion'] == '') {
+            $post['fecha_presentacion'] = null;
+        }
 
         $deja_deposito = $this->db
             ->select('deja_deposito')
@@ -639,10 +693,18 @@ SQL;
                 $query[0]['id_estudios'] = utf8_encode(ucwords(lower(trim(utf8_decode(
                     $query_est[0]['nombre']
                 )))));
-                $query[0]['codigopractica'] = $query_est[0]['codigopractica'];
+                $query[0]['codigoalternat'] =
+                    $query[0]['codigoalternat'] > 0
+                        ? $query[0]['codigoalternat']
+                        : $query_est[0]['codigopractica']
+                ;
             } else {
                 $query[0]['id_estudios'] = '---';
-                $query[0]['codigopractica'] = '';
+                $query[0]['codigopractica'] =
+                    $query[0]['codigoalternat'] > 0
+                        ? $query[0]['codigoalternat']
+                        : ''
+                ;
             }
 
             $query_med = $this->db
@@ -671,7 +733,14 @@ SQL;
                 $query[0]['id_obras_sociales'] = '---';
             }
 
-            $query[0]['fecha_presentacion'] = date("d/m/Y", strtotime($query[0]['fecha_presentacion']));
+            if (
+                isset($query[0]['fecha_presentacion']) and
+                $query[0]['fecha_presentacion'] > '0000-00-00'
+            ) {
+                $query[0]['fecha_presentacion'] = date("d/m/Y", strtotime($query[0]['fecha_presentacion']));
+            } else {
+                $query[0]['fecha_presentacion'] = '';
+            }
 
             if (trim($query[0]['nro_orden']) == '') {
                 $query[0]['nro_orden'] = '---';

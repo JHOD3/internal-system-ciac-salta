@@ -25,7 +25,6 @@ $sql = "
         relEstMed.particular AS estmed_particular,
         med.nombres AS med_nombres,
         med.apellidos AS med_apellidos,
-        med.particular_consulta AS med_particular_consulta,
         relMedOsm.arancel AS medosm_arancel,
         osm.abreviacion AS osm_abreviacion,
         osm.importe_consulta AS osm_importe_consulta
@@ -69,7 +68,6 @@ $estudios = $this_db->consulta($sql);
         <td><?=utf8_encode($est['osm_abreviacion'])?></td>
         <td style="text-align:right;">$&nbsp;<?=utf8_encode($est['osm_importe_consulta'])?></td>
         <td><?=utf8_encode($est['med_apellidos'].", ".$est['med_nombres'])?></td>
-        <td style="text-align:right;">$&nbsp;<?=utf8_encode($est['med_particular_consulta'])?></td>
         <td style="text-align:right;">$&nbsp;<?=utf8_encode($est['medosm_arancel'])?></td>
     </tr>
 <?php endwhile; ?>

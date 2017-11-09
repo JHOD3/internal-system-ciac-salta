@@ -1,3 +1,8 @@
+<?php
+$selected = ' selected="selected"';
+$orderby_field = isset($orderby_field) ? $orderby_field : '1';
+$orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
+?>
 <style>
 .tAC {
     text-align: center;
@@ -14,8 +19,12 @@
     font-size: 14px!important;
     font-weight: bold!important;
 }
+.dOrder {
+    cursor: pointer;
+}
 </style>
 <h1>Prácticas Médicas <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a></h1>
+<?=$error_rol?>
 <form id="frmInpSrcFilter" method="post">
     <table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
         <tbody>
@@ -30,6 +39,30 @@
                     <input type="text" id="hour2" name="hour2" value="<?=$hour2?>" class="formathour" style="width: 38px;" placeholder="__:__" />
                     <input type="button" id="dateok" value="ok" />
                     <input type="button" id="dateexport" value="exportar" />
+                    &nbsp;
+                    Ordenar por:
+                    <select id="orderby_field" name="orderby_field" style="width:120px;">
+                        <option value="1"<?=$orderby_field == '1' ? $selected : ''?>>Turno</option>
+                        <option value="2"<?=$orderby_field == '2' ? $selected : ''?>>Paciente</option>
+                        <option value="3"<?=$orderby_field == '3' ? $selected : ''?>>Cód.Pra.</option>
+                        <option value="4"<?=$orderby_field == '4' ? $selected : ''?>>Estudio</option>
+                        <option value="5"<?=$orderby_field == '5' ? $selected : ''?>>Realizador</option>
+                        <option value="6"<?=$orderby_field == '6' ? $selected : ''?>>O.Social</option>
+                        <option value="7"<?=$orderby_field == '7' ? $selected : ''?>>Prestación</option>
+                        <option value="8"<?=$orderby_field == '8' ? $selected : ''?>>Nro.Orden</option>
+                        <option value="9"<?=$orderby_field == '9' ? $selected : ''?>>Nro.Afiliado</option>
+                        <option value="10"<?=$orderby_field == '10' ? $selected : ''?>>Cant.</option>
+                        <option value="11"<?=$orderby_field == '11' ? $selected : ''?>>Tipo</option>
+                        <option value="12"<?=$orderby_field == '12' ? $selected : ''?>>TP</option>
+                        <option value="13"<?=$orderby_field == '13' ? $selected : ''?>>TO</option>
+                        <option value="14"<?=$orderby_field == '14' ? $selected : ''?>>TA</option>
+                        <option value="15"<?=$orderby_field == '15' ? $selected : ''?>>DD</option>
+                        <option value="16"<?=$orderby_field == '16' ? $selected : ''?>>Derivador</option>
+                    </select>
+                    <select id="orderby_order" name="orderby_order" style="width:90px;">
+                        <option value="ASC"<?=$orderby_order == 'ASC' ? $selected : ''?>>Ascendiente</option>
+                        <option value="DESC"<?=$orderby_order == 'DESC' ? $selected : ''?>>Descendiente</option>
+                    </select>
                     &nbsp;
                     Total:&nbsp; <?=$listado_count?>
                 </td>
@@ -50,7 +83,7 @@
                                 trim($medicos[$i]['nombres'])
                             );
                             ?>
-                            <option value="<?=$medicos[$i]['id_medicos']?>"<?=(isset($srea) and $srea == $medicos[$i]['id_medicos']) ? ' selected="selected"' : ''?>><?=$m?></option>
+                            <option value="<?=$medicos[$i]['id_medicos']?>"<?=(isset($srea) and $srea == $medicos[$i]['id_medicos']) ? $selected : ''?>><?=$m?></option>
                             <?php
                         endfor;
                         ?>
@@ -67,33 +100,49 @@
                 <td class="tot"><?=isset($deja_deposito_suma[0]) ? '$'.number_format($deja_deposito_suma[0], 0, "", ".") : ''?></td>
                 <td class="tot"><?=isset($deja_deposito_suma[1]) ? '$'.number_format($deja_deposito_suma[1], 0, "", ".") : ''?></td>
                 <td><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
-                <td>&nbsp;</td>
+                <td>
+                    <select id="sden" name="sden">
+                        <option value=""></option>
+                        <?php
+                        foreach ($medicos_mt AS $rs_mmt):
+                            $m = strtoupper(
+                                trim($rs_mmt['saludo'])." ".
+                                trim($rs_mmt['apellidos']).", ".
+                                trim($rs_mmt['nombres'])
+                            );
+                            ?>
+                            <option value="<?=$rs_mmt['matricula']?>"<?=(isset($sden) and $sden == $rs_mmt['matricula']) ? $selected : ''?>><?=$m?></option>
+                            <?php
+                        endforeach;
+                        ?>
+                    </select>
+                </td>
                 <td>&nbsp;</td>
                 <td colspan="2">
                     <select id="sche" name="sche">
-                        <option value=""<?=(!isset($sche) or !in_array($sche, array('1', '2'))) ? ' selected="selected"' : ''?>>Todo</option>
-                        <option value="1"<?=(isset($sche) and $sche == '1') ? ' selected="selected"' : ''?>>No chequeado</option>
-                        <option value="2"<?=(isset($sche) and $sche == '2') ? ' selected="selected"' : ''?>>Chequeado</option>
+                        <option value=""<?=(!isset($sche) or !in_array($sche, array('1', '2'))) ? $selected : ''?>>Todo</option>
+                        <option value="1"<?=(isset($sche) and $sche == '1') ? $selected : ''?>>No chequeado</option>
+                        <option value="2"<?=(isset($sche) and $sche == '2') ? $selected : ''?>>Chequeado</option>
                     </select>
                 </td>
             </tr>
             <tr class="trHead">
-                <td style="width:36px;">Turno</td>
-                <td>Paciente</td>
-                <td style="width:51px;">Cod.Pra.</td>
-                <td>Estudio</td>
-                <td>Realizador</td>
-                <td>O.Social</td>
-                <td style="width:80px;">Prestación</td>
-                <td style="width:70px;">Nro.Orden</td>
-                <td>Nro.Afiliado</td>
-                <td style="width:33px;">Cant.</td>
-                <td style="width:27px;">Tipo</td>
-                <td style="width:16px;">TP</td>
-                <td style="width:16px;">TO</td>
-                <td style="width:32px;">TA</td>
-                <td style="width:32px;">DD</td>
-                <td style="width:60px;">Derivador</td>
+                <td class="dOrder" data-order="1" style="width:36px;">Turno</td>
+                <td class="dOrder" data-order="2">Paciente</td>
+                <td class="dOrder" data-order="3" style="width:51px;" title="Código de P.M.">Cod.Pra.</td>
+                <td class="dOrder" data-order="4">Estudio</td>
+                <td class="dOrder" data-order="5">Realizador</td>
+                <td class="dOrder" data-order="6" title="Obra Social">O.Social</td>
+                <td class="dOrder" data-order="7" style="width:80px;">Prestación</td>
+                <td class="dOrder" data-order="8" style="width:70px;">Nro.Orden</td>
+                <td class="dOrder" data-order="9">Nro.Afiliado</td>
+                <td class="dOrder" data-order="10" style="width:33px;">Cant.</td>
+                <td class="dOrder" data-order="11" style="width:27px;">Tipo</td>
+                <td class="dOrder" data-order="12" style="width:16px;" title="Trajo Pedido">TP</td>
+                <td class="dOrder" data-order="13" style="width:16px;" title="Trajo Orden">TO</td>
+                <td class="dOrder" data-order="14" style="width:32px;" title="Trajo Arancel">TA</td>
+                <td class="dOrder" data-order="15" style="width:32px;" title="Deja Depósito">DD</td>
+                <td class="dOrder" data-order="16" style="width:60px;">Derivador</td>
                 <td style="width:120px;">Nombre</td>
                 <td style="width:100px;">Observaciones</td>
                 <td>&nbsp;</td>
@@ -112,7 +161,7 @@
 <tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
     <td style="text-align:center;"><?=date("d/m", strtotime($item['fecha']))?><br /><?=substr($item['desde'], 0, 5)?></td>
     <td><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
-    <td data-mth="codigopractica"><?=$item['codigopractica']?></td>
+    <td<?=$idme?>"codigoalternat<?=$item['codigoalternat'] > 0? '" style="color:#C66;' : ''?>"><?=$item['codigoalternat'] ? $item['codigoalternat'] : $item['codigopractica']?></td>
     <td<?=$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
     <td<?=$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
     <td<?=$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
@@ -152,6 +201,7 @@
     </table>
 </form>
 
+<div id="tab_codigoalternat" class="tab_hidden"><input type="text" name="codigoalternat" value="" style="width:70px;"<?=$SUPERUSER == '0' ? ' readonly="readonly"' : ''?> /></div>
 <div id="tab_estudios" class="tab_hidden">
     <select name="id_estudios" style="width:80px;">
         <option value="">---</option>
@@ -262,7 +312,7 @@ $(document).ready(function(){
         date2 = date2.split('/');
         date2 = date2[2] + '-' + date2[1] + '-' + date2[0];
         var frmData = $('#frmInpSrcFilter').serialize();
-        $('#dateok').parent().parent().html('<div style="white-space: nowrap;"><img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Prácticas Médicas<br /><img alt="" src="../files/img/ajax-loader.gif" /> Espere un momento por favor</div>');
+        $('#dateok').parent().parent().html('<div style="white-space: nowrap;"><img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Prácticas Médicas</div>');
         $('tr.inputSearch').html('');
         ajxM = $.ajax({
             type: 'POST',
@@ -343,6 +393,7 @@ $(document).ready(function(){
                         var pos = '"]';
                         var serialized;
                         serialized = 'id_turnos_estudios=' + $(this).data('id');
+                        serialized+= '&codigoalternat=' + $(pre_i + 'codigoalternat' + pos).val();
                         serialized+= '&id_estudios=' + $(pre_s + 'id_estudios' + pos).val();
                         serialized+= '&id_medicos=' + $(pre_s + 'id_medicos' + pos).val();
                         serialized+= '&id_obras_sociales=' + $(pre_s + 'id_obras_sociales' + pos).val();
@@ -357,6 +408,7 @@ $(document).ready(function(){
                         serialized+= '&deja_deposito=' + $(pre_i + 'deja_deposito' + pos).val();
                         serialized+= '&matricula_derivacion=' + $(pre_i + 'matricula_derivacion' + pos).val();
                         serialized+= '&observaciones=' + $(pre_i + 'observaciones' + pos).val();
+                        $(pre_d + 'codigoalternat' + pos).html('&#8634;');
                         $(pre_d + 'estudios' + pos).html('&#8634;');
                         $(pre_d + 'medicos' + pos).html('&#8634;');
                         $(pre_d + 'obras_sociales' + pos).html('&#8634;');
@@ -378,7 +430,7 @@ $(document).ready(function(){
                             context: $('#id_te_' + $(this).data('id'))
                         }).done(function(data) {
                             var dataJSON = JSON && JSON.parse(data) || $.parseJSON(data);
-                            $(pre_d + 'codigopractica' + pos).html(dataJSON['codigopractica']);
+                            $(pre_d + 'codigoalternat' + pos).html(dataJSON['codigoalternat']);
                             $(pre_d + 'estudios' + pos).html(dataJSON['id_estudios']);
                             $(pre_d + 'medicos' + pos).html(dataJSON['id_medicos']);
                             $(pre_d + 'obras_sociales' + pos).html(dataJSON['id_obras_sociales']);
@@ -435,11 +487,31 @@ $(document).ready(function(){
         });
     });
     $('body').on('focus',".datepicker", function(){
-
         if( $(this).hasClass('hasDatepicker') === false )  {
             $(this).datepicker();
         }
-
     });
+    $('.dOrder').click(function(){
+        if ($('#orderby_field').val() == $(this).data('order')) {
+            if ($('#orderby_order').val() == 'ASC') {
+                $('#orderby_order').val('DESC');
+            } else {
+                $('#orderby_order').val('ASC');
+            }
+        } else {
+            $('#orderby_field').val($(this).data('order'));
+            $('#orderby_order').val('ASC');
+        }
+        $('#dateok').focus().click();
+    });
+    <?php if ($orderby_order == 'ASC'): ?>
+        var apnd = '&nbsp;&#9650;';
+    <?php else: ?>
+        var apnd = '&nbsp;&#9660;';
+    <?php endif; ?>
+    $('.dOrder[data-order="<?=$orderby_field?>"]')
+        .append(apnd)
+        .attr('style', 'color:#ff0;')
+    ;
 });
 </script>

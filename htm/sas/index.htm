@@ -231,9 +231,8 @@
         </div>
     </div>
 </section>
-<section id="panel_menu" class="bg_verde">
-	[MENU_TABLAS]
-</section>
+[MENU_TABLAS]
+<section id="panel_menu" class="bg_verde"></section>
 
 <section id="panel_busqueda" class="bg_azul">
     <div class="container">
@@ -384,6 +383,22 @@ if ([ENC_NUMROWS] > 0) {
     }
 }
 
+if ([DER_NUMROWS] > 0) {
+    google.charts.setOnLoadCallback(drawBar6Chart);
+    function drawBar6Chart() {
+        var dataBar6 = google.visualization.arrayToDataTable([
+            ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
+            [DER]
+        ]);
+        var options = {
+            title: 'DERIVACIONES POR MÉDICOS\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            legend: {position: 'none'},
+        };
+        var chart = new google.visualization.BarChart(document.getElementById('bar6chart'));
+        chart.draw(dataBar6, options);
+    }
+}
+
 </script>
 <div style="position:absolute;left:0;width:100%;">
 <div id="bar1chart" style="width: 100%; height: [TOT_NUMROWS]px;"></div>
@@ -392,6 +407,7 @@ if ([ENC_NUMROWS] > 0) {
 <div id="bar3chart" style="width: 100%; height: [OST_NUMROWS]px;"></div>
 <div id="bar4chart" style="width: 100%; height: [EST_NUMROWS]px;"></div>
 <div id="bar5chart" style="width: 100%; height: [ENC_NUMROWS]px;"></div>
+<div id="bar6chart" style="width: 100%; height: [DER_NUMROWS]px;"></div>
 </div>
                     </div>
                     <div class="span3 contenedor" id="habilitar_inhabilitar" >

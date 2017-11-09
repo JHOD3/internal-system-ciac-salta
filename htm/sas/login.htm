@@ -39,6 +39,17 @@ $(document).ready(function(){
         						.fadeIn("slow")
                             ;
                             $('#captcha').focus();
+                        } else if (rta.trim() == "4") {
+    						$('#mje_login')
+        						.html("<span class='error'>Acceso no autorizado de forma remota</span>")
+        						.fadeIn("slow")
+                            ;
+                            $('#f_login img, #f_login a').remove();
+                            $('#f_login input')
+                                .attr('disabled', 'disabled')
+                                .attr('readonly', 'readonly')
+                                .attr('style', 'opacity:0.5;')
+                            ;
                         } else {
     						$('#mje_login')
         						.html("<span class='error'>Nombre de Usuario y/o Password Incorrectos</span>")

@@ -101,7 +101,7 @@ class Estructura{
         return $lafecha;
     }
 
-	function Drop($ordenar = "",$id = "",$id_padre = "", $nombre = "", $orden = "", $multiple = ""){
+	function Drop($ordenar = "",$id = "",$id_padre = "", $nombre = "", $orden = "", $multiple = "", $size = ""){
 
 		switch($this->nombre_tabla){
 			case "medicos_especialidades":
@@ -146,6 +146,11 @@ class Estructura{
 			$drop->Asigna("MULTIPLE",'multiple="multiple"');
 		}else{
 			$drop->Asigna("MULTIPLE",'');
+		}
+		if ($size > 1){
+			$drop->Asigna("SIZE",'size="'.$size.'"');
+		}else{
+			$drop->Asigna("SIZE",'');
 		}
 		if ($cant_registros != 0){
 			while ($row = $this->db->fetch_array($query)){
@@ -197,6 +202,7 @@ class Estructura{
 				$row["VALUE"] = $valor;
 				$row["TEXTO_OPTION"] = $texto;
                 $row["PARENT_ID"] = $parent_id;
+                #var_dump($row);
 				$drop->AsignaBloque('block_option',$row);
 			}
 		}else{
@@ -1743,6 +1749,28 @@ class Estructura{
         while ($row = $this->db->fetch_array($query)) {
             $style = $color[$i % count($color)];
             $data.= ",['{$row['pregunta']}', {$row['count']}, '{$style}', '{$row['count']}']\n";
+            $i++;
+        }
+        return array(utf8_encode($data), $i);
+    }
+
+    function obtTurnosOtorgadosPorDER($desde, $hasta, $id_usuarios){
+		$query_string = $this->querys->dataTurnosOtorgadosPorDER($desde, $hasta, $id_usuarios);
+
+		$query = $this->db->consulta($query_string);
+        $data = "";
+        $color = array('#007FA6');
+        $i = 0;
+        while ($row = $this->db->fetch_array($query)) {
+            if ($row['medicos_derivacion']) {
+                $color = array('#007FA6');
+                $style = $color[$i % count($color)];
+                $data.= ",['{$row['medicos_derivacion']}', {$row['count']}, '{$style}', '{$row['count']}']\n";
+            } else {
+                $color = array('#CC0000');
+                $style = $color[$i % count($color)];
+                $data.= ",['{$row['medicosext_derivacion']}', {$row['count']}, '{$style}', '{$row['count']}']\n";
+            }
             $i++;
         }
         return array(utf8_encode($data), $i);

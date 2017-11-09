@@ -51,9 +51,9 @@ class Turnos extends Estructura implements iTurnos{
 		$obj_paciente = new Pacientes($row["id_pacientes"]);
 		$row["PACIENTE"] =
             '<strong style="color:#008A47">'.
-            trim($obj_paciente->apellidos).
+            strtoupper(trim($obj_paciente->apellidos)).
             ", ".
-            trim($obj_paciente->nombres).
+            strtoupper(trim($obj_paciente->nombres)).
             "</strong><br />"
         ;
         $row["PACIENTE"].=
@@ -109,7 +109,7 @@ class Turnos extends Estructura implements iTurnos{
 				$row["CLASS_ESTUDIO"] = "oculto";
 
 				$arancel_os = $obj_medico->ArancelConsulta($obj_paciente->id_obras_sociales);
-				$particular_consulta = $obj_medico->particular_consulta;
+				$particular_consulta = '0'; //$obj_medico->particular_consulta;
 
 				$row['IMPORTE_ARANCEL_OS'] = $arancel_os;
 				$row['IMPORTE_CONSULTA_PARTICULAR'] =  $particular_consulta;
@@ -166,7 +166,12 @@ class Turnos extends Estructura implements iTurnos{
 		switch ($sistema){
 			case "sas":
 				$obj_turnos_estados = new Turnos_estados();
-				$row["DROP_TURNOS_ESTADOS"] =  $obj_turnos_estados->Drop("",$row["id_turnos_estados"]);
+				$row["DROP_TURNOS_ESTADOS"] =  $obj_turnos_estados->Drop("",$row["id_turnos_estados"], null, null, null, null, 8);
+                $row["DROP_TURNOS_ESTADOS"] = str_replace(
+                    '<option value="">Elija un Estado de Turno</option>',
+                    '',
+                    $row["DROP_TURNOS_ESTADOS"]
+                );
 			break;
 			case "sam":
 				//$datos = array('label_elija' => 'Elija un Estado de Turno', '2' => 'LLEGO EL PACIENTE', '4' => 'CANCELADO POR EL MEDICO', '7' => 'YA ATENDIDO');

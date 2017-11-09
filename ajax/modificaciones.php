@@ -51,9 +51,6 @@ switch ($tabla){
 	case "medicos":
 		parse_str(stripslashes($datos));
 
-		if (!isset($particular_consulta) || $particular_consulta == "")
-			$particular_consulta = 0;
-
 		if (!isset($sectores) || $sectores == "")
 			$sectores = 0;
 
@@ -80,7 +77,6 @@ switch ($tabla){
 					nro_documento = '".$nro_documento."',
 					domicilio = '".strtoupper(utf8_decode($domicilio))."',
 					email = '".strtoupper($email)."',
-					particular_consulta = '".$particular_consulta."',
 					id_sectores = ".$sectores.",
 					id_subsectores = ".$subsectores.",
 					nro_sector = '".strtoupper(utf8_decode($nro_sector))."',

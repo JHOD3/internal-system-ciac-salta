@@ -114,6 +114,15 @@ class Diagnostico extends CI_Controller {
             $post['hour2'] = '23:59';
         }
         $dataView = $post;
+        if (
+            $this->session->userdata('SUPERUSER') == 0 and
+            $date1 < date("Y-m-d", strtotime("-7 days"))
+        ) {
+            $date1 = date("Y-m-d", strtotime("-7 days"));
+            $dataView['error_rol'] = '<strong style="color:red;">No es posible mostrar Prácticas Médicas anteriores al '.date("d/m/Y", strtotime("-7 days")).' por razones de seguridad.</strong>';
+        } else {
+            $dataView['error_rol'] = '';
+        }
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
         $dataView['listado'] = $this->Model->obtenerListado(
@@ -147,6 +156,7 @@ class Diagnostico extends CI_Controller {
         $dataView['medicos'] = $this->Model->obtMedicos();
         $dataView['estudios'] = $this->Model->obtEstudios();
         $dataView['medicos_cm'] = $this->Model->obtMedicosConMatriculas();
+        $dataView['medicos_mt'] = $this->Model->obtMedicosConMatriculas();
         $dataView['obras_sociales'] = $this->Model->obtObrasSociales();
         $dataView['SUPERUSER'] = $this->session->userdata('SUPERUSER');
         $this->load->view($this->router->fetch_class().'/Listado_view', $dataView);

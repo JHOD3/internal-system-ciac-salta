@@ -7,7 +7,7 @@ if (
     !isset($_SESSION['tmptxt']) or
     $_SESSION['tmptxt'] != $_POST['captcha']
 ) {
-    die('3');
+    die('3'); // Captcha incorrecto
 }
 
 $usuario = $_POST["usr"];
