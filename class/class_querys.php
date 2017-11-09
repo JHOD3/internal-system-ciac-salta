@@ -938,6 +938,9 @@ class Querys implements iQuerys{
             INNER JOIN
                 encuestas_preguntas AS ep
                 ON er.id_encuestas_preguntas = ep.id_encuestas_preguntas
+            LEFT JOIN
+                turnos_estados AS te
+                ON t.id_turnos_estados= te.id_turnos_estados
             WHERE
                 t.id_turnos_estados IN ('2', '7') AND
                 t.estado = 1 AND
