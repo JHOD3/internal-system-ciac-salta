@@ -939,7 +939,9 @@ class Querys implements iQuerys{
                 encuestas_preguntas AS ep
                 ON er.id_encuestas_preguntas = ep.id_encuestas_preguntas
             WHERE
-                t.fecha_alta BETWEEN '{$desde}' AND '{$hasta}'
+                t.id_turnos_estados IN ('2', '7') AND
+                t.estado = 1 AND
+                t.fecha BETWEEN '{$desde}' AND '{$hasta}'
             GROUP BY
             	ep.pregunta
             ORDER BY
