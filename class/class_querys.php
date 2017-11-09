@@ -941,7 +941,8 @@ class Querys implements iQuerys{
             WHERE
                 t.id_turnos_estados IN ('2', '7') AND
                 t.estado = 1 AND
-                t.fecha BETWEEN '{$desde}' AND '{$hasta}'
+                t.fecha BETWEEN '{$desde}' AND '{$hasta}' AND
+                ts.estado = 1
             GROUP BY
             	ep.pregunta
             ORDER BY
