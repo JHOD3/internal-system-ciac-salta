@@ -3,6 +3,14 @@ require_once("../engine/config.php");
 require_once("../engine/restringir_acceso.php");
 requerir_class("tpl","querys","mysql","estructura");
 
+function upper($str)
+{
+    $arrAcentos = array('á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü');
+    $arrReemplz = array('Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'Ü');
+    $str = str_replace($arrAcentos, $arrReemplz, $str);
+    return strtoupper($str);
+}
+
 #var_dump($_POST); die;
 
 $tabla = $_POST["tabla"];
@@ -830,12 +838,12 @@ SQL;
 					)";
 
 		$valores = "(
-					'".utf8_decode(strtoupper($nombre))."',
-					'".utf8_decode(strtoupper($apellido))."',
-					'".utf8_decode(strtoupper($rubro))."',
-					'".utf8_decode(strtoupper($celular))."',
-					'".utf8_decode(strtoupper($telefono))."',
-					'".utf8_decode(strtoupper($direccion))."',
+					'".utf8_decode(upper($nombre))."',
+					'".utf8_decode(upper($apellido))."',
+					'".utf8_decode(upper($rubro))."',
+					'".utf8_decode(upper($celular))."',
+					'".utf8_decode(upper($telefono))."',
+					'".utf8_decode(upper($direccion))."',
 					'".utf8_decode($agendas_tipos)."',
                     1
 					)";
