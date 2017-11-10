@@ -15,7 +15,9 @@ requerir_class(
     'cobros_conceptos',
     'estructura',
     'sectores',
-    'subsectores'
+    'subsectores',
+    'agendas',
+    'agendas_tipos'
 );
 
 $tabla = $_GET["tabla"];
@@ -82,6 +84,9 @@ switch ($tabla){
 	break;
 	case "subsectores":
 		$aColumns = array('id_subsectores','id_sectores','nombre');
+	break;
+	case "agendas":
+		$aColumns = array('id_agendas','nombre','apellido','rubro','celular','telefono','direccion','id_agendas_tipos');
 	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
@@ -581,6 +586,35 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 						break;
                     }
                 break;
+                case 'agendas_tipos':
+					switch($aColumns[$i]){
+						case "id_agendas":
+							$obj = new Agendas();
+							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
+
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
+						break;
+                    }
+                break;
 				default:
 					switch($aColumns[$i]){
 						case 'id_especialidades':
@@ -1000,6 +1034,11 @@ if ($cant_registros != 0){
 					$subsector = $obj_subsectores->nombre;
 				}
 
+				if ($aColumns[$i] == "id_agendas_tipos"){
+					$obj_agendas_tipos = new Agendas_Tipos($aRow[$aColumns[$i]]);
+					$agenda_tipo = $obj_agendas_tipos->nombre;
+				}
+
 				if ($aColumns[$i] == "id_plantas"){
 					$obj_plantas = new Plantas($aRow[$aColumns[$i]]);
 					$planta = $obj_plantas->nombre;
@@ -1269,6 +1308,17 @@ if ($cant_registros != 0){
 					$row[1] = utf8_encode($sector);
 					$row[2] = utf8_encode($aRow['nombre']);
                     $row[3] = $editar.''.$eliminar.'';
+				break;
+				case 'agendas':
+					$row[0] = $aRow["id_agendas"];
+					$row[1] = utf8_encode($aRow['nombre']);
+					$row[2] = utf8_encode($aRow['apellido']);
+					$row[3] = utf8_encode($aRow['rubro']);
+					$row[4] = utf8_encode($aRow['celular']);
+					$row[5] = utf8_encode($aRow['telefono']);
+					$row[6] = utf8_encode($aRow['direccion']);
+					$row[7] = utf8_encode($agenda_tipo);
+                    $row[8] = $editar.''.$eliminar.'';
 				break;
 
 			}

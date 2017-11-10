@@ -384,6 +384,29 @@ switch ($tabla){
 			$rta = false;
 
 	break;
+
+	case "agendas":
+		parse_str(stripslashes($datos));
+
+		$asignaciones = "
+					nombre = '".utf8_decode($nombre)."',
+					apellido = '".utf8_decode($apellido)."',
+					rubro = '".utf8_decode($rubro)."',
+					celular = '".utf8_decode($celular)."',
+					telefono = '".utf8_decode($telefono)."',
+					direccion = '".utf8_decode($direccion)."',
+					id_agendas_tipos = '".utf8_decode($agendas_tipos)."'
+					";
+
+        $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
+
+		if ($obj->db->consulta($query_string))
+			$rta = true;
+		else
+			$rta = false;
+
+	break;
+
 }
 echo $rta;
 ?>

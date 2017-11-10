@@ -815,6 +815,40 @@ SQL;
 			$rta = false;
 
 	break;
+	case "agendas":
+		parse_str(stripslashes($datos));
+
+		$columnas = "(
+					nombre,
+                    apellido,
+                    rubro,
+                    celular,
+                    telefono,
+                    direccion,
+                    id_agendas_tipos,
+                    estado
+					)";
+
+		$valores = "(
+					'".utf8_decode($nombre)."',
+					'".utf8_decode($apellido)."',
+					'".utf8_decode($rubro)."',
+					'".utf8_decode($celular)."',
+					'".utf8_decode($telefono)."',
+					'".utf8_decode($direccion)."',
+					'".utf8_decode($agendas_tipos)."',
+                    1
+					)";
+
+		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+		if ($obj->db->consulta($query_string))
+			$rta = $obj->db->ultimo_id_insertado();
+		else
+			$rta = false;
+
+	break;
+
 }
 echo $rta;
 ?>
