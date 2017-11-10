@@ -830,12 +830,12 @@ SQL;
 					)";
 
 		$valores = "(
-					'".utf8_decode($nombre)."',
-					'".utf8_decode($apellido)."',
-					'".utf8_decode($rubro)."',
-					'".utf8_decode($celular)."',
-					'".utf8_decode($telefono)."',
-					'".utf8_decode($direccion)."',
+					'".utf8_decode(strtoupper($nombre))."',
+					'".utf8_decode(strtoupper($apellido))."',
+					'".utf8_decode(strtoupper($rubro))."',
+					'".utf8_decode(strtoupper($celular))."',
+					'".utf8_decode(strtoupper($telefono))."',
+					'".utf8_decode(strtoupper($direccion))."',
 					'".utf8_decode($agendas_tipos)."',
                     1
 					)";

@@ -389,12 +389,12 @@ switch ($tabla){
 		parse_str(stripslashes($datos));
 
 		$asignaciones = "
-					nombre = '".utf8_decode($nombre)."',
-					apellido = '".utf8_decode($apellido)."',
-					rubro = '".utf8_decode($rubro)."',
-					celular = '".utf8_decode($celular)."',
-					telefono = '".utf8_decode($telefono)."',
-					direccion = '".utf8_decode($direccion)."',
+					nombre = '".utf8_decode(strtoupper($nombre))."',
+					apellido = '".utf8_decode(strtoupper($apellido))."',
+					rubro = '".utf8_decode(strtoupper($rubro))."',
+					celular = '".utf8_decode(strtoupper($celular))."',
+					telefono = '".utf8_decode(strtoupper($telefono))."',
+					direccion = '".utf8_decode(strtoupper($direccion))."',
 					id_agendas_tipos = '".utf8_decode($agendas_tipos)."'
 					";
 
