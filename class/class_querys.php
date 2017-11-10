@@ -940,7 +940,9 @@ class Querys implements iQuerys{
                 encuestas_preguntas AS ep
                 ON er.id_encuestas_preguntas = ep.id_encuestas_preguntas
             WHERE
-                t.fecha_alta BETWEEN '{$desde}' AND '{$hasta}'
+                t.id_turnos_estados IN ('2', '7') AND
+                t.estado = 1 AND
+                t.fecha BETWEEN '{$desde}' AND '{$hasta}'
             GROUP BY
             	ep.pregunta
             ORDER BY
@@ -967,8 +969,15 @@ class Querys implements iQuerys{
                 ON
                     ts.matricula_derivacion = dx.matricula AND
                     dx.estado = 1 AND dx.matricula != ''
+            INNER JOIN
+                turnos AS t
+                ON ts.id_turnos = t.id_turnos
             WHERE
-                ts.matricula_derivacion > 0
+                ts.matricula_derivacion > 0 AND
+                ts.estado = 1 AND
+                t.id_turnos_estados IN ('2', '7') AND
+                t.estado = 1 AND
+                t.fecha BETWEEN '{$desde}' AND '{$hasta}'
             GROUP BY
             	ts.matricula_derivacion
             ORDER BY
