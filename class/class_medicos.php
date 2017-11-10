@@ -921,6 +921,19 @@ HTML;
 		$htm = $this->Html($this->nombre_tabla."/contenedor_grilla");
 
 		$horariosv = $this->RangoTurnosDia($id_especialidad, $diaSemana);
+        $anterior = '';
+        for ($i = count($horariosv) - 2; $i >= 0; $i--) {
+            $split = explode(" - ", $horariosv[$i]);
+            if ($anterior != '') {
+                $split[1] = date("H:i:s", strtotime ( '-1 minute' , strtotime($anterior)));
+                $horariosv[$i] = implode(" - ", $split);
+            }
+            $anterior = $split[0];
+        }
+        $horariosv[count($horariosv) - 2] =
+            substr($horariosv[count($horariosv) - 2], 0, 8).
+            " - 23:59:00"
+        ;
 
 		$htm->Asigna('DROP_HORARIOS', $this->DropArmado("horarios",$horariosv));
 		$htm->Asigna('MEDICO',$this->apellidos.", ".$this->nombres);

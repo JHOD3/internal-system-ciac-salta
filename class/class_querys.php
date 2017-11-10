@@ -693,7 +693,14 @@ class Querys implements iQuerys{
 	function RangoTurnosDia($id_medico, $id_especialidad, $dia_semana){
 		$query = "SELECT desde, hasta
 				FROM medicos_horarios
-				WHERE id_medicos = $id_medico AND id_especialidades = $id_especialidad AND id_dias_semana = $dia_semana AND estado = 1";
+				WHERE
+                    id_medicos = $id_medico AND
+                    id_especialidades = $id_especialidad AND
+                    id_dias_semana = $dia_semana AND
+                    estado = 1
+                ORDER BY
+                    desde
+                ";
 		return $query;
 	}
 
