@@ -7,6 +7,7 @@ requerir_class("tpl","querys","mysql","estructura");
 requerir_class(
     'medicos',
     'medicosext',
+    'medicosexp',
     'obras_sociales',
     'obras_sociales_planes',
     'especialidades',
@@ -45,6 +46,9 @@ switch ($tabla){
 	break;
 	case "medicosext":
 		$aColumns = array('id_medicosext', 'saludo', 'apellidos', 'nombres', 'matricula');
+    break;
+	case "medicosexp":
+		$aColumns = array('mx.id_medicosexp','mx.saludo','mx.apellidos','mx.nombres','turnos_turnos','turnos_sobreturnos','turnos_total','minutos_turnos','minutos_sobreturnos','minutos_total','horas_turnos','horas_sobreturnos','horas_total');
 	break;
 	case "especialidades":
 		$aColumns = array('id_especialidades', 'nombre');
@@ -920,11 +924,19 @@ $sWhere = trim($sWhere, " AND ");
 $sWhere = trim($sWhere, " OR ");
 
 if ( $sWhere == "" ){
-    if ($tabla != 'sectores' and $tabla != 'subsectores') {
+    if (
+        $tabla != 'sectores' and
+        $tabla != 'subsectores' and
+        $tabla != 'medicosexp'
+    ) {
     		$sWhere = "WHERE $pfTable.estado = 1";
     }
 } else {
-    if ($tabla != 'sectores' and $tabla != 'subsectores') {
+    if (
+        $tabla != 'sectores' and
+        $tabla != 'subsectores' and
+        $tabla != 'medicosexp'
+    ) {
     	$sWhere = $sWhere.") AND $pfTable.estado = 1";
     } else {
     	$sWhere = $sWhere.")";
@@ -936,14 +948,80 @@ if ( $sWhere == "" ){
  * SQL queries
  * Get data to display
  */
-$sQuery = "
-		SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
-		FROM   $sTableFrom
-		$sWhere
-		$sOrder
-		$sLimit
-";
-#var_dump($sQuery);
+if ($tabla == 'medicosexp') {
+    $mes = date("Y-m-", strtotime("-1 month"));
+    $sQuery = <<<SQL
+        SELECT *
+        FROM
+            (
+                SELECT `m`.`id_medicos` AS `id_medicosexp`,
+                       `m`.`saludo` AS `saludo`,
+                       `m`.`apellidos` AS `apellidos`,
+                       `m`.`nombres` AS `nombres`,
+                       `ty`.`turnos` AS `turnos_turnos`,
+                       (`tx`.`turnos` - `ty`.`turnos`) AS `turnos_sobreturnos`,
+                       `tx`.`turnos` AS `turnos_total`,
+                       `ty`.`minutos` AS `minutos_turnos`,
+                       (`tx`.`minutos` - `ty`.`minutos`) AS `minutos_sobreturnos`,
+                       `tx`.`minutos` AS `minutos_total`,
+                       `ty`.`horas` AS `horas_turnos`,
+                       (`tx`.`horas` - `ty`.`horas`) AS `horas_sobreturnos`,
+                       `tx`.`horas` AS `horas_total`,
+                       `m`.`estado` AS `estado`
+                FROM (((
+                          (SELECT `t`.`id_medicos` AS `id_medicos`,
+                                  count(`t`.`id_turnos`) AS `turnos`,
+                                  floor(sum((timestampdiff(SECOND,`t`.`desde`,`t`.`hasta`) / 60))) AS `minutos`,
+                                  floor(sum((timestampdiff(SECOND,`t`.`desde`,`t`.`hasta`) / 3600))) AS `horas`
+                           FROM `turnos` `t`
+                           WHERE ((`t`.`fecha` LIKE '{$mes}%')
+                                  AND (`t`.`estado` = 1)
+                                  AND (`t`.`id_turnos_estados` IN (1,
+                                                                   2,
+                                                                   7)))
+                           GROUP BY `t`.`id_medicos`)) `tx`
+                       JOIN
+                         (SELECT `t`.`id_medicos` AS `id_medicos`,
+                                 count(`t`.`id_turnos`) AS `turnos`,
+                                 floor(sum((timestampdiff(SECOND,`t`.`desde`,`t`.`hasta`) / 60))) AS `minutos`,
+                                 floor(sum((timestampdiff(SECOND,`t`.`desde`,`t`.`hasta`) / 3600))) AS `horas`
+                          FROM
+                            (SELECT `tt`.`id_turnos` AS `id_turnos`,
+                                    `tt`.`id_medicos` AS `id_medicos`,
+                                    `tt`.`fecha` AS `fecha`,
+                                    `tt`.`desde` AS `desde`,
+                                    `tt`.`hasta` AS `hasta`,
+                                    `tt`.`estado` AS `estado`
+                             FROM (`turnos` `tt`
+                                   JOIN `medicos_horarios` `mh` on(((`tt`.`id_medicos` = `mh`.`id_medicos`)
+                                                                    AND (`mh`.`estado` = 1)
+                                                                    AND (dayofweek(`tt`.`fecha`) = `mh`.`id_dias_semana`)
+                                                                    AND (`tt`.`desde` BETWEEN `mh`.`desde` AND `mh`.`hasta`))))
+                             WHERE ((`tt`.`fecha` LIKE '{$mes}%')
+                                    AND (`tt`.`estado` = 1)
+                                    AND (`tt`.`id_turnos_estados` IN (1,
+                                                                      2,
+                                                                      7)))
+                             GROUP BY `tt`.`id_turnos`) `t`
+                          GROUP BY `t`.`id_medicos`
+                          ORDER BY `minutos` DESC) `ty` on((`tx`.`id_medicos` = `ty`.`id_medicos`)))
+                      JOIN `medicos` `m` on((`m`.`id_medicos` = `tx`.`id_medicos`)))
+            ) AS `mx`
+    		$sWhere
+    		$sOrder
+    		$sLimit
+SQL;
+} else {
+    $sQuery = "
+    		SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
+    		FROM   $sTableFrom
+    		$sWhere
+    		$sOrder
+    		$sLimit
+    ";
+}
+
+#print "<pre>{$sQuery}</pre>";
 //error_log($sQuery);
 
 $rResult = mysql_query( $sQuery, $link ) or die(mysql_error());
@@ -952,15 +1030,31 @@ $rResult = mysql_query( $sQuery, $link ) or die(mysql_error());
 $sQuery = "
 		SELECT FOUND_ROWS()
 ";
+
 $rResultFilterTotal = mysql_query( $sQuery, $link ) or die(mysql_error());
 $aResultFilterTotal = mysql_fetch_array($rResultFilterTotal);
 $iFilteredTotal = $aResultFilterTotal[0];
 
 /* Total data set length */
-$sQuery = "
-		SELECT COUNT(".$sIndexColumn.")
-		FROM   $sTableFrom
-";
+if ($tabla == 'medicosexp') {
+    $mes = date("Y-m-", strtotime("-1 month"));
+    $sQuery = <<<SQL
+        SELECT COUNT(`t`.`id_medicos`)
+        FROM `turnos` `t`
+        WHERE ((`t`.`fecha` LIKE '{$mes}%')
+              AND (`t`.`estado` = 1)
+              AND (`t`.`id_turnos_estados` IN (1,
+                                               2,
+                                               7)))
+        GROUP BY `t`.`id_medicos`
+SQL;
+} else {
+    $sQuery = "
+    		SELECT COUNT(".$sIndexColumn.")
+    		FROM   $sTableFrom
+    ";
+}
+
 $rResultTotal = mysql_query( $sQuery, $link ) or die(mysql_error());
 $aResultTotal = mysql_fetch_array($rResultTotal);
 $iTotal = $aResultTotal[0];
@@ -1145,6 +1239,22 @@ if ($cant_registros != 0){
                     } else {
                         $row[5] = $editar.'';
                     }
+
+				break;
+				case "medicosexp":
+					$row[0] = $aRow["id_medicosexp"];
+					$row[1] = utf8_encode($aRow["saludo"]);
+					$row[2] = utf8_encode($aRow["apellidos"]);
+					$row[3] = utf8_encode($aRow["nombres"]);
+					$row[4] = utf8_encode($aRow["turnos_turnos"]);
+					$row[4] = utf8_encode($aRow["turnos_sobreturnos"]);
+					$row[4] = utf8_encode($aRow["turnos_total"]);
+					$row[4] = utf8_encode($aRow["minutos_turnos"]);
+					$row[4] = utf8_encode($aRow["minutos_sobreturnos"]);
+					$row[4] = utf8_encode($aRow["minutos_total"]);
+					$row[4] = utf8_encode($aRow["horas_turnos"]);
+					$row[4] = utf8_encode($aRow["horas_sobreturnos"]);
+					$row[4] = utf8_encode($aRow["horas_total"]);
 
 				break;
 				case "especialidades":

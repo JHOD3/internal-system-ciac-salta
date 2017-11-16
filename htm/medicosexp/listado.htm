@@ -1,0 +1,100 @@
+
+			<script type="text/javascript">
+				var oTable;
+				var asInitVals = new Array();
+
+				$(document).ready(function(){
+					oTable = $("#t_medicosexp").dataTable( {
+						//"bProcessing": true,
+						//"bServerSide": true,
+						//"sAjaxSource": "[AJAX_SRC]",
+						//"aaSorting": [[1, "desc" ],[0, "desc" ]], //argumentos posibles: asc o desc
+						"aaSorting": [[0, "desc" ]], //argumentos posibles: asc o desc
+						"bAutoWidth": false,
+						"sPaginationType": "full_numbers",
+						"aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
+						"oLanguage": {
+							"sProcessing": "Procesando...",
+							"sSearch": "Buscar en todas las Columnas:",
+							"sLengthMenu": "Mostrar _MENU_ registros por hoja",
+							"sZeroRecords": "No se encontraron registros cargados",
+							"sInfo": "Mostrando _START_ a _END_ registros de un total de _TOTAL_ registros",
+							"sInfoEmpty": "Mostrando 0 registro",
+							"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+							"oPaginate": {
+								"sFirst":    "Primero",
+								"sPrevious": "Anterior",
+								"sNext":     "Siguiente",
+								"sLast":     "&Uacute;ltimo"
+							},
+						}
+					});
+					$("tfoot input").keyup( function () {
+						//CAMBIE ESTO PARA QUE ME TOME LA BUSQUEDA CORRECTAMENTE CON COLUMNAS OCULTAS... AGREGUE A LAS COLUMNAS DEL PIE EL ATRIBUTO ID, ej. id="i-0"  http://datatables.net/forums/discussion/2864/x#Item_3
+						var id = $(this).attr("id").split("-")[1];
+						oTable.fnFilter( this.value, id);
+					});
+					$("tfoot input").each( function (i) {
+						asInitVals[i] = this.value;
+					});
+					$("tfoot input").focus( function () {
+						if ( this.className == "search_init" ){
+							this.className = "";
+							this.value = "";
+						}
+					});
+					$("tfoot input").blur( function (i) {
+						if ( this.value == "" ){
+							this.className = "search_init";
+							this.value = asInitVals[$("tfoot input").index(this)];
+						}
+					});
+				});
+			</script>
+
+			<table id="t_medicosexp" class="display ex_highlight_row">
+    			<thead>
+					<tr>
+                        <th>ID</th>
+                        <th>Saludo</th>
+                        <th>Apellidos</th>
+                        <th>Nombres</th>
+                        <th>Turnos</th>
+                        <th>Sobreturnos</th>
+                        <th>Total</th>
+                        <th>Turnos (min)</th>
+                        <th>Sobreturnos (min)</th>
+                        <th>Total (min)</th>
+                        <th>Turnos (hs)</th>
+                        <th>Sobreturnos (hs)</th>
+                        <th>Total (hs)</th>
+					</tr>
+				</thead>
+				<tbody>
+					[block: block_registros]
+					<tr>
+						<td>[id_medicosexp]</td>
+						<td>[saludo]</td>
+						<td>[apellidos]</td>
+						<td>[nombres]</td>
+						<td>[turnos_turnos]</td>
+						<td>[turnos_sobreturnos]</td>
+						<td>[turnos_total]</td>
+						<td>[minutos_turnos]</td>
+						<td>[minutos_sobreturnos]</td>
+						<td>[minutos_total]</td>
+						<td>[horas_turnos]</td>
+						<td>[horas_sobreturnos]</td>
+						<td>[horas_total]</td>
+					</tr>
+					[/block: block_registros]
+				</tbody>
+				<tfoot>
+					<tr>
+						<th><input type="text" id="i-0" name="tb_id_medicosexp" value="Buscar ID" class="search_init" /></th>
+						<th><input type="text" id="i-1" name="tb_saludo" value="Buscar Saludo" class="search_init" /></th>
+						<th><input type="text" id="i-2" name="tb_apellidos" value="Buscar Apellido" class="search_init" /></th>
+						<th><input type="text" id="i-3" name="tb_nombres" value="Buscar Nombre" class="search_init" /></th>
+					</tr>
+				</tfoot>
+			</table>
