@@ -48,7 +48,7 @@ switch ($tabla){
 		$aColumns = array('id_medicosext', 'saludo', 'apellidos', 'nombres', 'matricula');
     break;
 	case "medicosexp":
-		$aColumns = array('mx.id_medicosexp','mx.saludo','mx.apellidos','mx.nombres','turnos_turnos','turnos_sobreturnos','turnos_total','minutos_turnos','minutos_sobreturnos','minutos_total','horas_turnos','horas_sobreturnos','horas_total');
+		$aColumns = array('mx.id_medicosexp','mx.saludo','mx.apellidos','mx.nombres','turnos_turnos','turnos_sobreturnos','turnos_total','minutos_horario','minutos_turnos','minutos_sobreturnos','minutos_total','horas_horario','horas_turnos','horas_sobreturnos','horas_total');
 	break;
 	case "especialidades":
 		$aColumns = array('id_especialidades', 'nombre');
@@ -967,6 +967,8 @@ if ($tabla == 'medicosexp') {
                        `ty`.`horas` AS `horas_turnos`,
                        (`tx`.`horas` - `ty`.`horas`) AS `horas_sobreturnos`,
                        `tx`.`horas` AS `horas_total`,
+                       `my`.`minutos_horario`,
+                       `my`.`horas_horario`,
                        `m`.`estado` AS `estado`
                 FROM (((
                           (SELECT `t`.`id_medicos` AS `id_medicos`,
@@ -1006,6 +1008,20 @@ if ($tabla == 'medicosexp') {
                           GROUP BY `t`.`id_medicos`
                           ORDER BY `minutos` DESC) `ty` on((`tx`.`id_medicos` = `ty`.`id_medicos`)))
                       JOIN `medicos` `m` on((`m`.`id_medicos` = `tx`.`id_medicos`)))
+                JOIN
+                  (
+                    SELECT
+                    		`mh`.`id_medicos`,
+                    		floor(sum(timestampdiff(SECOND,CONCAT('2017-10-01 ',`mh`.`desde`),CONCAT('2017-10-01 ',`mh`.`hasta`)) / 60) * truncate((datediff(STR_TO_DATE('20171130', '%Y%m%d'),STR_TO_DATE('20171101', '%Y%m%d')) - Weekday(date_add(STR_TO_DATE('20171130', '%Y%m%d'), interval(-`mh`.`id_dias_semana` + 1)day)) + 7) / 7, 0)) AS `minutos_horario`,
+                    		floor(sum(timestampdiff(SECOND,CONCAT('2017-10-01 ',`mh`.`desde`),CONCAT('2017-10-01 ',`mh`.`hasta`)) / 3600) * truncate((datediff(STR_TO_DATE('20171130', '%Y%m%d'),STR_TO_DATE('20171101', '%Y%m%d')) - Weekday(date_add(STR_TO_DATE('20171130', '%Y%m%d'), interval(-`mh`.`id_dias_semana` + 1)day)) + 7) / 7, 0)) AS `horas_horario`
+                    FROM `medicos_horarios` `mh`
+                    WHERE
+                    		`mh`.`estado` = 1
+                    GROUP BY
+                    	`mh`.`id_medicos`
+                  ) AS `my`
+                  ON
+                    `m`.`id_medicos` = `my`.`id_medicos`
             ) AS `mx`
     		$sWhere
     		$sOrder
@@ -1247,14 +1263,16 @@ if ($cant_registros != 0){
 					$row[2] = utf8_encode($aRow["apellidos"]);
 					$row[3] = utf8_encode($aRow["nombres"]);
 					$row[4] = utf8_encode($aRow["turnos_turnos"]);
-					$row[4] = utf8_encode($aRow["turnos_sobreturnos"]);
-					$row[4] = utf8_encode($aRow["turnos_total"]);
-					$row[4] = utf8_encode($aRow["minutos_turnos"]);
-					$row[4] = utf8_encode($aRow["minutos_sobreturnos"]);
-					$row[4] = utf8_encode($aRow["minutos_total"]);
-					$row[4] = utf8_encode($aRow["horas_turnos"]);
-					$row[4] = utf8_encode($aRow["horas_sobreturnos"]);
-					$row[4] = utf8_encode($aRow["horas_total"]);
+					$row[5] = utf8_encode($aRow["turnos_sobreturnos"]);
+					$row[6] = utf8_encode($aRow["turnos_total"]);
+					$row[7] = utf8_encode($aRow["minutos_horario"]);
+					$row[8] = utf8_encode($aRow["minutos_turnos"]);
+					$row[9] = utf8_encode($aRow["minutos_sobreturnos"]);
+					$row[10] = utf8_encode($aRow["minutos_total"]);
+					$row[11] = utf8_encode($aRow["horas_horario"]);
+					$row[12] = utf8_encode($aRow["horas_turnos"]);
+					$row[13] = utf8_encode($aRow["horas_sobreturnos"]);
+					$row[14] = utf8_encode($aRow["horas_total"]);
 
 				break;
 				case "especialidades":
