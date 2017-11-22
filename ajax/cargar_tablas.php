@@ -971,8 +971,8 @@ if ($tabla == 'medicosexp') {
                 FROM (((
                           (SELECT `t`.`id_medicos` AS `id_medicos`,
                                   count(`t`.`id_turnos`) AS `turnos`,
-                                  floor(sum((timestampdiff(SECOND,`t`.`desde`,`t`.`hasta`) / 60))) AS `minutos`,
-                                  floor(sum((timestampdiff(SECOND,`t`.`desde`,`t`.`hasta`) / 3600))) AS `horas`
+                                  floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 60))) AS `minutos`,
+                                  floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 3600))) AS `horas`
                            FROM `turnos` `t`
                            WHERE ((`t`.`fecha` LIKE '{$mes}%')
                                   AND (`t`.`estado` = 1)
@@ -983,8 +983,8 @@ if ($tabla == 'medicosexp') {
                        JOIN
                          (SELECT `t`.`id_medicos` AS `id_medicos`,
                                  count(`t`.`id_turnos`) AS `turnos`,
-                                 floor(sum((timestampdiff(SECOND,`t`.`desde`,`t`.`hasta`) / 60))) AS `minutos`,
-                                 floor(sum((timestampdiff(SECOND,`t`.`desde`,`t`.`hasta`) / 3600))) AS `horas`
+                                 floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 60))) AS `minutos`,
+                                 floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 3600))) AS `horas`
                           FROM
                             (SELECT `tt`.`id_turnos` AS `id_turnos`,
                                     `tt`.`id_medicos` AS `id_medicos`,
