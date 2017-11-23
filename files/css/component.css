@@ -97,6 +97,7 @@
 	line-height: 50px;
 	speak: none;
 	content: "\e000";
+    color: #fff;
 }
 
 .dl-menuwrapper li.dl-back:after {
