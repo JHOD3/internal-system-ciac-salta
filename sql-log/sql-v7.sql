@@ -45,3 +45,6 @@ CREATE TABLE `mantenimhistoricos` (
 
 ALTER TABLE `mantenimientos` ADD COLUMN `id_mantenimientos_estados`  integer(11) NOT NULL AFTER `estado`;
 ALTER TABLE `mantenimhistoricos` ADD COLUMN `id_mantenimientos_estados`  integer(11) NOT NULL AFTER `estado`;
+
+ALTER TABLE `mantenimientos` ADD COLUMN `id_usuarios`  int(11) NOT NULL AFTER `id_mantenimientos_estados`;
+ALTER TABLE `mantenimhistoricos` ADD COLUMN `id_usuarios`  int(11) NOT NULL AFTER `id_mantenimientos_estados`;

@@ -41,7 +41,8 @@ switch ($tabla) {
                 CONCAT(tarea, ' (ELIMINADO)'),
                 especialista,
                 observaciones,
-                1
+                1,
+                '".$_SESSION['ID_USUARIO']."'
             FROM
                 mantenimientos
             WHERE

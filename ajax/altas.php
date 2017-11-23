@@ -867,7 +867,8 @@ SQL;
                     especialista,
                     observaciones,
                     id_mantenimientos_estados,
-                    estado
+                    estado,
+                    id_usuarios
 		)";
 
 		if (!isset($sectores) || $sectores == "")
@@ -881,7 +882,8 @@ SQL;
 					'".utf8_decode(upper($especialista))."',
 					'".utf8_decode(upper($observaciones))."',
 					'".$mantenimientos_estados."',
-                    1
+                    1,
+                    '".$_SESSION['ID_USUARIO']."'
 		)";
 
 		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
@@ -897,7 +899,8 @@ SQL;
                         especialista,
                         observaciones,
                         id_mantenimientos_estados,
-                        estado
+                        estado,
+                        id_usuarios
 			)";
     		$valores = "(
     					'".$rta."',
@@ -908,7 +911,8 @@ SQL;
     					'".utf8_decode(upper($especialista))."',
     					'".utf8_decode(upper($observaciones))."',
                         '".$mantenimientos_estados."',
-                        1
+                        1,
+                        '".$_SESSION['ID_USUARIO']."'
 			)";
     		$query_string2 = $obj->querys->Alta('mantenimhistoricos', $columnas, $valores);
     		$obj->db->consulta($query_string2);

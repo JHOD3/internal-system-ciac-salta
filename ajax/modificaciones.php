@@ -427,7 +427,8 @@ switch ($tabla){
 					tarea = '".utf8_decode(upper($tarea))."',
 					especialista = '".utf8_decode(upper($especialista))."',
 					observaciones = '".utf8_decode(upper($observaciones))."',
-                    id_mantenimientos_estados = '".$mantenimientos_estados."'
+                    id_mantenimientos_estados = '".$mantenimientos_estados."',
+                    id_usuarios = '".$_SESSION['ID_USUARIO']."'
 					";
 
         $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
@@ -443,7 +444,8 @@ switch ($tabla){
                         especialista,
                         observaciones,
                         id_mantenimientos_estados,
-                        estado
+                        estado,
+                        id_usuarios
 			)";
     		$valores = "(
     					'".$id."',
@@ -454,7 +456,8 @@ switch ($tabla){
     					'".utf8_decode(upper($especialista))."',
     					'".utf8_decode(upper($observaciones))."',
                         '".$mantenimientos_estados."',
-                        1
+                        1,
+                        '".$_SESSION['ID_USUARIO']."'
 			)";
     		$query_string2 = $obj->querys->Alta('mantenimhistoricos', $columnas, $valores);
     		$obj->db->consulta($query_string2);
