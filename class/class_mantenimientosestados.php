@@ -1,30 +1,22 @@
 <?php
-interface iMantenimientos{
+interface iMantenimientosestados{
 
 }
 
-class Mantenimientos extends Estructura implements iMantenimientos{
+class Mantenimientosestados extends Estructura implements iMantenimientosestados{
 
 	function __construct($id = ""){
-		$this->nombre_tabla = "mantenimientos";
-		$this->titulo_tabla = "Pedidos de Mantenimientos";
+		$this->nombre_tabla = "mantenimientos_estados";
+		$this->titulo_tabla = "Estados de los Mantenimientos";
 		$this->tabla_padre = "";
 
-		$this->drop_label_elija = "Elija un Pedido de Mantenimiento";
+		$this->drop_label_elija = "Elija un Estados";
 
 		parent::__construct($id);
-
-        requerir_class("sectores","mantenimientosestados");
 	}
 
 	function FormAlta(){
 		$htm = $this->Html($this->nombre_tabla."/form_alta");
-
-		$obj_sectores = new Sectores();
-		$htm->Asigna("DROP_SECTORES", $obj_sectores->Drop());
-
-		$obj_mantenimientos_estados = new Mantenimientosestados();
-		$htm->Asigna("DROP_MANTENIMIENTOS_ESTADOS", $obj_mantenimientos_estados->Drop());
 
 		$htm->Asigna("TABLA",$this->nombre_tabla);
 
@@ -36,13 +28,6 @@ class Mantenimientos extends Estructura implements iMantenimientos{
 	function FormModificacion(){
 		$htm = $this->Html($this->nombre_tabla."/form_modificacion");
 		$row = $this->registro;
-
-		$obj_sectores = new Sectores();
-		$htm->Asigna("DROP_SECTORES", $obj_sectores->Drop("", $row["id_sectores"]));
-
-		$obj_mantenimientos_estados = new Mantenimientosestados();
-		$htm->Asigna("DROP_MANTENIMIENTOS_ESTADOS", $obj_mantenimientos_estados->Drop("", $row["id_mantenimientos_estados"]));
-
 
 		$htm->Asigna("TABLA",$this->nombre_tabla);
 

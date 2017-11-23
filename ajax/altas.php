@@ -866,6 +866,7 @@ SQL;
                     tarea,
                     especialista,
                     observaciones,
+                    id_mantenimientos_estados,
                     estado
 		)";
 
@@ -879,6 +880,7 @@ SQL;
 					'".utf8_decode(upper($tarea))."',
 					'".utf8_decode(upper($especialista))."',
 					'".utf8_decode(upper($observaciones))."',
+					'".$mantenimientos_estados."',
                     1
 		)";
 
@@ -894,6 +896,7 @@ SQL;
                         tarea,
                         especialista,
                         observaciones,
+                        id_mantenimientos_estados,
                         estado
 			)";
     		$valores = "(
@@ -904,6 +907,7 @@ SQL;
     					'".utf8_decode(upper($tarea))."',
     					'".utf8_decode(upper($especialista))."',
     					'".utf8_decode(upper($observaciones))."',
+                        '".$mantenimientos_estados."',
                         1
 			)";
     		$query_string2 = $obj->querys->Alta('mantenimhistoricos', $columnas, $valores);

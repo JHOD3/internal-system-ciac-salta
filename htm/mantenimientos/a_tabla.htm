@@ -20,7 +20,7 @@
 
 			"bProcessing": true,
 			"bServerSide": true,
-			"iDisplayLength": 10000,
+			"iDisplayLength": 12,
 			"iDisplayStart":0,
 			"sAjaxSource": "[URL]ajax/cargar_tablas.php?tabla=[NOMBRE_TABLA]",
 			"aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
@@ -38,6 +38,7 @@
 					{ sWidth: '100px' },
 					{ sWidth: '200px' },
 					{ sWidth: '200px' },
+					{ sWidth: '100px' },
 					{ sWidth: '100px' },
 					{ sWidth: '100px' },
 					{ sWidth: '70px', "sClass": "right" }]
@@ -77,6 +78,7 @@
             <th>Tarea</th>
             <th>Especialista</th>
             <th>Observaciones</th>
+            <th>Estados</th>
             <th>Acci&oacute;n</th>
         </tr>
     </thead>
@@ -89,6 +91,7 @@
             <th><input type="text" name="tb_tarea" value="Tarea" class="search_init" /></th>
             <th><input type="text" name="tb_especialista" value="Especialista" class="search_init" /></th>
             <th><input type="text" name="tb_observaciones" value="Observaciones" class="search_init" /></th>
+            <th><input type="text" name="tb_mantenimientos_estados" value="Estados" class="search_init" /></th>
         </tr>
     </tfoot>
     <tbody>

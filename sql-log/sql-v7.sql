@@ -42,3 +42,6 @@ CREATE TABLE `mantenimhistoricos` (
   `estado` tinyint(1) NOT NULL,
   PRIMARY KEY (`id_mantenimhistoricos`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+ALTER TABLE `mantenimientos` ADD COLUMN `id_mantenimientos_estados`  integer(11) NOT NULL AFTER `estado`;
+ALTER TABLE `mantenimhistoricos` ADD COLUMN `id_mantenimientos_estados`  integer(11) NOT NULL AFTER `estado`;

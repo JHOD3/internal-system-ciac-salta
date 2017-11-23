@@ -20,7 +20,8 @@ requerir_class(
     'agendas',
     'agendas_tipos',
     'mantenimientos',
-    'mantenimhistoricos'
+    'mantenimhistoricos',
+    'mantenimientosestados'
 );
 
 $tabla = $_GET["tabla"];
@@ -96,7 +97,7 @@ switch ($tabla){
 	break;
 	case "mantenimientos":
     case "mantenimhistoricos":
-		$aColumns = array('id_mantenimientos','fecha','id_sectores','solicitador','tarea','especialista','observaciones','estado');
+		$aColumns = array('id_mantenimientos','fecha','id_sectores','solicitador','tarea','especialista','observaciones','id_mantenimientos_estados','estado');
 	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
@@ -568,10 +569,63 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 						break;
 				break;
                 case 'subsectores':
+					switch($aColumns[$i]){
+						case "id_sectores":
+							$obj = new Sectores();
+							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
+
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
+						break;
+                    }
+                break;
                 case 'mantenimientos':
 					switch($aColumns[$i]){
 						case "id_sectores":
 							$obj = new Sectores();
+							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
+
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
+						break;
+						case "id_mantenimientos_estados":
+							$obj = new Mantenimientosestados();
 							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
 
 							$cant = $obj->db->num_rows($query);
@@ -920,6 +974,58 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 						$sWhere .= $aColumns[$i + 1]." LIKE '%".$buscar."%' ";
 				}
 			break;
+			case 'mantenimientos':
+			case 'mantenimhistoricos':
+				switch($aColumns[$i]){
+					case "id_sectores":
+						$obj = new Sectores();
+						$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch_'.$i],"like");
+
+						$ids = "(";
+						$band = 0;
+						while ($row = $obj->db->fetch_array($query)){
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
+							$band = 1;
+						}
+						$ids = trim($ids, ", ");
+						$ids .= ")";
+
+
+						if ($band == 1){
+							$buscar = $ids;
+							$sWhere .= $aColumns[$i]." IN ".$buscar;
+						}else{
+							$buscar = 0;
+							$sWhere .= $aColumns[$i]." = ".$buscar;
+						}
+					break;
+					case "id_mantenimientos_estados":
+						$obj = new Mantenimientosestados();
+						$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch_'.$i],"like");
+
+						$ids = "(";
+						$band = 0;
+						while ($row = $obj->db->fetch_array($query)){
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
+							$band = 1;
+						}
+						$ids = trim($ids, ", ");
+						$ids .= ")";
+
+
+						if ($band == 1){
+							$buscar = $ids;
+							$sWhere .= $aColumns[$i]." IN ".$buscar;
+						}else{
+							$buscar = 0;
+							$sWhere .= $aColumns[$i]." = ".$buscar;
+						}
+					break;
+					default:
+						$buscar = utf8_decode($_GET['sSearch_'.$i]);
+						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
+				}
+			break;
 			default:
 				$buscar = $_GET['sSearch_'.$i];
 				$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
@@ -1149,6 +1255,11 @@ if ($cant_registros != 0){
 				if ($aColumns[$i] == "id_subsectores"){
 					$obj_subsectores = new Subsectores($aRow[$aColumns[$i]]);
 					$subsector = $obj_subsectores->nombre;
+				}
+
+				if ($aColumns[$i] == "id_mantenimientos_estados"){
+					$obj_mantenimientos_estados = new Mantenimientosestados($aRow[$aColumns[$i]]);
+					$mantenimientos_estados = $obj_mantenimientos_estados->nombre;
 				}
 
 				if ($aColumns[$i] == "id_agendas_tipos"){
@@ -1464,10 +1575,11 @@ if ($cant_registros != 0){
 					$row[4] = utf8_encode($aRow['tarea']);
 					$row[5] = utf8_encode($aRow['especialista']);
 					$row[6] = utf8_encode($aRow['observaciones']);
+					$row[7] = utf8_encode($mantenimientos_estados);
                     if ($tabla == 'mantenimhistoricos') {
-                        $row[7] = '';
+                        $row[8] = '';
                     } else {
-                        $row[7] = $editar.''.$eliminar.'';
+                        $row[8] = $editar.''.$eliminar.'';
                     }
 				break;
 
