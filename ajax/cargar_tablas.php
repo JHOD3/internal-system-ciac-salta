@@ -18,7 +18,9 @@ requerir_class(
     'sectores',
     'subsectores',
     'agendas',
-    'agendas_tipos'
+    'agendas_tipos',
+    'mantenimientos',
+    'mantenimhistoricos'
 );
 
 $tabla = $_GET["tabla"];
@@ -91,6 +93,10 @@ switch ($tabla){
 	break;
 	case "agendas":
 		$aColumns = array('id_agendas','nombre','apellido','rubro','celular','telefono','direccion','id_agendas_tipos');
+	break;
+	case "mantenimientos":
+    case "mantenimhistoricos":
+		$aColumns = array('id_mantenimientos','fecha','id_sectores','solicitador','tarea','especialista','observaciones','estado');
 	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
@@ -562,6 +568,7 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 						break;
 				break;
                 case 'subsectores':
+                case 'mantenimientos':
 					switch($aColumns[$i]){
 						case "id_sectores":
 							$obj = new Sectores();
@@ -1447,6 +1454,21 @@ if ($cant_registros != 0){
 					$row[6] = utf8_encode($aRow['direccion']);
 					$row[7] = utf8_encode($agenda_tipo);
                     $row[8] = $editar.''.$eliminar.'';
+				break;
+				case 'mantenimientos':
+                case 'mantenimhistoricos':
+					$row[0] = $aRow["id_mantenimientos"];
+					$row[1] = utf8_encode(date("d/m/Y H:i", strtotime($aRow['fecha']))."hs");
+					$row[2] = utf8_encode($sector);
+					$row[3] = utf8_encode($aRow['solicitador']);
+					$row[4] = utf8_encode($aRow['tarea']);
+					$row[5] = utf8_encode($aRow['especialista']);
+					$row[6] = utf8_encode($aRow['observaciones']);
+                    if ($tabla == 'mantenimhistoricos') {
+                        $row[7] = '';
+                    } else {
+                        $row[7] = $editar.''.$eliminar.'';
+                    }
 				break;
 
 			}

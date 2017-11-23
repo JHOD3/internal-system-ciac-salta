@@ -1,0 +1,91 @@
+
+			<script type="text/javascript">
+				var oTable;
+				var asInitVals = new Array();
+
+				$(document).ready(function(){
+					oTable = $("#t_mantenimientos").dataTable( {
+						//"bProcessing": true,
+						//"bServerSide": true,
+						//"sAjaxSource": "[AJAX_SRC]",
+						//"aaSorting": [[1, "desc" ],[0, "desc" ]], //argumentos posibles: asc o desc
+						"aaSorting": [[0, "desc" ]], //argumentos posibles: asc o desc
+						"bAutoWidth": false,
+						"sPaginationType": "full_numbers",
+						"aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
+						"oLanguage": {
+							"sProcessing": "Procesando...",
+							"sSearch": "Buscar en todas las Columnas:",
+							"sLengthMenu": "Mostrar _MENU_ registros por hoja",
+							"sZeroRecords": "No se encontraron registros cargados",
+							"sInfo": "Mostrando _START_ a _END_ registros de un total de _TOTAL_ registros",
+							"sInfoEmpty": "Mostrando 0 registro",
+							"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+							"oPaginate": {
+								"sFirst":    "Primero",
+								"sPrevious": "Anterior",
+								"sNext":     "Siguiente",
+								"sLast":     "&Uacute;ltimo"
+							},
+						}
+					});
+					$("tfoot input").keyup( function () {
+						//CAMBIE ESTO PARA QUE ME TOME LA BUSQUEDA CORRECTAMENTE CON COLUMNAS OCULTAS... AGREGUE A LAS COLUMNAS DEL PIE EL ATRIBUTO ID, ej. id="i-0"  http://datatables.net/forums/discussion/2864/x#Item_3
+						var id = $(this).attr("id").split("-")[1];
+						oTable.fnFilter( this.value, id);
+					});
+					$("tfoot input").each( function (i) {
+						asInitVals[i] = this.value;
+					});
+					$("tfoot input").focus( function () {
+						if ( this.className == "search_init" ){
+							this.className = "";
+							this.value = "";
+						}
+					});
+					$("tfoot input").blur( function (i) {
+						if ( this.value == "" ){
+							this.className = "search_init";
+							this.value = asInitVals[$("tfoot input").index(this)];
+						}
+					});
+				});
+			</script>
+
+			<table id="t_mantenimientos" class="display ex_highlight_row">
+    			<thead>
+					<tr>
+						<th>ID</th>
+                        <th>Ultima modificaci&oacute;n</th>
+                        <th>Sector</th>
+                        <th>Solicitador</th>
+                        <th>Tarea</th>
+                        <th>Especialista</th>
+                        <th>Observaciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					[block: block_registros]
+					<tr>
+						<td class="id">[id_mantenimientos]</td>
+						<td>[fecha]</td>
+						<td>[id_sector]</td>
+						<td>[solicitador]</td>
+						<td>[tarea]</td>
+						<td>[especialista]</td>
+						<td>[observaciones]</td>
+					</tr>
+					[/block: block_registros]
+				</tbody>
+				<tfoot>
+					<tr>
+						<th><input type="text" id="i-0" name="tb_id" value="Buscar ID" class="search_init" /></th>
+						<th><input type="text" id="i-1" name="tb_fecha" value="Buscar Fecha" class="search_init" /></th>
+						<th><input type="text" id="i-1" name="tb_id_sector" value="Buscar Sector" class="search_init" /></th>
+						<th><input type="text" id="i-1" name="tb_solicitador" value="Buscar Solicitador" class="search_init" /></th>
+						<th><input type="text" id="i-1" name="tb_tarea" value="Buscar Tarea" class="search_init" /></th>
+						<th><input type="text" id="i-1" name="tb_especialista" value="Buscar Especialista" class="search_init" /></th>
+						<th><input type="text" id="i-1" name="tb_observaciones" value="Buscar Observaciones" class="search_init" /></th>
+					</tr>
+				</tfoot>
+			</table>

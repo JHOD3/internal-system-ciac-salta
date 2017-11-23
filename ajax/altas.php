@@ -856,6 +856,63 @@ SQL;
 			$rta = false;
 
 	break;
+	case "mantenimientos":
+		parse_str(stripslashes($datos));
+
+		$columnas = "(
+					fecha,
+                    id_sectores,
+                    solicitador,
+                    tarea,
+                    especialista,
+                    observaciones,
+                    estado
+		)";
+
+		if (!isset($sectores) || $sectores == "")
+			$sectores = 0;
+
+		$valores = "(
+					'".date("Y-m-d H:i:s")."',
+					'".$sectores."',
+					'".utf8_decode(upper($solicitador))."',
+					'".utf8_decode(upper($tarea))."',
+					'".utf8_decode(upper($especialista))."',
+					'".utf8_decode(upper($observaciones))."',
+                    1
+		)";
+
+		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+		if ($obj->db->consulta($query_string)) {
+			$rta = $obj->db->ultimo_id_insertado();
+    		$columnas = "(
+                        id_mantenimientos,
+    					fecha,
+                        id_sectores,
+                        solicitador,
+                        tarea,
+                        especialista,
+                        observaciones,
+                        estado
+			)";
+    		$valores = "(
+    					'".$rta."',
+    					'".date("Y-m-d H:i:s")."',
+    					'".$sectores."',
+    					'".utf8_decode(upper($solicitador))."',
+    					'".utf8_decode(upper($tarea))."',
+    					'".utf8_decode(upper($especialista))."',
+    					'".utf8_decode(upper($observaciones))."',
+                        1
+			)";
+    		$query_string2 = $obj->querys->Alta('mantenimhistoricos', $columnas, $valores);
+    		$obj->db->consulta($query_string2);
+        } else {
+			$rta = false;
+        }
+
+	break;
 
 }
 echo $rta;

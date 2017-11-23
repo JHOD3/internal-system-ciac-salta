@@ -414,6 +414,52 @@ switch ($tabla){
 			$rta = false;
 
 	break;
+	case "mantenimientos":
+		parse_str(stripslashes($datos));
+
+		if (!isset($sectores) || $sectores == "")
+			$sectores = 0;
+
+		$asignaciones = "
+                    fecha = '".date("Y-m-d H:i:s")."',
+					id_sectores = '".$sectores."',
+					solicitador = '".utf8_decode(upper($solicitador))."',
+					tarea = '".utf8_decode(upper($tarea))."',
+					especialista = '".utf8_decode(upper($especialista))."',
+					observaciones = '".utf8_decode(upper($observaciones))."'
+					";
+
+        $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
+
+		if ($obj->db->consulta($query_string)) {
+			$rta = true;
+    		$columnas = "(
+                        id_mantenimientos,
+    					fecha,
+                        id_sectores,
+                        solicitador,
+                        tarea,
+                        especialista,
+                        observaciones,
+                        estado
+			)";
+    		$valores = "(
+    					'".$id."',
+    					'".date("Y-m-d H:i:s")."',
+    					'".$sectores."',
+    					'".utf8_decode(upper($solicitador))."',
+    					'".utf8_decode(upper($tarea))."',
+    					'".utf8_decode(upper($especialista))."',
+    					'".utf8_decode(upper($observaciones))."',
+                        1
+			)";
+    		$query_string2 = $obj->querys->Alta('mantenimhistoricos', $columnas, $valores);
+    		$obj->db->consulta($query_string2);
+        } else {
+			$rta = false;
+        }
+
+	break;
 
 }
 echo $rta;

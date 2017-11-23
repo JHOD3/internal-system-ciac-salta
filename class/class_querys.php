@@ -101,15 +101,17 @@ class Querys implements iQuerys{
 			case "obras_sociales":
 			case "medicos_especialidades":
 			case "medicos_horarios":
-			case 'medicos_estudios':
-			case 'obras_sociales_estudios':
-			case 'obras_sociales_planes':
-			case 'medicos_obras_sociales':
-			case 'horarios_inhabilitados':
+			case "medicos_estudios":
+			case "obras_sociales_estudios":
+			case "obras_sociales_planes":
+			case "medicos_obras_sociales":
+			case "horarios_inhabilitados":
 			case "turnos_cambios_estados":
             case "sectores":
             case "subsectores":
             case "agendas":
+            case "mantenimientos":
+            case "mantenimhistoricos":
 				$query = "INSERT INTO ".$tabla." ".$columnas." VALUES ".$valores;
 			break;
 			case "medicos_cancelaciones":
@@ -140,17 +142,18 @@ class Querys implements iQuerys{
 			case "pacientes":
 			case "medicos":
 			case "medicosext":
-			case 'medicos_horarios':
-			case 'medicos_estudios':
-			case 'medicos_obras_sociales':
-			case 'especialidades':
+			case "medicos_horarios":
+			case "medicos_estudios":
+			case "medicos_obras_sociales":
+			case "especialidades":
 			case "estudios":
 			case "obras_sociales":
-			case 'obras_sociales_estudios':
-			case 'obras_sociales_planes':
-            case 'sectores':
-            case 'subsectores':
-            case 'agendas':
+			case "obras_sociales_estudios":
+			case "obras_sociales_planes":
+            case "sectores":
+            case "subsectores":
+            case "agendas":
+            case "mantenimientos":
 				$query = "UPDATE ".$tabla." SET ".$asignacion." WHERE id_".$tabla." = ".$id;
 			break;
 		}
