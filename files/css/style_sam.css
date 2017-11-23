@@ -18,6 +18,7 @@ body#sam{
                 color: #555;
 				font-size:0.8em;
 				background:url(../img/logo_clarito.png) center 80% no-repeat;
+                padding-bottom: 50px;
                 }
 
 #body-wrapper {
