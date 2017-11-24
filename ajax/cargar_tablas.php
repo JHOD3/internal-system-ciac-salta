@@ -1168,7 +1168,7 @@ if ($tabla == 'medicosexp') {
                              GROUP BY `tt`.`id_turnos`) `t`
                           GROUP BY `t`.`id_medicos`
                           ORDER BY `minutos` DESC) `ty` on((`tx`.`id_medicos` = `ty`.`id_medicos`)))
-                      JOIN `medicos` `m` on((`m`.`id_medicos` = `tx`.`id_medicos`)))
+                      JOIN `medicos` `m` on(`m`.`id_medicos` = `tx`.`id_medicos` AND `m`.`estado` = 1))
                 JOIN
                   (
                     SELECT
