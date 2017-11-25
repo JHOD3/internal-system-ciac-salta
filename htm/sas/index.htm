@@ -246,8 +246,8 @@
             </div>
             <div class="span4">
                 <input id="dni" type="text" onkeypress="return SoloNros(event)" placeHolder="Paciente" style="width: 130px!important;min-width:0px!important;" class="closeMenu"/>
-                <a href="#" id="btn_buscar_paciente" class="btn">Buscar</a>
-                <a href="#" class="btn btn_tabla" data-nombre="pacientes">Nuevo</a>
+                <a href="#" id="btn_buscar_paciente" class="btn btn-success">Buscar</a>
+                <a href="#" class="btn btn-info btn_tabla" data-nombre="pacientes">Nuevo</a>
             </div>
 
         </div>
@@ -278,7 +278,7 @@
                             [DROP_MEDICOS]
                             Desde: <input type="text" name="desde" value="[DATE_DESDE]" style="width:150px;" class="datepicker" />
                             Hasta: <input type="text" name="hasta" value="[DATE_HASTA]" style="width:150px;" class="datepicker" />
-                            <input type="submit" value="ok"/>
+                            <input type="submit" value="ok" class="btn btn-success" />
                         </form>
 
 [ESTADISTICAS_GRAPH]
@@ -297,6 +297,7 @@ if ([TOT_NUMROWS] > 0) {
         var options = {
             title: 'TURNOS OTORGADOS TOTALES\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
             legend: {position: 'none'},
+            chartArea:{top:80, height:"100%"},
         };
         var chart = new google.visualization.BarChart(document.getElementById('bar1chart'));
         chart.draw(dataBar1, options);
@@ -313,6 +314,7 @@ if ([TPD_NUMROWS] > 0) {
         var options = {
             title: 'TURNOS OTORGADOS POR DÍA\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
             legend: {position: 'none'},
+            chartArea:{top:80, height:"100%"},
         };
         var chart = new google.visualization.LineChart(document.getElementById('linechart'));
         chart.draw(dataLine, options);
@@ -329,6 +331,7 @@ if ([TPM_NUMROWS] > 0) {
         var options = {
             title: 'TURNOS POR MEDICOS\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
             legend: {position: 'none'},
+            chartArea:{top:80, height:"100%"},
         };
         var chart = new google.visualization.BarChart(document.getElementById('bar2chart'));
         chart.draw(dataBar2, options);
@@ -345,6 +348,7 @@ if ([OST_NUMROWS] > 0) {
         var options = {
             title: 'TURNOS OTORGADOS POR OBRA SOCIAL\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
             legend: {position: 'none'},
+            chartArea:{top:80, height:"100%"},
         };
         var chart = new google.visualization.BarChart(document.getElementById('bar3chart'));
         chart.draw(dataBar3, options);
@@ -361,6 +365,7 @@ if ([EST_NUMROWS] > 0) {
         var options = {
             title: 'TURNOS OTORGADOS POR ESTUDIOS REALIZADOS\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
             legend: {position: 'none'},
+            chartArea:{top:80, height:"100%"},
         };
         var chart = new google.visualization.BarChart(document.getElementById('bar4chart'));
         chart.draw(dataBar4, options);
@@ -377,6 +382,7 @@ if ([ENC_NUMROWS] > 0) {
         var options = {
             title: 'CONTANOS DÓNDE NOS CONOCISTE | TURNERO WEB\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
             legend: {position: 'none'},
+            chartArea:{top:80, height:"100%"},
         };
         var chart = new google.visualization.BarChart(document.getElementById('bar5chart'));
         chart.draw(dataBar5, options);
@@ -393,21 +399,68 @@ if ([DER_NUMROWS] > 0) {
         var options = {
             title: 'DERIVACIONES POR MÉDICOS\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
             legend: {position: 'none'},
+            chartArea:{top:80, height:"100%"},
         };
         var chart = new google.visualization.BarChart(document.getElementById('bar6chart'));
         chart.draw(dataBar6, options);
+
+        /**********************************************************************/
+        /**********************************************************************/
+        /*CARGAR TABS CUANDO SE CARGUEN LOS GRÁFICOS***************************/
+        $("#tabs").tabs().attr(
+            'style',
+            'position:absolute;left:0;width:100%;height:100%;visibility:show;'
+        );
+        /**********************************************************************/
+        /**********************************************************************/
+        /**********************************************************************/
     }
 }
 
 </script>
-<div style="position:absolute;left:0;width:100%;">
-<div id="bar1chart" style="width: 100%; height: [TOT_NUMROWS]px;"></div>
-<div id="linechart" style="width: 100%; height: 280px;"></div>
-<div id="bar2chart" style="width: 100%; height: [TPM_NUMROWS]px;"></div>
-<div id="bar3chart" style="width: 100%; height: [OST_NUMROWS]px;"></div>
-<div id="bar4chart" style="width: 100%; height: [EST_NUMROWS]px;"></div>
-<div id="bar5chart" style="width: 100%; height: [ENC_NUMROWS]px;"></div>
-<div id="bar6chart" style="width: 100%; height: [DER_NUMROWS]px;"></div>
+<style>
+#tabs .ui-state-active a,
+#tabs .ui-state-active a:link,
+#tabs .ui-state-active a:visited{
+    color: #ffffff!important;
+}
+#tabs .ui-state-active,
+#tabs .ui-widget-content .ui-state-active,
+#tabs .ui-widget-header .ui-state-active{
+    background:#008a47!important;
+}
+</style>
+<div id="tabs" style="position:absolute;left:0;width:100%;height:100%;visibility:hidden;">
+  <ul>
+    <li><a href="#tabs-1">TURNOS<br />OTORGADOS<br />TOTALES</a></li>
+    <li><a href="#tabs-2">TURNOS<br />OTORGADOS<br />POR DÍA</a></li>
+    <li><a href="#tabs-3">TURNOS<br />POR<br />MEDICOS</a></li>
+    <li><a href="#tabs-4">TURNOS<br />OTORGADOS<br />POR OBRA SOCIAL</a></li>
+    <li><a href="#tabs-5">TURNOS<br />OTORGADOS<br />POR ESTUDIOS REALIZADOS</a></li>
+    <li><a href="#tabs-6">CONTANOS DÓNDE<br />NOS CONOCISTE<br />TURNERO WEB</a></li>
+    <li><a href="#tabs-7">DERIVACIONES<br />POR<br />MÉDICOS</a></li>
+  </ul>
+  <div id="tabs-1">
+    <div id="bar1chart" style="width: 100%!important; height: [TOT_NUMROWS]px;!important;"></div>
+  </div>
+  <div id="tabs-2">
+    <div id="linechart" style="width: 100%!important; height: [TPD_NUMROWS]px;!important;"></div>
+  </div>
+  <div id="tabs-3">
+    <div id="bar2chart" style="width: 100%!important; height: [TPM_NUMROWS]px;!important;"></div>
+  </div>
+  <div id="tabs-4">
+    <div id="bar3chart" style="width: 100%!important; height: [OST_NUMROWS]px;!important;"></div>
+  </div>
+  <div id="tabs-5">
+    <div id="bar4chart" style="width: 100%!important; height: [EST_NUMROWS]px;!important;"></div>
+  </div>
+  <div id="tabs-6">
+    <div id="bar5chart" style="width: 100%!important; height: [ENC_NUMROWS]px;!important;"></div>
+  </div>
+  <div id="tabs-7">
+    <div id="bar6chart" style="width: 100%!important; height: [DER_NUMROWS]px;!important;"></div>
+  </div>
 </div>
                     </div>
                     <div class="span3 contenedor" id="habilitar_inhabilitar" >

@@ -66,26 +66,26 @@ if ($_GET['id_medicos']) {
     $htm_index->Asigna("EST_NUMROWS", 0);
 } else {
     $dataTOT = $obj_estructura->obtTurnosOtorgadosTotales($d, $h, $_SESSION['ID_USUARIO']);
-    $dataTPM = $obj_estructura->obtTurnosPorMedicos($d, $h, $_SESSION['ID_USUARIO']);
     $dataTPD = $obj_estructura->obtTurnosOtorgadosPorDia($d, $h, $_SESSION['ID_USUARIO']);
+    $dataTPM = $obj_estructura->obtTurnosPorMedicos($d, $h, $_SESSION['ID_USUARIO']);
     $dataOST = $obj_estructura->obtTurnosOtorgadosPorOS($d, $h, $_SESSION['ID_USUARIO']);
     $dataEST = $obj_estructura->obtTurnosOtorgadosPorEST($d, $h, $_SESSION['ID_USUARIO']);
     $dataENC = $obj_estructura->obtTurnosOtorgadosPorENC($d, $h, $_SESSION['ID_USUARIO']);
     $dataDER = $obj_estructura->obtTurnosOtorgadosPorDER($d, $h, $_SESSION['ID_USUARIO']);
     $htm_index->Asigna("TOT", $dataTOT[0]);
-    $htm_index->Asigna("TPM", $dataTPM[0]);
     $htm_index->Asigna("TPD", $dataTPD[0]);
+    $htm_index->Asigna("TPM", $dataTPM[0]);
     $htm_index->Asigna("OST", $dataOST[0]);
     $htm_index->Asigna("EST", $dataEST[0]);
     $htm_index->Asigna("ENC", $dataENC[0]);
     $htm_index->Asigna("DER", $dataDER[0]);
-    $htm_index->Asigna("TOT_NUMROWS", 100 + ($dataTOT[1] * 40));
-    $htm_index->Asigna("TPM_NUMROWS", 100 + ($dataOST[1] * 40));
-    $htm_index->Asigna("TPD_NUMROWS", 100 + ($dataOST[1] * 40));
-    $htm_index->Asigna("OST_NUMROWS", 100 + ($dataOST[1] * 40));
-    $htm_index->Asigna("EST_NUMROWS", 100 + ($dataEST[1] * 40));
-    $htm_index->Asigna("ENC_NUMROWS", 200);
-    $htm_index->Asigna("DER_NUMROWS", 100 + ($dataEST[1] * 40));
+    $htm_index->Asigna("TOT_NUMROWS", 80 + ($dataTOT[1] * 41));
+    $htm_index->Asigna("TPD_NUMROWS", 80 + (6 * 41));
+    $htm_index->Asigna("TPM_NUMROWS", 80 + ($dataTPM[1] * 41));
+    $htm_index->Asigna("OST_NUMROWS", 80 + ($dataOST[1] * 41));
+    $htm_index->Asigna("EST_NUMROWS", 80 + ($dataEST[1] * 41));
+    $htm_index->Asigna("ENC_NUMROWS", 80 + (4 * 41));
+    $htm_index->Asigna("DER_NUMROWS", 80 + ($dataDER[1] * 41));
 
     $htm_index->Asigna("ESTADISTICAS_GRAPH", '');
     $htm_index->Asigna("get_id_medicos", '');
