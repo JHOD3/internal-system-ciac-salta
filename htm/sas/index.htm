@@ -295,9 +295,9 @@ if ([TOT_NUMROWS] > 0) {
             [TOT]
         ]);
         var options = {
-            title: 'TURNOS OTORGADOS TOTALES\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            title: '',
             legend: {position: 'none'},
-            chartArea:{top:80, height:"100%"},
+            chartArea:{top:10, height:"100%"},
         };
         var chart = new google.visualization.BarChart(document.getElementById('bar1chart'));
         chart.draw(dataBar1, options);
@@ -312,9 +312,9 @@ if ([TPD_NUMROWS] > 0) {
             [TPD]
         ]);
         var options = {
-            title: 'TURNOS OTORGADOS POR DÍA\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            title: '',
             legend: {position: 'none'},
-            chartArea:{top:80, height:"100%"},
+            chartArea:{top:10, height:"100%"},
         };
         var chart = new google.visualization.LineChart(document.getElementById('linechart'));
         chart.draw(dataLine, options);
@@ -329,9 +329,9 @@ if ([TPM_NUMROWS] > 0) {
             [TPM]
         ]);
         var options = {
-            title: 'TURNOS POR MEDICOS\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            title: '',
             legend: {position: 'none'},
-            chartArea:{top:80, height:"100%"},
+            chartArea:{top:10, height:"100%"},
         };
         var chart = new google.visualization.BarChart(document.getElementById('bar2chart'));
         chart.draw(dataBar2, options);
@@ -346,9 +346,9 @@ if ([OST_NUMROWS] > 0) {
             [OST]
         ]);
         var options = {
-            title: 'TURNOS OTORGADOS POR OBRA SOCIAL\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            title: '',
             legend: {position: 'none'},
-            chartArea:{top:80, height:"100%"},
+            chartArea:{top:10, height:"100%"},
         };
         var chart = new google.visualization.BarChart(document.getElementById('bar3chart'));
         chart.draw(dataBar3, options);
@@ -363,9 +363,9 @@ if ([EST_NUMROWS] > 0) {
             [EST]
         ]);
         var options = {
-            title: 'TURNOS OTORGADOS POR ESTUDIOS REALIZADOS\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            title: '',
             legend: {position: 'none'},
-            chartArea:{top:80, height:"100%"},
+            chartArea:{top:10, height:"100%"},
         };
         var chart = new google.visualization.BarChart(document.getElementById('bar4chart'));
         chart.draw(dataBar4, options);
@@ -380,9 +380,9 @@ if ([ENC_NUMROWS] > 0) {
             [ENC]
         ]);
         var options = {
-            title: 'CONTANOS DÓNDE NOS CONOCISTE | TURNERO WEB\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            title: '',
             legend: {position: 'none'},
-            chartArea:{top:80, height:"100%"},
+            chartArea:{top:10, height:"100%"},
         };
         var chart = new google.visualization.BarChart(document.getElementById('bar5chart'));
         chart.draw(dataBar5, options);
@@ -397,9 +397,9 @@ if ([DER_NUMROWS] > 0) {
             [DER]
         ]);
         var options = {
-            title: 'DERIVACIONES POR MÉDICOS\nDesde [DATE_DESDE] Hasta [DATE_HASTA]',
+            title: '',
             legend: {position: 'none'},
-            chartArea:{top:80, height:"100%"},
+            chartArea:{top:10, height:"100%"},
         };
         var chart = new google.visualization.BarChart(document.getElementById('bar6chart'));
         chart.draw(dataBar6, options);

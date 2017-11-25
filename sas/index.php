@@ -79,13 +79,13 @@ if ($_GET['id_medicos']) {
     $htm_index->Asigna("EST", $dataEST[0]);
     $htm_index->Asigna("ENC", $dataENC[0]);
     $htm_index->Asigna("DER", $dataDER[0]);
-    $htm_index->Asigna("TOT_NUMROWS", 80 + ($dataTOT[1] * 41));
-    $htm_index->Asigna("TPD_NUMROWS", 80 + (6 * 41));
-    $htm_index->Asigna("TPM_NUMROWS", 80 + ($dataTPM[1] * 41));
-    $htm_index->Asigna("OST_NUMROWS", 80 + ($dataOST[1] * 41));
-    $htm_index->Asigna("EST_NUMROWS", 80 + ($dataEST[1] * 41));
-    $htm_index->Asigna("ENC_NUMROWS", 80 + (4 * 41));
-    $htm_index->Asigna("DER_NUMROWS", 80 + ($dataDER[1] * 41));
+    $htm_index->Asigna("TOT_NUMROWS", 10 + ($dataTOT[1] * 41));
+    $htm_index->Asigna("TPD_NUMROWS", 10 + (6 * 41));
+    $htm_index->Asigna("TPM_NUMROWS", 10 + ($dataTPM[1] * 41));
+    $htm_index->Asigna("OST_NUMROWS", 10 + ($dataOST[1] * 41));
+    $htm_index->Asigna("EST_NUMROWS", 10 + ($dataEST[1] * 41));
+    $htm_index->Asigna("ENC_NUMROWS", 10 + (4 * 41));
+    $htm_index->Asigna("DER_NUMROWS", 10 + ($dataDER[1] * 41));
 
     $htm_index->Asigna("ESTADISTICAS_GRAPH", '');
     $htm_index->Asigna("get_id_medicos", '');
