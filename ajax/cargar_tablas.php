@@ -1120,7 +1120,8 @@ if ( $sWhere == "" ){
     if (
         $tabla != 'sectores' and
         $tabla != 'subsectores' and
-        $tabla != 'medicosexp'
+        $tabla != 'medicosexp' and
+        $tabla != 'encuestas'
     ) {
     		$sWhere = "WHERE $pfTable.estado = 1";
     }
@@ -1128,7 +1129,8 @@ if ( $sWhere == "" ){
     if (
         $tabla != 'sectores' and
         $tabla != 'subsectores' and
-        $tabla != 'medicosexp'
+        $tabla != 'medicosexp' and
+        $tabla != 'encuestas'
     ) {
     	$sWhere = $sWhere.") AND $pfTable.estado = 1";
     } else {
