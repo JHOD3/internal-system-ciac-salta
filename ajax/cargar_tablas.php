@@ -22,7 +22,8 @@ requerir_class(
     'mantenimientos',
     'mantenimhistoricos',
     'mantenimientosestados',
-    'usuarios'
+    'usuarios',
+    'encuestas'
 );
 
 $tabla = $_GET["tabla"];
@@ -99,6 +100,9 @@ switch ($tabla){
 	case "mantenimientos":
     case "mantenimhistoricos":
 		$aColumns = array('id_mantenimientos','fecha','id_sectores','solicitador','tarea','especialista','observaciones','id_mantenimientos_estados','id_usuarios');
+	break;
+	case "encuestas":
+		$aColumns = array('er.id_encuestas_respuestas','t.fecha_alta','t.hora_alta','paciente','respuesta1','respuesta2','medico','especialidad');
 	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
@@ -1074,6 +1078,34 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
 				}
 			break;
+            case 'encuestas':
+				switch($aColumns[$i]){
+					case "paciente":
+        				$buscar = $_GET['sSearch_'.$i];
+        				$sWhere .= "CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres)) LIKE '%".$buscar."%' ";
+                    break;
+					case "respuesta1":
+        				$buscar = $_GET['sSearch_'.$i];
+        				$sWhere .= "ep.pregunta LIKE '%".$buscar."%' ";
+                    break;
+					case "respuesta2":
+        				$buscar = $_GET['sSearch_'.$i];
+        				$sWhere .= "era.respuesta LIKE '%".$buscar."%' ";
+                    break;
+					case "medico":
+        				$buscar = $_GET['sSearch_'.$i];
+        				$sWhere .= "CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres) LIKE '%".$buscar."%' ";
+                    break;
+					case "especialidad":
+        				$buscar = $_GET['sSearch_'.$i];
+        				$sWhere .= "e.nombre LIKE '%".$buscar."%' ";
+                    break;
+                    default:
+        				$buscar = $_GET['sSearch_'.$i];
+        				$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
+                    break;
+                }
+            break;
 			default:
 				$buscar = $_GET['sSearch_'.$i];
 				$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
@@ -1109,95 +1141,141 @@ if ( $sWhere == "" ){
  * SQL queries
  * Get data to display
  */
-if ($tabla == 'medicosexp') {
-    $mes = date("Y-m-", strtotime("-1 month"));
-    $sQuery = <<<SQL
-        SELECT *
-        FROM
-            (
-                SELECT `m`.`id_medicos` AS `id_medicosexp`,
-                       `m`.`saludo` AS `saludo`,
-                       `m`.`apellidos` AS `apellidos`,
-                       `m`.`nombres` AS `nombres`,
-                       `ty`.`turnos` AS `turnos_turnos`,
-                       (`tx`.`turnos` - `ty`.`turnos`) AS `turnos_sobreturnos`,
-                       `tx`.`turnos` AS `turnos_total`,
-                       `ty`.`minutos` AS `minutos_turnos`,
-                       (`tx`.`minutos` - `ty`.`minutos`) AS `minutos_sobreturnos`,
-                       `tx`.`minutos` AS `minutos_total`,
-                       `ty`.`horas` AS `horas_turnos`,
-                       (`tx`.`horas` - `ty`.`horas`) AS `horas_sobreturnos`,
-                       `tx`.`horas` AS `horas_total`,
-                       `my`.`minutos_horario`,
-                       `my`.`horas_horario`,
-                       `m`.`estado` AS `estado`
-                FROM (((
-                          (SELECT `t`.`id_medicos` AS `id_medicos`,
-                                  count(`t`.`id_turnos`) AS `turnos`,
-                                  floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 60))) AS `minutos`,
-                                  floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 3600))) AS `horas`
-                           FROM `turnos` `t`
-                           WHERE ((`t`.`fecha` LIKE '{$mes}%')
-                                  AND (`t`.`estado` = 1)
-                                  AND (`t`.`id_turnos_estados` IN (1,
-                                                                   2,
-                                                                   7)))
-                           GROUP BY `t`.`id_medicos`)) `tx`
-                       JOIN
-                         (SELECT `t`.`id_medicos` AS `id_medicos`,
-                                 count(`t`.`id_turnos`) AS `turnos`,
-                                 floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 60))) AS `minutos`,
-                                 floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 3600))) AS `horas`
-                          FROM
-                            (SELECT `tt`.`id_turnos` AS `id_turnos`,
-                                    `tt`.`id_medicos` AS `id_medicos`,
-                                    `tt`.`fecha` AS `fecha`,
-                                    `tt`.`desde` AS `desde`,
-                                    `tt`.`hasta` AS `hasta`,
-                                    `tt`.`estado` AS `estado`
-                             FROM (`turnos` `tt`
-                                   JOIN `medicos_horarios` `mh` on(((`tt`.`id_medicos` = `mh`.`id_medicos`)
-                                                                    AND (`mh`.`estado` = 1)
-                                                                    AND (dayofweek(`tt`.`fecha`) = `mh`.`id_dias_semana`)
-                                                                    AND (`tt`.`desde` BETWEEN `mh`.`desde` AND `mh`.`hasta`))))
-                             WHERE ((`tt`.`fecha` LIKE '{$mes}%')
-                                    AND (`tt`.`estado` = 1)
-                                    AND (`tt`.`id_turnos_estados` IN (1,
-                                                                      2,
-                                                                      7)))
-                             GROUP BY `tt`.`id_turnos`) `t`
-                          GROUP BY `t`.`id_medicos`
-                          ORDER BY `minutos` DESC) `ty` on((`tx`.`id_medicos` = `ty`.`id_medicos`)))
-                      JOIN `medicos` `m` on(`m`.`id_medicos` = `tx`.`id_medicos` AND `m`.`estado` = 1))
-                JOIN
-                  (
-                    SELECT
-                    		`mh`.`id_medicos`,
-                    		floor(sum(timestampdiff(SECOND,CONCAT('2017-10-01 ',`mh`.`desde`),CONCAT('2017-10-01 ',`mh`.`hasta`)) / 60) * truncate((datediff(STR_TO_DATE('20171130', '%Y%m%d'),STR_TO_DATE('20171101', '%Y%m%d')) - Weekday(date_add(STR_TO_DATE('20171130', '%Y%m%d'), interval(-`mh`.`id_dias_semana` + 1)day)) + 7) / 7, 0)) AS `minutos_horario`,
-                    		floor(sum(timestampdiff(SECOND,CONCAT('2017-10-01 ',`mh`.`desde`),CONCAT('2017-10-01 ',`mh`.`hasta`)) / 3600) * truncate((datediff(STR_TO_DATE('20171130', '%Y%m%d'),STR_TO_DATE('20171101', '%Y%m%d')) - Weekday(date_add(STR_TO_DATE('20171130', '%Y%m%d'), interval(-`mh`.`id_dias_semana` + 1)day)) + 7) / 7, 0)) AS `horas_horario`
-                    FROM `medicos_horarios` `mh`
-                    WHERE
-                    		`mh`.`estado` = 1
-                    GROUP BY
-                    	`mh`.`id_medicos`
-                  ) AS `my`
-                  ON
-                    `m`.`id_medicos` = `my`.`id_medicos`
-            ) AS `mx`
+switch ($tabla) {
+    case 'medicosexp':
+        $mes = date("Y-m-", strtotime("-1 month"));
+        $sQuery = <<<SQL
+            SELECT
+                SQL_CALC_FOUND_ROWS
+                *
+            FROM
+                (
+                    SELECT `m`.`id_medicos` AS `id_medicosexp`,
+                           `m`.`saludo` AS `saludo`,
+                           `m`.`apellidos` AS `apellidos`,
+                           `m`.`nombres` AS `nombres`,
+                           `ty`.`turnos` AS `turnos_turnos`,
+                           (`tx`.`turnos` - `ty`.`turnos`) AS `turnos_sobreturnos`,
+                           `tx`.`turnos` AS `turnos_total`,
+                           `ty`.`minutos` AS `minutos_turnos`,
+                           (`tx`.`minutos` - `ty`.`minutos`) AS `minutos_sobreturnos`,
+                           `tx`.`minutos` AS `minutos_total`,
+                           `ty`.`horas` AS `horas_turnos`,
+                           (`tx`.`horas` - `ty`.`horas`) AS `horas_sobreturnos`,
+                           `tx`.`horas` AS `horas_total`,
+                           `my`.`minutos_horario`,
+                           `my`.`horas_horario`,
+                           `m`.`estado` AS `estado`
+                    FROM (((
+                              (SELECT `t`.`id_medicos` AS `id_medicos`,
+                                      count(`t`.`id_turnos`) AS `turnos`,
+                                      floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 60))) AS `minutos`,
+                                      floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 3600))) AS `horas`
+                               FROM `turnos` `t`
+                               WHERE ((`t`.`fecha` LIKE '{$mes}%')
+                                      AND (`t`.`estado` = 1)
+                                      AND (`t`.`id_turnos_estados` IN (1,
+                                                                       2,
+                                                                       7)))
+                               GROUP BY `t`.`id_medicos`)) `tx`
+                           JOIN
+                             (SELECT `t`.`id_medicos` AS `id_medicos`,
+                                     count(`t`.`id_turnos`) AS `turnos`,
+                                     floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 60))) AS `minutos`,
+                                     floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 3600))) AS `horas`
+                              FROM
+                                (SELECT `tt`.`id_turnos` AS `id_turnos`,
+                                        `tt`.`id_medicos` AS `id_medicos`,
+                                        `tt`.`fecha` AS `fecha`,
+                                        `tt`.`desde` AS `desde`,
+                                        `tt`.`hasta` AS `hasta`,
+                                        `tt`.`estado` AS `estado`
+                                 FROM (`turnos` `tt`
+                                       JOIN `medicos_horarios` `mh` on(((`tt`.`id_medicos` = `mh`.`id_medicos`)
+                                                                        AND (`mh`.`estado` = 1)
+                                                                        AND (dayofweek(`tt`.`fecha`) = `mh`.`id_dias_semana`)
+                                                                        AND (`tt`.`desde` BETWEEN `mh`.`desde` AND `mh`.`hasta`))))
+                                 WHERE ((`tt`.`fecha` LIKE '{$mes}%')
+                                        AND (`tt`.`estado` = 1)
+                                        AND (`tt`.`id_turnos_estados` IN (1,
+                                                                          2,
+                                                                          7)))
+                                 GROUP BY `tt`.`id_turnos`) `t`
+                              GROUP BY `t`.`id_medicos`
+                              ORDER BY `minutos` DESC) `ty` on((`tx`.`id_medicos` = `ty`.`id_medicos`)))
+                          JOIN `medicos` `m` on(`m`.`id_medicos` = `tx`.`id_medicos` AND `m`.`estado` = 1))
+                    JOIN
+                      (
+                        SELECT
+                        		`mh`.`id_medicos`,
+                        		floor(sum(timestampdiff(SECOND,CONCAT('2017-10-01 ',`mh`.`desde`),CONCAT('2017-10-01 ',`mh`.`hasta`)) / 60) * truncate((datediff(STR_TO_DATE('20171130', '%Y%m%d'),STR_TO_DATE('20171101', '%Y%m%d')) - Weekday(date_add(STR_TO_DATE('20171130', '%Y%m%d'), interval(-`mh`.`id_dias_semana` + 1)day)) + 7) / 7, 0)) AS `minutos_horario`,
+                        		floor(sum(timestampdiff(SECOND,CONCAT('2017-10-01 ',`mh`.`desde`),CONCAT('2017-10-01 ',`mh`.`hasta`)) / 3600) * truncate((datediff(STR_TO_DATE('20171130', '%Y%m%d'),STR_TO_DATE('20171101', '%Y%m%d')) - Weekday(date_add(STR_TO_DATE('20171130', '%Y%m%d'), interval(-`mh`.`id_dias_semana` + 1)day)) + 7) / 7, 0)) AS `horas_horario`
+                        FROM `medicos_horarios` `mh`
+                        WHERE
+                        		`mh`.`estado` = 1
+                        GROUP BY
+                        	`mh`.`id_medicos`
+                      ) AS `my`
+                      ON
+                        `m`.`id_medicos` = `my`.`id_medicos`
+                ) AS `mx`
+        		$sWhere
+        		$sOrder
+        		$sLimit
+SQL;
+        break;
+    case 'encuestas':
+        $sQuery = <<<SQL
+            SELECT
+                SQL_CALC_FOUND_ROWS
+                er.id_encuestas_respuestas,
+                t.fecha_alta,
+                t.hora_alta,
+                CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres)) AS paciente,
+                ep.pregunta AS respuesta1,
+                era.respuesta AS resuesta2,
+                CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres) AS medico,
+                e.nombre AS especialidad,
+                t.id_turnos,
+                p.id_pacientes
+            FROM encuestas_respuestas AS er
+            INNER JOIN
+            	encuestas_preguntas AS ep
+            	ON er.id_encuestas_preguntas = ep.id_encuestas_preguntas
+            LEFT JOIN
+            	encuestas_respuestas_abiertas AS era
+            	ON era.id_encuestas_respuestas = er.id_encuestas_respuestas
+            LEFT JOIN
+            	turnos AS t
+            	ON er.id_turnos = t.id_turnos
+            LEFT JOIN
+            	pacientes AS p
+            	ON t.id_pacientes = p.id_pacientes
+            LEFT JOIN
+            	medicos AS m
+            	ON t.id_medicos = m.id_medicos
+            LEFT JOIN
+            	especialidades AS e
+            	ON t.id_especialidades = e.id_especialidades
     		$sWhere
     		$sOrder
     		$sLimit
 SQL;
-} else {
-    $sQuery = "
-    		SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
-    		FROM   $sTableFrom
-    		$sWhere
-    		$sOrder
-    		$sLimit
-    ";
+        break;
+    default:
+        $sQuery = "
+        		SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
+        		FROM   $sTableFrom
+        		$sWhere
+        		$sOrder
+        		$sLimit
+        ";
+        break;
 }
 
+#print "<pre>{$sWhere}</pre>";
+#print "<pre>{$sOrder}</pre>";
+#print "<pre>{$sLimit}</pre>";
 #print "<pre>{$sQuery}</pre>";
 //error_log($sQuery);
 
@@ -1213,23 +1291,32 @@ $aResultFilterTotal = mysql_fetch_array($rResultFilterTotal);
 $iFilteredTotal = $aResultFilterTotal[0];
 
 /* Total data set length */
-if ($tabla == 'medicosexp') {
-    $mes = date("Y-m-", strtotime("-1 month"));
-    $sQuery = <<<SQL
-        SELECT COUNT(`t`.`id_medicos`)
-        FROM `turnos` `t`
-        WHERE ((`t`.`fecha` LIKE '{$mes}%')
-              AND (`t`.`estado` = 1)
-              AND (`t`.`id_turnos_estados` IN (1,
-                                               2,
-                                               7)))
-        GROUP BY `t`.`id_medicos`
+switch ($tabla) {
+    case 'medicosexp':
+        $mes = date("Y-m-", strtotime("-1 month"));
+        $sQuery = <<<SQL
+            SELECT COUNT(`t`.`id_medicos`)
+            FROM `turnos` `t`
+            WHERE ((`t`.`fecha` LIKE '{$mes}%')
+                  AND (`t`.`estado` = 1)
+                  AND (`t`.`id_turnos_estados` IN (1,
+                                                   2,
+                                                   7)))
+            GROUP BY `t`.`id_medicos`
 SQL;
-} else {
-    $sQuery = "
+        break;
+    case 'encuestas':
+        $sQuery = <<<SQL
+            SELECT COUNT(id_encuestas_respuestas)
+            FROM encuestas_respuestas
+SQL;
+        break;
+    default:
+        $sQuery = "
     		SELECT COUNT(".$sIndexColumn.")
     		FROM   $sTableFrom
     ";
+        break;
 }
 
 $rResultTotal = mysql_query( $sQuery, $link ) or die(mysql_error());
@@ -1635,6 +1722,18 @@ if ($cant_registros != 0){
                     } else {
                         $row[9] = $editar.''.$eliminar.'';
                     }
+				break;
+				case 'encuestas':
+					$turnos = "<a class='btn_opciones' href='#' data-id='".$aRow["id_pacientes"]."' data-tipo_btn='tabla_hija' data-hija='turnos' data-nombre='Turnos Reservados'><img src='".URL."files/img/btns/turnos.png' border='0'></a>";
+					$row[0] = $aRow["id_encuestas_respuestas"];
+					$row[1] = utf8_encode($aRow['fecha_alta']);
+					$row[2] = utf8_encode($aRow['hora_alta']);
+					$row[3] = utf8_encode($aRow['paciente']);
+					$row[4] = utf8_encode($aRow['respuesta1']);
+					$row[5] = utf8_encode($aRow['respuesta2']);
+					$row[6] = utf8_encode($aRow['medico']);
+					$row[7] = utf8_encode($aRow['especialidad']);
+                    $row[8] = $turnos;
 				break;
 
 			}
