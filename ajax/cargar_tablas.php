@@ -1750,11 +1750,10 @@ if ($cant_registros != 0){
 					$row[6] = utf8_encode($aRow['observaciones']);
 					$row[7] = utf8_encode($mantenimientos_estados);
 					$row[8] = utf8_encode($usuario);
-                    $color = '<script>$(this).parent().parent().html(\'diego\');</script>';
                     if ($tabla == 'mantenimhistoricos') {
                         $row[9] = '';
                     } else {
-                        $row[9] = $editar.''.$eliminar.''.$color.'';
+                        $row[9] = $editar.''.$eliminar.'';
                     }
 				break;
 				case 'encuestas':
