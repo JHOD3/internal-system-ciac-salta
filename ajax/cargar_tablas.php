@@ -156,28 +156,31 @@ if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
 $sOrder = "";
 if ( isset( $_GET['iSortCol_0'] ) )
 {
-    if ($tabla == "medicos_obras_sociales") {
-        $sTableFrom.= "
-            LEFT JOIN obras_sociales AS os
-                ON M.id_obras_sociales = os.id_obras_sociales
-        ";
-        $sOrder = "ORDER BY nombre";
-    } else {
-		$sOrder = "ORDER BY  ";
-		for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
-		{
-				if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
-				{
-						$sOrder .= $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
-								".mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
-				}
-		}
-		$sOrder = substr_replace( $sOrder, "", -2 );
-		if ( $sOrder == "ORDER BY" )
-		{
-				$sOrder = "";
-		}
-    }
+    switch ($tabla) {
+        case "medicos_obras_sociales":
+            $sTableFrom.= "
+                LEFT JOIN obras_sociales AS os
+                    ON M.id_obras_sociales = os.id_obras_sociales
+            ";
+            $sOrder = "ORDER BY nombre";
+            break;
+        default:
+    		$sOrder = "ORDER BY  ";
+    		for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
+    		{
+    				if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
+    				{
+    						$sOrder .= $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
+    								".mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
+    				}
+    		}
+    		$sOrder = substr_replace( $sOrder, "", -2 );
+    		if ( $sOrder == "ORDER BY" )
+    		{
+    				$sOrder = "";
+    		}
+            break;
+      }
 }
 
 
@@ -710,6 +713,34 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 						break;
                     }
                 break;
+                case 'encuestas':
+    				switch($aColumns[$i]){
+    					case "paciente":
+            				$buscar = $_GET['sSearch'];
+            				$sWhere .= "CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres)) LIKE '%".$buscar."%' OR ";
+                        break;
+    					case "respuesta1":
+            				$buscar = $_GET['sSearch'];
+            				$sWhere .= "ep.pregunta LIKE '%".$buscar."%' OR ";
+                        break;
+    					case "respuesta2":
+            				$buscar = $_GET['sSearch'];
+            				$sWhere .= "era.respuesta LIKE '%".$buscar."%' OR ";
+                        break;
+    					case "medico":
+            				$buscar = $_GET['sSearch'];
+            				$sWhere .= "CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres) LIKE '%".$buscar."%' OR ";
+                        break;
+    					case "especialidad":
+            				$buscar = $_GET['sSearch'];
+            				$sWhere .= "e.nombre LIKE '%".$buscar."%' OR ";
+                        break;
+                        default:
+            				$buscar = $_GET['sSearch'];
+            				$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' OR ";
+                        break;
+                    }
+                break;
 				default:
 					switch($aColumns[$i]){
 						case 'id_especialidades':
@@ -1235,7 +1266,7 @@ SQL;
                 t.hora_alta,
                 CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres)) AS paciente,
                 ep.pregunta AS respuesta1,
-                era.respuesta AS resuesta2,
+                era.respuesta AS respuesta2,
                 CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres) AS medico,
                 e.nombre AS especialidad,
                 t.id_turnos,
