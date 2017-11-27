@@ -283,13 +283,13 @@ class Diagnostico_model extends CI_Model
                 t.*,
                 LEFT(t.desde, 5) AS hora,
                 CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres)) AS pacientes,
-                CONCAT(m.saludo, ' ', m.apellidos, ', ', m.nombres) AS medicos,
+                CONCAT(TRIM(m.saludo), ' ', TRIM(m.apellidos), ', ', TRIM(m.nombres)) AS medicos,
                 os.abreviacion AS obras_sociales,
                 e.nombre AS estudios,
                 e.codigopractica,
                 ts.*,
-                CONCAT(d.saludo, ' ', d.apellidos, ', ', d.nombres) AS medicos_derivacion,
-                CONCAT(dx.saludo, ' ', dx.apellidos, ', ', dx.nombres, ' (Externo)') AS medicosext_derivacion,
+                CONCAT(TRIM(d.saludo), ' ', TRIM(d.apellidos), ', ', TRIM(d.nombres)) AS medicos_derivacion,
+                CONCAT(TRIM(dx.saludo), ' ', TRIM(dx.apellidos), ', ', TRIM(dx.nombres), ' (Externo)') AS medicosext_derivacion,
                 te.nombre AS turnos_estados
             ")
             ->from('turnos AS t')
