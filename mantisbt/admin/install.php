@@ -411,7 +411,7 @@ if( 2 == $t_install_state ) {
 	<?php
 		$t_db_open = false;
 	$g_db = ADONewConnection( $f_db_type );
-	$t_result = @$g_db->Connect( $f_hostname, $f_admin_username, $f_admin_password );
+	$t_result = @$g_db->Connect( '192.168.100.156', $f_admin_username, $f_admin_password );
 
 	if( $t_result ) {
 		# due to a bug in ADODB, this call prompts warnings, hence the @
