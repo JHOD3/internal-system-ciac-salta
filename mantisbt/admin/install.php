@@ -419,7 +419,7 @@ if( 2 == $t_install_state ) {
 		$t_version_info = @$g_db->ServerInfo();
 
 		# check if db exists for the admin
-		$t_result = @$g_db->Connect( $f_hostname, $f_admin_username, $f_admin_password, $f_database_name );
+		$t_result = @$g_db->Connect( '192.168.100.156', $f_admin_username, $f_admin_password, $f_database_name );
 		if( $t_result ) {
 			$t_db_open = true;
 			$f_db_exists = true;
@@ -445,7 +445,7 @@ if( 2 == $t_install_state ) {
 	</td>
 	<?php
 		$g_db = ADONewConnection( $f_db_type );
-		$t_result = @$g_db->Connect( $f_hostname, $f_db_username, $f_db_password, $f_database_name );
+		$t_result = @$g_db->Connect( '192.168.100.156', $f_db_username, $f_db_password, $f_database_name );
 
 		if( $t_result == true ) {
 			$t_db_open = true;
@@ -603,7 +603,7 @@ if( !$g_database_upgrade ) {
 		Hostname (for Database Server)
 	</td>
 	<td>
-		<input name="hostname" type="text" value="<?php echo string_attribute( $f_hostname ) ?>">
+		<input name="hostname" type="text" value="<?php echo string_attribute( '192.168.100.156' ) ?>">
 	</td>
 </tr>
 
@@ -770,7 +770,7 @@ if( 3 == $t_install_state ) {
 		Create database if it does not exist
 	</td>
 	<?php
-		$t_result = @$g_db->Connect( $f_hostname, $f_admin_username, $f_admin_password, $f_database_name );
+		$t_result = @$g_db->Connect( '192.168.100.156', $f_admin_username, $f_admin_password, $f_database_name );
 
 		$t_db_open = false;
 
@@ -780,7 +780,7 @@ if( 3 == $t_install_state ) {
 		} else {
 			# create db
 			$g_db = ADONewConnection( $f_db_type );
-			$t_result = $g_db->Connect( $f_hostname, $f_admin_username, $f_admin_password );
+			$t_result = $g_db->Connect( '192.168.100.156', $f_admin_username, $f_admin_password );
 
 			$t_dict = NewDataDictionary( $g_db );
 
@@ -828,7 +828,7 @@ if( 3 == $t_install_state ) {
 	</td>
 	<?php
 		$g_db = ADONewConnection( $f_db_type );
-		$t_result = @$g_db->Connect( $f_hostname, $f_db_username, $f_db_password, $f_database_name );
+		$t_result = @$g_db->Connect( '192.168.100.156', $f_db_username, $f_db_password, $f_database_name );
 		if( $t_result == true ) {
 			print_test_result( GOOD );
 		} else {
@@ -858,7 +858,7 @@ if( 3 == $t_install_state ) {
 		# database_api references this
 		require_once( dirname( __FILE__ ) . '/schema.php' );
 		$g_db = ADONewConnection( $f_db_type );
-		$t_result = @$g_db->Connect( $f_hostname, $f_admin_username, $f_admin_password, $f_database_name );
+		$t_result = @$g_db->Connect( '192.168.100.156', $f_admin_username, $f_admin_password, $f_database_name );
 		if( !$f_log_queries ) {
 			$g_db_connected = true;
 
@@ -1107,7 +1107,7 @@ if( 5 == $t_install_state ) {
 	}
 
 	$t_config = '<?php' . PHP_EOL
-		. '$g_hostname               = \'' . addslashes( $f_hostname ) . '\';' . PHP_EOL
+		. '$g_hostname               = \'' . addslashes( '192.168.100.156' ) . '\';' . PHP_EOL
 		. '$g_db_type                = \'' . addslashes( $f_db_type ) . '\';' . PHP_EOL
 		. '$g_database_name          = \'' . addslashes( $f_database_name ) . '\';' . PHP_EOL
 		. '$g_db_username            = \'' . addslashes( $f_db_username ) . '\';' . PHP_EOL
@@ -1149,7 +1149,7 @@ if( 5 == $t_install_state ) {
 		}
 	} else {
 		# already exists, see if the information is the same
-		if( ( $f_hostname != config_get( 'hostname', '' ) ) ||
+		if( ( '192.168.100.156' != config_get( 'hostname', '' ) ) ||
 			( $f_db_type != config_get( 'db_type', '' ) ) ||
 			( $f_database_name != config_get( 'database_name', '' ) ) ||
 			( $f_db_username != config_get( 'db_username', '' ) ) ||
@@ -1231,7 +1231,7 @@ if( 6 == $t_install_state ) {
 	</td>
 	<?php
 		$g_db = ADONewConnection( $f_db_type );
-	$t_result = @$g_db->Connect( $f_hostname, $f_db_username, $f_db_password, $f_database_name );
+	$t_result = @$g_db->Connect( '192.168.100.156', $f_db_username, $f_db_password, $f_database_name );
 
 	if( $t_result == true ) {
 		print_test_result( GOOD );
