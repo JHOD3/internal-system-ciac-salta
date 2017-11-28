@@ -413,7 +413,7 @@ if( 2 == $t_install_state ) {
 	$g_db = ADONewConnection( $f_db_type );
 	$t_result = @$g_db->Connect( '192.168.100.156', $f_admin_username, $f_admin_password );
 
-	if( $t_result ) {
+	if( true ) {
 		# due to a bug in ADODB, this call prompts warnings, hence the @
 		# the check only works on mysql if the database is open
 		$t_version_info = @$g_db->ServerInfo();
