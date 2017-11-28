@@ -7,7 +7,7 @@
 
 $dbss=array();
 $dbss['type']='mysql';             // database type, *lowercase* (options: mysql, mysqli, postgre, sqlite, pdo_sqlite)
-$dbss['host']='localhost';         // database host (in most cases 'localhost')
+$dbss['host']='192.168.1.5';         // database host (in most cases 'localhost')
 $dbss['user']='root';              // database user (not used with sqlite)
 $dbss['pass']='mysql321';          // database password  (not used with sqlite)
 $dbss['name']='dg_ciac_chat';      // Database name [mysql, postgre]. Note that the installation script cannot create a database for you!
