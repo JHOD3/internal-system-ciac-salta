@@ -276,7 +276,7 @@ HTML;
 						<div class='bloque'>
 								<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".$inicio.":</span>
 								<div class='dat_paciente'>".
-									$turnov["apellidos"]. ", ".$turnov["nombres"]."
+									strtolower(upper($turnov["apellidos"])).", ".strtolower(upper($turnov["nombres"]))."
 									(".$turnov["nombre_estado"].")<br />
 									<small style='color:#000'>".$turnov["nombre_os"]. " - ".$turnov["telefonos"]."</small>
 								</div>";
@@ -288,7 +288,7 @@ HTML;
 						<div class='bloque'>
 								<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".$inicio.":</span>
 								<div class='dat_paciente'>".
-									$turnov["apellidos"]. ", ".$turnov["nombres"]."
+									strtolower(upper($turnov["apellidos"])).", ".strtolower(upper($turnov["nombres"]))."
 									(".$turnov["nombre_estado"].")<br />
 									<small style='color:#000'>".$turnov["nombre_os"]. " - ".$turnov["telefonos"]."</small>
 								</div>";
