@@ -5,14 +5,6 @@ requerir_class("tpl","querys","mysql","estructura","json");
 
 requerir_class ("medicos");
 
-function upper($str)
-{
-    $arrAcentos = array('á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü');
-    $arrReemplz = array('Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'Ü');
-    $str = str_replace($arrAcentos, $arrReemplz, $str);
-    return strtoupper($str);
-}
-
 $id_medico = $_POST["id_medico"];
 $id_especialidad = $_POST["id_especialidad"];
 $id_dia = $_POST["dia"] + 1;

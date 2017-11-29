@@ -1,4 +1,12 @@
 <?php
+function upper($str)
+{
+    $arrAcentos = array('á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü');
+    $arrReemplz = array('Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'Ü');
+    $str = str_replace($arrAcentos, $arrReemplz, $str);
+    return strtoupper($str);
+}
+
 interface iQuerys{
 
 }
