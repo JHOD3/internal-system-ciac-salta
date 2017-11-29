@@ -85,8 +85,8 @@ class Pacientes extends Estructura implements iPacientes{
 		$row["OBRA_SOCIAL_PLAN"] = $obj_obra_social_plan->nombre;
         $row['nro_documento'] = number_format($row['nro_documento'], 0, ",", ".");
 
-		$row['nombres'] = strtoupper($row['nombres']);
-		$row['apellidos'] = strtoupper($row['apellidos']);
+		$row['nombres'] = upper($row['nombres']);
+		$row['apellidos'] = upper($row['apellidos']);
 		$htm->AsignaBloque('block_registros',$row);
 
 		$rta = $htm->Muestra();
@@ -125,8 +125,8 @@ class Pacientes extends Estructura implements iPacientes{
 				$row["OBRA_SOCIAL_PLAN"] = $obj_obra_social_plan->nombre;
                 $row['nro_documento'] = number_format($row['nro_documento'], 0, ",", ".");
 
-				$row['nombres'] = strtoupper($row['nombres']);
-				$row['apellidos'] = strtoupper($row['apellidos']);
+				$row['nombres'] = upper($row['nombres']);
+				$row['apellidos'] = upper($row['apellidos']);
                 $htm->AsignaBloque('block_registros',$row);
 			}
 
