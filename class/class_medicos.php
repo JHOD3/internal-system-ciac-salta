@@ -371,7 +371,7 @@ class Medicos extends Estructura implements iMedicos{
 									<div class='bloque'>
 										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 										<div class='dat_paciente'>".
-											strtoupper(trim($row["apellidos"])). ", ".strtoupper(trim($row["nombres"]))."
+											upper(trim($row["apellidos"])). ", ".upper(trim($row["nombres"]))."
 											(".$row["nombre_estado"].")<br />
 											<small style='color:#000'>".$row["abreviacion"]."</small>";
 
@@ -396,7 +396,7 @@ class Medicos extends Estructura implements iMedicos{
 									<div class='bloque'>
 											<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 											<div class='dat_paciente'>".
-												strtoupper(trim($row["apellidos"])). ", ".strtoupper(trim($row["nombres"]))."
+												upper(trim($row["apellidos"])). ", ".upper(trim($row["nombres"]))."
 												(".$row["nombre_estado"].")<br />
 												<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>
 											</div>";
