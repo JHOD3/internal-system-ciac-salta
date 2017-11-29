@@ -7,10 +7,10 @@ class Mantenimhistoricos extends Estructura implements iMantenimhistoricos{
 
 	function __construct($id = ""){
 		$this->nombre_tabla = "mantenimhistoricos";
-		$this->titulo_tabla = "Pedidos de Mantenimientos históricos";
+		$this->titulo_tabla = "Mantenimientos históricos";
 		$this->tabla_padre = "";
 
-		$this->drop_label_elija = "Elija un Pedido de Mantenimiento";
+		$this->drop_label_elija = "Elija un Mantenimiento";
 
 		parent::__construct($id);
 	}

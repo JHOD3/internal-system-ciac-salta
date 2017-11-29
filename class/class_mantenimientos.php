@@ -7,10 +7,10 @@ class Mantenimientos extends Estructura implements iMantenimientos{
 
 	function __construct($id = ""){
 		$this->nombre_tabla = "mantenimientos";
-		$this->titulo_tabla = "Pedidos de Mantenimientos";
+		$this->titulo_tabla = "Mantenimiento";
 		$this->tabla_padre = "";
 
-		$this->drop_label_elija = "Elija un Pedido de Mantenimiento";
+		$this->drop_label_elija = "Elija un Mantenimiento";
 
 		parent::__construct($id);
 
