@@ -31,12 +31,12 @@ switch ($tabla){
 		$asignaciones.= "
 			id_tipos_documentos = ".$tipos_documentos.",
 			id_obras_sociales = ".$obras_sociales.",
-			apellidos = '".strtoupper(utf8_decode($apellidos))."',
-			nombres = '".strtoupper(utf8_decode($nombres))."',
+			apellidos = '".upper(utf8_decode($apellidos))."',
+			nombres = '".upper(utf8_decode($nombres))."',
 			telefonos = '".$telefonos."',
 			nro_documento = '".$nro_documento."',
-			domicilio = '".strtoupper(utf8_decode($domicilio))."',
-			email = '".strtoupper($email)."',
+			domicilio = '".upper(utf8_decode($domicilio))."',
+			email = '".upper($email)."',
 			id_obras_sociales_planes = ".$obras_sociales_planes."
 		";
 
@@ -71,21 +71,21 @@ switch ($tabla){
 
 		$asignaciones = "
 					id_tipos_documentos = ".$tipos_documentos.",
-					apellidos = '".strtoupper(utf8_decode($apellidos))."',
-					nombres = '".strtoupper(utf8_decode($nombres))."',
+					apellidos = '".upper(utf8_decode($apellidos))."',
+					nombres = '".upper(utf8_decode($nombres))."',
 					telefonos = '".$telefonos."',
 					nro_documento = '".$nro_documento."',
-					domicilio = '".strtoupper(utf8_decode($domicilio))."',
-					email = '".strtoupper($email)."',
+					domicilio = '".upper(utf8_decode($domicilio))."',
+					email = '".upper($email)."',
 					id_sectores = ".$sectores.",
 					id_subsectores = ".$subsectores.",
-					nro_sector = '".strtoupper(utf8_decode($nro_sector))."',
+					nro_sector = '".upper(utf8_decode($nro_sector))."',
 					id_plantas = ".$plantas.",
 					interno = ".$interno.",
 					matricula = ".$matricula.",
                     saludo = '".$saludo."'
 					";
-		#usuario = '".strtolower($obj->QuitarTildes($nombres[0].$apellidos))."',
+		#usuario = '".lower($obj->QuitarTildes($nombres[0].$apellidos))."',
 		#pass = '".base64_encode($nro_documento)."',
 
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
@@ -103,8 +103,8 @@ switch ($tabla){
 			$matricula = 0;
 
 		$asignaciones = "
-			apellidos = '".strtoupper(utf8_decode($apellidos))."',
-			nombres = '".strtoupper(utf8_decode($nombres))."',
+			apellidos = '".upper(utf8_decode($apellidos))."',
+			nombres = '".upper(utf8_decode($nombres))."',
 			matricula = ".$matricula.",
             saludo = '".$saludo."'
 		";
@@ -143,7 +143,7 @@ switch ($tabla){
 		parse_str(stripslashes($datos));
 
 		$asignaciones = "
-					nombre = '".strtoupper(utf8_decode($nombre))."'
+					nombre = '".upper(utf8_decode($nombre))."'
 					";
 
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
@@ -158,7 +158,7 @@ switch ($tabla){
 		parse_str(stripslashes($datos));
 
 		$asignaciones = "
-					nombre = '".strtoupper(utf8_decode($nombre))."',
+					nombre = '".upper(utf8_decode($nombre))."',
 					importe = '".$importe."',
 					arancel = '".$arancel."',
 					requisitos = '".utf8_decode($requisitos)."',
@@ -177,8 +177,8 @@ switch ($tabla){
 		parse_str(stripslashes($datos));
 
 		$asignaciones = "
-					nombre = '".strtoupper(utf8_decode($nombre))."',
-					abreviacion = '".strtoupper(utf8_decode($abreviacion))."',
+					nombre = '".upper(utf8_decode($nombre))."',
+					abreviacion = '".upper(utf8_decode($abreviacion))."',
 					importe_consulta = '".$importe_consulta."'
 					";
 
