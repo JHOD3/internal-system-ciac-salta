@@ -682,6 +682,10 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 								}
 							}
 						break;
+						default:
+							$buscar = $_GET['sSearch'];
+							$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' OR ";
+                        break;
                     }
                 break;
                 case 'agendas_tipos':
