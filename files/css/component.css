@@ -74,7 +74,7 @@
 .dl-menuwrapper li a {
 	display: block;
 	position: relative;
-	padding: 8px 16px;
+	padding: 3px 16px;
 	line-height: 16px;
 	color: #fff;
 	outline: none;
@@ -93,7 +93,7 @@
 .dl-menuwrapper li > a:not(:only-child):after {
     font-family: 'icomoon';
 	position: absolute;
-	top: 0;
+	top: -7px;
 	line-height: 50px;
 	speak: none;
 	content: "\e000";
@@ -102,7 +102,7 @@
 
 .dl-menuwrapper li.dl-back:after {
 	left: 10px;
-    top: -7px;
+    top: -11px;
     color: #fff;
 	-webkit-transform: rotate(180deg);
 	transform: rotate(180deg);
