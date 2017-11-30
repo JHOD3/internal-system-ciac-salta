@@ -196,7 +196,7 @@
 		_openMenu : function() {
 			var self = this;
 			// clicking somewhere else makes the menu close
-			$('.closeMenu').off( 'click' ).on( 'click.dlmenu', function() {
+			$body.off( 'click' ).on( 'click.dlmenu', function() {
 				self._closeMenu() ;
 			} );
 			this.$menu.addClass( 'dl-menuopen dl-menu-toggle' ).on( this.transEndEventName, function() {
