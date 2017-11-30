@@ -1,15 +1,18 @@
 <?php
 function upper($str)
 {
-    if ($_SERVER['REMOTE_ADDR'] == '181.199.157.15') {
-        $str = utf8_encode($str);
-    }
     $arrAcentos = array('á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü');
     $arrReemplz = array('Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'Ü');
     $str = str_replace($arrAcentos, $arrReemplz, $str);
-    if ($_SERVER['REMOTE_ADDR'] == '181.199.157.15') {
-        $str = utf8_decode($str);
-    }
+
+    $str = utf8_encode($str);
+
+    $arrAcentos = array('á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü');
+    $arrReemplz = array('Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'Ü');
+    $str = str_replace($arrAcentos, $arrReemplz, $str);
+
+    $str = utf8_decode($str);
+
     return strtoupper($str);
 }
 
