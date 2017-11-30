@@ -99,7 +99,7 @@ switch ($tabla){
 	break;
 	case "mantenimientos":
     case "mantenimhistoricos":
-		$aColumns = array('id_mantenimientos','fecha','id_sectores','solicitador','tarea','especialista','observaciones','id_mantenimientos_estados','id_usuarios');
+		$aColumns = array('id_mantenimientos','creado','fecha','id_sectores','solicitador','tarea','especialista','observaciones','id_mantenimientos_estados','id_usuarios');
 	break;
 	case "encuestas":
 		$aColumns = array('er.id_encuestas_respuestas','t.fecha_alta','t.hora_alta','paciente','respuesta1','respuesta2','medico','especialidad');
@@ -1746,18 +1746,19 @@ if ($cant_registros != 0){
 				case 'mantenimientos':
                 case 'mantenimhistoricos':
 					$row[0] = $aRow["id_mantenimientos"];
-					$row[1] = utf8_encode(date("d/m/Y H:i", strtotime($aRow['fecha']))."hs");
-					$row[2] = utf8_encode($sector);
-					$row[3] = utf8_encode($aRow['solicitador']);
-					$row[4] = utf8_encode($aRow['tarea']);
-					$row[5] = utf8_encode($aRow['especialista']);
-					$row[6] = utf8_encode($aRow['observaciones']);
-					$row[7] = utf8_encode($mantenimientos_estados);
-					$row[8] = utf8_encode($usuario);
+					$row[1] = utf8_encode(date("d/m/Y H:i", strtotime($aRow['creado']))."hs");
+					$row[2] = utf8_encode(date("d/m/Y H:i", strtotime($aRow['fecha']))."hs");
+					$row[3] = utf8_encode($sector);
+					$row[4] = utf8_encode($aRow['solicitador']);
+					$row[5] = utf8_encode($aRow['tarea']);
+					$row[6] = utf8_encode($aRow['especialista']);
+					$row[7] = utf8_encode($aRow['observaciones']);
+					$row[8] = utf8_encode($mantenimientos_estados);
+					$row[9] = utf8_encode($usuario);
                     if ($tabla == 'mantenimhistoricos') {
-                        $row[9] = '';
+                        $row[10] = '';
                     } else {
-                        $row[9] = $editar.''.$eliminar.'';
+                        $row[10] = $editar.''.$eliminar.'';
                     }
 				break;
 				case 'encuestas':

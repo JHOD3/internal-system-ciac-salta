@@ -13,7 +13,7 @@
 		//CargarBotonesUI();
 
 		TableMantenimientos = $('#t_'+nombre).dataTable( {
-			"aaSorting": [[1, "desc" ]], //argumentos posibles: asc o desc
+			"aaSorting": [[2, "desc" ]], //argumentos posibles: asc o desc
 			"bAutoWidth": true,
 			"sPaginationType": "full_numbers",
 			"bFilter": true, //OCULTAR BUSQUEDA GRAL
@@ -44,6 +44,7 @@
             },
 			"bLengthChange": false,
 			"aoColumns" : [{ sWidth: '20px' },
+					{ sWidth: '200px' },
 					{ sWidth: '200px' },
 					{ sWidth: '100px' },
 					{ sWidth: '200px' },
@@ -83,6 +84,7 @@
     <thead>
         <tr>
             <th>ID</th>
+            <th>Creado</th>
             <th>Ultima modificaci&oacute;n</th>
             <th>Sector</th>
             <th>Solicitador</th>

@@ -852,6 +852,7 @@ SQL;
 		parse_str(stripslashes($datos));
 
 		$columnas = "(
+                    creado,
 					fecha,
                     id_sectores,
                     solicitador,
@@ -868,6 +869,7 @@ SQL;
 
 		$valores = "(
 					'".date("Y-m-d H:i:s")."',
+					'".date("Y-m-d H:i:s")."',
 					'".$sectores."',
 					'".utf8_decode(upper($solicitador))."',
 					'".utf8_decode(upper($tarea))."',
@@ -882,31 +884,27 @@ SQL;
 
 		if ($obj->db->consulta($query_string)) {
 			$rta = $obj->db->ultimo_id_insertado();
-    		$columnas = "(
-                        id_mantenimientos,
-    					fecha,
-                        id_sectores,
-                        solicitador,
-                        tarea,
-                        especialista,
-                        observaciones,
-                        id_mantenimientos_estados,
-                        estado,
-                        id_usuarios
-			)";
-    		$valores = "(
-    					'".$rta."',
-    					'".date("Y-m-d H:i:s")."',
-    					'".$sectores."',
-    					'".utf8_decode(upper($solicitador))."',
-    					'".utf8_decode(upper($tarea))."',
-    					'".utf8_decode(upper($especialista))."',
-    					'".utf8_decode(upper($observaciones))."',
-                        '".$mantenimientos_estados."',
-                        1,
-                        '".$_SESSION['ID_USUARIO']."'
-			)";
-    		$query_string2 = $obj->querys->Alta('mantenimhistoricos', $columnas, $valores);
+    		$query_string2 = "
+                INSERT INTO
+                    mantenimhistoricos
+                SELECT
+                    null,
+                    id_mantenimientos,
+					creado,
+                    fecha,
+                    id_sectores,
+                    solicitador,
+                    tarea,
+                    especialista,
+                    observaciones,
+                    estado,
+                    id_mantenimientos_estados,
+                    id_usuarios
+                FROM
+                    mantenimientos
+                WHERE
+                    id_mantenimientos = '{$rta}'
+            ";
     		$obj->db->consulta($query_string2);
         } else {
 			$rta = false;
