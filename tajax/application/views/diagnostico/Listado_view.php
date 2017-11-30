@@ -130,7 +130,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                 <td style="width:100px;">Observaciones</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <?php if ($SUPERUSER > 0): ?>
+                <?php if ($SUPERUSER > 1): ?>
                     <td>&nbsp;</td>
                 <?php endif; ?>
             </tr>
@@ -166,7 +166,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
         <td><?=$item['checked'] == '1' ? '✓' : '&nbsp;'?></td>
     <?php endif; ?>
     <td<?=$idmer?>"save"></td>
-    <?php if ($SUPERUSER > 0): ?>
+    <?php if ($SUPERUSER > 1): ?>
         <td<?=$idmer?>"dele"></td>
     <?php endif; ?>
 </tr>
@@ -184,7 +184,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
     </table>
 </form>
 
-<div id="tab_codigoalternat" class="tab_hidden"><input type="text" name="codigoalternat" value="" style="width:70px;"<?=$SUPERUSER == '0' ? ' readonly="readonly"' : ''?> /></div>
+<div id="tab_codigoalternat" class="tab_hidden"><input type="text" name="codigoalternat" value="" style="width:70px;"<?=$SUPERUSER < 2 ? ' readonly="readonly"' : ''?> /></div>
 <div id="tab_estudios" class="tab_hidden">
     <select name="id_estudios" style="width:80px;">
         <option value="">---</option>
@@ -259,7 +259,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
 <div id="tab_matricula_derivacion" class="tab_hidden"><input type="text" name="matricula_derivacion" value="" style="width:70px;text-align:right;" class="ac_matricula_derivacion" /></div>
 <div id="tab_observaciones" class="tab_hidden"><input type="text" name="observaciones" value="" style="width:100px;" /></div>
 <div id="tab_save" class="tab_hidden"><input type="button" value="Guardar" /></div>
-<?php if ($SUPERUSER > 0): ?>
+<?php if ($SUPERUSER > 1): ?>
     <div id="tab_dele" class="tab_hidden"><a href="#" class="dele">Eliminar</a></div>
 <?php endif; ?>
 
@@ -431,7 +431,7 @@ $(document).ready(function(){
                             $(pre_d + 'observaciones' + pos).html(dataJSON['observaciones']);
                         });
                     });
-                    <?php if ($SUPERUSER > 0): ?>
+                    <?php if ($SUPERUSER > 1): ?>
                         $(this).find('a.dele').click(function(event){
                             event.preventDefault();
                             if (confirm('Seguro que desea Eliminar?')) {

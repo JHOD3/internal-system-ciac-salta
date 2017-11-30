@@ -115,7 +115,7 @@ class Diagnostico extends CI_Controller {
         }
         $dataView = $post;
         if (
-            $this->session->userdata('SUPERUSER') == 0 and
+            $this->session->userdata('SUPERUSER') < 2 and
             $date1 < date("Y-m-d", strtotime("-7 days"))
         ) {
             $date1 = date("Y-m-d", strtotime("-7 days"));
@@ -131,7 +131,7 @@ class Diagnostico extends CI_Controller {
             $post
         );
         if (
-            $this->session->userdata('SUPERUSER') > 0 or
+            $this->session->userdata('SUPERUSER') > 1 or
             $date1 >= date("Y-m-d", strtotime("-2 days"))
         ) {
             $dataView['deja_deposito_suma'] = $this->Model->obtDejaDepositoSuma(

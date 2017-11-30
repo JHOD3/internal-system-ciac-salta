@@ -29,7 +29,7 @@ if (!$d or $d->format($format) != $date or strlen($hasta) != 10) {
 $d = implode("-", array_reverse(explode("/", $desde)));
 $h = implode("-", array_reverse(explode("/", $hasta)));
 
-if ($_SESSION['ID_USUARIO'] === '0') {
+if ($_SESSION['SUPERUSER'] == '3') {
     $obj_medicos = new Medicos();
     $htm_index->Asigna(
         "DROP_MEDICOS",

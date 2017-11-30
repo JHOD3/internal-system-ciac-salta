@@ -1496,7 +1496,7 @@ if ($cant_registros != 0){
                         $TurnosCant = $myRow['TurnosCant'];
                     }
 
-                    if ($_SESSION['ID_USUARIO'] === '0' or $TurnosCant == 0) {
+                    if ($_SESSION['SUPERUSER'] == '3' or $TurnosCant == 0) {
                         $row[5] = $editar.''.$turnos.''.$cobros.''.$eliminar.'';
                     } else {
                         $row[5] = $editar.''.$turnos.''.$cobros.'';
@@ -1522,7 +1522,7 @@ if ($cant_registros != 0){
 					$row[9] = utf8_encode($aRow["interno"]);
 					$row[10] = utf8_encode($planta);
 					$row[11] = utf8_encode($aRow["matricula"]);
-                    if ($_SESSION['ID_USUARIO'] === '0') {
+                    if ($_SESSION['SUPERUSER'] == '3') {
                         $row[12] =
                             $editar.''.
                             $especialidades.''.
@@ -1545,7 +1545,7 @@ if ($cant_registros != 0){
 					$row[2] = utf8_encode($aRow["apellidos"]);
 					$row[3] = utf8_encode($aRow["nombres"]);
 					$row[4] = utf8_encode($aRow["matricula"]);
-                    if ($_SESSION['ID_USUARIO'] === '0') {
+                    if ($_SESSION['SUPERUSER'] == '3') {
                         $row[5] = $editar.''.$eliminar.'';
                     } else {
                         $row[5] = $editar.'';
@@ -1575,7 +1575,7 @@ if ($cant_registros != 0){
 
 					$row[0] = $aRow["id_especialidades"];
 					$row[1] = utf8_encode($aRow["nombre"]);
-                    if ($_SESSION['ID_USUARIO'] === '0') {
+                    if ($_SESSION['SUPERUSER'] == '3') {
                         $row[2] = $editar.''.$eliminar.'';
                     } else {
                         $row[2] = '';
@@ -1589,7 +1589,7 @@ if ($cant_registros != 0){
 					$row[3] = utf8_encode($aRow["arancel"]);
 					$row[4] = utf8_encode($aRow["requisitos"]);
 					$row[5] = utf8_encode($aRow["codigopractica"]);
-                    if ($_SESSION['ID_USUARIO'] === '0') {
+                    if ($_SESSION['SUPERUSER'] == '3') {
                         $row[6] = $editar.''.$eliminar.'';
                     } else {
                         $row[6] = '';
@@ -1605,7 +1605,7 @@ if ($cant_registros != 0){
 					$row[1] = utf8_encode($aRow["abreviacion"]);
 					$row[2] = utf8_encode($aRow["nombre"]);
 					//$row[3] = utf8_encode($aRow["importe_consulta"]);
-                    if ($_SESSION['ID_USUARIO'] === '0') {
+                    if ($_SESSION['SUPERUSER'] == '3') {
 						$row[3] = $editar.''.$planes.''.$estudios.''.$eliminar.'';
                     } else {
 						$row[3] = $planes.''.$estudios;
@@ -1624,7 +1624,7 @@ if ($cant_registros != 0){
                         substr($aRow["duracion_turno"], 3, 2)
                     )." min";
 					//$row[3] = $mostrar." ".$editar." ".$horarios;
-                    if ($_SESSION['ID_USUARIO'] === '0') {
+                    if ($_SESSION['SUPERUSER'] == '3') {
 						$row[3] = $horarios.''.$eliminar.'';
                     } else {
 						$row[3] = $horarios.'';
@@ -1638,7 +1638,7 @@ if ($cant_registros != 0){
 					$row[2] = '<input type="text" class="particular" id="'.$aRow["id_medicos_estudios"].'" value="'.$aRow["particular"].'" />';
 					//$row[2] = $aRow["particular"];
 					//$row[2] = $mostrar." ".$editar;
-                    if ($_SESSION['ID_USUARIO'] === '0') {
+                    if ($_SESSION['SUPERUSER'] == '3') {
                         $row[3] = $editar.'';
                     } else {
                         $row[3] = '';
@@ -1651,7 +1651,7 @@ if ($cant_registros != 0){
 					$row[1] = utf8_encode($aRow["nombre"]);
 					$row[2] = '<input type="text" class="arancel" id="'.$aRow["id_medicos_obras_sociales"].'" value="'.$aRow["arancel"].'" />';
                     if (
-                        $_SESSION['ID_USUARIO'] === '0' OR
+                        $_SESSION['SUPERUSER'] == '3' OR
                         isset($_SESSION['ID_MEDICO'])
                     ) {
                         $row[3] = $eliminar.'';
@@ -1662,7 +1662,7 @@ if ($cant_registros != 0){
 				case 'obras_sociales_planes':
 					$row[0] = $aRow["id_obras_sociales_planes"];
 					$row[1] = utf8_encode($aRow["nombre"]);
-                    if ($_SESSION['ID_USUARIO'] === '0') {
+                    if ($_SESSION['SUPERUSER'] == '3') {
                         $row[2] = $editar.'';
                     } else {
                         $row[2] = '';
@@ -1674,7 +1674,7 @@ if ($cant_registros != 0){
 					$row[1] = utf8_encode($estudio);
 					$row[2] = utf8_encode($aRow["importe"]);
 					//$row[3] = $mostrar." ".$editar;
-                    if ($_SESSION['ID_USUARIO'] === '0') {
+                    if ($_SESSION['SUPERUSER'] == '3') {
                         $row[3] = $editar.'';
                     } else {
                         $row[3] = '';
@@ -1689,7 +1689,7 @@ if ($cant_registros != 0){
 					$row[2] = utf8_encode($planta);
 					$row[3] = utf8_encode(substr($aRow["desde"], 0, 5));
 					$row[4] = utf8_encode(substr($aRow["hasta"], 0, 5));
-                    if ($_SESSION['ID_USUARIO'] === '0') {
+                    if ($_SESSION['SUPERUSER'] == '3') {
                         $row[5] = $editar.''.$eliminar.'';
                     } else {
                         $row[5] = '';
