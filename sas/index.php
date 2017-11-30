@@ -47,6 +47,15 @@ $htm_index->Asigna("DATE_HASTA", $hasta);
 $dataMOT = $obj_estructura->obtMotivosDeInhabilitaciones();
 $htm_index->Asigna("MOTIVOS", $dataMOT);
 
+if ($_SESSION['SUPERUSER'] == '1') {
+    list($dataNDMli, $dataNDMdiv) = $obj_estructura->obtNotificacionesDeMantenimientos();
+    $htm_index->Asigna("dataNDMli", $dataNDMli);
+    $htm_index->Asigna("dataNDMdiv", $dataNDMdiv);
+} else {
+    $htm_index->Asigna("dataNDMli", '');
+    $htm_index->Asigna("dataNDMdiv", '');
+}
+
 if ($_GET['id_medicos']) {
     $ses_id_medico = $_GET['id_medicos'];
     $this_db = new MySQL();

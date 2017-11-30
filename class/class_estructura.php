@@ -1803,4 +1803,111 @@ class Estructura{
         return utf8_encode($data);
     }
 
+    function obtNotificacionesDeMantenimientos() {
+        $estado = '';
+        $dataDIV = <<<HTML
+            <style>
+            .notifMant {
+                margin: 15px;
+                background-color: #fff;
+                width: auto;
+                border: solid 1px #ccc;
+            }
+            .notifMant tr td{
+                color: #424242;
+            }
+            .notifMant .notifLine td {
+                border-bottom: solid 1px #ccc;
+            }
+            .notifMant tr:nth-child(odd) *{
+                color: #007FA6;
+            }
+            .notifMant tr:nth-child(even) *{
+                color: #008A47;
+            }
+            .notifMant .notifLine td:first-child {
+                font-weight: bold;
+            }
+            .notifMant td:last-child div {
+                padding: 2px 10px;
+                display: list-item;
+                list-style-type: square;
+                list-style-position: outside;
+                list-style-image: none;
+                margin-left: 30px;
+            }
+            .notifMant tr:first-child td{
+                font-weight: bold;
+                font-size: 1.2em;
+            }
+            </style>
+HTML;
+        $dataDIV.= <<<HTML
+            <div id="tabs-0">
+                <table class="notifMantContainer">
+                    <tr>
+                        <td>
+                            <table class="notifMant table">
+                                <tr>
+                                    <td colspan="2">Mantenimientos Pendientes
+HTML;
+        $query_string = $this->querys->obtNotificacionesDeMantenimientos([6, 8, 9]);
+		$query = $this->db->consulta($query_string);
+        while ($row = $this->db->fetch_array($query)) {
+            if ($estado != $row['nombre']) {
+                $dataDIV.= <<<HTML
+                                        </td>
+                                    </tr>
+                                    <tr class="notifLine">
+                                        <td>{$row['nombre']}</td>
+                                        <td>
+                                            <div>{$row['tarea']}</div>
+HTML;
+            } else {
+                $dataDIV.= <<<HTML
+                                            <div>{$row['tarea']}</div>
+HTML;
+            }
+            $estado = $row['nombre'];
+        }
+        $dataDIV.= <<<HTML
+                            </table>
+                        </td>
+                        <td>
+                            <table class="notifMant table">
+                                <tr>
+                                    <td colspan="2">Mantenimientos Finalizados
+HTML;
+        $query_string = $this->querys->obtNotificacionesDeMantenimientos([1, 2, 3, 4, 5, 7]);
+		$query = $this->db->consulta($query_string);
+        while ($row = $this->db->fetch_array($query)) {
+            if ($estado != $row['nombre']) {
+                $dataDIV.= <<<HTML
+                                        </td>
+                                    </tr>
+                                    <tr class="notifLine">
+                                        <td>{$row['nombre']}</td>
+                                        <td>
+                                            <div>{$row['tarea']}</div>
+HTML;
+            } else {
+                $dataDIV.= <<<HTML
+                                            <div>{$row['tarea']}</div>
+HTML;
+            }
+            $estado = $row['nombre'];
+        }
+        $dataDIV.= <<<HTML
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+HTML;
+        $dataLI = <<<HTML
+    <li><a href="#tabs-0">NOTIFICACIONES<br />DE<br />MANTENIMIENTO</a></li>
+HTML;
+        return array($dataLI, $dataDIV);
+    }
+
 }

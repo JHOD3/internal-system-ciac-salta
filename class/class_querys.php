@@ -1029,4 +1029,24 @@ class Querys implements iQuerys{
         return $query;
     }
 
+    function obtNotificacionesDeMantenimientos($aIn) {
+        $query = "
+            SELECT
+                `me`.`nombre`,
+                `m`.*
+            FROM
+                `mantenimientos` AS `m`
+            INNER JOIN
+                `mantenimientos_estados` AS `me`
+                ON
+                    `me`.`id_mantenimientos_estados` = `m`.`id_mantenimientos_estados`
+            WHERE
+                `m`.`id_mantenimientos_estados` NOT IN(".implode(", ", $aIn).")
+            ORDER BY
+                `me`.`id_mantenimientos_estados` ASC,
+                `m`.`tarea`
+        ";
+        return $query;
+    }
+
 }
