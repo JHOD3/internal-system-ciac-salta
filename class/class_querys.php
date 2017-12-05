@@ -523,6 +523,29 @@ class Querys implements iQuerys{
 		return $query;
 	}
 
+	function DropHorariosInhabilitadosPorFecha($id_medico, $id_especialidad){
+        $fecha = date("Y-m-d");
+		$query = "
+            SELECT
+                `hi`.*,
+                `him`.motivo_descripcion
+			FROM
+                horarios_inhabilitados AS `hi`
+            LEFT JOIN
+                horarios_inhabilitados_motivos AS `him`
+                ON
+                    `hi`.id_horarios_inhabilitados_motivos = `him`.id_horarios_inhabilitados_motivos
+			WHERE
+                `hi`.fecha >= '$fecha' AND
+                `hi`.id_medicos = $id_medico AND
+                `hi`.id_especialidades = $id_especialidad
+            ORDER BY
+                `hi`.fecha,
+                `hi`.desde
+        ";
+		return $query;
+	}
+
 	function TipoHorario($dia, $inicio, $fin, $id_medico, $id_especialidad){
 		$query = "SELECT *
 				FROM medicos_horarios

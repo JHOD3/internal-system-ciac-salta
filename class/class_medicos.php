@@ -272,7 +272,7 @@ class Medicos extends Estructura implements iMedicos{
 			}
 		}
 
-		$drop_horarios_inhabilitado = $this->HorariosInhabilitados($id_medico, $id_especialidad, $fecha);
+		$drop_horarios_inhabilitado = $this->HorariosInhabilitadosPorFecha($id_medico, $id_especialidad, $fecha);
 
 		$htm->Asigna("DROP_HORARIOS_INHABILITADOS", $drop_horarios_inhabilitado);
 
@@ -600,7 +600,7 @@ HTML;
 
 
 
-		$drop_horarios_inhabilitado = $this->HorariosInhabilitados($id_medico, $id_especialidad, $fecha);
+		$drop_horarios_inhabilitado = $this->HorariosInhabilitadosPorFecha($id_medico, $id_especialidad, $fecha);
 
 		$htm->Asigna("DROP_HORARIOS_INHABILITADOS", $drop_horarios_inhabilitado);
 
@@ -850,7 +850,7 @@ HTML;
 			}
 		}
 
-		$drop_horarios_inhabilitado = $this->HorariosInhabilitados($id_medico, $id_especialidad, $fecha);
+		$drop_horarios_inhabilitado = $this->HorariosInhabilitadosPorFecha($id_medico, $id_especialidad, $fecha);
 
 		$htm->Asigna("DROP_HORARIOS_INHABILITADOS", $drop_horarios_inhabilitado);
 
@@ -1190,4 +1190,54 @@ HTML;
 		return $rta;
 
 	}
+
+
+	function HorariosInhabilitadosPorFecha($id_medico, $id_especialidad){
+		$htm = $this->Html("drop_uno");
+		$query_string = $this->querys->DropHorariosInhabilitadosPorFecha($id_medico, $id_especialidad);
+		$query = $this->db->consulta($query_string);
+		$cant = $this->db->num_rows($query);
+		if ($cant != 0){
+			$htm->Asigna('NOMBRE_SELECT', 'horarios_inhabilitados');
+			$htm->Asigna('LABEL_ELIJA', 'Seleccione Horario');
+			$htm->Asigna('MULTIPLE', 'multiple');
+			$htm->Asigna('SIZE', 'size="'.max(4, min(10, $cant)).'" style="width:100%;"');
+			while ($row = $this->db->fetch_array($query)){
+                $desde = $row['desde'];
+                if (substr($desde, -3, 3) == ':00') {
+                    $desde = substr($desde, 0, strlen($desde) -3);
+                }
+                if (substr($desde, -3, 3) == ':00') {
+                    $desde = substr($desde, 0, strlen($desde) -3);
+                }
+                $hasta = $row['hasta'];
+                if (substr($hasta, -3, 3) == ':00') {
+                    $hasta = substr($hasta, 0, strlen($hasta) -3);
+                }
+                if (substr($hasta, -3, 3) == ':00') {
+                    $hasta = substr($hasta, 0, strlen($hasta) -3);
+                }
+				$row['TEXTO_OPTION'] =
+                    date("d/m", strtotime($row['fecha'])).
+                    " | ".
+                    $desde.
+                    "-".
+                    $hasta.
+                    " | ".
+                    $row['motivo_descripcion']
+                ;
+                if ($row['motivo_descripcion'] == 'Otro') {
+    				$row['TEXTO_OPTION'].= ': '.$row['horarios_inhabilitados_motivos'];
+                }
+				$row['VALUE'] = $row['id_horarios_inhabilitados'];
+				$htm->AsignaBloque('block_option',$row);
+			}
+			$rta = $htm->Muestra();
+		}else{
+			$rta = "Sin Horarios Inhabilitados";
+		}
+		return $rta;
+
+	}
+
 }

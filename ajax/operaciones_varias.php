@@ -31,9 +31,15 @@ switch($tipo){
 	case "habilitar":
 		$id = $_POST['id'];
 		requerir_class('horarios_inhabilitados');
-		$obj = new Horarios_inhabilitados($id);
-
-		$rta = $obj->Baja();
+        if (is_array($_POST['id'])) {
+            foreach ($_POST['id'] AS $id) {
+        		$obj = new Horarios_inhabilitados($id);
+        		$rta = $obj->Baja();
+            }
+        } else {
+    		$obj = new Horarios_inhabilitados($id);
+    		$rta = $obj->Baja();
+        }
 	break;
 	case 'duplicados':
 		requerir_class('turnos');
