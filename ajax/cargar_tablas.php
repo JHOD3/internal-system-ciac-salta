@@ -1764,7 +1764,7 @@ if ($cant_registros != 0){
 				case 'encuestas':
 					$turnos = "<a class='btn_opciones' href='#' data-id='".$aRow["id_pacientes"]."' data-tipo_btn='tabla_hija' data-hija='turnos' data-nombre='Turnos Reservados'><img src='".URL."files/img/btns/turnos.png' border='0'></a>";
 					$row[0] = $aRow["id_encuestas_respuestas"];
-					$row[1] = utf8_encode($aRow['fecha_alta']);
+					$row[1] = utf8_encode(date("d/m/Y", strtotime($aRow['fecha_alta'])));
 					$row[2] = utf8_encode($aRow['hora_alta']);
 					$row[3] = utf8_encode($aRow['paciente']);
 					$row[4] = utf8_encode($aRow['respuesta1']);
