@@ -69,7 +69,7 @@ class Diagnostico_model extends CI_Model
     protected function _filtroListado($date1, $date2, $post, $cualFecha = 't.fecha')
     {
         $this->db
-            ->where_in('t.id_especialidades', explode(", ", ID_ESPECIALIDADES . ', 33'))
+            ->where_in('tt.tipo', 'ESTUDIOS')
             ->where_in('t.id_turnos_estados', array(2, 7))
             ->where('t.estado', 1)
             ->where("CONCAT({$cualFecha}, ' ', t.desde) BETWEEN '{$date1} {$post['hour1']}:00' AND '{$date2} {$post['hour2']}:00'")
@@ -166,6 +166,7 @@ class Diagnostico_model extends CI_Model
         $this->db
             ->select('SUM(ts.trajo_arancel) AS Suma')
             ->from('turnos AS t')
+            ->join('turnos_tipos AS tt', 't.id_turnos_tipos = tt.id_turnos_tipos')
             ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
@@ -188,6 +189,7 @@ class Diagnostico_model extends CI_Model
         $this->db
             ->select('SUM(ts.deja_deposito) AS Suma')
             ->from('turnos AS t')
+            ->join('turnos_tipos AS tt', 't.id_turnos_tipos = tt.id_turnos_tipos')
             ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
@@ -213,6 +215,7 @@ class Diagnostico_model extends CI_Model
         $this->db
             ->select('COUNT(t.id_turnos) AS Count')
             ->from('turnos AS t')
+            ->join('turnos_tipos AS tt', 't.id_turnos_tipos = tt.id_turnos_tipos')
             ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
@@ -236,6 +239,7 @@ class Diagnostico_model extends CI_Model
                 COUNT(ts.trajo_orden) AS Count
             ")
             ->from('turnos AS t')
+            ->join('turnos_tipos AS tt', 't.id_turnos_tipos = tt.id_turnos_tipos')
             ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
@@ -257,6 +261,7 @@ class Diagnostico_model extends CI_Model
                 COUNT(ts.trajo_pedido) AS Count
             ")
             ->from('turnos AS t')
+            ->join('turnos_tipos AS tt', 't.id_turnos_tipos = tt.id_turnos_tipos')
             ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
@@ -293,6 +298,7 @@ class Diagnostico_model extends CI_Model
                 te.nombre AS turnos_estados
             ")
             ->from('turnos AS t')
+            ->join('turnos_tipos AS tt', 't.id_turnos_tipos = tt.id_turnos_tipos')
             ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
@@ -330,65 +336,27 @@ class Diagnostico_model extends CI_Model
             ->get()
             ->result_array()
         ;
-        #print "<pre>".($this->db->last_query())."</pre>";
         return $query;
     }
-/*
-    public function obtDiasSemanaDiagnostico($date1, $date2){
-        $query = $this->db
-            ->select('id_dias_semana')
-            ->from('medicos_horarios')
-            ->where_in('id_especialidades', explode(", ", ID_ESPECIALIDADES) . ', 33')
-            ->where('estado', 1)
-            ->group_by('id_dias_semana')
-            ->order_by('id_dias_semana')
-            ->get()
-            ->result_array()
-        ;
-        $dias_semana = array();
-        foreach ($query AS $itm){
-            $val = (($itm['id_dias_semana'] + 5) % 7) + 1;
-            $dias_semana[$val] = $val;
-        }
-        sort($dias_semana);
 
-        $while_condition = true;
-        $i = -1;
-        while ($while_condition) {
-            $dataView['ayer'] = "{$i} day";
-            $dia = date("N", strtotime($dataView['ayer'], strtotime($date)));
-            $while_condition = !in_array($dia, $dias_semana);
-            $i--;
-        }
-
-        $while_condition = true;
-        $i = 1;
-        while ($while_condition) {
-            $dataView['mana'] = "{$i} day";
-            $dia = date("N", strtotime($dataView['mana'], strtotime($date)));
-            $while_condition = !in_array($dia, $dias_semana);
-            $i++;
-        }
-
-        return $dataView;
-    }
-*/
     public function obtMedicos()
     {
-        $ID_ESPECIALIDADES = ID_ESPECIALIDADES;
         $query = <<<SQL
             SELECT
                 m.*
             FROM
                 medicos AS m
             INNER JOIN
-                medicos_especialidades AS me
-                ON me.id_medicos = m.id_medicos
+                medicos_horarios AS mh
+                ON mh.id_medicos = m.id_medicos
+            INNER JOIN
+                turnos_tipos AS tt
+                ON mh.id_turnos_tipos = tt.id_turnos_tipos
             WHERE
                 m.estado = 1 AND
-                me.estado = 1 AND
-                me.id_especialidades IN ({$ID_ESPECIALIDADES}) AND
-                me.id_medicos != 205
+                mh.estado = 1 AND
+                tt.estado = 1 AND
+                tt.tipo = 'ESTUDIOS'
             GROUP BY
                 m.id_medicos
             ORDER BY
@@ -432,23 +400,30 @@ SQL;
 
     public function obtEspecialidadDeMedico($id_medico)
     {
-        $ID_ESPECIALIDADES = ID_ESPECIALIDADES;
         $query = <<<SQL
             SELECT
                 e.*
             FROM
-                medicos_especialidades AS me
+                medicos_especialidades AS m
             INNER JOIN
                 especialidades AS e
                 ON me.id_especialidades = e.id_especialidades
+            INNER JOIN
+                medicos_horarios AS mh
+                ON mh.id_medicos = m.id_medicos
+            INNER JOIN
+                turnos_tipos AS tt
+                ON mh.id_turnos_tipos = tt.id_turnos_tipos
             WHERE
-                me.id_medicos = '{$id_medico}' AND
-                me.estado = 1 AND
-                me.id_especialidades IN ({$ID_ESPECIALIDADES}) AND
+                m.id_medicos = '{$id_medico}' AND
+                m.estado = 1 AND
+                mh.estado = 1 AND
+                tt.estado = 1 AND
+                tt.tipo = 'ESTUDIOS'
                 e.estado = 1
             GROUP BY
-                me.id_medicos,
-                me.id_especialidades
+                m.id_medicos,
+                m.id_especialidades
 SQL;
         return $this->db->query($query)->result_array();
     }
@@ -533,6 +508,7 @@ SQL;
                 ts.observaciones
             ")
             ->from('turnos AS t')
+            ->join('turnos_tipos AS tt', 't.id_turnos_tipos = tt.id_turnos_tipos')
             ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
             ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
             ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')

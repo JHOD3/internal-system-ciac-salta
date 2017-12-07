@@ -3,8 +3,6 @@ require_once ("../engine/config.php");
 require_once ("../engine/restringir_acceso.php");
 requerir_class("tpl","mysql","querys","estructura");
 
-defined('ID_ESPECIALIDADES') OR define('ID_ESPECIALIDADES', '60, 61, 63, 64, 65, 68, 66, 73, 77, 62');
-
 //requerir_class("dias_semana");
 $this_db = new MySQL();
 
@@ -39,32 +37,40 @@ function doSaludo($rsMedico, $prefix = true)
 
 $SQL_esp = <<<SQL
     SELECT
-        t.id_especialidades
+        t.*
     FROM
         turnos AS t
+    INNER JOIN
+        turnos_tipos AS tt
+        ON mh.id_turnos_tipos = tt.id_turnos_tipos
     WHERE
         t.id_turnos = '{$_POST['id_turno']}' AND
-        t.estado = 1
+        t.estado = 1 AND
+        tt.estado = 1 AND
+        tt.tipo = 'ESTUDIOS'
     LIMIT 1
 SQL;
 $query_esp = $this_db->consulta($SQL_esp);
 
-if ($row_esp = $this_db->fetch_assoc($query_esp) and in_array($row_esp['id_especialidades'], explode(", ", ID_ESPECIALIDADES . ', 33'))) {
+if ($row_tur = $this_db->fetch_assoc($query_esp)) {
 // IF NO ANIDADO
 
-$ID_ESPECIALIDADES = ID_ESPECIALIDADES;
 $SQL_med = <<<SQL
     SELECT
         m.*
     FROM
         medicos AS m
     INNER JOIN
-        medicos_especialidades AS me
-        ON me.id_medicos = m.id_medicos
+        medicos_horarios AS mh
+        ON mh.id_medicos = m.id_medicos
+    INNER JOIN
+        turnos_tipos AS tt
+        ON mh.id_turnos_tipos = tt.id_turnos_tipos
     WHERE
         m.estado = 1 AND
-        me.estado = 1 AND
-        me.id_especialidades IN ({$ID_ESPECIALIDADES})
+        mh.estado = 1 AND
+        tt.estado = 1 AND
+        tt.tipo = 'ESTUDIOS'
     GROUP BY
         m.id_medicos
     ORDER BY
