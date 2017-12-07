@@ -3,7 +3,7 @@ require_once ("../engine/config.php");
 require_once ("../engine/restringir_acceso.php");
 requerir_class("tpl","mysql","querys","estructura");
 
-defined('ID_ESPECIALIDADES') OR define('ID_ESPECIALIDADES', '60, 61, 63, 64, 65, 68, 66, 73');
+defined('ID_ESPECIALIDADES') OR define('ID_ESPECIALIDADES', '60, 61, 63, 64, 65, 68, 66, 73, 77');
 
 //requerir_class("dias_semana");
 $this_db = new MySQL();
