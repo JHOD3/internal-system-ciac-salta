@@ -69,7 +69,7 @@ class Diagnostico_model extends CI_Model
     protected function _filtroListado($date1, $date2, $post, $cualFecha = 't.fecha')
     {
         $this->db
-            ->where_in('tt.tipo', 'ESTUDIOS')
+            #->where('tt.tipo', 'ESTUDIOS')
             ->where_in('t.id_turnos_estados', array(2, 7))
             ->where('t.estado', 1)
             ->where("CONCAT({$cualFecha}, ' ', t.desde) BETWEEN '{$date1} {$post['hour1']}:00' AND '{$date2} {$post['hour2']}:00'")
