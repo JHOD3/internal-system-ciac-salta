@@ -41,6 +41,9 @@ $SQL_esp = <<<SQL
     FROM
         turnos AS t
     INNER JOIN
+        medicos_horarios AS mh
+        ON mh.id_medicos = t.id_medicos
+    INNER JOIN
         turnos_tipos AS tt
         ON mh.id_turnos_tipos = tt.id_turnos_tipos
     WHERE
