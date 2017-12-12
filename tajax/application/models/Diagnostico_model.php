@@ -444,8 +444,7 @@ SQL;
                 ON me.id_medicos = m.id_medicos
             WHERE
                 m.estado = 1 AND
-                m.matricula > 0 AND
-                me.estado = 1
+                m.matricula > 0
             GROUP BY
                 m.id_medicos
             UNION
