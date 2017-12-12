@@ -439,9 +439,6 @@ SQL;
                 '0' AS externo
             FROM
                 medicos AS m
-            INNER JOIN
-                medicos_especialidades AS me
-                ON me.id_medicos = m.id_medicos
             WHERE
                 m.estado = 1 AND
                 m.matricula > 0
