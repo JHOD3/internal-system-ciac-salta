@@ -47,7 +47,7 @@ $htm_index->Asigna("DATE_HASTA", $hasta);
 $dataMOT = $obj_estructura->obtMotivosDeInhabilitaciones();
 $htm_index->Asigna("MOTIVOS", $dataMOT);
 
-if ($_SESSION['SUPERUSER'] == '1') {
+if (in_array($_SESSION['SUPERUSER'], array(1, 2))) {
     list($dataNDMli, $dataNDMdiv) = $obj_estructura->obtNotificacionesDeMantenimientos();
     $htm_index->Asigna("dataNDMli", $dataNDMli);
     $htm_index->Asigna("dataNDMdiv", $dataNDMdiv);
