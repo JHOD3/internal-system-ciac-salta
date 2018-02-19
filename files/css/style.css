@@ -1,3 +1,4 @@
+@import 'healthmedical-icons.css';
 
 /********************************      Basic Structure      ********************************/
 
@@ -1381,4 +1382,21 @@ tr.even td:last-child{
 .subA:hover .subAopen {
     position: absolute;
     display: block;
+}
+
+.dl-menu > li > a > i,
+.dl-menu > li > ul > li > a > i {
+    display: inline-block;
+    padding-top: 8px;
+    width: 30px;
+    height: 30px;
+    font-size: 30px;
+    text-align: center;
+    vertical-align: middle;
+    color: #ffffff;
+}
+.dl-menu > li > a > i.fa,
+.dl-menu > li > ul > li > a > i.fa {
+    padding-top: 0px;
+    font-size: 22px;
 }

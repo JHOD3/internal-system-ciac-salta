@@ -29,7 +29,7 @@ if (isset($isDiagnosticos) and $isDiagnosticos) {
 
     $html_button = <<<EOT
 <a id="btnEst" href="index.php" class="btn">
-	<img src="../files/img/btns/pacientes.png" width="30" />
+	<i class="fa fa-calendar"></i>
     <span>Agenda</span>
 </a>
 EOT;
@@ -40,11 +40,11 @@ if ($_GET['show'] != 'estadisticas') {
 
     $html_button = <<<EOT
 <a id="btnEst" href="index.php?show=estadisticas" class="btn">
-	<img src="../files/img/btns/estadisticas.png" width="30" />
+	<i class="fa fa-bar-chart"></i>
     <span>Estad&iacute;s-<br />ticas</span>
 </a>
 <a href="diagnosticos.php" class="btn">
-	<img src="../files/img/btns/medicos.png" width="30" />
+	<i class="fa fa-medkit"></i>
     <span>Pr&aacute;cticas<br />M&eacute;dicas</span>
 </a>
 EOT;
@@ -55,11 +55,11 @@ EOT;
 
     $html_button = <<<EOT
 <a id="btnEst" href="index.php" class="btn">
-	<img src="../files/img/btns/pacientes.png" width="30" />
+	<i class="fa fa-calendar"></i>
     <span>Agenda</span>
 </a>
 <a href="diagnosticos.php" class="btn">
-	<img src="../files/img/btns/medicos.png" width="30" />
+	<i class="fa fa-medkit"></i>
     <span>Pr&aacute;cticas<br />M&eacute;dicas</span>
 </a>
 EOT;

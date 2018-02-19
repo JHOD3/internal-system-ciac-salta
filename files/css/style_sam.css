@@ -1,3 +1,4 @@
+@import 'healthmedical-icons.css';
 
 /********************************      Basic Structure      ********************************/
 
@@ -1425,4 +1426,17 @@ input[type=text].arancel, input[type=text].particular{
     display: inline-block;
     vertical-align: middle;
     line-height: 11px;
+}
+.aBtnMin a i {
+    display: inline-block;
+    padding-top: 8px;
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    text-align: center;
+    vertical-align: middle;
+    color: #008A47;
+}
+.aBtnMin a i.fa {
+    font-size: 20px;
 }
