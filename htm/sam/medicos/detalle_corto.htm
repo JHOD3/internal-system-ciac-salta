@@ -3,6 +3,7 @@
     	[block: block_registros]
         <div class="row">
             <div class="span12">
+                [DIV_HIDE_OPEN]
                 <div class="float margin"><label>Esp.:</label></div>
                 <div class="float">[DROP_ESPECIALIDADES]</div>
                 <div class="float">
@@ -11,8 +12,9 @@
                         <a href="#" id="btn_buscar_paciente" class="btn">Buscar</a>
                     </div>
                 </div>
+                [DIV_HIDE_CLOSE]
                 <div class="right margin"><a href="login.php">[Salir]</a></div>
-                <div class="right">
+                <div class="right aBtnMin">
                     [ESTADISTICAS_BUTTON]
                     <a
                         href="#"
@@ -21,14 +23,13 @@
                         data-tipo_btn="tabla_sas"
                         class="btn btn_opciones"
                         data-nombre="medicos_obras_sociales"
-                        style="float:left!important;"
                     >
                     	<img src="[IMG]btns/obras_sociales.png" width="30" />
-                        <span>Obras Sociales</span>
+                        <span>Obras<br />Sociales</span>
                     </a>
-                    <a href="#" class="btn btn_tabla" data-nombre="medicos" style="float:left!important;">
+                    <a href="#" class="btn btn_tabla" data-nombre="medicos">
                     	<img src="[IMG]btns/medicos.png" width="30" />
-                        <span>Planta M&eacute;dica</span>
+                        <span>Planta<br />M&eacute;dica</span>
                     </a>
                 </div>
                 <div class="fn"></div>

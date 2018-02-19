@@ -66,14 +66,23 @@ class Diagnostico_model extends CI_Model
         }
     }
 
-    protected function _filtroListado($date1, $date2, $post, $cualFecha = 't.fecha')
+    protected function _filtroListado($date1, $date2, $post, $cualFecha, $id_usuario = null, $isMedico = false)
     {
+        if (!isset($cualFecha)) {
+            $cualFecha = 't.fecha';
+        }
         $this->db
             #->where('tt.tipo', 'ESTUDIOS')
             ->where_in('t.id_turnos_estados', array(2, 7))
             ->where('t.estado', 1)
             ->where("CONCAT({$cualFecha}, ' ', t.desde) BETWEEN '{$date1} {$post['hour1']}:00' AND '{$date2} {$post['hour2']}:00'")
         ;
+        if (
+            $isMedico and
+            ($id_usuario - 1000000) > 0
+        ) {
+            $this->db->where('t.id_medicos', ($id_usuario - 1000000));
+        }
         $aPost = array(
             'spac' => "CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres))",
             'sces' => "e.codigopractica",
@@ -160,7 +169,7 @@ class Diagnostico_model extends CI_Model
         */
     }
 
-    function obtDejaDepositoSuma($date1, $date2, $post)
+    function obtDejaDepositoSuma($date1, $date2, $post, $id_usuario = null, $isMedico = false)
     {
         $suma1 = 0;
         $this->db
@@ -174,7 +183,7 @@ class Diagnostico_model extends CI_Model
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $post);
+        $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
         $query = $this->db
             ->where('ts.estado', 1)
             ->get()
@@ -197,7 +206,7 @@ class Diagnostico_model extends CI_Model
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $post);
+        $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
         $query = $this->db
             ->where('ts.estado', 1)
             ->get()
@@ -210,7 +219,7 @@ class Diagnostico_model extends CI_Model
         return array($suma1, $suma2);
     }
 
-    function obtenerListadoCount($date1, $date2, $post)
+    function obtenerListadoCount($date1, $date2, $post, $id_usuario = null, $isMedico = false)
     {
         $this->db
             ->select('COUNT(t.id_turnos) AS Count')
@@ -223,7 +232,7 @@ class Diagnostico_model extends CI_Model
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $post);
+        $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
         $query = $this->db
             ->where('ts.estado', 1)
             ->get()
@@ -232,7 +241,7 @@ class Diagnostico_model extends CI_Model
         return $query[0]['Count'];
     }
 
-    function obtCantidadDeOrdenes($date1, $date2, $post)
+    function obtCantidadDeOrdenes($date1, $date2, $post, $id_usuario = null, $isMedico = false)
     {
         $this->db
             ->select("
@@ -247,7 +256,7 @@ class Diagnostico_model extends CI_Model
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $post);
+        $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
         $query1 = $this->db
             ->where('ts.trajo_orden', 1)
             ->where('ts.estado', 1)
@@ -269,7 +278,7 @@ class Diagnostico_model extends CI_Model
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $post);
+        $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
         $query2 = $this->db
             ->where('ts.trajo_pedido', 1)
             ->where('ts.estado', 1)
@@ -281,8 +290,13 @@ class Diagnostico_model extends CI_Model
         return array($query1[0]['Count'], $query2[0]['Count']);
     }
 
-    function obtenerListado($date1, $date2, $post)
-    {
+    function obtenerListado(
+        $date1,
+        $date2,
+        $post,
+        $id_usuario = null,
+        $isMedico = false
+    ) {
         $this->db
             ->select("
                 t.*,
@@ -308,7 +322,7 @@ class Diagnostico_model extends CI_Model
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $post);
+        $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
         $post['orderby_field'] = isset($post['orderby_field']) ? $post['orderby_field'] : '1';
         $post['orderby_order'] = isset($post['orderby_order']) ? $post['orderby_order'] : 'ASC';
         $ord = $post['orderby_order'];
@@ -477,7 +491,7 @@ SQL;
         return $this->db->query($query)->result_array();
     }
 
-    public function obtDiagnosticosExport($date1, $date2, $post)
+    public function obtDiagnosticosExport($date1, $date2, $post, $id_usuario = null, $isMedico = false)
     {
         $this->db
             ->select("
@@ -514,7 +528,7 @@ SQL;
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
         ;
-        $this->_filtroListado($date1, $date2, $post, 'ts.fecha_presentacion');
+        $this->_filtroListado($date1, $date2, $post, 'ts.fecha_presentacion', $id_usuario, $isMedico);
         $query = $this->db
             ->where('ts.estado', 1)
             ->order_by('ts.estado DESC, ts.fecha_presentacion, t.desde, t.hasta, t.id_turnos')

@@ -2,9 +2,53 @@
 <script src="[JS]/propios/medicos.js"></script>
 <script src="[JS]/propios/obras_sociales.js"></script>
 <script src="[JS]/propios/mensajes.js"></script>
+<script src="[JS]/propios/notificaciones.js"></script>
+<script>
+	$(document).ready(function(){
+		CrearAgenda();
+		var fecha=new Date();
+		GrillaInicial(fecha,'sam');
+        $('#medicos_especialidades').change(function(){
+            CrearAgenda();
+    		GrillaInicial(fecha,'sam');
+        });
 
-
+        ajxM = $.ajax({
+            type: 'POST',
+            url:
+                '../tajax/index.php/diagnostico/listado/[DATE1]/[DATE2]/[ID_USUARIO]/1'
+            ,
+            context: document.body
+        }).done(function(data) {
+            $('#diagnosticos_medicos').html(data);
+        });
+	});
+</script>
 <style>
+#myChat,
+#myChat *{
+    font-size:16px;
+    margin:0;
+    padding:0;
+}
+#myChat h3{
+    font-size:19.2px;
+    line-height:19.2px;
+}
+#myChat b{
+    color:#999999;
+    font-weight:lighter;
+    font-size:12px;
+    display:block;
+    height:13px;
+}
+#myChat strong{
+    color:#007FA6;
+}
+#dialog-confirm, #dialog_eliminar{
+	display:none;
+	overflow:hidden !important
+}
 .ui-autocomplete {
 	max-height: 200px;
 	overflow-y: auto;
@@ -182,109 +226,8 @@ h1{
     width: 280px;
 }
 </style>
-<script>
-	$(document).ready(function(){
-		$("#medicos").focus(function(){
-			$(this).val('');
-		})
-
-		$("#dni").focus(function(){
-			$(this).val('');
-		})
-
-        $(document).keypress(function(e) {
-            if ($('#estudiosF10').length) {
-                if (
-                    (
-                        (e.charCode >= 65 && e.charCode <= 90) ||
-                        (e.charCode >= 97 && e.charCode <= 122) ||
-                        (e.charCode >= 48 && e.charCode <= 58) ||
-                        (e.charCode == 32) ||
-                        (e.charCode == 45)
-                    ) && (
-                        e.key.length == 1
-                    )
-                ) {
-                    e.preventDefault();
-                    $('.f10focus').val($('.f10focus').val() + e.key);
-                    $('.f10focus').keyup();
-                } else if (e.key == 'Backspace') {
-                    e.preventDefault();
-                    $('.f10focus').val($('.f10focus').val().substr(0, $('.f10focus').val().length - 1));
-                    $('.f10focus').keyup();
-                } else if (e.key == 'Tab') {
-                    e.preventDefault();
-                    if ($('.f10focus').attr('id') == 'tb_f10_estudio') {
-                        $('#tb_f10_estudio').removeClass('f10focus');
-                        $('#tb_f10_obrasocial').addClass('f10focus').focus();
-                    } else {
-                        $('#tb_f10_estudio').addClass('f10focus').focus();
-                        $('#tb_f10_obrasocial').removeClass('f10focus');
-                    }
-                }/* else {
-                    if (console && console.log) console.log(e.charCode + ' > ' + e.key);
-                    if (console && console.log) console.log(e);
-                    e.preventDefault();
-                }/**/
-            }
-            if (e.key == 'F10') {
-                e.preventDefault();
-                if ($('#estudiosF10').length) {
-                    $('#estudiosF10').remove();
-                } else {
-                    $.ajax(
-                        '../ajax/estudios_f10.php'
-                    ).done(function(data){
-                        $('body').before(data);
-                        $('.f10focus').focus();
-                    });
-                }
-            }
-        });
-        $('#tb_f10_obrasocial').click(function(){
-            $('#tb_f10_estudio').removeClass('f10focus');
-            $('#tb_f10_obrasocial').addClass('f10focus').focus();
-        });
-        $('#tb_f10_estudio').click(function(){
-            $('#tb_f10_estudio').addClass('f10focus').focus();
-            $('#tb_f10_obrasocial').removeClass('f10focus');
-        });
-
-        ajxM = $.ajax({
-            type: 'POST',
-            url:
-                '../tajax/index.php/diagnostico/listado/[DATE1]/[DATE2]/[ID_USUARIO]/0'
-            ,
-            context: document.body
-        }).done(function(data) {
-            $('#diagnosticos_medicos').html(data);
-        });
-    });
-
-	jQuery(function($){
-        $("#desde").mask("99:99");
-        $("#hasta").mask("99:99");
-	});
-
-	//CARGO LA FUNCION DE HORA ACTUAL (mi_script.js)
-  	window.onload = HoraActual
-</script>
-<section class="bg_negro">
-	<div class="container">
-    	<div class="row" id="datos_usr">
-        	<div class="span6">
-        	Bienvenido/a [USUARIO_APELLIDOS], [USUARIO_NOMBRES]
-            </div>
-            <div id="fecha_hora_actual" class="span6">
-            	<span>[FECHA]</span>  -  <span id="liveclock" ></span>
-            </div>
-        </div>
-    </div>
-</section>
-[MENU_TABLAS]
-<section id="panel_menu" class="bg_verde"></section>
-
-<section id="panel_cuerpo">
+[DETALLE_MEDICO]
+<section id='cuerpo'>
 	<div class="container">
         <div id="diagnosticos_medicos">
             <img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Pr&aacute;cticas M&eacute;dicas
@@ -292,7 +235,10 @@ h1{
         <div style="float:none;clear:both;">&nbsp;</div>
         <input type="hidden" placeholder="Medico" id="medicos" class="ui-autocomplete-input" autocomplete="off">
 	</div>
-</div>
+</section>
+<section id="panel_menu_sam" class="bg_verde">
+	[MENU_TABLAS]
+</section>
 
 <div id="dialog_eliminar" title="Borrar Registos Seleccionado?">
     <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Se borrar&aacute;n todos los datos vinculados al registro. Desea continuar?</p>

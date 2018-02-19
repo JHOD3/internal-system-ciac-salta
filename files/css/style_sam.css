@@ -1357,10 +1357,72 @@ input[type=text].arancel, input[type=text].particular{
     padding: 0 6px 6px 6px;
     border-bottom: 2px solid #CCCCCC;
 }
+.ui-datepicker-calendar > tbody > tr > td > a,
+.ui-datepicker-calendar > tbody > tr > td > span{
+    padding: 3px 10px!important;
+}
+
+#tblDxI tr.inputSearch,
+#tblDxI tr.inputSearch *,
+#tblDxI tr.inputSearch td input,
+#tblDxI tr.inputSearch td select {
+    background-color: #ffffff!important;
+    padding: 0!important;
+    margin: 0!important;
+}
+
+#tblDxI tr.inputSearch > td > input,
+#tblDxI tr.inputSearch > td > select {
+    width: 90%!important;
+    padding: 1px 2%!important;
+    margin: 0 0 2px 0!important;
+    display: block!important;
+    box-shadow: none!important;
+    text-shadow: none!important;
+    border-radius: 5px!important;
+    height: 19px!important;
+}
+
+#tblDxI tr.inputSearch > td > select {
+    height: 23px!important;
+}
+
+#ui-datepicker-div{
+    max-width: 300px!important;
+    width: auto!important;
+    background-color: #ffffff;
+}
 
 .sobreturno > div{
     background-color: #ccffcc;
 }
+
 .sobreturno2 > div{
     background-color: #ffeecc;
+}
+
+.subA{
+    display: inline-block;
+}
+.subA .subAopen {
+    display: none;
+    background-color: #008A47;
+    padding: 4px;
+    border-radius: 0 0 4px 4px;
+    margin-left: -4px;
+}
+.subA:focus .subAopen,
+.subA:active .subAopen,
+.subA:hover .subAopen {
+    position: absolute;
+    display: block;
+}
+.aBtnMin a{
+    float: left!important;
+    padding: 4px 6px 4px 2px;
+}
+.aBtnMin a span{
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 11px;
 }
