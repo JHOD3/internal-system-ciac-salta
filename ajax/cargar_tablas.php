@@ -53,7 +53,7 @@ switch ($tabla){
 		$aColumns = array('id_medicosext', 'saludo', 'apellidos', 'nombres', 'matricula');
     break;
 	case "medicosexp":
-		$aColumns = array('mx.id_medicosexp','mx.saludo','mx.apellidos','mx.nombres','turnos_turnos','turnos_sobreturnos','turnos_total','minutos_horario','minutos_turnos','minutos_sobreturnos','minutos_total','horas_horario','horas_turnos','horas_sobreturnos','horas_total');
+		$aColumns = array('mx.id_medicosexp','mx.saludo','mx.apellidos','mx.nombres','turnos_turnos','turnos_sobreturnos','turnos_total','horas_horario','horas_turnos','horas_sobreturnos','horas_total');
 	break;
 	case "especialidades":
 		$aColumns = array('id_especialidades', 'nombre');
@@ -1194,19 +1194,14 @@ switch ($tabla) {
                            `ty`.`turnos` AS `turnos_turnos`,
                            (`tx`.`turnos` - `ty`.`turnos`) AS `turnos_sobreturnos`,
                            `tx`.`turnos` AS `turnos_total`,
-                           `ty`.`minutos` AS `minutos_turnos`,
-                           (`tx`.`minutos` - `ty`.`minutos`) AS `minutos_sobreturnos`,
-                           `tx`.`minutos` AS `minutos_total`,
                            `ty`.`horas` AS `horas_turnos`,
                            (`tx`.`horas` - `ty`.`horas`) AS `horas_sobreturnos`,
                            `tx`.`horas` AS `horas_total`,
-                           `my`.`minutos_horario`,
                            `my`.`horas_horario`,
                            `m`.`estado` AS `estado`
                     FROM (((
                               (SELECT `t`.`id_medicos` AS `id_medicos`,
                                       count(`t`.`id_turnos`) AS `turnos`,
-                                      floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 60))) AS `minutos`,
                                       floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 3600))) AS `horas`
                                FROM `turnos` `t`
                                WHERE ((`t`.`fecha` LIKE '{$mes}%')
@@ -1218,7 +1213,6 @@ switch ($tabla) {
                            JOIN
                              (SELECT `t`.`id_medicos` AS `id_medicos`,
                                      count(`t`.`id_turnos`) AS `turnos`,
-                                     floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 60))) AS `minutos`,
                                      floor(sum((timestampdiff(SECOND,CONCAT(`t`.`fecha`,' ',`t`.`desde`),CONCAT(`t`.`fecha`,' ',`t`.`hasta`)) / 3600))) AS `horas`
                               FROM
                                 (SELECT `tt`.`id_turnos` AS `id_turnos`,
@@ -1239,13 +1233,12 @@ switch ($tabla) {
                                                                           7)))
                                  GROUP BY `tt`.`id_turnos`) `t`
                               GROUP BY `t`.`id_medicos`
-                              ORDER BY `minutos` DESC) `ty` on((`tx`.`id_medicos` = `ty`.`id_medicos`)))
+                              ORDER BY `horas` DESC) `ty` on((`tx`.`id_medicos` = `ty`.`id_medicos`)))
                           JOIN `medicos` `m` on(`m`.`id_medicos` = `tx`.`id_medicos` AND `m`.`estado` = 1))
                     JOIN
                       (
                         SELECT
                         		`mh`.`id_medicos`,
-                        		floor(sum(timestampdiff(SECOND,CONCAT('2017-10-01 ',`mh`.`desde`),CONCAT('2017-10-01 ',`mh`.`hasta`)) / 60) * truncate((datediff(STR_TO_DATE('20171130', '%Y%m%d'),STR_TO_DATE('20171101', '%Y%m%d')) - Weekday(date_add(STR_TO_DATE('20171130', '%Y%m%d'), interval(-`mh`.`id_dias_semana` + 1)day)) + 7) / 7, 0)) AS `minutos_horario`,
                         		floor(sum(timestampdiff(SECOND,CONCAT('2017-10-01 ',`mh`.`desde`),CONCAT('2017-10-01 ',`mh`.`hasta`)) / 3600) * truncate((datediff(STR_TO_DATE('20171130', '%Y%m%d'),STR_TO_DATE('20171101', '%Y%m%d')) - Weekday(date_add(STR_TO_DATE('20171130', '%Y%m%d'), interval(-`mh`.`id_dias_semana` + 1)day)) + 7) / 7, 0)) AS `horas_horario`
                         FROM `medicos_horarios` `mh`
                         WHERE
@@ -1560,14 +1553,10 @@ if ($cant_registros != 0){
 					$row[4] = utf8_encode($aRow["turnos_turnos"]);
 					$row[5] = utf8_encode($aRow["turnos_sobreturnos"]);
 					$row[6] = utf8_encode($aRow["turnos_total"]);
-					$row[7] = utf8_encode($aRow["minutos_horario"]);
-					$row[8] = utf8_encode($aRow["minutos_turnos"]);
-					$row[9] = utf8_encode($aRow["minutos_sobreturnos"]);
-					$row[10] = utf8_encode($aRow["minutos_total"]);
-					$row[11] = utf8_encode($aRow["horas_horario"]);
-					$row[12] = utf8_encode($aRow["horas_turnos"]);
-					$row[13] = utf8_encode($aRow["horas_sobreturnos"]);
-					$row[14] = utf8_encode($aRow["horas_total"]);
+					$row[7] = utf8_encode($aRow["horas_horario"]);
+					$row[8] = utf8_encode($aRow["horas_turnos"]);
+					$row[9] = utf8_encode($aRow["horas_sobreturnos"]);
+					$row[10] = utf8_encode($aRow["horas_total"]);
 
 				break;
 				case "especialidades":
