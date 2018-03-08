@@ -1,6 +1,6 @@
 <div class="sPicon fa fa-calendar"><strong>Elija un Turno</strong></div>
 <div class="clearfloat"></div>
-<div class="padding-05em-15px col-md-12" style="background-color: #f3f3f3;">
+<div class="padding-05em-15px col-md-12 rowPanelLine">
     <div><?=$calendar?></div>
     <div class="detail">
         <div class="MedEsp">
