@@ -1580,6 +1580,8 @@ if ($cant_registros != 0){
 					$row[5] = utf8_encode($aRow["codigopractica"]);
                     if ($_SESSION['SUPERUSER'] == '3') {
                         $row[6] = $editar.''.$eliminar.'';
+                    } elseif ($_SESSION['TIPO_USR'] == 'M') {
+                        $row[6] = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."' data-tipo_btn='dialog_sas'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
                     } else {
                         $row[6] = '';
                     }
