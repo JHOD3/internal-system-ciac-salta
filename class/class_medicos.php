@@ -372,7 +372,11 @@ class Medicos extends Estructura implements iMedicos{
 										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 										<div class='dat_paciente'>".
 											upper(trim($row["apellidos"])). ", ".upper(trim($row["nombres"]))."
-											(".$row["nombre_estado"].")<br />
+											(".$row["nombre_estado"].")";
+                                if ($row['aviso_demora'] == '1') {
+                                    $linea .= " <sup style=\"color:#c00;\">DEMORADO</sup>";
+                                }
+                                $linea .= "<br />
 											<small style='color:#000'>".$row["abreviacion"]."</small>";
 
 								if ($cant_estudios > 0){
@@ -397,7 +401,11 @@ class Medicos extends Estructura implements iMedicos{
 											<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 											<div class='dat_paciente'>".
 												upper(trim($row["apellidos"])). ", ".upper(trim($row["nombres"]))."
-												(".$row["nombre_estado"].")<br />
+												(".$row["nombre_estado"].")";
+                                if ($row['aviso_demora'] == '1') {
+                                    $linea .= " <sup style=\"color:#c00;\">DEMORADO</sup>";
+                                }
+                                $linea .= "<br />
 												<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>
 											</div>";
 
@@ -678,7 +686,11 @@ HTML;
 										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".$row["desde"].":</span>
 										<div class='dat_paciente'>".
 											$row["apellidos"]. ", ".$row["nombres"]."
-											(".$row["nombre_estado"].")<br />
+											(".$row["nombre_estado"].")";
+                                if ($row['aviso_demora'] == '1') {
+                                    $linea .= " <sup style=\"color:#c00;\">DEMORADO</sup>";
+                                }
+                                $linea .= "<br />
 											<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>
 										</div>
 									</div>
@@ -695,7 +707,11 @@ HTML;
 											<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".$row["desde"].":</span>
 											<div class='dat_paciente'>".
 												$row["apellidos"]. ", ".$row["nombres"]."
-												(".$row["nombre_estado"].")<br />
+												(".$row["nombre_estado"].")";
+                                if ($row['aviso_demora'] == '1') {
+                                    $linea .= " <sup style=\"color:#c00;\">DEMORADO</sup>";
+                                }
+                                $linea .= "<br />
 												<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>
 											</div>";
 
