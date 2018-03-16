@@ -242,10 +242,11 @@
 				var tipo = $(this).data("tipo");
 				var titulo = $(this).data("titulo");
                 var id_padre = $(this).data("id_padre");
+				var nombre = $(this).data('nombre');
 
 				IniciarVentana("ventana_menu", "abrir", tabla);
 				$(ventana_menu).html('');
-				$(ventana_menu).dialog('option', 'title', 'Administraci\u00f3n de Obras Sociales');
+				$(ventana_menu).dialog('option', 'title', 'Administraci\u00f3n de ' + nombre);
 				$(ventana_menu).dialog( "open" );
 				$(ventana_menu).focus();
 
