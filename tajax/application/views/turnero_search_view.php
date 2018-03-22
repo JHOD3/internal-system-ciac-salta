@@ -54,7 +54,8 @@
     $(function(){
         $('.onClickButtonMedico').click(function(event){
             event.preventDefault();
-            $(this).next().prepend('<div>Debes elegir una de sus agendas:</div>');
+            $('.alertElegirAgenda').remove();
+            $(this).next().prepend('<div class="alertElegirAgenda">Debes elegir una de sus agendas:</div>');
         });
         $('.onClickButtonAgenda').click(function(event){
             event.preventDefault();
