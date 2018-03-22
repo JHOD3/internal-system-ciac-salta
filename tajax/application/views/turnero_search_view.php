@@ -109,3 +109,8 @@
         </div>
     </div>
 <?php endif; ?>
+<script>
+$(function(){
+    $('#calendar').html('');
+});
+</script>
