@@ -1400,3 +1400,6 @@ tr.even td:last-child{
     padding-top: 0px;
     font-size: 22px;
 }
+.dl-menuwrapper button:hover, .dl-menuwrapper button.dl-active, .dl-menuwrapper ul {
+    background-color: #007fa6;
+}
