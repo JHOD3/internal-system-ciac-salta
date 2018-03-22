@@ -63,6 +63,11 @@
                 }
             });
         });
+<?php if (count($aMedicos) == 1 and count($aMedicos[0]['especialidades']) == 1): ?>
+        setTimeout(function(){
+            $('.onClickButtonAgenda').click();
+        }, 100);
+<?php endif; ?>
     });
     </script>
 <?php else: ?>
