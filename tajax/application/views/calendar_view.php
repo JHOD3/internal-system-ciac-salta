@@ -1,14 +1,15 @@
 <div class="sPicon fa fa-calendar"><strong>Elija un Turno</strong></div>
 <div class="clearfloat"></div>
 <div class="padding-05em-15px col-md-12 rowPanelLine">
+    <span class="MedEsp">
+        <span class="fa fa-user-md"></span>
+        <?=doSaludo($rsMedico, false)?>
+        <br />
+        <span class="fa fa-stethoscope"></span>
+        <?=$rsEspecialidad['nombre']?>
+    </span>
     <div><?=$calendar?></div>
     <div class="detail">
-        <div class="MedEsp">
-            <span class="fa fa-user-md"></span>
-            <?=doSaludo($rsMedico, false)?>&nbsp;&nbsp;&nbsp;
-            <span class="fa fa-stethoscope"></span>
-            <?=$rsEspecialidad['nombre']?>
-        </div>
         <div class="title">
             <?php if (is_array($aHorarios)): ?>
                 Horarios disponibles para el <span><?=$day?>/<?=$month?>/<?=$year?></span>

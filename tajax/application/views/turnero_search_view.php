@@ -2,29 +2,60 @@
     <div class="row margin-10">
         <?php foreach ($aMedicos AS $rsM): ?>
             <div class="col-sm-6 col-md-4">
-                <div class="txtBig">
-                    <span class="fa fa-user-md" aria-hidden="true"></span>
-                    <strong><?=doSaludo($rsM, false)?></strong>
-                </div>
-                <?php foreach ($rsM['especialidades'] AS $rwEsp): ?>
-                    <div>
+                <?php if (count($rsM['especialidades']) == 1): ?>
+                    <?php foreach ($rsM['especialidades'] AS $rwEsp): ?>
                         <a
                             href="#"
                             class="onClickButtonAgenda"
                             data-id_medicos="<?=$rsM['id_medicos']?>"
                             data-id_especialidades="<?=$rwEsp['id_especialidades']?>"
                         >
-                            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                            <?=upper($rwEsp['nombre'])?>
+                            <div class="txtBig">
+                                <span class="fa fa-user-md" aria-hidden="true"></span>
+                                <strong><?=doSaludo($rsM, false)?></strong>
+                            </div>
+                            <div>
+                                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                <?=upper($rwEsp['nombre'])?>
+                            </div>
                         </a>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <a
+                        href="#"
+                        class="onClickButtonMedico"
+                    >
+                        <div class="txtBig">
+                            <span class="fa fa-user-md" aria-hidden="true"></span>
+                            <strong><?=doSaludo($rsM, false)?></strong>
+                        </div>
+                    </a>
+                    <div>
+                        <?php foreach ($rsM['especialidades'] AS $rwEsp): ?>
+                            <div>
+                                <a
+                                    href="#"
+                                    class="onClickButtonAgenda"
+                                    data-id_medicos="<?=$rsM['id_medicos']?>"
+                                    data-id_especialidades="<?=$rwEsp['id_especialidades']?>"
+                                >
+                                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    <?=upper($rwEsp['nombre'])?>
+                                </a>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
+                <?php endif; ?>
                 <div class="clearfloat30"></div>
             </div>
         <?php endforeach; ?>
     </div>
     <script>
     $(function(){
+        $('.onClickButtonMedico').click(function(event){
+            event.preventDefault();
+            $(this).next().prepend('<div>Debes elegir una de sus agendas:</div>');
+        });
         $('.onClickButtonAgenda').click(function(event){
             event.preventDefault();
             id_especialidades = $(this).data('id_especialidades');
