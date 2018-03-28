@@ -17,6 +17,7 @@ requerir_class(
     'estructura',
     'sectores',
     'subsectores',
+    'consultorios',
     'agendas',
     'agendas_tipos',
     'mantenimientos',
@@ -93,6 +94,9 @@ switch ($tabla){
 	break;
 	case "subsectores":
 		$aColumns = array('id_subsectores','id_sectores','nombre');
+	break;
+	case "consultorios":
+		$aColumns = array('nro_consultorio');
 	break;
 	case "agendas":
 		$aColumns = array('id_agendas','nombre','apellido','rubro','celular','telefono','direccion','id_agendas_tipos');
@@ -1292,6 +1296,20 @@ SQL;
     		$sLimit
 SQL;
         break;
+    case 'consultorios':
+        $sQuery = <<<SQL
+            SELECT
+                SQL_CALC_FOUND_ROWS
+                C.nro_consultorio
+            FROM medicos_horarios AS C
+            $sWhere
+            AND C.nro_consultorio IS NOT NULL
+            GROUP BY
+                C.nro_consultorio
+    		$sOrder
+    		$sLimit
+SQL;
+        break;
     default:
         $sQuery = "
         		SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
@@ -1339,6 +1357,19 @@ SQL;
         $sQuery = <<<SQL
             SELECT COUNT(id_encuestas_respuestas)
             FROM encuestas_respuestas
+SQL;
+        break;
+    case 'consultorios':
+        $sQuery = <<<SQL
+            SELECT
+                COUNT(C.nro_consultorio)
+            FROM medicos_horarios AS C
+            $sWhere
+            AND C.nro_consultorio IS NOT NULL
+            GROUP BY
+                C.nro_consultorio
+    		$sOrder
+    		$sLimit
 SQL;
         break;
     default:
@@ -1721,6 +1752,11 @@ if ($cant_registros != 0){
 					$row[1] = utf8_encode($sector);
 					$row[2] = utf8_encode($aRow['nombre']);
                     $row[3] = $editar.''.$eliminar.'';
+				break;
+				case 'consultorios':
+    				$detalle = "<a href='#' class='btn_opciones' data-titulo='Ocupación ".$aRow["nro_consultorio"]."' data-tipo='detalle' data-id='".$aRow["nro_consultorio"]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
+					$row[0] = utf8_encode($aRow['nro_consultorio']);
+                    $row[1] = $detalle.'';
 				break;
 				case 'agendas':
 					$row[0] = $aRow["id_agendas"];

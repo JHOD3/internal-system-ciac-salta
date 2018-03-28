@@ -28,10 +28,19 @@ class Querys implements iQuerys{
 
 	function Registro($tabla,$id){
 		switch ($tabla){
+		    case 'consultorios':
+				$query = "SELECT *
+					FROM medicos_horarios
+					WHERE
+                        nro_consultorio = ".$id." AND
+                        nro_consultorio IS NOT NULL
+                    GROUP BY nro_consultorio";
+                break;
 			default:
 				$query = "SELECT *
 					FROM ".$tabla."
 					WHERE id_".$tabla." = ".$id;
+                break;
 		}
 		//echo $query;
 		return $query;
@@ -1068,6 +1077,43 @@ class Querys implements iQuerys{
             ORDER BY
                 `me`.`id_mantenimientos_estados` ASC,
                 `m`.`tarea`
+        ";
+        return $query;
+    }
+
+    function DetalleConsultorios($nro_consultorio) {
+        $query = "
+            SELECT
+                `ds`.`nombre`,
+                `m`.`saludo`,
+                `m`.`apellidos`,
+                `m`.`nombres`,
+                `mh`.`desde`,
+                `mh`.`hasta`,
+                `me`.`duracion_turno`
+            FROM
+                `medicos_horarios` AS `mh`
+            INNER JOIN
+                `medicos` AS `m`
+                ON `m`.`id_medicos` = `mh`.`id_medicos`
+            INNER JOIN
+                `dias_semana` AS `ds`
+                ON `mh`.`id_dias_semana` = `ds`.`id_dias_semana`
+            INNER JOIN
+                `medicos_especialidades` AS `me`
+                ON
+                    `mh`.`id_especialidades` = `me`.`id_especialidades` AND
+                    `mh`.`id_medicos` = `me`.`id_medicos`
+            WHERE
+                `mh`.`estado` = 1 AND
+                `mh`.`nro_consultorio` IS NOT NULL AND
+                `m`.`estado` = 1 AND
+                `ds`.`estado` = 1 AND
+                `mh`.`nro_consultorio` = '{$nro_consultorio}'
+            ORDER BY
+                `mh`.`id_dias_semana`,
+                `mh`.`desde`,
+                `m`.`apellidos`
         ";
         return $query;
     }

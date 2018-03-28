@@ -29,6 +29,7 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 					break;
 					case 'sectores':
 					case 'subsectores':
+                    case 'consultorios':
 						Width = 600;
 					break;
 					case 'obras_sociales':
@@ -102,6 +103,9 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 				$("#contenedor_listado").append('<div id="'+nombre+'"></div>');
 				Width = 600;
 				switch (tabla){
+                    case 'consultorios':
+						Width = '90%';
+					break;
 					case 'pacientes':
 						Height = 600;
 					break;
