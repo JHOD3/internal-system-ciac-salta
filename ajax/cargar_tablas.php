@@ -74,7 +74,7 @@ switch ($tabla){
 		$aColumns = array('id_medicos_especialidades', 'id_medicos','id_especialidades', 'duracion_turno');
 	break;
 	case "medicos_horarios":
-		$aColumns = array('id_medicos_horarios', 'id_medicos', 'id_especialidades',  'id_dias_semana', 'id_plantas', 'desde', 'hasta');
+		$aColumns = array('id_medicos_horarios', 'id_medicos', 'id_especialidades',  'id_dias_semana', 'id_plantas', 'desde', 'hasta', 'nro_consultorio');
 	break;
 	case 'medicos_estudios':
 		$aColumns = array('id_medicos_estudios', 'id_medicos','id_estudios', 'particular');
@@ -1676,12 +1676,13 @@ if ($cant_registros != 0){
 					$row[0] = $aRow["id_medicos_horarios"];
 					$row[1] = utf8_encode($dia_semana);
 					$row[2] = utf8_encode($planta);
-					$row[3] = utf8_encode(substr($aRow["desde"], 0, 5));
-					$row[4] = utf8_encode(substr($aRow["hasta"], 0, 5));
+                    $row[3] = $aRow['nro_consultorio'];
+					$row[4] = utf8_encode(substr($aRow["desde"], 0, 5));
+					$row[5] = utf8_encode(substr($aRow["hasta"], 0, 5));
                     if ($_SESSION['SUPERUSER'] == '3') {
-                        $row[5] = $editar.''.$eliminar.'';
+                        $row[6] = $editar.''.$eliminar.'';
                     } else {
-                        $row[5] = '';
+                        $row[6] = '';
                     }
 				break;
 				case "cobros":
