@@ -64,6 +64,12 @@ class Querys implements iQuerys{
                         nro_consultorio IS NOT NULL
                     GROUP BY nro_consultorio";
                 break;
+		    case 'disponibilidades':
+				$query = "SELECT *
+					FROM dias_semana
+					WHERE
+                        id_dias_semana = ".$id;
+                break;
 			default:
 				$query = "SELECT *
 					FROM ".$tabla."
@@ -1184,6 +1190,48 @@ class Querys implements iQuerys{
                 `mh`.`id_dias_semana`,
                 `mh`.`desde`,
                 `m`.`apellidos`
+        ";
+        return $query;
+    }
+
+    function DetalleDiaDisponibilidad($id_dias_semana) {
+        $query = "
+            SELECT
+                `ds`.`nombre`,
+                `m`.`saludo`,
+                `m`.`apellidos`,
+                `m`.`nombres`,
+                `mh`.`desde`,
+                `mh`.`hasta`,
+                `me`.`duracion_turno`,
+                `mh`.`nro_consultorio`
+            FROM
+                `medicos_horarios` AS `mh`
+            INNER JOIN
+                `medicos` AS `m`
+                ON `m`.`id_medicos` = `mh`.`id_medicos`
+            INNER JOIN
+                `dias_semana` AS `ds`
+                ON `mh`.`id_dias_semana` = `ds`.`id_dias_semana`
+            INNER JOIN
+                `medicos_especialidades` AS `me`
+                ON
+                    `mh`.`id_especialidades` = `me`.`id_especialidades` AND
+                    `mh`.`id_medicos` = `me`.`id_medicos`
+            INNER JOIN
+                `especialidades` AS `e`
+                ON `me`.`id_especialidades` = `e`.`id_especialidades`
+            WHERE
+                `mh`.`estado` = 1 AND
+                `mh`.`nro_consultorio` IS NOT NULL AND
+                `m`.`estado` = 1 AND
+                `ds`.`estado` = 1 AND
+                `ds`.`id_dias_semana` = '{$id_dias_semana}'
+            ORDER BY
+                `mh`.`id_dias_semana`,
+                `mh`.`nro_consultorio`,
+                `mh`.`desde`,
+                `mh`.`hasta`
         ";
         return $query;
     }

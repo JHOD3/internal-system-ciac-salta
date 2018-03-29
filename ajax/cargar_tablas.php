@@ -18,6 +18,7 @@ requerir_class(
     'sectores',
     'subsectores',
     'consultorios',
+    'disponibilidades',
     'agendas',
     'agendas_tipos',
     'mantenimientos',
@@ -97,6 +98,9 @@ switch ($tabla){
 	break;
 	case "consultorios":
 		$aColumns = array('nro_consultorio');
+	break;
+	case "disponibilidades":
+		$aColumns = array('id_dias_semana', 'nombre');
 	break;
 	case "agendas":
 		$aColumns = array('id_agendas','nombre','apellido','rubro','celular','telefono','direccion','id_agendas_tipos');
@@ -1310,6 +1314,18 @@ SQL;
     		$sLimit
 SQL;
         break;
+    case 'disponibilidades':
+        $sQuery = <<<SQL
+            SELECT
+                SQL_CALC_FOUND_ROWS
+                D.id_dias_semana,
+                D.nombre
+            FROM dias_semana AS D
+            $sWhere
+            $sOrder
+            $sLimit
+SQL;
+        break;
     default:
         $sQuery = "
         		SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
@@ -1368,6 +1384,16 @@ SQL;
             AND C.nro_consultorio IS NOT NULL
             GROUP BY
                 C.nro_consultorio
+    		$sOrder
+    		$sLimit
+SQL;
+        break;
+    case 'disponibilidades':
+        $sQuery = <<<SQL
+            SELECT
+                COUNT(D.id_dias_semana)
+            FROM dias_semana AS D
+            $sWhere
     		$sOrder
     		$sLimit
 SQL;
@@ -1766,6 +1792,12 @@ if ($cant_registros != 0){
     				$detalle = "<a href='#' class='btn_opciones' data-titulo='Consultorio ".$aRow["nro_consultorio"]."' data-tipo='detalle' data-id='".$aRow["nro_consultorio"]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
 					$row[0] = utf8_encode($aRow['nro_consultorio']);
                     $row[1] = $detalle.'';
+				break;
+				case 'disponibilidades':
+    				$detalle = "<a href='#' class='btn_opciones' data-titulo='".utf8_encode($aRow['nombre'])."' data-tipo='disponibilidad' data-id='".$aRow["id_dias_semana"]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
+					$row[0] = $aRow['id_dias_semana'];
+					$row[1] = utf8_encode($aRow['nombre']);
+                    $row[2] = $detalle.'';
 				break;
 				case 'agendas':
 					$row[0] = $aRow["id_agendas"];

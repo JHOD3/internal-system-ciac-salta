@@ -104,6 +104,7 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 				Width = 600;
 				switch (tabla){
                     case 'consultorios':
+                    case 'disponibilidades':
 						Width = '90%';
 					break;
 					case 'pacientes':

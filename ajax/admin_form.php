@@ -26,6 +26,9 @@ switch ($tipo){
 	case "consultorio":
 		$rta = $obj->Consultorio($id);
 	break;
+	case "disponibilidad":
+		$rta = $obj->Dia($id);
+	break;
 	case "editar":
 		switch($tabla){
 			case "medicos_estudios":
