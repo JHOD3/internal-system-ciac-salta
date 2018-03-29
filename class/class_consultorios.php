@@ -92,6 +92,9 @@ class Consultorios extends Estructura implements iConsultorios{
             $cnct = ",\n";
         }
 
+        if (!trim($addRows)) {
+            $addRows = "]);}</script>No se encontraron datos.<script>nul=([";
+        }
         $htm->Asigna("ADDROWS", utf8_encode($addRows));
 
 		CargarVariablesGrales($htm, $tipo = "");
