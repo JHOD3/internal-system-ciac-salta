@@ -75,8 +75,6 @@ class Consultorios extends Estructura implements iConsultorios{
 		$query = $this->db->consulta($query_string);
 
 		$addRows = "";
-        $iColor = 0;
-        $aSelCol = array();
         $cnct = "";
         while ($row = $this->db->fetch_array($query)) {
             $desdeH = substr($row['desde'], 0, 2);
@@ -84,10 +82,6 @@ class Consultorios extends Estructura implements iConsultorios{
             $hastaH = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 0, 2);
             $hastaM = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 3, 2);
             $doSaludo = $this->doSaludo($row, false);
-            if (!in_array($doSaludo, array_keys($aSelCol))) {
-                $aSelCol[$doSaludo] = $iColor;
-                $iColor++;
-            }
             $addRows.= "{$cnct}['{$row['nombre']}', '{$doSaludo}', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,{$hastaH},{$hastaM},0)]";
             $cnct = ",\n";
         }

@@ -1531,7 +1531,7 @@ if ($cant_registros != 0){
 					$especialidades = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='medicos_especialidades' data-nombre='Especialidades por M&eacute;dicos'><img src='".URL."files/img/btns/medicos_especialidades.png' border='0'></a>";
 					$obras_sociales_planes = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='medicos_obras_sociales' data-nombre='Planes de Obras Sociales por M&eacute;dicos'><img src='".URL."files/img/btns/medicos_obras_sociales.png' border='0'></a>";
 					$estudios = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='medicos_estudios' data-nombre='Estudios por M&eacute;dicos'><img src='".URL."files/img/btns/medicos_estudios.png' border='0'></a>";
-				    $medconsul = "<a href='#' class='btn_opciones' data-titulo='Consultorio' data-tipo='consultorio' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
+				    $medconsul = "<a href='#' class='btn_opciones' data-titulo=\"".utf8_encode(doSaludo($aRow, false))."\" data-tipo='consultorio' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
 
 					$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
 

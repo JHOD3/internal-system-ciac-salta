@@ -16,6 +16,34 @@ function upper($str)
     return strtoupper($str);
 }
 
+function lower($str)
+{
+    $arrAcentos = array('Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'Ü');
+    $arrReemplz = array('á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü');
+    $str = str_replace($arrAcentos, $arrReemplz, $str);
+    return strtolower($str);
+}
+
+function doSaludo($rsMedico, $prefix = true) {
+    $str = "";
+    if ($prefix) {
+        switch (lower($rsMedico['saludo'])) {
+            case "dr.":
+                $str.= "el ";
+                break;
+            case "dra.":
+                $str.= "la ";
+                break;
+        }
+    }
+    $str.= ucwords(lower(trim($rsMedico['saludo'])));
+    $str.= " ";
+    $str.= upper(trim($rsMedico['apellidos']));
+    $str.= ", ";
+    $str.= ucwords(lower(trim($rsMedico['nombres'])));
+    return $str;
+}
+
 interface iQuerys{
 
 }
@@ -1127,7 +1155,9 @@ class Querys implements iQuerys{
                 `m`.`nombres`,
                 `mh`.`desde`,
                 `mh`.`hasta`,
-                `me`.`duracion_turno`
+                `me`.`duracion_turno`,
+                `mh`.`nro_consultorio`,
+                `e`.`nombre` AS `especialidad`
             FROM
                 `medicos_horarios` AS `mh`
             INNER JOIN
@@ -1141,6 +1171,9 @@ class Querys implements iQuerys{
                 ON
                     `mh`.`id_especialidades` = `me`.`id_especialidades` AND
                     `mh`.`id_medicos` = `me`.`id_medicos`
+            INNER JOIN
+                `especialidades` AS `e`
+                ON `me`.`id_especialidades` = `e`.`id_especialidades`
             WHERE
                 `mh`.`estado` = 1 AND
                 `mh`.`nro_consultorio` IS NOT NULL AND
