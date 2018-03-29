@@ -1763,7 +1763,7 @@ if ($cant_registros != 0){
                     $row[3] = $editar.''.$eliminar.'';
 				break;
 				case 'consultorios':
-    				$detalle = "<a href='#' class='btn_opciones' data-titulo='Ocupación ".$aRow["nro_consultorio"]."' data-tipo='detalle' data-id='".$aRow["nro_consultorio"]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
+    				$detalle = "<a href='#' class='btn_opciones' data-titulo='Consultorio ".$aRow["nro_consultorio"]."' data-tipo='detalle' data-id='".$aRow["nro_consultorio"]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
 					$row[0] = utf8_encode($aRow['nro_consultorio']);
                     $row[1] = $detalle.'';
 				break;
