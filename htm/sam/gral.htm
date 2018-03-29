@@ -47,8 +47,8 @@
     <script src="[JS]bootstrap-collapse.js"></script>
     <script src="[JS]bootstrap-carousel.js"></script>
     <script src="[JS]bootstrap-typeahead.js"></script>
-    <script src="[JS]script_gral.js"></script>
-	<script src="[JS]mi_script_sam.js"></script>
+    <script src="[JS]script_gral.js?v=2"></script>
+	<script src="[JS]mi_script_sam.js?v=2"></script>
 
    <!-- <script src="files/js/jquery.pnotify.js"></script>
 
@@ -242,10 +242,11 @@
 				var tipo = $(this).data("tipo");
 				var titulo = $(this).data("titulo");
                 var id_padre = $(this).data("id_padre");
+				var nombre = $(this).data('nombre');
 
 				IniciarVentana("ventana_menu", "abrir", tabla);
 				$(ventana_menu).html('');
-				$(ventana_menu).dialog('option', 'title', 'Administraci\u00f3n de Obras Sociales');
+				$(ventana_menu).dialog('option', 'title', 'Administraci\u00f3n de ' + nombre);
 				$(ventana_menu).dialog( "open" );
 				$(ventana_menu).focus();
 
@@ -315,7 +316,34 @@
 
         		$(ventana_menu).dialog('option', 'title', titulo);
         		$(ventana_menu).dialog( "open" );
-        	}else{
+        	}else if(tipo_btn == 'dialog_sas'){
+        		var tabla = $(this).data("tabla");
+        		var tipo = $(this).data("tipo");
+        		var titulo = $(this).data("titulo");
+
+        		IniciarVentana("ventana_opciones", "abrir", tabla, tipo);
+
+        		$.ajax({
+        			type: "POST",
+        			url: "../ajax/admin_form.php",
+        			data: {tabla: tabla, id: id, tipo: tipo, id_padre: id_padre},
+        			beforeSend: function() {
+        				$(ventana_opciones).html("");
+        			},
+        			success: function(requestData){
+        				var rta = requestData;
+        				$(ventana_opciones).html(rta);
+        			},
+        			complete: function(requestData, exito){
+        			},
+        			error: function (){
+        				alert ("error");
+        			}
+        		});
+
+        		$(ventana_opciones).dialog('option', 'title', titulo);
+        		$(ventana_opciones).dialog( "open" );
+            }else{
 				var tabla = $(this).data("tabla");
 				var tipo = $(this).data("tipo");
 				var titulo = $(this).data("titulo");

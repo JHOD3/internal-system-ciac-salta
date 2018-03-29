@@ -372,7 +372,11 @@ class Medicos extends Estructura implements iMedicos{
 										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 										<div class='dat_paciente'>".
 											upper(trim($row["apellidos"])). ", ".upper(trim($row["nombres"]))."
-											(".$row["nombre_estado"].")<br />
+											(".$row["nombre_estado"].")";
+                                if ($row['aviso_demora'] == '1') {
+                                    $linea .= " <sup style=\"color:#c00;\">DEMORADO</sup>";
+                                }
+                                $linea .= "<br />
 											<small style='color:#000'>".$row["abreviacion"]."</small>";
 
 								if ($cant_estudios > 0){
@@ -397,7 +401,11 @@ class Medicos extends Estructura implements iMedicos{
 											<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 											<div class='dat_paciente'>".
 												upper(trim($row["apellidos"])). ", ".upper(trim($row["nombres"]))."
-												(".$row["nombre_estado"].")<br />
+												(".$row["nombre_estado"].")";
+                                if ($row['aviso_demora'] == '1') {
+                                    $linea .= " <sup style=\"color:#c00;\">DEMORADO</sup>";
+                                }
+                                $linea .= "<br />
 												<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>
 											</div>";
 
@@ -678,7 +686,11 @@ HTML;
 										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".$row["desde"].":</span>
 										<div class='dat_paciente'>".
 											$row["apellidos"]. ", ".$row["nombres"]."
-											(".$row["nombre_estado"].")<br />
+											(".$row["nombre_estado"].")";
+                                if ($row['aviso_demora'] == '1') {
+                                    $linea .= " <sup style=\"color:#c00;\">DEMORADO</sup>";
+                                }
+                                $linea .= "<br />
 											<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>
 										</div>
 									</div>
@@ -695,7 +707,11 @@ HTML;
 											<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".$row["desde"].":</span>
 											<div class='dat_paciente'>".
 												$row["apellidos"]. ", ".$row["nombres"]."
-												(".$row["nombre_estado"].")<br />
+												(".$row["nombre_estado"].")";
+                                if ($row['aviso_demora'] == '1') {
+                                    $linea .= " <sup style=\"color:#c00;\">DEMORADO</sup>";
+                                }
+                                $linea .= "<br />
 												<small style='color:#000'>".$row["abreviacion"]. " - ".$row["telefonos"]."</small>
 											</div>";
 
@@ -1238,6 +1254,84 @@ HTML;
 		}
 		return $rta;
 
+	}
+
+    function upper($str)
+    {
+        $arrAcentos = array('á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü');
+        $arrReemplz = array('Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'Ü');
+        $str = str_replace($arrAcentos, $arrReemplz, $str);
+        return strtoupper($str);
+    }
+
+    function lower($str)
+    {
+        $arrAcentos = array('Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'Ü');
+        $arrReemplz = array('á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü');
+        $str = str_replace($arrAcentos, $arrReemplz, $str);
+        return strtolower($str);
+    }
+
+    function doSaludo($rsMedico, $prefix = true) {
+        $str = "";
+        if ($prefix) {
+            switch ($this->lower($rsMedico['saludo'])) {
+                case "dr.":
+                    $str.= "el ";
+                    break;
+                case "dra.":
+                    $str.= "la ";
+                    break;
+            }
+        }
+        $str.= ucwords($this->lower(trim($rsMedico['saludo'])));
+        $str.= " ";
+        $str.= $this->upper(trim($rsMedico['apellidos']));
+        $str.= ", ";
+        $str.= ucwords($this->lower(trim($rsMedico['nombres'])));
+        return $str;
+    }
+
+    function horaMM($hora, $masm) {
+        $aHora = explode(":", $hora);
+        $aMasM = explode(":", $masm);
+        $aSuma = array(
+            $aHora[0] + $aMasM[0] + floor(($aHora[1] + $aMasM[1]) / 60),
+            ($aHora[1] + $aMasM[1]) % 60,
+            '00'
+        );
+        if ($aSuma[0] < 10) $aSuma[0] = '0'.$aSuma[0];
+        if ($aSuma[1] < 10) $aSuma[1] = '0'.$aSuma[1];
+        return implode(":", $aSuma);
+    }
+
+	function Consultorio($id_medicos){
+		$htm = $this->Html("consultorios/form_detalle");
+
+		$htm->Asigna("TABLA",$this->nombre_tabla);
+
+		$query_string = $this->querys->DetalleMedicosConsultorios($id_medicos);
+		$query = $this->db->consulta($query_string);
+
+		$addRows = "";
+        $cnct = "";
+        while ($row = $this->db->fetch_array($query)) {
+            $desdeH = substr($row['desde'], 0, 2);
+            $desdeM = substr($row['desde'], 3, 2);
+            $hastaH = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 0, 2);
+            $hastaM = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 3, 2);
+            $addRows.= "{$cnct}['{$row['nombre']}', 'Consultorio {$row['nro_consultorio']} - {$row['especialidad']}', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,{$hastaH},{$hastaM},0)]";
+            $cnct = ",\n";
+        }
+
+        if (!trim($addRows)) {
+            $addRows = "]);}</script>No se encontraron datos.<script>nul=([";
+        }
+        $htm->Asigna("ADDROWS", utf8_encode($addRows));
+
+		CargarVariablesGrales($htm, $tipo = "");
+
+		return ($htm->Muestra());
 	}
 
 }

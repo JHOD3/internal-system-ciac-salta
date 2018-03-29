@@ -781,5 +781,126 @@ SQL;
         }
     }
 
+    public function obtMedicosPorEspecialidadFiltro($post)
+    {
+        #dumpLindo($post);
+        $aStype = array('pro', 'esp', 'obr', 'est');
+        $where = '';
+        $cnct = '(';
+        for ($i = 0; $i < count($aStype); $i++) {
+            if (
+                isset($post['search_'.$aStype[$i]]) and
+                $post['search_'.$aStype[$i]]
+            ) {
+                for (
+                    $j = 0;
+                    $j < count(
+                        $post[
+                            'search_'.
+                            $aStype[$i]
+                        ]
+                    );
+                    $j++
+                ) {
+                    $rwS = $this->db->escape($post['search_'.$aStype[$i]][$j]);
+                    switch ($aStype[$i]) {
+                        case 'pro':
+                            $where.= <<<SQL
+    {$cnct}
+    CONCAT(TRIM(m.saludo), ' ', TRIM(m.apellidos), ' ', TRIM(m.nombres)) LIKE {$rwS}
+SQL;
+                            break;
+                        case 'esp':
+                            $where.= <<<SQL
+    {$cnct}
+    TRIM(e.nombre) LIKE {$rwS}
+SQL;
+                            break;
+                        case 'obr':
+                            $where.= <<<SQL
+    {$cnct}
+    CONCAT(TRIM(os.abreviacion), ' - ', TRIM(os.nombre)) LIKE {$rwS}
+SQL;
+                            break;
+                        case 'est':
+                            $where.= <<<SQL
+    {$cnct}
+    TRIM(es.nombre) LIKE {$rwS}
+SQL;
+                            break;
+                    }
+                    $cnct = 'OR';
+                }
+            }
+            if (trim($where)) {
+                $cnct = ') AND (';
+            }
+        }
+        if (trim($where)) {
+            $where.= ')';
+        } else {
+            return null;
+        }
+
+        $this->db
+            ->select('m.*')
+            ->from('medicos AS m')
+            ->join('medicos_especialidades AS me', 'me.id_medicos = m.id_medicos')
+            ->join('especialidades AS e', 'me.id_especialidades = e.id_especialidades')
+            ->join('medicos_horarios AS tt', 'tt.id_medicos = m.id_medicos AND tt.id_especialidades = e.id_especialidades')
+        ;
+        if (
+            isset($post['search_obr']) and
+            $post['search_obr']
+        ) {
+            $this->db
+                ->join('medicos_obras_sociales AS mos', 'mos.id_medicos = m.id_medicos')
+                ->join('obras_sociales AS os', 'mos.id_obras_sociales = os.id_obras_sociales')
+            ;
+        }
+        if (
+            isset($post['search_est']) and
+            $post['search_est']
+        ) {
+            $this->db
+                ->join('medicos_estudios AS mes', 'mes.id_medicos = m.id_medicos')
+                ->join('estudios AS es', 'mes.id_estudios = es.id_estudios')
+            ;
+        }
+        $this->db
+            ->where('m.estado', 1)
+            ->where('tt.estado', 1)
+            ->where_in('tt.id_turnos_tipos', array(1, 2, 3, 4, 5, 6, 7, 8))
+        ;
+        if ($where) {
+            $this->db->where($where);
+        }
+        $query = $this->db
+            ->group_by('m.apellidos, m.nombres')
+            ->order_by('m.apellidos, m.nombres')
+            ->get()
+            ->result_array()
+        ;
+        #dumpLindo($this->db->last_query());
+        for ($i = 0; $i < count($query); $i++) {
+            // BUSCAR ESPECIALIDADES
+            $query[$i]['especialidades'] = $this->db
+                ->from('especialidades AS e')
+                ->join('medicos_especialidades AS me', 'me.id_especialidades = e.id_especialidades')
+                ->where('e.estado', 1)
+                ->where('me.estado', 1)
+                ->where('me.id_medicos', $query[$i]['id_medicos'])
+                ->group_by('e.nombre')
+                ->order_by('e.nombre')
+                ->limit(4)
+                ->get()
+                ->result_array()
+            ;
+        }
+
+        // FIN DE BUSQUEDAS
+        return $query;
+    }
+
 }
 //EOF Turnero_model.php

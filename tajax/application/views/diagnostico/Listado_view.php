@@ -23,7 +23,11 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
     cursor: pointer;
 }
 </style>
-<h1>Prácticas Médicas <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a></h1>
+<h1>Prácticas Médicas
+    <?php if (!$isMedico): ?>
+        <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a>
+    <?php endif; ?>
+</h1>
 <?=$error_rol?>
 <form id="frmInpSrcFilter" method="post">
     <table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
@@ -73,21 +77,25 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                 <td><input id="sces" name="sces" type="text" value="<?=isset($sces) ? $sces : ''?>" /></td>
                 <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
                 <td>
-                    <select id="srea" name="srea">
-                        <option value=""></option>
-                        <?php
-                        for ($i = 0; $i < count($medicos); $i++):
-                            $m = strtoupper(
-                                trim($medicos[$i]['saludo'])." ".
-                                trim($medicos[$i]['apellidos']).", ".
-                                trim($medicos[$i]['nombres'])
-                            );
-                            ?>
-                            <option value="<?=$medicos[$i]['id_medicos']?>"<?=(isset($srea) and $srea == $medicos[$i]['id_medicos']) ? $selected : ''?>><?=$m?></option>
+                    <?php if ($isMedico): ?>
+                        <input type="hidden" id="srea" name="srea" value="<?=($id_usuario - 1000000)?>" />
+                    <?php else: ?>
+                        <select id="srea" name="srea">
+                            <option value=""></option>
                             <?php
-                        endfor;
-                        ?>
-                    </select>
+                            for ($i = 0; $i < count($medicos); $i++):
+                                $m = strtoupper(
+                                    trim($medicos[$i]['saludo'])." ".
+                                    trim($medicos[$i]['apellidos']).", ".
+                                    trim($medicos[$i]['nombres'])
+                                );
+                                ?>
+                                <option value="<?=$medicos[$i]['id_medicos']?>"<?=(isset($srea) and $srea == $medicos[$i]['id_medicos']) ? $selected : ''?>><?=$m?></option>
+                                <?php
+                            endfor;
+                            ?>
+                        </select>
+                    <?php endif; ?>
                 </td>
                 <td><input id="soso" name="soso" type="text" value="<?=isset($soso) ? $soso : ''?>" /></td>
                 <td>&nbsp;</td>
@@ -265,7 +273,27 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
 
 <script>
 $(document).ready(function(){
-    $('.datepicker').datepicker();
+    $('.datepicker').datepicker({
+		dateFormat: 'dd/mm/yy'
+    });
+    $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '<Ant',
+        nextText: 'Sig>',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+    };
+    $.datepicker.setDefaults($.datepicker.regional['es']);
 
     $('#frmInpSrcFilter .formathour').bind('click focusin', function(){
         $(this).select();
@@ -295,11 +323,11 @@ $(document).ready(function(){
         date2 = date2.split('/');
         date2 = date2[2] + '-' + date2[1] + '-' + date2[0];
         var frmData = $('#frmInpSrcFilter').serialize();
-        $('#dateok').parent().parent().html('<div style="white-space: nowrap;"><img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Prácticas Médicas</div>');
+        $('#dateok').parent().parent().html('<div style="white-space: nowrap;"><img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Pr&aacute;cticas M&eacute;dicas</div>');
         $('tr.inputSearch').html('');
         ajxM = $.ajax({
             type: 'POST',
-            url: '../tajax/index.php/<?=$this->router->fetch_class()?>/listado/'+date1+'/'+date2+'/',
+            url: '../tajax/index.php/<?=$this->router->fetch_class()?>/listado/'+date1+'/'+date2+'/<?=$id_usuario?>/<?=$isMedico?>/',
             data: frmData,
             context: document.body
         }).done(function(data) {
@@ -314,7 +342,7 @@ $(document).ready(function(){
         date2 = date2.split('/');
         date2 = date2[2] + '-' + date2[1] + '-' + date2[0];
         var frmData = $('#frmInpSrcFilter').serialize();
-        $('#frmInpSrcFilter').attr('action', '../tajax/index.php/<?=$this->router->fetch_class()?>/exportar/'+date1+'/'+date2+'/');
+        $('#frmInpSrcFilter').attr('action', '../tajax/index.php/<?=$this->router->fetch_class()?>/exportar/'+date1+'/'+date2+'/<?=$id_usuario?>/<?=$isMedico?>/');
         $('#frmInpSrcFilter').submit();
     });
     $('#frmInpSrcFilter input').keypress(function(e){
@@ -344,113 +372,115 @@ $(document).ready(function(){
             $(this).attr('style', 'visibility:hidden;');
         })
     })
-    $('.tdTab').dblclick(function(event){
-        if (event.target == this) {
-            $(this).parent().find('.tdTab').each(function(){
-                var valDefault = $(this).html().replace('$&nbsp;', '').replace('---', '');
-                if (valDefault[0] != '<') {
-                    $(this).html($('#tab_' + $(this).data('mth')).html().replace('date_picker', 'datepicker'));
-                    switch ($(this).find('input, select').prop('tagName')) {
-                        case 'INPUT':
-                            if ($(this).find('input').attr('type') != 'button') {
-                                $(this).find('input').val(valDefault);
-                            }
-                            break;
-                        case 'SELECT':
-                            $(this).find('select option').each(function(){
-                                if ($(this).html().toLowerCase() == valDefault.toLowerCase()) {
-                                    $(this).attr("selected", true);
+    <?php if (!$isMedico): ?>
+        $('.tdTab').dblclick(function(event){
+            if (event.target == this) {
+                $(this).parent().find('.tdTab').each(function(){
+                    var valDefault = $(this).html().replace('$&nbsp;', '').replace('---', '');
+                    if (valDefault[0] != '<') {
+                        $(this).html($('#tab_' + $(this).data('mth')).html().replace('date_picker', 'datepicker'));
+                        switch ($(this).find('input, select').prop('tagName')) {
+                            case 'INPUT':
+                                if ($(this).find('input').attr('type') != 'button') {
+                                    $(this).find('input').val(valDefault);
+                                }
+                                break;
+                            case 'SELECT':
+                                $(this).find('select option').each(function(){
+                                    if ($(this).html().toLowerCase() == valDefault.toLowerCase()) {
+                                        $(this).attr("selected", true);
+                                    }
+                                });
+                                break;
+                        }
+                        $(this).find('.ac_matricula_derivacion').autocomplete({
+                            source: tagsACMD
+                        });
+                        $(this).find('input[type="button"]').attr('data-id', $(this).parent().data('id'));
+                        $(this).find('input[type="button"]').click(function(){
+                            $(this).parent().html('');
+                            var pre_d = '#id_te_' + $(this).data('id') + ' *[data-mth="';
+                            var pre_i = '#id_te_' + $(this).data('id') + ' input[name="';
+                            var pre_s = '#id_te_' + $(this).data('id') + ' select[name="';
+                            var pos = '"]';
+                            var serialized;
+                            serialized = 'id_turnos_estudios=' + $(this).data('id');
+                            serialized+= '&codigoalternat=' + $(pre_i + 'codigoalternat' + pos).val();
+                            serialized+= '&id_estudios=' + $(pre_s + 'id_estudios' + pos).val();
+                            serialized+= '&id_medicos=' + $(pre_s + 'id_medicos' + pos).val();
+                            serialized+= '&id_obras_sociales=' + $(pre_s + 'id_obras_sociales' + pos).val();
+                            serialized+= '&fecha_presentacion=' + $(pre_i + 'fecha_presentacion' + pos).val();
+                            serialized+= '&nro_orden=' + $(pre_i + 'nro_orden' + pos).val();
+                            serialized+= '&nro_afiliado=' + $(pre_i + 'nro_afiliado' + pos).val();
+                            serialized+= '&cantidad=' + $(pre_i + 'cantidad' + pos).val();
+                            serialized+= '&tipo=' + $(pre_s + 'tipo' + pos).val();
+                            serialized+= '&trajo_pedido=' + $(pre_s + 'trajo_pedido' + pos).val();
+                            serialized+= '&trajo_orden=' + $(pre_s + 'trajo_orden' + pos).val();
+                            serialized+= '&trajo_arancel=' + $(pre_i + 'trajo_arancel' + pos).val();
+                            serialized+= '&deja_deposito=' + $(pre_i + 'deja_deposito' + pos).val();
+                            serialized+= '&matricula_derivacion=' + $(pre_i + 'matricula_derivacion' + pos).val();
+                            serialized+= '&observaciones=' + $(pre_i + 'observaciones' + pos).val();
+                            $(pre_d + 'codigoalternat' + pos).html('&#8634;');
+                            $(pre_d + 'estudios' + pos).html('&#8634;');
+                            $(pre_d + 'medicos' + pos).html('&#8634;');
+                            $(pre_d + 'obras_sociales' + pos).html('&#8634;');
+                            $(pre_d + 'fecha_presentacion' + pos).html('&#8634;');
+                            $(pre_d + 'nro_orden' + pos).html('&#8634;');
+                            $(pre_d + 'nro_afiliado' + pos).html('&#8634;');
+                            $(pre_d + 'cantidad' + pos).html('&#8634;');
+                            $(pre_d + 'tipo' + pos).html('&#8634;');
+                            $(pre_d + 'trajo_pedido' + pos).html('&#8634;');
+                            $(pre_d + 'trajo_orden' + pos).html('&#8634;');
+                            $(pre_d + 'trajo_arancel' + pos).html('&#8634;');
+                            $(pre_d + 'deja_deposito' + pos).html('&#8634;');
+                            $(pre_d + 'matricula_derivacion' + pos).html('&#8634;');
+                            $(pre_d + 'observaciones' + pos).html('&#8634;');
+                            ajxM = $.ajax({
+                                type: 'POST',
+                                data: serialized,
+                                url: '../tajax/index.php/<?=$this->router->fetch_class()?>/savediagnostico',
+                                context: $('#id_te_' + $(this).data('id'))
+                            }).done(function(data) {
+                                var dataJSON = JSON && JSON.parse(data) || $.parseJSON(data);
+                                $(pre_d + 'codigoalternat' + pos).html(dataJSON['codigoalternat']);
+                                $(pre_d + 'estudios' + pos).html(dataJSON['id_estudios']);
+                                $(pre_d + 'medicos' + pos).html(dataJSON['id_medicos']);
+                                $(pre_d + 'obras_sociales' + pos).html(dataJSON['id_obras_sociales']);
+                                $(pre_d + 'fecha_presentacion' + pos).html(dataJSON['fecha_presentacion']);
+                                $(pre_d + 'nro_orden' + pos).html(dataJSON['nro_orden']);
+                                $(pre_d + 'nro_afiliado' + pos).html(dataJSON['nro_afiliado']);
+                                $(pre_d + 'cantidad' + pos).html(dataJSON['cantidad']);
+                                $(pre_d + 'tipo' + pos).html(dataJSON['tipo']);
+                                $(pre_d + 'trajo_pedido' + pos).html(dataJSON['trajo_pedido']);
+                                $(pre_d + 'trajo_orden' + pos).html(dataJSON['trajo_orden']);
+                                $(pre_d + 'trajo_arancel' + pos).html(dataJSON['trajo_arancel']);
+                                $(pre_d + 'deja_deposito' + pos).html(dataJSON['deja_deposito']);
+                                $(pre_d + 'matricula_derivacion' + pos).html(dataJSON['matricula_derivacion']);
+                                $(pre_d + 'medicos_derivacion' + pos).html(dataJSON['medicos_derivacion']);
+                                $(pre_d + 'observaciones' + pos).html(dataJSON['observaciones']);
+                            });
+                        });
+                        <?php if ($SUPERUSER > 1): ?>
+                            $(this).find('a.dele').click(function(event){
+                                event.preventDefault();
+                                if (confirm('Seguro que desea Eliminar?')) {
+                                    dId = $(this).parent().parent().data('id');
+                                    ajxM = $.ajax({
+                                        type: 'POST',
+                                        data: {id_turnos_estudios: dId},
+                                        url: '../tajax/index.php/<?=$this->router->fetch_class()?>/delediagnostico',
+                                        context: $('#id_te_' + dId)
+                                    }).done(function() {
+                                        $('#id_te_' + dId).remove();
+                                    });
                                 }
                             });
-                            break;
+                        <?php endif; ?>
                     }
-                    $(this).find('.ac_matricula_derivacion').autocomplete({
-                        source: tagsACMD
-                    });
-                    $(this).find('input[type="button"]').attr('data-id', $(this).parent().data('id'));
-                    $(this).find('input[type="button"]').click(function(){
-                        $(this).parent().html('');
-                        var pre_d = '#id_te_' + $(this).data('id') + ' *[data-mth="';
-                        var pre_i = '#id_te_' + $(this).data('id') + ' input[name="';
-                        var pre_s = '#id_te_' + $(this).data('id') + ' select[name="';
-                        var pos = '"]';
-                        var serialized;
-                        serialized = 'id_turnos_estudios=' + $(this).data('id');
-                        serialized+= '&codigoalternat=' + $(pre_i + 'codigoalternat' + pos).val();
-                        serialized+= '&id_estudios=' + $(pre_s + 'id_estudios' + pos).val();
-                        serialized+= '&id_medicos=' + $(pre_s + 'id_medicos' + pos).val();
-                        serialized+= '&id_obras_sociales=' + $(pre_s + 'id_obras_sociales' + pos).val();
-                        serialized+= '&fecha_presentacion=' + $(pre_i + 'fecha_presentacion' + pos).val();
-                        serialized+= '&nro_orden=' + $(pre_i + 'nro_orden' + pos).val();
-                        serialized+= '&nro_afiliado=' + $(pre_i + 'nro_afiliado' + pos).val();
-                        serialized+= '&cantidad=' + $(pre_i + 'cantidad' + pos).val();
-                        serialized+= '&tipo=' + $(pre_s + 'tipo' + pos).val();
-                        serialized+= '&trajo_pedido=' + $(pre_s + 'trajo_pedido' + pos).val();
-                        serialized+= '&trajo_orden=' + $(pre_s + 'trajo_orden' + pos).val();
-                        serialized+= '&trajo_arancel=' + $(pre_i + 'trajo_arancel' + pos).val();
-                        serialized+= '&deja_deposito=' + $(pre_i + 'deja_deposito' + pos).val();
-                        serialized+= '&matricula_derivacion=' + $(pre_i + 'matricula_derivacion' + pos).val();
-                        serialized+= '&observaciones=' + $(pre_i + 'observaciones' + pos).val();
-                        $(pre_d + 'codigoalternat' + pos).html('&#8634;');
-                        $(pre_d + 'estudios' + pos).html('&#8634;');
-                        $(pre_d + 'medicos' + pos).html('&#8634;');
-                        $(pre_d + 'obras_sociales' + pos).html('&#8634;');
-                        $(pre_d + 'fecha_presentacion' + pos).html('&#8634;');
-                        $(pre_d + 'nro_orden' + pos).html('&#8634;');
-                        $(pre_d + 'nro_afiliado' + pos).html('&#8634;');
-                        $(pre_d + 'cantidad' + pos).html('&#8634;');
-                        $(pre_d + 'tipo' + pos).html('&#8634;');
-                        $(pre_d + 'trajo_pedido' + pos).html('&#8634;');
-                        $(pre_d + 'trajo_orden' + pos).html('&#8634;');
-                        $(pre_d + 'trajo_arancel' + pos).html('&#8634;');
-                        $(pre_d + 'deja_deposito' + pos).html('&#8634;');
-                        $(pre_d + 'matricula_derivacion' + pos).html('&#8634;');
-                        $(pre_d + 'observaciones' + pos).html('&#8634;');
-                        ajxM = $.ajax({
-                            type: 'POST',
-                            data: serialized,
-                            url: '../tajax/index.php/<?=$this->router->fetch_class()?>/savediagnostico',
-                            context: $('#id_te_' + $(this).data('id'))
-                        }).done(function(data) {
-                            var dataJSON = JSON && JSON.parse(data) || $.parseJSON(data);
-                            $(pre_d + 'codigoalternat' + pos).html(dataJSON['codigoalternat']);
-                            $(pre_d + 'estudios' + pos).html(dataJSON['id_estudios']);
-                            $(pre_d + 'medicos' + pos).html(dataJSON['id_medicos']);
-                            $(pre_d + 'obras_sociales' + pos).html(dataJSON['id_obras_sociales']);
-                            $(pre_d + 'fecha_presentacion' + pos).html(dataJSON['fecha_presentacion']);
-                            $(pre_d + 'nro_orden' + pos).html(dataJSON['nro_orden']);
-                            $(pre_d + 'nro_afiliado' + pos).html(dataJSON['nro_afiliado']);
-                            $(pre_d + 'cantidad' + pos).html(dataJSON['cantidad']);
-                            $(pre_d + 'tipo' + pos).html(dataJSON['tipo']);
-                            $(pre_d + 'trajo_pedido' + pos).html(dataJSON['trajo_pedido']);
-                            $(pre_d + 'trajo_orden' + pos).html(dataJSON['trajo_orden']);
-                            $(pre_d + 'trajo_arancel' + pos).html(dataJSON['trajo_arancel']);
-                            $(pre_d + 'deja_deposito' + pos).html(dataJSON['deja_deposito']);
-                            $(pre_d + 'matricula_derivacion' + pos).html(dataJSON['matricula_derivacion']);
-                            $(pre_d + 'medicos_derivacion' + pos).html(dataJSON['medicos_derivacion']);
-                            $(pre_d + 'observaciones' + pos).html(dataJSON['observaciones']);
-                        });
-                    });
-                    <?php if ($SUPERUSER > 1): ?>
-                        $(this).find('a.dele').click(function(event){
-                            event.preventDefault();
-                            if (confirm('Seguro que desea Eliminar?')) {
-                                dId = $(this).parent().parent().data('id');
-                                ajxM = $.ajax({
-                                    type: 'POST',
-                                    data: {id_turnos_estudios: dId},
-                                    url: '../tajax/index.php/<?=$this->router->fetch_class()?>/delediagnostico',
-                                    context: $('#id_te_' + dId)
-                                }).done(function() {
-                                    $('#id_te_' + dId).remove();
-                                });
-                            }
-                        });
-                    <?php endif; ?>
-                }
-            });
-        }
-    });
+                });
+            }
+        });
+    <?php endif; ?>
     $('#frmInpSrcFilter input[type="checkbox"].checked').change(function(){
         var trRemove = $(this).parent().parent();
         dId = $(this).parent().parent().data('id');

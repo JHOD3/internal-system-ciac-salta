@@ -24,12 +24,28 @@ EOT;
 
 $this_db = new MySQL();
 $html_graph.= '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>';
+
+if (isset($isDiagnosticos) and $isDiagnosticos) {
+
+    $html_button = <<<EOT
+<a id="btnEst" href="index.php" class="btn">
+	<i class="fa fa-calendar"></i>
+    <span>Agenda</span>
+</a>
+EOT;
+
+} else {
+
 if ($_GET['show'] != 'estadisticas') {
 
     $html_button = <<<EOT
-<a id="btnEst" href="index.php?show=estadisticas" class="btn" data-nombre="estadisticas" style="float:left!important;">
-	<img src="../files/img/btns/estadisticas.png" width="30" />
-    <span>Estad&iacute;sticas</span>
+<a id="btnEst" href="index.php?show=estadisticas" class="btn">
+	<i class="fa fa-bar-chart"></i>
+    <span>Estad&iacute;s-<br />ticas</span>
+</a>
+<a href="diagnosticos.php" class="btn">
+	<i class="fa fa-medkit"></i>
+    <span>Pr&aacute;cticas<br />M&eacute;dicas</span>
 </a>
 EOT;
 
@@ -38,13 +54,19 @@ EOT;
     $html_graph.= "<script>\$(document).ready(function(){setTimeout(function(){\$('html, body').animate({scrollTop:460}, 920);}, 1000)});</script>";
 
     $html_button = <<<EOT
-<a id="btnEst" href="index.php" class="btn" data-nombre="estadisticas" style="float:left!important;">
-	<img src="../files/img/btns/estadisticas.png" width="30" />
-    <span>Ocultar Estad.</span>
+<a id="btnEst" href="index.php" class="btn">
+	<i class="fa fa-calendar"></i>
+    <span>Agenda</span>
+</a>
+<a href="diagnosticos.php" class="btn">
+	<i class="fa fa-medkit"></i>
+    <span>Pr&aacute;cticas<br />M&eacute;dicas</span>
 </a>
 EOT;
     $ses_id_medico = $_SESSION['ID_MEDICO'];
     include("estadisticas.medicos.inc.php");
+}
+
 }
 
 $htm_gral->Asigna("ESTADISTICAS_BUTTON", utf8_encode($html_button));

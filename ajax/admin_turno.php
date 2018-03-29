@@ -24,6 +24,20 @@ switch ($tipo){
 		parse_str($_POST["variables"]);
 		$rta = $obj_turno->CambiarEstado($id_turno, $turnos_estados, $turno_estado_actual);
 
+        if ($aviso_demora != 1) {
+            $aviso_demora = 0;
+        }
+        $query_string = <<<SQL
+            UPDATE
+                turnos
+            SET
+                aviso_demora = '{$aviso_demora}'
+            WHERE
+                id_turnos = '{$id_turno}'
+            LIMIT 1
+SQL;
+		$obj_turno->db->consulta($query_string);
+
 		requerir_class("turnos_cambios_estados");
 		$obj_turnos_cambios_estados = new Turnos_cambios_estados();
 

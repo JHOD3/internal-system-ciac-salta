@@ -107,5 +107,16 @@ class Turnero extends CI_Controller {
         $this->load->view('calendar_view', $aData);
     }
 
+    public function search()
+    {
+        $aData['post'] = $this->input->get();
+        $aData['aMedicos'] =
+            $this->turnero_model->obtMedicosPorEspecialidadFiltro(
+                $aData['post']
+            )
+            ;
+		$this->load->view('turnero_search_view', $aData);
+    }
+
 }
 //EOF Turnero.php

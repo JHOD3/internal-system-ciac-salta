@@ -99,12 +99,20 @@ class Turnos extends Estructura implements iTurnos{
 
 
 
+		$row["BTN_VER_ESTUDIO"] = "<a id='btn_estudios_asociados' data-id_turno='".$row["id_turnos"]."' data-id_obra_social='".$obj_paciente->id_obras_sociales."' data-id_medico='".$row["id_medicos"]."' class='btn' href='#'>Ver Estudios Asociados</a>";
+        if ($row["aviso_demora"] == '1') {
+            $ch = ' checked="checked"';
+        } else {
+            $ch = '';
+        }
+        $row["BTN_AVISO_DEMORA"] = <<<HTML
+            <label for="aviso_demora" style="white-space: nowrap; display: inline;">
+                <input type="checkbox" id="aviso_demora" name="aviso_demora" value="1" style="margin: 0;"{$ch} />
+                DEMORADO
+            </label>
+HTML;
 		switch($row["id_turnos_tipos"]){
 			case 1://CONSULTAS
-				$row["BTN_VER_ESTUDIO"] = "<a id='btn_estudios_asociados' data-id_turno='".$row["id_turnos"]."' data-id_obra_social='".$obj_paciente->id_obras_sociales."' data-id_medico='".$row["id_medicos"]."' class='btn' href='#'>Ver Estudios Asociados</a>";
-
-				//$row["BTN_VER_ESTUDIO"] = "";
-
 				$row["CLASS_CONSULTA"] = "";
 				$row["CLASS_ESTUDIO"] = "oculto";
 
@@ -136,7 +144,6 @@ class Turnos extends Estructura implements iTurnos{
 				$htm->Asigna("IMPORTE_CONSULTA",$valor_consulta);
 			break;
 			case 2://ESTUDIOS
-				$row["BTN_VER_ESTUDIO"] = "<a id='btn_estudios_asociados' data-id_turno='".$row["id_turnos"]."' data-id_obra_social='".$obj_paciente->id_obras_sociales."' data-id_medico='".$row["id_medicos"]."' class='btn' href='#'>Ver Estudios Asociados</a>";
 				$row["CLASS_CONSULTA"] = "oculto";
 				$row["CLASS_ESTUDIO"] = "";
 

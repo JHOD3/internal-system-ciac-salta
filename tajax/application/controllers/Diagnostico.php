@@ -97,14 +97,21 @@ class Diagnostico extends CI_Controller {
         print "<script>setTimeout(function() {\$('#ag_fecha').change();}, 1000);</script>";
     }
 
-    public function listado($date1, $date2, $id_usuario = null)
+    public function listado($date1, $date2, $id_usuario = null, $isMedico = false)
     {
         if (isset($id_usuario)) {
-            $aUsuario = $this->Model->getUsuario($id_usuario);
-            $this->session->set_userdata(array(
-                'ID_USUARIO' => $id_usuario,
-                'SUPERUSER' => $aUsuario['superuser']
-            ));
+            if ($isMedico) {
+                $this->session->set_userdata(array(
+                    'ID_USUARIO' => $id_usuario,
+                    'SUPERUSER' => 1
+                ));
+            } else {
+                $aUsuario = $this->Model->getUsuario($id_usuario);
+                $this->session->set_userdata(array(
+                    'ID_USUARIO' => $id_usuario,
+                    'SUPERUSER' => $aUsuario['superuser']
+                ));
+            }
         }
         $post = $this->input->post();
         if (!isset($post['hour1']) or !$post['hour1']) {
@@ -114,6 +121,8 @@ class Diagnostico extends CI_Controller {
             $post['hour2'] = '23:59';
         }
         $dataView = $post;
+        $dataView['id_usuario'] = $id_usuario;
+        $dataView['isMedico'] = $isMedico;
         if (
             $this->session->userdata('SUPERUSER') < 2 and
             $date1 < date("Y-m-d", strtotime("-7 days"))
@@ -128,7 +137,9 @@ class Diagnostico extends CI_Controller {
         $dataView['listado'] = $this->Model->obtenerListado(
             $date1,
             $date2,
-            $post
+            $post,
+            $id_usuario,
+            $isMedico
         );
         if (
             $this->session->userdata('SUPERUSER') > 1 or
@@ -137,7 +148,9 @@ class Diagnostico extends CI_Controller {
             $dataView['deja_deposito_suma'] = $this->Model->obtDejaDepositoSuma(
                 $date1,
                 $date2,
-                $post
+                $post,
+                $id_usuario,
+                $isMedico
             );
         } else {
             $dataView['deja_deposito_suma'] = array(null, null);
@@ -145,12 +158,16 @@ class Diagnostico extends CI_Controller {
         $dataView['cantidad_de_ordenes'] = $this->Model->obtCantidadDeOrdenes(
             $date1,
             $date2,
-            $post
+            $post,
+            $id_usuario,
+            $isMedico
         );
         $dataView['listado_count'] = $this->Model->obtenerListadoCount(
             $date1,
             $date2,
-            $post
+            $post,
+            $id_usuario,
+            $isMedico
         );
 
         $dataView['medicos'] = $this->Model->obtMedicos();
@@ -210,13 +227,12 @@ class Diagnostico extends CI_Controller {
         );
     }
 
-    public function exportar($date1, $date2, $filter = '')
+    public function exportar($date1, $date2, $id_usuario, $isMedico)
     {
         $post = $this->input->post();
         $dataView['date1'] = $date1;
         $dataView['date2'] = $date2;
-        $dataView['filter'] = utf8_encode($filter);
-        $dataView['aDiagnosticos'] = $this->Model->obtDiagnosticosExport($date1, $date2, $post);
+        $dataView['aDiagnosticos'] = $this->Model->obtDiagnosticosExport($date1, $date2, $post, $id_usuario, $isMedico);
         $dataView['set_heading'] = array(
             'Nro de Paciente',
             'Paciente',

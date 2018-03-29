@@ -264,6 +264,9 @@ switch ($tabla){
 	case "medicos_horarios":
 		parse_str(stripslashes($datos));
 
+		if (!isset($plantas) || $plantas == "")
+			$plantas = 0;
+
 		$columnas = "(
 					id_medicos,
 					id_especialidades,
@@ -271,7 +274,9 @@ switch ($tabla){
 					desde,
 					hasta,
 					estado,
-					id_turnos_tipos
+					id_turnos_tipos,
+                    id_plantas,
+                    nro_consultorio
 					)";
 
 		$valores = "(
@@ -281,7 +286,9 @@ switch ($tabla){
 					'".$desde."',
 					'".$hasta."',
 					1,
-					".$turnos_tipos."
+					".$turnos_tipos.",
+					".$plantas.",
+                    ".$nro_consultorio."
 					)";
 
 		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);

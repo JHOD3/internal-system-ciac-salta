@@ -23,6 +23,9 @@ switch ($tipo){
 	case "detalle":
 		$rta = $obj->Detalle("completo");
 	break;
+	case "consultorio":
+		$rta = $obj->Consultorio($id);
+	break;
 	case "editar":
 		switch($tabla){
 			case "medicos_estudios":

@@ -127,7 +127,8 @@ switch ($tabla){
 					desde = '".$desde."',
 					hasta = '".$hasta."',
 					id_turnos_tipos = ".$turnos_tipos.",
-					id_plantas = ".$plantas."
+					id_plantas = ".$plantas.",
+                    nro_consultorio = ".$nro_consultorio."
 					";
 
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
