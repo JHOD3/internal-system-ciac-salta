@@ -8,6 +8,7 @@ class Sectores extends Estructura implements iSectores{
 	function __construct($id = ""){
 		$this->nombre_tabla = "sectores";
 		$this->titulo_tabla = "Sectores";
+        $this->titulo_tabla_singular = "Sector";
 		$this->tabla_padre = "";
 
 		$this->drop_label_elija = "Elija un Sector";

@@ -8,6 +8,7 @@ class Subsectores extends Estructura implements iSubsectores{
 	function __construct($id = ""){
 		$this->nombre_tabla = "subsectores";
 		$this->titulo_tabla = "Subsectores";
+        $this->titulo_tabla_singular = "Subsector";
 		$this->tabla_padre = "";
 
 		$this->drop_label_elija = "Elija un Subsectores";
