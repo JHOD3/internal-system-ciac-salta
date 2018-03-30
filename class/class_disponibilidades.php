@@ -76,32 +76,16 @@ class Disponibilidades extends Estructura implements iDisponibilidades{
 
 		$addRows = "";
         $cnct = "";
-        $nro_consultorio = null;
         while ($row = $this->db->fetch_array($query)) {
-            if ($nro_consultorio != $row['nro_consultorio']) {
-                if (isset($desdeH) and isset($desdeM)) {
-                    $addRows.= "{$cnct}['Consultorio {$nro_consultorio}', 'LIBRE', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,22,0,0)]";
-                    $cnct = ",\n";
-                }
-                $desdeH = 7;
-                $desdeM = 0;
-                $nro_consultorio = $row['nro_consultorio'];
-            }
-            $hastaH = substr($row['desde'], 0, 2);
-            $hastaM = substr($row['desde'], 3, 2);
-            if (
-                ($desdeH == $hastaH and $desdeM < $hastaM) or
-                ($desdeH < $hastaH)
-            ) {
-                $addRows.= "{$cnct}['Consultorio {$row['nro_consultorio']}', 'LIBRE', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,{$hastaH},{$hastaM},0)]";
-                $cnct = ",\n";
-            }
-            $desdeH = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 0, 2);
-            $desdeM = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 3, 2);
+            $desdeH = (int)substr($row['desde'], 0, 2);
+            $desdeM = (int)substr($row['desde'], 3, 2);
+            $hastaH = (int)substr($this->horaMM($row['hasta'], $row['duracion_turno']), 0, 2);
+            $hastaM = (int)substr($this->horaMM($row['hasta'], $row['duracion_turno']), 3, 2);
+            $doSaludo = $this->doSaludo($row, false);
+            $addRows.= "{$cnct}['Consultorio {$row['nro_consultorio']}', '{$doSaludo} - {$row['especialidad']}', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,{$hastaH},{$hastaM},0)]";
+            $cnct = ",\n";
         }
-        if (trim($addRows)) {
-            $addRows.= "{$cnct}['Consultorio {$nro_consultorio}', 'LIBRE', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,22,0,0)]";
-        } else {
+        if (!trim($addRows)) {
             $addRows = "]);}</script>No se encontraron datos.<script>nul=([";
         }
         $htm->Asigna("ADDROWS", utf8_encode($addRows));

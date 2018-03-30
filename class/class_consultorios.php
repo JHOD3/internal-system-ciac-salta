@@ -82,7 +82,7 @@ class Consultorios extends Estructura implements iConsultorios{
             $hastaH = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 0, 2);
             $hastaM = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 3, 2);
             $doSaludo = $this->doSaludo($row, false);
-            $addRows.= "{$cnct}['{$row['nombre']}', '{$doSaludo}', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,{$hastaH},{$hastaM},0)]";
+            $addRows.= "{$cnct}['{$row['nombre']}', '{$doSaludo} - {$row['especialidad']}', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,{$hastaH},{$hastaM},0)]";
             $cnct = ",\n";
         }
 

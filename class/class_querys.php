@@ -1124,7 +1124,8 @@ class Querys implements iQuerys{
                 `m`.`nombres`,
                 `mh`.`desde`,
                 `mh`.`hasta`,
-                `me`.`duracion_turno`
+                `me`.`duracion_turno`,
+                `e`.`nombre` AS `especialidad`
             FROM
                 `medicos_horarios` AS `mh`
             INNER JOIN
@@ -1138,11 +1139,15 @@ class Querys implements iQuerys{
                 ON
                     `mh`.`id_especialidades` = `me`.`id_especialidades` AND
                     `mh`.`id_medicos` = `me`.`id_medicos`
+            INNER JOIN
+                `especialidades` AS `e`
+                ON `me`.`id_especialidades` = `e`.`id_especialidades`
             WHERE
                 `mh`.`estado` = 1 AND
                 `mh`.`nro_consultorio` IS NOT NULL AND
                 `m`.`estado` = 1 AND
                 `ds`.`estado` = 1 AND
+                `me`.`estado` = 1 AND
                 `mh`.`nro_consultorio` = '{$nro_consultorio}'
             ORDER BY
                 `mh`.`id_dias_semana`,
@@ -1185,6 +1190,7 @@ class Querys implements iQuerys{
                 `mh`.`nro_consultorio` IS NOT NULL AND
                 `m`.`estado` = 1 AND
                 `ds`.`estado` = 1 AND
+                `me`.`estado` = 1 AND
                 `mh`.`id_medicos` = '{$id_medicos}'
             ORDER BY
                 `mh`.`id_dias_semana`,
@@ -1204,7 +1210,8 @@ class Querys implements iQuerys{
                 `mh`.`desde`,
                 `mh`.`hasta`,
                 `me`.`duracion_turno`,
-                `mh`.`nro_consultorio`
+                `mh`.`nro_consultorio`,
+                `e`.`nombre` AS `especialidad`
             FROM
                 `medicos_horarios` AS `mh`
             INNER JOIN
@@ -1225,6 +1232,7 @@ class Querys implements iQuerys{
                 `mh`.`estado` = 1 AND
                 `mh`.`nro_consultorio` IS NOT NULL AND
                 `m`.`estado` = 1 AND
+                `me`.`estado` = 1 AND
                 `ds`.`estado` = 1 AND
                 `ds`.`id_dias_semana` = '{$id_dias_semana}'
             ORDER BY
