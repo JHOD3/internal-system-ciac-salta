@@ -179,7 +179,7 @@ $query = $this_db->consulta($SQL_Estudios);
                                                 <?php
                                             endif;
                                             ?>
-                                        ><?=doSaludo($row_med, false)?></option>
+                                        ><?=utf8_encode(doSaludo($row_med, false))?></option>
                                     <?php endwhile; ?>
                                 </select>
                             </td>
