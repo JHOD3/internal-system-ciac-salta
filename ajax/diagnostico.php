@@ -6,35 +6,6 @@ requerir_class("tpl","mysql","querys","estructura");
 //requerir_class("dias_semana");
 $this_db = new MySQL();
 
-function lower($str)
-{
-    $arrAcentos = array('Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'Ü');
-    $arrReemplz = array('á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü');
-    $str = str_replace($arrAcentos, $arrReemplz, $str);
-    return strtolower($str);
-}
-
-function doSaludo($rsMedico, $prefix = true)
-{
-    $str = "";
-    if ($prefix) {
-        switch (lower($rsMedico['saludo'])) {
-            case "dr.":
-                $str.= "el ";
-                break;
-            case "dra.":
-                $str.= "la ";
-                break;
-        }
-    }
-    #$str.= ucwords(lower(trim($rsMedico['saludo'])));
-    #$str.= " ";
-    $str.= upper(trim(utf8_encode($rsMedico['apellidos'])));
-    $str.= ", ";
-    $str.= utf8_encode(ucwords(lower(trim($rsMedico['nombres']))));
-    return $str;
-}
-
 $SQL_esp = <<<SQL
     SELECT
         t.*
