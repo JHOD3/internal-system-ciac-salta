@@ -2,16 +2,16 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		
+
 		$("a#modificar").click(function(){
 			$("#form_especialidades").submit();
 		});
-		
+
 		$("a#cancelar").click(function(){
 			IniciarVentana("ventana_opciones", "cerrar");
 			$(ventana_opciones).dialog('destroy').remove();
 		});
-		
+
 		$("#form_especialidades").validate({
 			rules: {
 				nombre: {
@@ -25,10 +25,10 @@
 			},
 			submitHandler: function(){
 				var variables = $("#form_especialidades").serialize();
-				$.ajax({  
-					type: "POST",   
+				$.ajax({
+					type: "POST",
 					url: "[URL]ajax/modificaciones.php",
-					data: {variables: variables, tabla: "[TABLA]"}, 
+					data: {variables: variables, tabla: "[TABLA]"},
 					beforeSend: function() {
 						$("#mje").html("Enviando información...");
 					},
@@ -48,15 +48,14 @@
 		});
 	});
 </script>
-[block: block_registros]		
+[block: block_registros]
 <div id="panel_alta">
-    <form name="form_especialidades" id="form_especialidades" class="jNice">					
+    <form name="form_especialidades" id="form_especialidades" class="jNice">
         <fieldset>
         	<div class="bloque oculto">
                 <label>ID: </label>
                 <input type="text" class="text-long" name="id" value="[id_especialidades]" />
             </div>
-            <div cla
             <div class="bloque">
                 <label>Nombre: </label>
                 <input type="text" class="text-long" name="nombre" value="[nombre]" />
