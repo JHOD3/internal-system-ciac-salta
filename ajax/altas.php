@@ -822,6 +822,31 @@ SQL;
 			$rta = false;
 
 	break;
+	case "novedades_diarias":
+		parse_str(stripslashes($datos));
+
+		$columnas = "(
+					   fechahora,
+                       titulo,
+                       descripcion,
+                       id_usuarios
+					)";
+
+        $valores = "(
+					   '".date("Y-m-d H:i:s")."',
+					   '".utf8_decode(mysql_real_escape_string($titulo))."',
+                       '".utf8_decode(mysql_real_escape_string($descripcion))."',
+                       '".$_SESSION['ID_USUARIO']."'
+					)";
+
+		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+		if ($obj->db->consulta($query_string))
+			$rta = $obj->db->ultimo_id_insertado();
+		else
+			$rta = false;
+
+	break;
 	case "agendas":
 		parse_str(stripslashes($datos));
 

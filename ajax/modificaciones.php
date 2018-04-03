@@ -386,6 +386,23 @@ switch ($tabla){
 
 	break;
 
+	case "novedades_diarias":
+		parse_str(stripslashes($datos));
+
+		$asignaciones = "
+			titulo = '".utf8_decode(mysql_real_escape_string($titulo))."',
+			descripcion = '".utf8_decode(mysql_real_escape_string($descripcion))."'
+        ";
+
+        $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
+
+		if ($obj->db->consulta($query_string))
+			$rta = true;
+		else
+			$rta = false;
+
+	break;
+
 	case "agendas":
 		parse_str(stripslashes($datos));
 

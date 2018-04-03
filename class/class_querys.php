@@ -169,6 +169,7 @@ class Querys implements iQuerys{
 			case "turnos_cambios_estados":
             case "sectores":
             case "subsectores":
+            case "novedades_diarias":
             case "agendas":
             case "mantenimientos":
             case "mantenimhistoricos":
@@ -212,6 +213,7 @@ class Querys implements iQuerys{
 			case "obras_sociales_planes":
             case "sectores":
             case "subsectores":
+            case "novedades_diarias":
             case "agendas":
             case "mantenimientos":
 				$query = "UPDATE ".$tabla." SET ".$asignacion." WHERE id_".$tabla." = ".$id;

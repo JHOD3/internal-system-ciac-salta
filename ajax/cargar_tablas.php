@@ -17,6 +17,7 @@ requerir_class(
     'estructura',
     'sectores',
     'subsectores',
+    'novedades_diarias',
     'consultorios',
     'disponibilidades',
     'agendas',
@@ -96,6 +97,9 @@ switch ($tabla){
 	case "subsectores":
 		$aColumns = array('id_subsectores','id_sectores','nombre');
 	break;
+    case "novedades_diarias":
+        $aColumns = array('id_novedades_diarias', 'fechahora', 'titulo', 'descripcion', 'id_usuarios');
+    break;
 	case "consultorios":
 		$aColumns = array('nro_consultorio');
 	break;
@@ -696,6 +700,39 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
                         break;
                     }
                 break;
+                case 'novedades_diarias':
+					switch($aColumns[$i]){
+						case "id_usuarios":
+							$obj = new Usuarios();
+							$query = $obj->RegistroXAtributo("usuario",$_GET['sSearch'],"like");
+
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
+						break;
+						default:
+							$buscar = $_GET['sSearch'];
+							$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' OR ";
+                        break;
+                    }
+                break;
                 case 'agendas_tipos':
 					switch($aColumns[$i]){
 						case "id_agendas":
@@ -1121,6 +1158,35 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
 				}
 			break;
+			case 'novedades_diarias':
+				switch($aColumns[$i]){
+					case "id_usuarios":
+						$obj = new Usuarios();
+						$query = $obj->RegistroXAtributo("usuario",$_GET['sSearch_'.$i],"like");
+
+						$ids = "(";
+						$band = 0;
+						while ($row = $obj->db->fetch_array($query)){
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
+							$band = 1;
+						}
+						$ids = trim($ids, ", ");
+						$ids .= ")";
+
+
+						if ($band == 1){
+							$buscar = $ids;
+							$sWhere .= $aColumns[$i]." IN ".$buscar;
+						}else{
+							$buscar = 0;
+							$sWhere .= $aColumns[$i]." = ".$buscar;
+						}
+					break;
+					default:
+						$buscar = utf8_decode($_GET['sSearch_'.$i]);
+						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
+				}
+			break;
             case 'encuestas':
 				switch($aColumns[$i]){
 					case "paciente":
@@ -1164,7 +1230,8 @@ if ( $sWhere == "" ){
         $tabla != 'sectores' and
         $tabla != 'subsectores' and
         $tabla != 'medicosexp' and
-        $tabla != 'encuestas'
+        $tabla != 'encuestas' and
+        $tabla != 'novedades_diarias'
     ) {
     		$sWhere = "WHERE $pfTable.estado = 1";
     }
@@ -1173,7 +1240,8 @@ if ( $sWhere == "" ){
         $tabla != 'sectores' and
         $tabla != 'subsectores' and
         $tabla != 'medicosexp' and
-        $tabla != 'encuestas'
+        $tabla != 'encuestas' and
+        $tabla != 'novedades_diarias'
     ) {
     	$sWhere = $sWhere.") AND $pfTable.estado = 1";
     } else {
@@ -1787,6 +1855,18 @@ if ($cant_registros != 0){
 					$row[1] = utf8_encode($sector);
 					$row[2] = utf8_encode($aRow['nombre']);
                     $row[3] = $editar.''.$eliminar.'';
+				break;
+                case 'novedades_diarias':
+					$row[0] = $aRow["id_novedades_diarias"];
+					$row[1] = date("d/m/Y H:i", strtotime($aRow['fechahora'])).'hs';
+					$row[2] = utf8_encode($aRow['titulo']);
+					$row[3] = utf8_encode($aRow['descripcion']);
+					$row[4] = utf8_encode($usuario);
+                    if ($_SESSION['SUPERUSER'] == '3') {
+                        $row[5] = $editar.''.$eliminar.'';
+                    } else {
+                        $row[5] = '';
+                    }
 				break;
 				case 'consultorios':
     				$detalle = "<a href='#' class='btn_opciones' data-titulo='Consultorio ".$aRow["nro_consultorio"]."' data-tipo='detalle' data-id='".$aRow["nro_consultorio"]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";

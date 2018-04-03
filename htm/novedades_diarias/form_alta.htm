@@ -1,0 +1,72 @@
+<script src="[JS]jquery.validate.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#nro_documento").focus();
+
+		$("a#cargar").click(function(e){
+			e.preventDefault();
+			$("#form_novedades_diarias").submit();
+		});
+
+		$("a#cancelar").click(function(){
+			IniciarVentana("ventana_opciones", "cerrar");
+			$(ventana_opciones).dialog('destroy').remove();
+		});
+
+		$("#form_novedades_diarias").validate({
+			rules: {
+				nombre: {
+					required: true
+				}
+			},
+			messages: {
+				nombre: {
+					required: "Ingrese Nombre"
+				}
+			},
+			submitHandler: function(){
+				var variables = $("#form_novedades_diarias").serialize();
+				$.ajax({
+					type: "POST",
+					url: "[URL]ajax/altas.php",
+					data: {variables: variables, tabla: "[TABLA]"},
+					beforeSend: function() {
+						$("#mje").html("Enviando información...");
+					},
+					success: function(requestData){
+						var rta = requestData;
+
+						alert ("Novedad Diaria Cargada Correctamente.");
+						IniciarVentana("ventana_opciones", "cerrar");
+						TableNovedadesDiarias.fnDraw();
+						$(ventana_opciones).dialog('destroy').remove();
+					},
+					complete: function(requestData, exito){},
+					error: function (){
+						alert ("Ocurri&oacute; un error. Vuelva a Intentarlo.");
+					}
+				});
+			}
+		});
+	});
+</script>
+
+<div id="panel_alta">
+    <form name="form_novedades_diarias" id="form_novedades_diarias" class="jNice">
+        <fieldset>
+            <div class="bloque">
+                <label>T&iacute;tulo: </label>
+                <input type="text" class="text-long" name="titulo" style="text-transform:none!important;" />
+            </div>
+            <div class="bloque">
+                <label>Descripci&oacute;n: </label>
+                <textarea class="text-long" name="descripcion" style="text-transform:none!important;"></textarea>
+            </div>
+            <div class="bloque botones">
+                <a href="#" id="cargar" class="boton_gris">Cargar</a>
+                <a href="#" id="cancelar" class="boton_gris">Cancelar</a>
+            </div>
+        </fieldset>
+    </form>
+</div>
