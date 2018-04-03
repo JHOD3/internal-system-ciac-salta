@@ -19,22 +19,41 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
                 LIMIT 1
             ";
         } else {
-            $sql = "
-                UPDATE
-                    novedades_usuarios AS no
-                SET
-                    no.confirmacion = '".date("Y-m-d H:i:s")."'
-                WHERE
-                    no.id_usuarios = '{$_SESSION['ID_USUARIO']}' AND
-                    no.id_novedades = '{$_GET['get']}'
-                LIMIT 1
-            ";
+            if ($_GET['tipo'] == 'nov') {
+                $sql = "
+                    UPDATE
+                        novedades_usuarios AS no
+                    SET
+                        no.confirmacion = '".date("Y-m-d H:i:s")."'
+                    WHERE
+                        no.id_usuarios = '{$_SESSION['ID_USUARIO']}' AND
+                        no.id_novedades = '{$_GET['get']}'
+                    LIMIT 1
+                ";
+            } else {
+                $sql = "
+                    INSERT INTO
+                        novedades_diarias_usuarios
+                        (
+                            id_novedades_diarias,
+                            id_usuarios,
+                            confirmacion
+                        )
+                    VALUES
+                        (
+                            '{$_GET['get']}',
+                            '{$_SESSION['ID_USUARIO']}',
+                            '".date("Y-m-d H:i:s")."'
+                        )
+                ";
+            }
         }
         $this_db->consulta($sql);
     }
     if ($_SESSION['TIPO_USR'] == 'M') {
         $sql = "
             SELECT
+                'nov' AS tipo,
                 n.*
             FROM
                 novedades AS n
@@ -50,7 +69,11 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
     } else {
         $sql = "
             SELECT
-                n.*
+                'nov' AS tipo,
+                n.id_novedades,
+                n.titulo,
+                n.fechahora,
+                n.contenido
             FROM
                 novedades AS n
             INNER JOIN novedades_usuarios AS no
@@ -58,8 +81,25 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
             WHERE
                 no.id_usuarios = '{$_SESSION['ID_USUARIO']}' AND
                 no.confirmacion IS NULL
+            UNION
+                SELECT
+                    'dia' AS tipo,
+                    nd.id_novedades_diarias AS id_novedades,
+                    nd.titulo,
+                    nd.fechahora,
+                    nd.descripcion AS contenido
+                FROM
+                    novedades_diarias AS nd
+                WHERE
+                    nd.id_novedades_diarias NOT IN (
+                        SELECT id_novedades_diarias
+                        FROM novedades_diarias_usuarios AS ndu
+                        WHERE
+                            ndu.id_usuarios = '{$_SESSION['ID_USUARIO']}' AND
+                            ndu.confirmacion IS NOT NULL
+                    )
             ORDER BY
-                n.fechahora ASC
+                fechahora ASC
             LIMIT 1
         ";
     }
@@ -68,12 +108,17 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
         ?>
         <div>
             <input type="hidden" id="dieAjaxNovedadesHidden" name="dieAjaxNovedadesHidden" value="<?=$nov['id_novedades']?>" />
+            <?php if ($nov['tipo'] == 'nov'): ?>
+                <strong>Comunicado de Gerencia</strong><br />
+            <?php else: ?>
+                <strong>Novedades Diarias</strong><br />
+            <?php endif; ?>
             <h1 style="color:#007FA6;"><?=utf8_encode($nov['titulo'])?></h1>
             <h4 style="color:#007FA6;"><?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</h4>
             <div style="color:#008A47;font-size:20px;"><?=utf8_encode(nl2br($nov['contenido']))?></div>
             <br />
             <div>
-                <input id="dieAjaxNovedadesButton" type="button" value="He le&iacute;do" />
+                <input id="dieAjaxNovedadesButton" type="button" data-tipo="<?=$nov['tipo']?>" value="He le&iacute;do" />
                 <input id="dieAjaxNovedadesCancel" type="button" value="Leer despu&eacute;s" />
             </div>
         </div>
@@ -108,7 +153,7 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
                 id = $('#dieAjaxNovedadesHidden').val();
                 $('#dieAjaxNovedadesDiv').html('');
                 $.ajax({
-                    url: "../ajax/novedades.php?get=" + id,
+                    url: "../ajax/novedades.php?get=" + id + "&tipo=" + $(this).data('tipo'),
                     context: document.body
                 }).done(function(data) {
                     $('#dieAjaxNovedadesDiv').html(data);
