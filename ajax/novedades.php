@@ -54,7 +54,8 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
         $sql = "
             SELECT
                 'nov' AS tipo,
-                n.*
+                n.*,
+                '' AS usuario
             FROM
                 novedades AS n
             INNER JOIN novedades_medicos AS nm
@@ -73,7 +74,8 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
                 n.id_novedades,
                 n.titulo,
                 n.fechahora,
-                n.contenido
+                n.contenido,
+                '' AS usuario
             FROM
                 novedades AS n
             INNER JOIN novedades_usuarios AS no
@@ -87,9 +89,13 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
                     nd.id_novedades_diarias AS id_novedades,
                     nd.titulo,
                     nd.fechahora,
-                    nd.descripcion AS contenido
+                    nd.descripcion AS contenido,
+                    CONCAT(u.nombres, ', ', u.apellidos) AS usuario
                 FROM
                     novedades_diarias AS nd
+                INNER JOIN
+                    usuarios AS u
+                    ON nd.id_usuarios = u.id_usuarios
                 WHERE
                     nd.id_novedades_diarias NOT IN (
                         SELECT id_novedades_diarias
@@ -111,7 +117,7 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
             <?php if ($nov['tipo'] == 'nov'): ?>
                 <strong>Comunicado de Gerencia</strong><br />
             <?php else: ?>
-                <strong>Novedades Diarias</strong><br />
+                <strong>Novedades Diarias | <?=$nov['usuario']?></strong><br />
             <?php endif; ?>
             <h1 style="color:#007FA6;"><?=utf8_encode($nov['titulo'])?></h1>
             <h4 style="color:#007FA6;"><?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</h4>
