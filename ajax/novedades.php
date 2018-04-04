@@ -117,7 +117,7 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
             <?php if ($nov['tipo'] == 'nov'): ?>
                 <strong>Comunicado de Gerencia</strong><br />
             <?php else: ?>
-                <strong>Novedades Diarias | <?=$nov['usuario']?></strong><br />
+                <strong>Novedades Diarias | <?=utf8_encode($nov['usuario'])?></strong><br />
             <?php endif; ?>
             <h1 style="color:#007FA6;"><?=utf8_encode($nov['titulo'])?></h1>
             <h4 style="color:#007FA6;"><?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</h4>
