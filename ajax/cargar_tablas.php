@@ -1874,10 +1874,11 @@ if ($cant_registros != 0){
                     $row[1] = $detalle.'';
 				break;
 				case 'disponibilidades':
-    				$detalle = "<a href='#' class='btn_opciones' data-titulo='".utf8_encode($aRow['nombre'])."' data-tipo='disponibilidad' data-id='".$aRow["id_dias_semana"]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
+    				$dispon = "<a href='#' class='btn_opciones' data-titulo='Ocupación' data-tipo='disponibles_ocupado' data-id='".$aRow["id_dias_semana"]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
+    				$ocupac = "<a href='#' class='btn_opciones' data-titulo='Disponibilidad' data-tipo='disponibles_libre' data-id='".$aRow["id_dias_semana"]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
 					$row[0] = $aRow['id_dias_semana'];
 					$row[1] = utf8_encode($aRow['nombre']);
-                    $row[2] = $detalle.'';
+                    $row[2] = $dispon.''.$ocupac.'';
 				break;
 				case 'agendas':
 					$row[0] = $aRow["id_agendas"];

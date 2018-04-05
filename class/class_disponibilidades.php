@@ -64,7 +64,54 @@ class Disponibilidades extends Estructura implements iDisponibilidades{
         return implode(":", $aSuma);
     }
 
-	function Dia(){
+	function DiaLibre(){
+		$htm = $this->Html($this->nombre_tabla."/form_detalle");
+
+		$htm->Asigna("TABLA",$this->nombre_tabla);
+
+        $row = $this->registro;
+
+		$query_string = $this->querys->DetalleDiaDisponibilidad($row['id_dias_semana']);
+		$query = $this->db->consulta($query_string);
+
+		$addRows = "";
+        $cnct = "";
+        $nro_consultorio = null;
+        while ($row = $this->db->fetch_array($query)) {
+            if ($nro_consultorio != $row['nro_consultorio']) {
+                if (isset($desdeH) and isset($desdeM)) {
+                    $addRows.= "{$cnct}['Consultorio {$nro_consultorio}', '{$desdeH}:{$desdeM} a 22:00', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,22,0,0)]";
+                    $cnct = ",\n";
+                }
+                $desdeH = 7;
+                $desdeM = 0;
+                $nro_consultorio = $row['nro_consultorio'];
+            }
+            $hastaH = substr($row['desde'], 0, 2);
+            $hastaM = substr($row['desde'], 3, 2);
+            if (
+                ($desdeH == $hastaH and $desdeM < $hastaM) or
+                ($desdeH < $hastaH)
+            ) {
+                $addRows.= "{$cnct}['Consultorio {$row['nro_consultorio']}', '{$desdeH}:{$desdeM} a {$hastaH}:{$hastaM}', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,{$hastaH},{$hastaM},0)]";
+                $cnct = ",\n";
+            }
+            $desdeH = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 0, 2);
+            $desdeM = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 3, 2);
+        }
+        if (trim($addRows)) {
+            $addRows.= "{$cnct}['Consultorio {$nro_consultorio}', '{$desdeH}:{$desdeM} a 22:00', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,22,0,0)]";
+        } else {
+            $addRows = "]);}</script>No se encontraron datos.<script>nul=([";
+        }
+        $htm->Asigna("ADDROWS", utf8_encode($addRows));
+
+		CargarVariablesGrales($htm, $tipo = "");
+
+		return ($htm->Muestra());
+	}
+
+	function DiaOcupado(){
 		$htm = $this->Html($this->nombre_tabla."/form_detalle");
 
 		$htm->Asigna("TABLA",$this->nombre_tabla);
