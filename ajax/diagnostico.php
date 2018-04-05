@@ -17,11 +17,14 @@ $SQL_esp = <<<SQL
     INNER JOIN
         turnos_tipos AS tt
         ON mh.id_turnos_tipos = tt.id_turnos_tipos
+    INNER JOIN
+        turnos_estudios AS te
+        ON te.id_turnos = t.id_turnos
     WHERE
         t.id_turnos = '{$_POST['id_turno']}' AND
         t.estado = 1 AND
         tt.estado = 1 AND
-        tt.tipo = 'ESTUDIOS'
+        te.id_turnos_estudios IS NOT NULL
     LIMIT 1
 SQL;
 $query_esp = $this_db->consulta($SQL_esp);
@@ -368,6 +371,8 @@ $query = $this_db->consulta($SQL_Estudios);
 <?php
 
 // IF NO ANIDADO
+} else {
+    print "no se cargaron estudios a realizar.";
 }
 
 //EOF diagnostico.php
