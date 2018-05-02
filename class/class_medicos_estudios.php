@@ -56,7 +56,7 @@ class Medicos_estudios extends Estructura implements iMedicos_estudios{
 	}
 
 	function TablaAdmin($id_padre = ""){
-		$tabla = $this->html($this->nombre_tabla."/a_tabla");
+		$tabla = $this->html($this->nombre_tabla."/a_tabla_".$_SESSION['SISTEMA']);
 
 		requerir_class("medicos");
 

@@ -1762,7 +1762,7 @@ if ($cant_registros != 0){
 					//$row[2] = $aRow["particular"];
 					//$row[2] = $mostrar." ".$editar;
                     if ($_SESSION['SUPERUSER'] == '3') {
-                        $row[3] = $editar.'';
+                        $row[3] = $eliminar.'';
                     } else {
                         $row[3] = '';
                     }
