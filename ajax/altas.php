@@ -944,6 +944,40 @@ SQL;
 
 	break;
 
+	case "usuarios":
+		parse_str(stripslashes($datos));
+
+		$columnas = "(
+					superuser,
+                    nombres,
+                    apellidos,
+                    usuario,
+                    pass,
+                    fecha_alta,
+                    fecha_baja,
+                    estado
+					)";
+
+		$valores = "(
+					'".utf8_decode($roles)."',
+					'".utf8_decode($nombres)."',
+					'".utf8_decode($apellidos)."',
+					'".utf8_decode(strtolower($usuario))."',
+					'".base64_encode($pass)."',
+					'".date("Y-m-d")."',
+					NULL,
+                    1
+					)";
+
+		print $query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+		if ($obj->db->consulta($query_string))
+			$rta = $obj->db->ultimo_id_insertado();
+		else
+			$rta = false;
+
+	break;
+
 }
 echo $rta;
 ?>

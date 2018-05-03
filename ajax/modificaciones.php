@@ -473,6 +473,28 @@ switch ($tabla){
 
 	break;
 
+	case "usuarios":
+		parse_str(stripslashes($datos));
+
+		$asignaciones = "
+			superuser = '".utf8_decode($roles)."',
+			nombres = '".utf8_decode($nombres)."',
+			apellidos = '".utf8_decode($apellidos)."',
+			usuario = '".utf8_decode(strtolower($usuario))."'
+        ";
+        if (isset($pass) and trim($pass)) {
+            $asignaciones.= ", pass = '".base64_encode($pass)."' ";
+        }
+
+        $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
+
+		if ($obj->db->consulta($query_string))
+			$rta = true;
+		else
+			$rta = false;
+
+	break;
+
 }
 echo $rta;
 ?>

@@ -17,6 +17,7 @@ switch ($tabla) {
     case "medicos":
     case "agendas":
     case "mantenimientos":
+    case "usuarios":
         $rta = $obj->Inhabilitar();
         break;
     default:

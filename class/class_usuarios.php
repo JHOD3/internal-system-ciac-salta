@@ -8,11 +8,66 @@ class Usuarios extends Estructura implements iUsuarios{
 	function __construct($id = ""){
 		$this->nombre_tabla = "usuarios";
 		$this->titulo_tabla = "Usuarios";
+        $this->titulo_tabla_singular = "Usuario";
 		$this->tabla_padre = "";
 
 		$this->drop_label_elija = "Elija un Usuario";
 
 		parent::__construct($id);
+		requerir_class("roles");
+	}
+
+	function FormAlta(){
+		$htm = $this->Html($this->nombre_tabla."/form_alta");
+
+		$obj_roles = new Roles();
+		$htm->Asigna("DROP_ROLES", $obj_roles->Drop());
+
+		$htm->Asigna("TABLA",$this->nombre_tabla);
+
+		CargarVariablesGrales($htm, $tipo = "");
+
+		return ($htm->Muestra());
+	}
+
+	function FormModificacion(){
+		$htm = $this->Html($this->nombre_tabla."/form_modificacion");
+		$row = $this->registro;
+
+		$obj_roles = new Roles();
+		$htm->Asigna("DROP_ROLES", $obj_roles->Drop("", $row["superuser"]));
+
+		$htm->Asigna("TABLA",$this->nombre_tabla);
+
+		$htm->AsignaBloque('block_registros',$row);
+
+		CargarVariablesGrales($htm, $tipo = "");
+
+		return  utf8_encode($htm->Muestra());
+	}
+
+	function TablaAdmin(){
+		$tabla = $this->html($this->nombre_tabla."/a_tabla");
+
+		$tabla->Asigna("NOMBRE_TABLA",$this->nombre_tabla);
+
+		$rta = utf8_encode($tabla->Muestra());
+
+		return $rta;
+	}
+
+	function PanelAdmin(){
+		$htm = $this->Html($this->nombre_tabla."/panel_admin");
+
+		$htm->Asigna("LISTADO", $this->TablaAdmin());
+
+		$htm->Asigna("TABLA", $this->nombre_tabla);
+		$htm->Asigna("TITULO_TABLA", $this->titulo_tabla_singular);
+
+		CargarVariablesGrales($htm, $tipo = "");
+
+		echo ($htm->Muestra());
+
 	}
 
 	function ValidaLogueo($usuario, $pass){
@@ -50,13 +105,13 @@ class Usuarios extends Estructura implements iUsuarios{
 		else
 			return ("2"); //Login Incorrecto
 	}
-
+/*
 	function FormAlta(){
 		$htm_form = $this->Html($this->nombre_tabla."/form_alta");
 
 		return ($htm_form->Muestra());
 	}
-
+*/
 	function Detalle($tipo){
 		$htm_form = $this->Html($this->nombre_tabla."/detalle_".$tipo);
 

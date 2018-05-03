@@ -26,6 +26,7 @@ requerir_class(
     'mantenimhistoricos',
     'mantenimientosestados',
     'usuarios',
+    'roles',
     'encuestas'
 );
 
@@ -115,6 +116,9 @@ switch ($tabla){
 	break;
 	case "encuestas":
 		$aColumns = array('er.id_encuestas_respuestas','t.fecha_alta','t.hora_alta','paciente','respuesta1','respuesta2','medico','especialidad');
+	break;
+	case "usuarios":
+		$aColumns = array('id_usuarios','superuser','nombres','apellidos','usuario','fecha_alta');
 	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
@@ -790,6 +794,35 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
                         break;
                     }
                 break;
+                case 'usuarios':
+					switch($aColumns[$i]){
+						case "superuser":
+							$obj = new Roles();
+							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
+
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
+						break;
+                    }
+                break;
 				default:
 					switch($aColumns[$i]){
 						case 'id_especialidades':
@@ -1215,6 +1248,35 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
                     break;
                 }
             break;
+			case 'usuarios':
+				switch($aColumns[$i]){
+					case "superuser":
+						$obj = new Roles();
+						$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch_'.$i],"like");
+
+						$ids = "(";
+						$band = 0;
+						while ($row = $obj->db->fetch_array($query)){
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
+							$band = 1;
+						}
+						$ids = trim($ids, ", ");
+						$ids .= ")";
+
+
+						if ($band == 1){
+							$buscar = $ids;
+							$sWhere .= $aColumns[$i]." IN ".$buscar;
+						}else{
+							$buscar = 0;
+							$sWhere .= $aColumns[$i]." = ".$buscar;
+						}
+					break;
+					default:
+						$buscar = utf8_decode($_GET['sSearch_'.$i]);
+						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
+				}
+			break;
 			default:
 				$buscar = $_GET['sSearch_'.$i];
 				$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
@@ -1233,7 +1295,7 @@ if ( $sWhere == "" ){
         $tabla != 'encuestas' and
         $tabla != 'novedades_diarias'
     ) {
-    		$sWhere = "WHERE $pfTable.estado = 1";
+        $sWhere = "WHERE $pfTable.estado = 1";
     }
 } else {
     if (
@@ -1545,6 +1607,11 @@ if ($cant_registros != 0){
 				if ($aColumns[$i] == "id_usuarios"){
 					$obj_usuarios = new Usuarios($aRow[$aColumns[$i]]);
 					$usuario = $obj_usuarios->usuario;
+				}
+
+				if ($aColumns[$i] == "superuser"){
+					$obj_usuarios = new Roles($aRow[$aColumns[$i]]);
+					$rol = $obj_usuarios->nombre;
 				}
 
 				if ($aColumns[$i] == "id_subsectores"){
@@ -1921,9 +1988,21 @@ if ($cant_registros != 0){
 					$row[7] = utf8_encode($aRow['especialidad']);
                     $row[8] = $turnos;
 				break;
+				case 'usuarios':
+					$row[0] = $aRow["id_usuarios"];
+					$row[1] = utf8_encode($rol);
+					$row[2] = utf8_encode($aRow['nombres']);
+					$row[3] = utf8_encode($aRow['apellidos']);
+					$row[4] = utf8_encode($aRow['usuario']);
+                    $obj_estructura = new Estructura();
+					$row[5] = $obj_estructura->cambiaf_a_normal($aRow['fecha_alta'], '/');
+                    $row[6] = $editar.''.$eliminar.'';
+				break;
 
 			}
-			$output['aaData'][] = $row;
+            if ($tabla != 'usuarios' or $row[0] >= 0) {
+                $output['aaData'][] = $row;
+            }
 	}
 }else{
 	$output['aaData'] = "";
