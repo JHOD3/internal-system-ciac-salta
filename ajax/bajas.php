@@ -20,6 +20,19 @@ switch ($tabla) {
     case "usuarios":
         $rta = $obj->Inhabilitar();
         break;
+    case "horarios_inhabilitados":
+        if (trim($_POST['borrar_horarios_inhabilitados'])) {
+            $query_string = <<<SQL
+                UPDATE
+                    {$tabla}
+                SET
+                    estado = 0
+                WHERE
+                    id_horarios_inhabilitados IN ({$_POST['borrar_horarios_inhabilitados']})
+SQL;
+    		$obj->db->consulta($query_string);
+        }
+        break;
     default:
         $rta = $obj->Baja();
         break;

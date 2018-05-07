@@ -1,0 +1,102 @@
+<script>
+$(function(){
+    var ajxM;
+    $('.search_init').keyup(function(e) {
+        var code = e.keyCode || e.which;
+        if (
+            code != 9 &&
+            code != 16 &&
+            code != 35 &&
+            code != 36 &&
+            code != 37 &&
+            code != 38 &&
+            code != 39 &&
+            code != 40
+        ) {
+            $('#borrar_horarios_inhabilitados').attr('disabled', 'disabled');
+            if (typeof ajxM != "undefined" && ajxM && ajxM.readyState != 4){
+                ajxM.abort();
+            }
+            ajxM = $.ajax({
+                type: 'GET',
+                url:'[URL]ajax/cargar_tablas.php',
+                data: $('#frm_bhi').serialize(),
+                context: document.body
+            }).done(function(data) {
+                $('#borrar_horarios_inhabilitados').removeAttr('disabled');
+                $('#borrar_horarios_inhabilitados').html(data);
+            });
+        }
+    });
+    $('.search_init').keyup();
+    $('#btn_bhi').click(function(){
+        $('#borrar_horarios_inhabilitados').attr('disabled', 'disabled');
+        if (typeof ajxM != "undefined" && ajxM && ajxM.readyState != 4){
+            ajxM.abort();
+        }
+        ajxM = $.ajax({
+            type: 'POST',
+            url:'[URL]ajax/bajas.php',
+            data: $('#frm_bhi').serialize()+'&borrar_horarios_inhabilitados='+$('#borrar_horarios_inhabilitados').val(),
+            context: document.body
+        }).done(function(data) {
+            $('.search_init').keyup();
+        });
+    });
+	// Datepicker
+	$(".datepicker").datepicker({
+		changeMonth: true,
+		changeYear: true,
+		dateFormat: 'dd/mm/yy'
+	});
+	$.datepicker.setDefaults($.datepicker.regional['es']);
+    $.datepicker.setDefaults({
+        onSelect: function () {
+            $('.search_init').keyup();
+        }
+    });
+});
+</script>
+<style>
+#borrar_horarios_inhabilitados {
+    width:100%;
+    height: 100%;
+}
+#contenedor_listado {
+    height: 85%;
+}
+#frm_bhi,
+#tbl_bhi,
+#tbl_bhi tbody,
+#tbl_bhi tbody tr,
+#tbl_bhi tbody tr td{
+    height: 100%;
+}
+</style>
+<form id="frm_bhi">
+    <input type="hidden" name="tabla" value="[NOMBRE_TABLA]" />
+    <input type="hidden" name="bSearchable_1" value="true" />
+    <input type="hidden" name="bSearchable_2" value="true" />
+    <input type="hidden" name="bSearchable_6" value="true" />
+    <table id="tbl_bhi" border="0" id="t_[NOMBRE_TABLA]" class="display">
+        <tfoot>
+            <tr>
+                <th>M&eacute;dico<br /><input type="text" name="sSearch_1" value="" placeholder="M&eacute;dico" class="search_init" /></th>
+                <th>Especialidad<br /><input type="text" name="sSearch_2" value="" placeholder="Especialidad" class="search_init" /></th>
+                <th>Desde<br /><input type="text" name="sDesde" value="[HOY]" placeholder="Desde" class="search_init datepicker" /></th>
+                <th>Hasta<br /><input type="text" name="sHasta" value="[HOY]" placeholder="Hasta" class="search_init datepicker" /></th>
+                <th>Motivo<br /><input type="text" name="sSearch_6" value="" placeholder="Motivo" class="search_init" /></th>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr>
+                <td colspan="4">
+                    <select id="borrar_horarios_inhabilitados" multiple="multiple"></select>
+                </td>
+                <td style="vertical-align: top;">
+                    <input type="button" id="btn_bhi" class="btn btn-success" value="Habilitar Seleccionados" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>

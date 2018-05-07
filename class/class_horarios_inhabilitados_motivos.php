@@ -1,16 +1,16 @@
 <?php
-interface iHorarios_inhabilitados{
+interface iHorarios_inhabilitados_motivos{
 
 }
 
-class Horarios_inhabilitados extends Estructura implements iHorarios_inhabilitados{
+class Horarios_inhabilitados_motivos extends Estructura implements iHorarios_inhabilitados_motivos{
 
 	function __construct($id = ""){
-		$this->nombre_tabla = "horarios_inhabilitados";
-		$this->titulo_tabla = "Horarios_inhabilitados";
+		$this->nombre_tabla = "horarios_inhabilitados_motivos";
+		$this->titulo_tabla = "Motivos de Horarios Inhabilitados";
 		$this->tabla_padre = "";
 
-		$this->drop_label_elija = "Elija un Tipo de Turno";
+		$this->drop_label_elija = "Elija un Motivo de Horario Inhabilitado";
 
 		parent::__construct($id);
 	}

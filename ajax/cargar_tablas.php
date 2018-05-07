@@ -27,7 +27,9 @@ requerir_class(
     'mantenimientosestados',
     'usuarios',
     'roles',
-    'encuestas'
+    'encuestas',
+    'horarios_inhabilitados',
+    'horarios_inhabilitados_motivos'
 );
 
 $tabla = $_GET["tabla"];
@@ -119,6 +121,9 @@ switch ($tabla){
 	break;
 	case "usuarios":
 		$aColumns = array('id_usuarios','superuser','nombres','apellidos','usuario','fecha_alta');
+	break;
+	case "horarios_inhabilitados":
+		$aColumns = array('id_horarios_inhabilitados','id_medicos','id_especialidades','fecha','desde','hasta','id_horarios_inhabilitados_motivos');
 	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
@@ -234,6 +239,15 @@ switch ($tabla){
 		$id_especialidad = $_GET["id_especialidad"];
 		$sWhere = "WHERE ( id_medicos = ".$id_medico." AND id_especialidades = ".$id_especialidad;
 	break;
+    case "horarios_inhabilitados":
+        $sDesde = $_GET['sDesde'];
+        $sDesde = implode("-", array_reverse(explode("/", $sDesde)));
+        $sDesde = date("Y-m-d", strtotime($sDesde));
+        $sHasta = $_GET['sHasta'];
+        $sHasta = implode("-", array_reverse(explode("/", $sHasta)));
+        $sHasta = date("Y-m-d", strtotime($sHasta));
+		$sWhere = "WHERE ((H.fecha >= '{$sDesde}' AND H.fecha <= '{$sHasta}') ";
+    break;
 	default:
 		$sWhere = "";
 }
@@ -823,6 +837,85 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 						break;
                     }
                 break;
+                case 'horarios_inhabilitados':
+					switch($aColumns[$i]){
+						case "id_medicos":
+							$obj = new Medicos();
+							$query = $obj->RegistroXAtributo("apellidos",$_GET['sSearch'],"like");
+
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
+						break;
+						case "id_especialidades":
+							$obj = new Especialidades();
+							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
+
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
+						break;
+						case "id_horarios_inhabilitados_motivos":
+							$obj = new Horarios_Inhabilitados_Motivos();
+							$query = $obj->RegistroXAtributo("motivo_descripcion",$_GET['sSearch'],"like");
+
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
+						break;
+                    }
+                break;
 				default:
 					switch($aColumns[$i]){
 						case 'id_especialidades':
@@ -1277,6 +1370,79 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
 				}
 			break;
+			case 'horarios_inhabilitados':
+				switch($aColumns[$i]){
+					case "id_medicos":
+						$obj = new Medicos();
+						$query = $obj->RegistroXAtributo("apellidos",$_GET['sSearch_'.$i],"like");
+
+						$ids = "(";
+						$band = 0;
+						while ($row = $obj->db->fetch_array($query)){
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
+							$band = 1;
+						}
+						$ids = trim($ids, ", ");
+						$ids .= ")";
+
+
+						if ($band == 1){
+							$buscar = $ids;
+							$sWhere .= $aColumns[$i]." IN ".$buscar;
+						}else{
+							$buscar = 0;
+							$sWhere .= $aColumns[$i]." = ".$buscar;
+						}
+					break;
+					case "id_especialidades":
+						$obj = new Especialidades();
+						$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch_'.$i],"like");
+
+						$ids = "(";
+						$band = 0;
+						while ($row = $obj->db->fetch_array($query)){
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
+							$band = 1;
+						}
+						$ids = trim($ids, ", ");
+						$ids .= ")";
+
+
+						if ($band == 1){
+							$buscar = $ids;
+							$sWhere .= $aColumns[$i]." IN ".$buscar;
+						}else{
+							$buscar = 0;
+							$sWhere .= $aColumns[$i]." = ".$buscar;
+						}
+					break;
+					case "id_horarios_inhabilitados_motivos":
+						$obj = new Horarios_Inhabilitados_Motivos();
+						$query = $obj->RegistroXAtributo("motivo_descripcion",$_GET['sSearch_'.$i],"like");
+
+						$ids = "(";
+						$band = 0;
+						while ($row = $obj->db->fetch_array($query)){
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
+							$band = 1;
+						}
+						$ids = trim($ids, ", ");
+						$ids .= ")";
+
+
+						if ($band == 1){
+							$buscar = $ids;
+							$sWhere .= $aColumns[$i]." IN ".$buscar;
+						}else{
+							$buscar = 0;
+							$sWhere .= $aColumns[$i]." = ".$buscar;
+						}
+					break;
+					default:
+						$buscar = utf8_decode($_GET['sSearch_'.$i]);
+						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
+				}
+			break;
 			default:
 				$buscar = $_GET['sSearch_'.$i];
 				$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
@@ -1639,6 +1805,11 @@ if ($cant_registros != 0){
 					$cobro_concepto = $obj_cobro_concepto->nombre;
 				}
 
+				if ($aColumns[$i] == "id_horarios_inhabilitados_motivos"){
+					$obj_horarios_inhabilitados_motivos = new Horarios_inhabilitados_motivos($aRow[$aColumns[$i]]);
+					$horario_inhabilitado_motivo = $obj_horarios_inhabilitados_motivos->motivo_descripcion;
+				}
+
 				if ($aColumns[$i] == "fecha"){
 					$obj_estructura = new Estructura();
 					$fecha = $obj_estructura->cambiaf_a_normal($aRow[$aColumns[$i]], '/');
@@ -1998,6 +2169,15 @@ if ($cant_registros != 0){
 					$row[5] = $obj_estructura->cambiaf_a_normal($aRow['fecha_alta'], '/');
                     $row[6] = $editar.''.$eliminar.'';
 				break;
+                case 'horarios_inhabilitados':
+					$row[0] = $aRow["id_horarios_inhabilitados"];
+					$row[1] = utf8_encode($medico);
+					$row[2] = utf8_encode($especialidad);
+                    $row[3] = date("d/m/Y", strtotime($row[3]));
+                    $row[4] = date("H:i", strtotime($row[4]));
+                    $row[5] = date("H:i", strtotime($row[5]));
+                    $row[6] = utf8_encode($horario_inhabilitado_motivo);
+                break;
 
 			}
             if ($tabla != 'usuarios' or $row[0] >= 0) {
@@ -2008,4 +2188,19 @@ if ($cant_registros != 0){
 	$output['aaData'] = "";
 }
 
-echo json_encode( $output );
+if ($tabla == 'horarios_inhabilitados') {
+    if (isset($output['aaData']) and is_array($output['aaData'])) {
+        foreach ($output['aaData'] AS $row) {
+            print "<option value=\"{$row[0]}\">";
+            print "{$row[1]} | ";
+            print "{$row[2]} | ";
+            print "{$row[3]} | ";
+            print "{$row[4]} | ";
+            print "{$row[5]} | ";
+            print "{$row[6]}";
+            print "</option>\n";
+        }
+    }
+} else {
+    echo json_encode( $output );
+}
