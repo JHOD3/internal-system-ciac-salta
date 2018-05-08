@@ -571,18 +571,12 @@ class Querys implements iQuerys{
 	}
 
 	function DropHorariosInhabilitadosPorFecha($id_medico, $id_especialidad){
-	    if ($_SESSION['SISTEMA'] == 'sas' and $_SESSION['SUPERUSER'] < '3') {
-            $where = "
-                AND `him`.`bloqueo_superadmin` = '0'
-            ";
-	    } else {
-            $where = "";
-	    }
         $fecha = date("Y-m-d");
 		$query = "
             SELECT
                 `hi`.*,
-                `him`.motivo_descripcion
+                `him`.motivo_descripcion,
+                `him`.`bloqueo_superadmin`
 			FROM
                 horarios_inhabilitados AS `hi`
             LEFT JOIN
@@ -593,7 +587,6 @@ class Querys implements iQuerys{
                 `hi`.fecha >= '{$fecha}' AND
                 `hi`.id_medicos = {$id_medico} AND
                 `hi`.id_especialidades = {$id_especialidad}
-                {$where}
             ORDER BY
                 `hi`.fecha,
                 `hi`.desde

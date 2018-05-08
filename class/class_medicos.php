@@ -1246,6 +1246,15 @@ HTML;
     				$row['TEXTO_OPTION'].= ': '.$row['horarios_inhabilitados_motivos'];
                 }
 				$row['VALUE'] = $row['id_horarios_inhabilitados'];
+        	    if (
+                    $_SESSION['SISTEMA'] == 'sas' and
+                    $_SESSION['SUPERUSER'] < '3' and
+                    $row['bloqueo_superadmin'] == '1'
+                ) {
+    				$row['SELECTED'] = ' disabled="disabled"';
+     	        } else {
+    				$row['SELECTED'] = '';
+     	        }
 				$htm->AsignaBloque('block_option',$row);
 			}
 			$rta = $htm->Muestra();
