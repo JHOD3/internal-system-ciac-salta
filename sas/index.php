@@ -100,6 +100,15 @@ if ($_GET['id_medicos']) {
     $htm_index->Asigna("get_id_medicos", '');
 }
 
+if (
+    $_SESSION['SISTEMA'] == 'sas' and
+    $_SESSION['SUPERUSER'] < 2
+) {
+    $BTN_MA = ' style="display: none;"';
+} else {
+    $BTN_MA = '';
+}
+$htm_index->Asigna("BTN_MA", $BTN_MA);
 $htm_index->Asigna("AGENDAS_OPTIONS", $obj_estructura->obtAGENDAS_OPTIONS());
 $htm_index->Asigna("FECHA", ucfirst(strftime("%A %d de ")).ucfirst(strftime("%B del %Y")));
 $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));
