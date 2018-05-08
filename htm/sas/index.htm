@@ -100,9 +100,16 @@
 				variables +=
                     "&medico=" + $("#id_medico").val() +
                     "&especialidad=" + $("#medicos_especialidades").val() +
-                    "&fecha=" + fecha +
-                    "&medicos_especialidades=" + $('#id_medicos_especialidades').val()
+                    "&fecha=" + fecha
                 ;
+                if (
+                    $('#div_inhabilitar_mas_agendas').is(':visible') &&
+                    !$('#id_medicos_especialidades').attr('disabled')
+                ) {
+                    variables +=
+                        "&medicos_especialidades=" + $('#id_medicos_especialidades').val()
+                    ;
+                }
 				$.ajax({
 					type: "POST",
 					url: "[URL]ajax/altas.php",
@@ -132,6 +139,7 @@
             event.preventDefault();
             $(this).hide();
             $('#div_inhabilitar_mas_agendas').show();
+            $('#id_medicos_especialidades').removeAttr('disabled');
         });
 
 
@@ -517,7 +525,7 @@ if ([DER_NUMROWS] > 0) {
                                     <a href="#" id="inhabilitar_mas_agendas" class="btn btn-success">más agendas</a>
                                 </div>
                                 <div id="div_inhabilitar_mas_agendas" style="display: none;">
-                                    <select id="id_medicos_especialidades" multiple="multiple">
+                                    <select id="id_medicos_especialidades" multiple="multiple" disabled="disabled">
                                         [AGENDAS_OPTIONS]
                                     </select>
                                 </div>
