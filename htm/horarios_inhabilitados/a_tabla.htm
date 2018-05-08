@@ -53,8 +53,13 @@ $(function(){
     $.datepicker.setDefaults({
         onSelect: function () {
             $('.search_init').keyup();
+            $('input[name="sHasta"]').datepicker('option', 'minDate', $('input[name="sDesde"]').val());
+            $('input[name="sDesde"]').datepicker('option', 'maxDate', $('input[name="sHasta"]').val());
         }
     });
+    $('input[name="sDesde"]').datepicker('option', 'minDate', 'today');
+    $('input[name="sHasta"]').datepicker('option', 'minDate', 'today');
+    $('input[name="sDesde"]').datepicker('option', 'maxDate', 'today');
 });
 </script>
 <style>
@@ -83,8 +88,8 @@ $(function(){
             <tr>
                 <th>M&eacute;dico<br /><input type="text" name="sSearch_1" value="" placeholder="M&eacute;dico" class="search_init" /></th>
                 <th>Especialidad<br /><input type="text" name="sSearch_2" value="" placeholder="Especialidad" class="search_init" /></th>
-                <th>Desde<br /><input type="text" name="sDesde" value="[HOY]" placeholder="Desde" class="search_init datepicker" /></th>
-                <th>Hasta<br /><input type="text" name="sHasta" value="[HOY]" placeholder="Hasta" class="search_init datepicker" /></th>
+                <th>Desde<br /><input type="text" name="sDesde" value="[HOY]" placeholder="Desde" class="datepicker" readonly="readonly" /></th>
+                <th>Hasta<br /><input type="text" name="sHasta" value="[HOY]" placeholder="Hasta" class="datepicker" readonly="readonly" /></th>
                 <th>Motivo<br /><input type="text" name="sSearch_6" value="" placeholder="Motivo" class="search_init" /></th>
             </tr>
         </tfoot>

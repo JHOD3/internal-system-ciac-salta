@@ -243,6 +243,7 @@ switch ($tabla){
         $sDesde = $_GET['sDesde'];
         $sDesde = implode("-", array_reverse(explode("/", $sDesde)));
         $sDesde = date("Y-m-d", strtotime($sDesde));
+        $sDesde = max($sDesde, date("Y-m-d"));
         $sHasta = $_GET['sHasta'];
         $sHasta = implode("-", array_reverse(explode("/", $sHasta)));
         $sHasta = date("Y-m-d", strtotime($sHasta));
@@ -1808,6 +1809,7 @@ if ($cant_registros != 0){
 				if ($aColumns[$i] == "id_horarios_inhabilitados_motivos"){
 					$obj_horarios_inhabilitados_motivos = new Horarios_inhabilitados_motivos($aRow[$aColumns[$i]]);
 					$horario_inhabilitado_motivo = $obj_horarios_inhabilitados_motivos->motivo_descripcion;
+                    $horario_inhabilitado_bloqueo = $obj_horarios_inhabilitados_motivos->bloqueo_superadmin;
 				}
 
 				if ($aColumns[$i] == "fecha"){
@@ -2177,6 +2179,7 @@ if ($cant_registros != 0){
                     $row[4] = date("H:i", strtotime($row[4]));
                     $row[5] = date("H:i", strtotime($row[5]));
                     $row[6] = utf8_encode($horario_inhabilitado_motivo);
+                    $row[7] = $horario_inhabilitado_bloqueo;
                 break;
 
 			}
@@ -2191,7 +2194,15 @@ if ($cant_registros != 0){
 if ($tabla == 'horarios_inhabilitados') {
     if (isset($output['aaData']) and is_array($output['aaData'])) {
         foreach ($output['aaData'] AS $row) {
-            print "<option value=\"{$row[0]}\">";
+            if (
+                $_SESSION['SUPERUSER'] == '3' or
+                $row[7] != 1
+            ) {
+                $disabled = '';
+            } else {
+                $disabled = ' disabled="disabled"';
+            }
+            print "<option value=\"{$row[0]}\"{$disabled}>";
             print "{$row[1]} | ";
             print "{$row[2]} | ";
             print "{$row[3]} | ";
