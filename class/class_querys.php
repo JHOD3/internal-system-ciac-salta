@@ -1256,4 +1256,29 @@ class Querys implements iQuerys{
         return $query;
     }
 
+    function obtAGENDAS_OPTIONS()
+    {
+        $query = <<<SQL
+            SELECT
+                m.id_medicos,
+                e.id_especialidades,
+                m.apellidos,
+                m.nombres,
+                e.nombre
+            FROM medicos AS m
+            INNER JOIN medicos_especialidades AS me
+                ON me.id_medicos = m.id_medicos
+            INNER JOIN especialidades AS e
+                ON me.id_especialidades = e.id_especialidades
+            WHERE
+            	m.estado = 1 AND
+            	me.estado = 1
+            ORDER BY
+            	m.apellidos,
+            	m.nombres,
+            	e.nombre
+SQL;
+        return $query;
+    }
+
 }

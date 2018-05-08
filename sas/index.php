@@ -100,6 +100,7 @@ if ($_GET['id_medicos']) {
     $htm_index->Asigna("get_id_medicos", '');
 }
 
+$htm_index->Asigna("AGENDAS_OPTIONS", $obj_estructura->obtAGENDAS_OPTIONS());
 $htm_index->Asigna("FECHA", ucfirst(strftime("%A %d de ")).ucfirst(strftime("%B del %Y")));
 $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));
 $htm_index->Asigna("USUARIO_NOMBRES", utf8_encode($_SESSION['NOMBRES']));

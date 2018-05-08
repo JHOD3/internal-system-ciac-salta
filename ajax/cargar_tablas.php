@@ -185,6 +185,22 @@ if ( isset( $_GET['iSortCol_0'] ) )
             ";
             $sOrder = "ORDER BY nombre";
             break;
+        case "horarios_inhabilitados":
+            $sTableFrom.= "
+                LEFT JOIN medicos AS m
+                    ON H.id_medicos = m.id_medicos
+                LEFT JOIN especialidades AS e
+                    ON H.id_especialidades = e.id_especialidades
+            ";
+            $sOrder = "
+                ORDER BY
+                    m.apellidos,
+                    m.nombres,
+                    e.nombre,
+                    H.fecha,
+                    H.desde
+            ";
+            break;
         default:
     		$sOrder = "ORDER BY  ";
     		for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
@@ -1389,10 +1405,10 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 
 						if ($band == 1){
 							$buscar = $ids;
-							$sWhere .= $aColumns[$i]." IN ".$buscar;
+							$sWhere .= "H.".$aColumns[$i]." IN ".$buscar;
 						}else{
 							$buscar = 0;
-							$sWhere .= $aColumns[$i]." = ".$buscar;
+							$sWhere .= "H.".$aColumns[$i]." = ".$buscar;
 						}
 					break;
 					case "id_especialidades":
@@ -1411,10 +1427,10 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 
 						if ($band == 1){
 							$buscar = $ids;
-							$sWhere .= $aColumns[$i]." IN ".$buscar;
+							$sWhere .= "H.".$aColumns[$i]." IN ".$buscar;
 						}else{
 							$buscar = 0;
-							$sWhere .= $aColumns[$i]." = ".$buscar;
+							$sWhere .= "H.".$aColumns[$i]." = ".$buscar;
 						}
 					break;
 					case "id_horarios_inhabilitados_motivos":
@@ -1622,6 +1638,16 @@ SQL;
             $sOrder
             $sLimit
 SQL;
+        break;
+    case "horarios_inhabilitados":
+        $sQuery = "
+        		SELECT SQL_CALC_FOUND_ROWS
+                H.".trim(str_replace(" , ", " ", implode(", H.", $aColumns)))."
+        		FROM   $sTableFrom
+        		$sWhere
+        		$sOrder
+        		$sLimit
+        ";
         break;
     default:
         $sQuery = "

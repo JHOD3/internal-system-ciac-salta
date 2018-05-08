@@ -1910,4 +1910,19 @@ HTML;
         return array($dataLI, $dataDIV);
     }
 
+    function obtAGENDAS_OPTIONS()
+    {
+		$query_string = $this->querys->obtAGENDAS_OPTIONS();
+		$query = $this->db->consulta($query_string);
+        $data = '';
+        while ($row = $this->db->fetch_array($query)) {
+            $data.=
+                "<option value=\"{$row['id_medicos']}|{$row['id_especialidades']}\">".
+                $row['apellidos']." ".$row['nombres']." | ".$row['nombre'].
+                "</option>"
+            ;
+        }
+        return utf8_encode($data);
+    }
+
 }

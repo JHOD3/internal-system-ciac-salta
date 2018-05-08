@@ -704,58 +704,142 @@ SQL;
 	break;
 	case "horarios_inhabilitados":
 		parse_str(stripslashes($datos));
-
-		$columnas = "(id_medicos, id_especialidades, fecha, desde, hasta, estado, id_horarios_inhabilitados_motivos, horarios_inhabilitados_motivos)";
-
-        $fdesde = implode("-", array_reverse(explode("/", $fdesde)));
-        $fhasta = implode("-", array_reverse(explode("/", $fhasta)));
-        #print "{$fdesde} a {$fhasta}<br />";
-
-        $query_string = <<<SQL
-            SELECT
-                id_dias_semana
-            FROM
-                medicos_horarios
-            WHERE
-                id_especialidades = '{$especialidad}' AND
-                id_medicos = '{$medico}' AND
-                estado = '1'
-            GROUP BY
-                id_dias_semana
-            ORDER BY
-                id_dias_semana
-SQL;
-        $query = $obj->db->consulta($query_string);
-        $dds = array();
-        while ($row = $obj->db->fetch_array($query)) {
-            $dds[] = $row['id_dias_semana'];
+        if (
+            isset($medicos_especialidades) and
+            $medicos_especialidades and
+            trim($medicos_especialidades)
+        ) {
+            $medicos_especialidades = explode(
+                ",",
+                $medicos_especialidades
+            );
+            if (count($medicos_especialidades) > 0) {
+                for ($i = 0; $i < count($medicos_especialidades); $i++) {
+                    $medicos_especialidades[$i] = explode(
+                        "|",
+                        $medicos_especialidades[$i]
+                    );
+                }
+            }
+        }
+        if (
+            count($medicos_especialidades) == 1 and
+            count($medicos_especialidades[0]) == 1 and
+            !is_array($medicos_especialidades[0][0])
+        ) {
+            unset($medicos_especialidades);
         }
 
-		$rta = false;
-        for ($f = $fdesde; $f <= $fhasta; $f = date("Y-m-d", strtotime('+1 day', strtotime($f)))) {
-            $id_dias_semana = date('w', strtotime($f));
-            if ($id_dias_semana == 7) {
-                $id_dias_semana = 1;
-            } else {
-                $id_dias_semana++;
-            }
-            if (in_array($id_dias_semana, $dds)) {
-        		$valores = "(
-        			".$medico.",
-        			".$especialidad.",
-        			'".$f."',
-        			'".$desde."',
-        			'".$hasta."',
-        			1,
-        			'".$id_horarios_inhabilitados_motivos."',
-        			'".utf8_decode($horarios_inhabilitados_motivos)."'
-                    )";
+        if (isset($medicos_especialidades)) {
+            for ($i = 0; $i < count($medicos_especialidades); $i++) {
+        		$columnas = "(id_medicos, id_especialidades, fecha, desde, hasta, estado, id_horarios_inhabilitados_motivos, horarios_inhabilitados_motivos)";
 
-        		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
-        		#error_log($query_string);
-        		if ($obj->db->consulta($query_string)){
-        			$ultimo_id_insertado = $obj->db->ultimo_id_insertado();
-        			$rta = $ultimo_id_insertado;
+                $fdesde = implode("-", array_reverse(explode("/", $fdesde)));
+                $fhasta = implode("-", array_reverse(explode("/", $fhasta)));
+                #print "{$fdesde} a {$fhasta}<br />";
+
+                $query_string = <<<SQL
+                    SELECT
+                        id_dias_semana
+                    FROM
+                        medicos_horarios
+                    WHERE
+                        id_especialidades = '{$medicos_especialidades[$i][1]}' AND
+                        id_medicos = '{$medicos_especialidades[$i][0]}' AND
+                        estado = '1'
+                    GROUP BY
+                        id_dias_semana
+                    ORDER BY
+                        id_dias_semana
+SQL;
+                $query = $obj->db->consulta($query_string);
+                $dds = array();
+                while ($row = $obj->db->fetch_array($query)) {
+                    $dds[] = $row['id_dias_semana'];
+                }
+
+        		$rta = false;
+                for ($f = $fdesde; $f <= $fhasta; $f = date("Y-m-d", strtotime('+1 day', strtotime($f)))) {
+                    $id_dias_semana = date('w', strtotime($f));
+                    if ($id_dias_semana == 7) {
+                        $id_dias_semana = 1;
+                    } else {
+                        $id_dias_semana++;
+                    }
+                    if (in_array($id_dias_semana, $dds)) {
+                		$valores = "(
+                			".$medicos_especialidades[$i][0].",
+                			".$medicos_especialidades[$i][1].",
+                			'".$f."',
+                			'".$desde."',
+                			'".$hasta."',
+                			1,
+                			'".$id_horarios_inhabilitados_motivos."',
+                			'".utf8_decode($horarios_inhabilitados_motivos)."'
+                            )";
+
+                		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+                		#error_log($query_string);
+                		if ($obj->db->consulta($query_string)){
+                			$ultimo_id_insertado = $obj->db->ultimo_id_insertado();
+                			$rta = $ultimo_id_insertado;
+                        }
+                    }
+                }
+            }
+        } else {
+    		$columnas = "(id_medicos, id_especialidades, fecha, desde, hasta, estado, id_horarios_inhabilitados_motivos, horarios_inhabilitados_motivos)";
+
+            $fdesde = implode("-", array_reverse(explode("/", $fdesde)));
+            $fhasta = implode("-", array_reverse(explode("/", $fhasta)));
+            #print "{$fdesde} a {$fhasta}<br />";
+
+            $query_string = <<<SQL
+                SELECT
+                    id_dias_semana
+                FROM
+                    medicos_horarios
+                WHERE
+                    id_especialidades = '{$especialidad}' AND
+                    id_medicos = '{$medico}' AND
+                    estado = '1'
+                GROUP BY
+                    id_dias_semana
+                ORDER BY
+                    id_dias_semana
+SQL;
+            $query = $obj->db->consulta($query_string);
+            $dds = array();
+            while ($row = $obj->db->fetch_array($query)) {
+                $dds[] = $row['id_dias_semana'];
+            }
+
+    		$rta = false;
+            for ($f = $fdesde; $f <= $fhasta; $f = date("Y-m-d", strtotime('+1 day', strtotime($f)))) {
+                $id_dias_semana = date('w', strtotime($f));
+                if ($id_dias_semana == 7) {
+                    $id_dias_semana = 1;
+                } else {
+                    $id_dias_semana++;
+                }
+                if (in_array($id_dias_semana, $dds)) {
+            		$valores = "(
+            			".$medico.",
+            			".$especialidad.",
+            			'".$f."',
+            			'".$desde."',
+            			'".$hasta."',
+            			1,
+            			'".$id_horarios_inhabilitados_motivos."',
+            			'".utf8_decode($horarios_inhabilitados_motivos)."'
+                        )";
+
+            		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+            		#error_log($query_string);
+            		if ($obj->db->consulta($query_string)){
+            			$ultimo_id_insertado = $obj->db->ultimo_id_insertado();
+            			$rta = $ultimo_id_insertado;
+                    }
                 }
             }
         }
