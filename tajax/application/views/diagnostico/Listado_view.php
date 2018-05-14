@@ -48,20 +48,21 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                     <select id="orderby_field" name="orderby_field" style="width:120px;">
                         <option value="1"<?=$orderby_field == '1' ? $selected : ''?>>Turno</option>
                         <option value="2"<?=$orderby_field == '2' ? $selected : ''?>>Paciente</option>
-                        <option value="3"<?=$orderby_field == '3' ? $selected : ''?>>Cód.Pra.</option>
-                        <option value="4"<?=$orderby_field == '4' ? $selected : ''?>>Estudio</option>
-                        <option value="5"<?=$orderby_field == '5' ? $selected : ''?>>Realizador</option>
-                        <option value="6"<?=$orderby_field == '6' ? $selected : ''?>>O.Social</option>
-                        <option value="7"<?=$orderby_field == '7' ? $selected : ''?>>Prestación</option>
-                        <option value="8"<?=$orderby_field == '8' ? $selected : ''?>>Nro.Orden</option>
-                        <option value="9"<?=$orderby_field == '9' ? $selected : ''?>>Nro.Afiliado</option>
-                        <option value="10"<?=$orderby_field == '10' ? $selected : ''?>>Cant.</option>
-                        <option value="11"<?=$orderby_field == '11' ? $selected : ''?>>Tipo</option>
-                        <option value="12"<?=$orderby_field == '12' ? $selected : ''?>>TP</option>
-                        <option value="13"<?=$orderby_field == '13' ? $selected : ''?>>TO</option>
-                        <option value="14"<?=$orderby_field == '14' ? $selected : ''?>>TA</option>
-                        <option value="15"<?=$orderby_field == '15' ? $selected : ''?>>DD</option>
-                        <option value="16"<?=$orderby_field == '16' ? $selected : ''?>>Derivador</option>
+                        <option value="3"<?=$orderby_field == '3' ? $selected : ''?>>Usuario</option>
+                        <option value="4"<?=$orderby_field == '4' ? $selected : ''?>>Cód.Pra.</option>
+                        <option value="5"<?=$orderby_field == '5' ? $selected : ''?>>Estudio</option>
+                        <option value="6"<?=$orderby_field == '6' ? $selected : ''?>>Realizador</option>
+                        <option value="7"<?=$orderby_field == '7' ? $selected : ''?>>O.Social</option>
+                        <option value="8"<?=$orderby_field == '8' ? $selected : ''?>>Prestación</option>
+                        <option value="9"<?=$orderby_field == '9' ? $selected : ''?>>Nro.Orden</option>
+                        <option value="10"<?=$orderby_field == '10' ? $selected : ''?>>Nro.Afiliado</option>
+                        <option value="11"<?=$orderby_field == '11' ? $selected : ''?>>Cant.</option>
+                        <option value="12"<?=$orderby_field == '12' ? $selected : ''?>>Tipo</option>
+                        <option value="13"<?=$orderby_field == '13' ? $selected : ''?>>TP</option>
+                        <option value="14"<?=$orderby_field == '14' ? $selected : ''?>>TO</option>
+                        <option value="15"<?=$orderby_field == '15' ? $selected : ''?>>TA</option>
+                        <option value="16"<?=$orderby_field == '16' ? $selected : ''?>>DD</option>
+                        <option value="17"<?=$orderby_field == '17' ? $selected : ''?>>Derivador</option>
                     </select>
                     <select id="orderby_order" name="orderby_order" style="width:90px;">
                         <option value="ASC"<?=$orderby_order == 'ASC' ? $selected : ''?>>Ascendiente</option>
