@@ -85,6 +85,7 @@ class Diagnostico_model extends CI_Model
         }
         $aPost = array(
             'spac' => "CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres))",
+            'susu' => "u.usuario",
             'sces' => "e.codigopractica",
             'sest' => "e.nombre",
             'calt' => "ts.codigoalternat",
@@ -182,6 +183,7 @@ class Diagnostico_model extends CI_Model
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
+            ->join('usuarios AS u', 't.id_usuarios = u.id_usuarios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
         $query = $this->db
@@ -205,6 +207,7 @@ class Diagnostico_model extends CI_Model
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
+            ->join('usuarios AS u', 't.id_usuarios = u.id_usuarios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
         $query = $this->db
@@ -231,6 +234,7 @@ class Diagnostico_model extends CI_Model
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
+            ->join('usuarios AS u', 't.id_usuarios = u.id_usuarios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
         $query = $this->db
@@ -255,6 +259,7 @@ class Diagnostico_model extends CI_Model
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
+            ->join('usuarios AS u', 't.id_usuarios = u.id_usuarios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
         $query1 = $this->db
@@ -277,6 +282,7 @@ class Diagnostico_model extends CI_Model
             ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
+            ->join('usuarios AS u', 't.id_usuarios = u.id_usuarios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
         $query2 = $this->db
@@ -309,7 +315,8 @@ class Diagnostico_model extends CI_Model
                 ts.*,
                 CONCAT(TRIM(d.saludo), ' ', TRIM(d.apellidos), ', ', TRIM(d.nombres)) AS medicos_derivacion,
                 CONCAT(TRIM(dx.saludo), ' ', TRIM(dx.apellidos), ', ', TRIM(dx.nombres), ' (Externo)') AS medicosext_derivacion,
-                te.nombre AS turnos_estados
+                te.nombre AS turnos_estados,
+                u.usuario
             ")
             ->from('turnos AS t')
             ->join('turnos_tipos AS tt', 't.id_turnos_tipos = tt.id_turnos_tipos')
@@ -321,6 +328,7 @@ class Diagnostico_model extends CI_Model
             ->join('medicosext AS dx', "ts.matricula_derivacion = dx.matricula AND dx.estado = 1 AND dx.matricula != ''", 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
+            ->join('usuarios AS u', 't.id_usuarios = u.id_usuarios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
         $post['orderby_field'] = isset($post['orderby_field']) ? $post['orderby_field'] : '1';
@@ -527,6 +535,7 @@ SQL;
             ->join('medicosext AS dx', "ts.matricula_derivacion = dx.matricula AND dx.estado = 1 AND dx.matricula != ''", 'left')
             ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
             ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
+            ->join('usuarios AS u', 't.id_usuarios = u.id_usuarios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post, 'ts.fecha_presentacion', $id_usuario, $isMedico);
         $query = $this->db

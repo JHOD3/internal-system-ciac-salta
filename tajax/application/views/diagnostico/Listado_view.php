@@ -74,6 +74,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
             <tr class="inputSearch">
                 <td>&nbsp;</td>
                 <td><input id="spac" name="spac" type="text" value="<?=isset($spac) ? $spac : ''?>" /></td>
+                <td><input id="susu" name="susu" type="text" value="<?=isset($susu) ? $susu : ''?>" /></td>
                 <td><input id="sces" name="sces" type="text" value="<?=isset($sces) ? $sces : ''?>" /></td>
                 <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
                 <td>
@@ -120,20 +121,21 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
             <tr class="trHead">
                 <td class="dOrder" data-order="1" style="width:36px;">Turno</td>
                 <td class="dOrder" data-order="2">Paciente</td>
-                <td class="dOrder" data-order="3" style="width:51px;" title="Código de P.M.">Cod.Pra.</td>
-                <td class="dOrder" data-order="4">Estudio</td>
-                <td class="dOrder" data-order="5">Realizador</td>
-                <td class="dOrder" data-order="6" title="Obra Social">O.Social</td>
-                <td class="dOrder" data-order="7" style="width:80px;">Prestación</td>
-                <td class="dOrder" data-order="8" style="width:70px;">Nro.Orden</td>
-                <td class="dOrder" data-order="9">Nro.Afiliado</td>
-                <td class="dOrder" data-order="10" style="width:33px;">Cant.</td>
-                <td class="dOrder" data-order="11" style="width:27px;">Tipo</td>
-                <td class="dOrder" data-order="12" style="width:16px;" title="Trajo Pedido">TP</td>
-                <td class="dOrder" data-order="13" style="width:16px;" title="Trajo Orden">TO</td>
-                <td class="dOrder" data-order="14" style="width:32px;" title="Trajo Arancel">TA</td>
-                <td class="dOrder" data-order="15" style="width:32px;" title="Deja Depósito">DD</td>
-                <td class="dOrder" data-order="16" style="width:60px;">Derivador</td>
+                <td class="dOrder" data-order="3">Usuario</td>
+                <td class="dOrder" data-order="4" style="width:51px;" title="Código de P.M.">Cod.Pra.</td>
+                <td class="dOrder" data-order="5">Estudio</td>
+                <td class="dOrder" data-order="6">Realizador</td>
+                <td class="dOrder" data-order="7" title="Obra Social">O.Social</td>
+                <td class="dOrder" data-order="8" style="width:80px;">Prestación</td>
+                <td class="dOrder" data-order="9" style="width:70px;">Nro.Orden</td>
+                <td class="dOrder" data-order="10">Nro.Afiliado</td>
+                <td class="dOrder" data-order="11" style="width:33px;">Cant.</td>
+                <td class="dOrder" data-order="12" style="width:27px;">Tipo</td>
+                <td class="dOrder" data-order="13" style="width:16px;" title="Trajo Pedido">TP</td>
+                <td class="dOrder" data-order="14" style="width:16px;" title="Trajo Orden">TO</td>
+                <td class="dOrder" data-order="15" style="width:32px;" title="Trajo Arancel">TA</td>
+                <td class="dOrder" data-order="16" style="width:32px;" title="Deja Depósito">DD</td>
+                <td class="dOrder" data-order="17" style="width:60px;">Derivador</td>
                 <td style="width:120px;">Nombre</td>
                 <td style="width:100px;">Observaciones</td>
                 <td>&nbsp;</td>
@@ -152,6 +154,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
 <tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
     <td style="text-align:center;"><?=date("d/m", strtotime($item['fecha']))?><br /><?=substr($item['desde'], 0, 5)?></td>
     <td><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
+    <td><?=$item['usuario']?></td>
     <td<?=$idme?>"codigoalternat<?=$item['codigoalternat'] > 0? '" style="color:#C66;' : ''?>"><?=$item['codigoalternat'] ? $item['codigoalternat'] : $item['codigopractica']?></td>
     <td<?=$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
     <td<?=$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
