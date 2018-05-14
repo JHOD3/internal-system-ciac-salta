@@ -170,7 +170,7 @@ class Diagnostico extends CI_Controller {
             $isMedico
         );
 
-        $dataView['medicos'] = $this->Model->obtMedicos();
+        $dataView['medicos'] = $this->Model->obtMedicosConEstudios();
         $dataView['estudios'] = $this->Model->obtEstudios();
         $dataView['medicos_cm'] = $this->Model->obtMedicosConMatriculas();
         $dataView['medicos_mt'] = $this->Model->obtMedicosConMatriculas();

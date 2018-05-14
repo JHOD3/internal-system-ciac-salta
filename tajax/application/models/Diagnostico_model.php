@@ -388,6 +388,33 @@ SQL;
         return $this->db->query($query)->result_array();
     }
 
+    public function obtMedicosConEstudios()
+    {
+        $aData[] = date("Y-m-d", strtotime("-11 months"));
+        $aData[] = date("Y-m-d", strtotime("+1 months"));
+        $query = <<<SQL
+            SELECT
+                m.*
+            FROM
+                medicos AS m
+            INNER JOIN
+                turnos AS t
+                ON t.id_medicos = m.id_medicos
+			INNER JOIN
+				turnos_estudios AS te
+				ON te.id_turnos = t.id_turnos
+            WHERE
+                m.estado = 1 AND
+                t.fecha BETWEEN ? AND ?
+            GROUP BY
+                m.id_medicos
+            ORDER BY
+                m.apellidos,
+                m.nombres
+SQL;
+        return $this->db->query($query, $aData)->result_array();
+    }
+
     public function buscarPacientes($nro_documento)
     {
         $query = <<<SQL
