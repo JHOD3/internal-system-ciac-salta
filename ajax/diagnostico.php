@@ -219,6 +219,7 @@ $query = $this_db->consulta($SQL_Estudios);
                                     <option value=""<?=!$row['trajo_pedido'] ? ' selected="selected"' : ''?>>---</option>
                                     <option value="1"<?=$row['trajo_pedido'] == '1' ? ' selected="selected"' : ''?>>TP</option>
                                     <option value="2"<?=$row['trajo_pedido'] == '2' ? ' selected="selected"' : ''?>>No</option>
+                                    <option value="3"<?=$row['trajo_pedido'] == '3' ? ' selected="selected"' : ''?>>Debe</option>
                                 </select>
                             </td>
                             <td>
@@ -226,6 +227,7 @@ $query = $this_db->consulta($SQL_Estudios);
                                     <option value=""<?=!$row['trajo_orden'] ? ' selected="selected"' : ''?>>---</option>
                                     <option value="1"<?=$row['trajo_orden'] == '1' ? ' selected="selected"' : ''?>>TO</option>
                                     <option value="2"<?=$row['trajo_orden'] == '2' ? ' selected="selected"' : ''?>>No</option>
+                                    <option value="3"<?=$row['trajo_orden'] == '3' ? ' selected="selected"' : ''?>>Debe</option>
                                 </select>
                             </td>
                             <td><input type="number" name="trajo_arancel[]" value="<?=$row['trajo_arancel']?>" alt="<?=$row['trajo_arancel'] ? 'Viejo valor: $'.$row['trajo_arancel'] : ''?>" title="<?=$row['trajo_arancel'] ? 'Viejo valor: $'.$row['trajo_arancel'] : ''?>" style="width:40px;text-align:right;" /></td>

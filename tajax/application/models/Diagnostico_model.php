@@ -337,20 +337,21 @@ class Diagnostico_model extends CI_Model
         switch ($post['orderby_field']) {
             case "1": $orderby_field = "CONCAT(t.fecha, t.desde, t.hasta) {$ord}, t.id_turnos {$ord}"; break;
             case "2": $orderby_field = "CONCAT(TRIM(p.apellidos), TRIM(p.nombres)) {$ord}, t.id_turnos {$ord}"; break;
-            case "3": $orderby_field = "TRIM(e.codigopractica) {$ord}, t.id_turnos {$ord}"; break;
-            case "4": $orderby_field = "e.nombre {$ord}, t.id_turnos {$ord}"; break;
-            case "5": $orderby_field = "CONCAT(TRIM(m.apellidos), TRIM(m.nombres)) {$ord}, t.id_turnos {$ord}"; break;
-            case "6": $orderby_field = "os.abreviacion {$ord}, t.id_turnos {$ord}"; break;
-            case "7": $orderby_field = "ts.fecha_presentacion {$ord}, t.id_turnos {$ord}"; break;
-            case "8": $orderby_field = "(ts.nro_orden * 1) {$ord}, t.id_turnos {$ord}"; break;
-            case "9": $orderby_field = "(ts.nro_afiliado * 1) {$ord}, t.id_turnos {$ord}"; break;
-            case "10": $orderby_field = "ts.cantidad {$ord}, t.id_turnos {$ord}"; break;
-            case "11": $orderby_field = "ts.tipo {$ord}, t.id_turnos {$ord}"; break;
-            case "12": $orderby_field = "ts.trajo_pedido {$ord}, t.id_turnos {$ord}"; break;
-            case "13": $orderby_field = "ts.trajo_orden {$ord}, t.id_turnos {$ord}"; break;
-            case "14": $orderby_field = "ts.trajo_arancel {$ord}, t.id_turnos {$ord}"; break;
-            case "15": $orderby_field = "ts.deja_deposito {$ord}, t.id_turnos {$ord}"; break;
-            case "16": $orderby_field = "ts.matricula_derivacion {$ord}, t.id_turnos {$ord}"; break;
+            case "3": $orderby_field = "TRIM(u.usuario) {$ord}, t.id_turnos {$ord}"; break;
+            case "4": $orderby_field = "TRIM(e.codigopractica) {$ord}, t.id_turnos {$ord}"; break;
+            case "5": $orderby_field = "e.nombre {$ord}, t.id_turnos {$ord}"; break;
+            case "6": $orderby_field = "CONCAT(TRIM(m.apellidos), TRIM(m.nombres)) {$ord}, t.id_turnos {$ord}"; break;
+            case "7": $orderby_field = "os.abreviacion {$ord}, t.id_turnos {$ord}"; break;
+            case "8": $orderby_field = "ts.fecha_presentacion {$ord}, t.id_turnos {$ord}"; break;
+            case "9": $orderby_field = "(ts.nro_orden * 1) {$ord}, t.id_turnos {$ord}"; break;
+            case "10": $orderby_field = "(ts.nro_afiliado * 1) {$ord}, t.id_turnos {$ord}"; break;
+            case "11": $orderby_field = "ts.cantidad {$ord}, t.id_turnos {$ord}"; break;
+            case "12": $orderby_field = "ts.tipo {$ord}, t.id_turnos {$ord}"; break;
+            case "13": $orderby_field = "ts.trajo_pedido {$ord}, t.id_turnos {$ord}"; break;
+            case "14": $orderby_field = "ts.trajo_orden {$ord}, t.id_turnos {$ord}"; break;
+            case "15": $orderby_field = "ts.trajo_arancel {$ord}, t.id_turnos {$ord}"; break;
+            case "16": $orderby_field = "ts.deja_deposito {$ord}, t.id_turnos {$ord}"; break;
+            case "17": $orderby_field = "ts.matricula_derivacion {$ord}, t.id_turnos {$ord}"; break;
         }
         $query = $this->db
             ->where('ts.estado', 1)
@@ -581,11 +582,13 @@ SQL;
             switch ($query[$i]['trajo_pedido']) {
                 case '1': $query[$i]['trajo_pedido'] = 'Si'; break;
                 case '2': $query[$i]['trajo_pedido'] = 'No'; break;
+                case '3': $query[$i]['trajo_pedido'] = 'Debe'; break;
                 default: $query[$i]['trajo_pedido'] = ''; break;
             }
             switch ($query[$i]['trajo_orden']) {
                 case '1': $query[$i]['trajo_orden'] = 'Si'; break;
                 case '2': $query[$i]['trajo_orden'] = 'No'; break;
+                case '3': $query[$i]['trajo_orden'] = 'Debe'; break;
                 default: $query[$i]['trajo_orden'] = ''; break;
             }
             if ($query[$i]['trajo_arancel'] > 0) {
@@ -788,6 +791,8 @@ SQL;
                 $query[0]['trajo_pedido'] = 'TP';
             } elseif ($query[0]['trajo_pedido'] == '2') {
                 $query[0]['trajo_pedido'] = 'No';
+            } elseif ($query[0]['trajo_pedido'] == '3') {
+                $query[0]['trajo_pedido'] = '<strong style="color:red">Debe</strong>';
             } else {
                 $query[0]['trajo_pedido'] = '---';
             }
@@ -796,6 +801,8 @@ SQL;
                 $query[0]['trajo_orden'] = 'TO';
             } elseif ($query[0]['trajo_orden'] == '2') {
                 $query[0]['trajo_orden'] = 'No';
+            } elseif ($query[0]['trajo_orden'] == '3') {
+                $query[0]['trajo_orden'] = '<strong style="color:red">Debe</strong>';
             } else {
                 $query[0]['trajo_orden'] = '---';
             }

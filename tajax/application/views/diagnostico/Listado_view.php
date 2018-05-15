@@ -165,8 +165,26 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
     <td<?=$idme?>"nro_afiliado"><?=$item['nro_afiliado'] ? $item['nro_afiliado'] : '---'?></td>
     <td<?=$idmec?>"cantidad"><?=$item['cantidad'] ? $item['cantidad'] : '---'?></td>
     <td<?=$idme?>"tipo"><?=$item['tipo'] == '1' ? 'A' : ($item['tipo'] == '2' ? 'I' : '---')?></td>
-    <td<?=$idmec?>"trajo_pedido"><?=$item['trajo_pedido'] == '1' ? 'TP' : ($item['trajo_pedido'] == '2' ? 'No' : '---')?></td>
-    <td<?=$idmec?>"trajo_orden"><?=$item['trajo_orden'] == '1' ? 'TO' : ($item['trajo_orden'] == '2' ? 'No' : '---')?></td>
+    <td<?=$idmec?>"trajo_pedido">
+        <?php
+        switch ($item['trajo_pedido']) {
+            case '1': echo 'TP'; break;
+            case '2': echo 'No'; break;
+            case '3': echo '<strong style="color:red">Debe</strong>'; break;
+            default: echo '---'; break;
+        }
+        ?>
+    </td>
+    <td<?=$idmec?>"trajo_orden">
+        <?php
+        switch ($item['trajo_orden']) {
+            case '1': echo 'TO'; break;
+            case '2': echo 'No'; break;
+            case '3': echo '<strong style="color:red">Debe</strong>'; break;
+            default: echo '---'; break;
+        }
+        ?>
+    </td>
     <td<?=$idmer?>"trajo_arancel"><?=$item['trajo_arancel'] > 0 ? "\$&nbsp;{$item['trajo_arancel']}" : '---'?></td>
     <td<?=$idmer?>"deja_deposito"><?=$item['deja_deposito'] > 0 ? "\$&nbsp;{$item['deja_deposito']}" : '---'?></td>
     <td<?=$idmer?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
@@ -257,6 +275,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
         <option value="">---</option>
         <option value="1">TP</option>
         <option value="2">No</option>
+        <option value="3">Debe</option>
     </select>
 </div>
 <div id="tab_trajo_orden" class="tab_hidden">
@@ -264,6 +283,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
         <option value="">---</option>
         <option value="1">TO</option>
         <option value="2">No</option>
+        <option value="3">Debe</option>
     </select>
 </div>
 <div id="tab_trajo_arancel" class="tab_hidden"><input type="number" name="trajo_arancel" value="" style="width:40px;text-align:right;" /></div>
@@ -381,6 +401,10 @@ $(document).ready(function(){
             if (event.target == this) {
                 $(this).parent().find('.tdTab').each(function(){
                     var valDefault = $(this).html().replace('$&nbsp;', '').replace('---', '');
+                    if (valDefault.trim() == '<strong style="color:red">Debe</strong>') {
+                        valDefault = 'Debe';
+                    }
+                    if (console && console.log) console.log(valDefault);
                     if (valDefault[0] != '<') {
                         $(this).html($('#tab_' + $(this).data('mth')).html().replace('date_picker', 'datepicker'));
                         switch ($(this).find('input, select').prop('tagName')) {
@@ -391,7 +415,7 @@ $(document).ready(function(){
                                 break;
                             case 'SELECT':
                                 $(this).find('select option').each(function(){
-                                    if ($(this).html().toLowerCase() == valDefault.toLowerCase()) {
+                                    if ($(this).html().toLowerCase() == valDefault.trim().toLowerCase()) {
                                         $(this).attr("selected", true);
                                     }
                                 });

@@ -149,6 +149,7 @@ input[type="number"] {
         <select name="trajo_pedido">
             <option value="1">TP</option>
             <option value="2">No</option>
+            <option value="3">Debe</option>
         </select>
     </div>
     <div class="tab_float">
