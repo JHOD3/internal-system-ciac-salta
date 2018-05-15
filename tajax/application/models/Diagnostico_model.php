@@ -101,9 +101,15 @@ class Diagnostico_model extends CI_Model
         $cnct = "";
         $where = "";
         foreach ($aPost AS $kP => $rP) {
-            if (isset($post[$kP]) and trim($post[$kP])) {
+            if (isset($post[$kP]) and (is_array($post[$kP]) or trim($post[$kP]))) {
                 switch ($kP) {
                     case "srea":
+                        $in = implode(', ', $post[$kP]);
+                        $where.= "
+                            {$cnct} {$rP} IN ({$in})
+                        ";
+                        $cnct = "AND";
+                        break;
                     case "sden":
                         $where.= "
                             {$cnct} {$rP} = '{$post[$kP]}'

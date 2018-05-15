@@ -22,6 +22,15 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
 .dOrder {
     cursor: pointer;
 }
+.ms-drop > ul > li > label {
+    padding: 2px 4px;
+}
+.ms-drop > ul > li:nth-child(even) > label {
+    background-color: #f0f0f0;
+}
+.ms-drop > ul > li > label > span {
+    padding-left: 8px;
+}
 </style>
 <h1>Prácticas Médicas
     <?php if (!$isMedico): ?>
@@ -72,33 +81,36 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                     Total:&nbsp; <?=$listado_count?>
                 </td>
             </tr>
+            <?php if ($isMedico): ?>
+                <input type="hidden" id="srea" name="srea" value="<?=($id_usuario - 1000000)?>" />
+            <?php else: ?>
+                <tr>
+                    <td colspan="100%">
+                        Realizador:
+                        <select id="srea" name="srea[]" multiple="multiple" style="width:75%!important;max-width:700px!important;">
+                            <?php
+                            for ($i = 0; $i < count($medicos); $i++):
+                                $m = strtoupper(
+                                    trim($medicos[$i]['saludo'])." ".
+                                    trim($medicos[$i]['apellidos'])." ".
+                                    trim($medicos[$i]['nombres'])
+                                );
+                                ?>
+                                <option value="<?=$medicos[$i]['id_medicos']?>"<?=(isset($srea) and is_array($srea) and in_array($medicos[$i]['id_medicos'], $srea)) ? $selected : ''?>><?=$m?></option>
+                                <?php
+                            endfor;
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+            <?php endif; ?>
             <tr class="inputSearch">
                 <td>&nbsp;</td>
                 <td><input id="spac" name="spac" type="text" value="<?=isset($spac) ? $spac : ''?>" /></td>
                 <td><input id="susu" name="susu" type="text" value="<?=isset($susu) ? $susu : ''?>" /></td>
                 <td><input id="sces" name="sces" type="text" value="<?=isset($sces) ? $sces : ''?>" /></td>
                 <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
-                <td>
-                    <?php if ($isMedico): ?>
-                        <input type="hidden" id="srea" name="srea" value="<?=($id_usuario - 1000000)?>" />
-                    <?php else: ?>
-                        <select id="srea" name="srea">
-                            <option value=""></option>
-                            <?php
-                            for ($i = 0; $i < count($medicos); $i++):
-                                $m = strtoupper(
-                                    trim($medicos[$i]['saludo'])." ".
-                                    trim($medicos[$i]['apellidos']).", ".
-                                    trim($medicos[$i]['nombres'])
-                                );
-                                ?>
-                                <option value="<?=$medicos[$i]['id_medicos']?>"<?=(isset($srea) and $srea == $medicos[$i]['id_medicos']) ? $selected : ''?>><?=$m?></option>
-                                <?php
-                            endfor;
-                            ?>
-                        </select>
-                    <?php endif; ?>
-                </td>
+                <td>&nbsp;</td>
                 <td><input id="soso" name="soso" type="text" value="<?=isset($soso) ? $soso : ''?>" /></td>
                 <td>&nbsp;</td>
                 <td><input id="snor" name="snor" type="text" value="<?=isset($snor) ? $snor : ''?>" /></td>
@@ -556,6 +568,10 @@ $(document).ready(function(){
     ;
     $(this).find('#sder').autocomplete({
         source: tagsACMD
+    });
+
+    $('select#srea').multipleSelect({
+        filter: true
     });
 });
 </script>

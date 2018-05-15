@@ -1342,7 +1342,7 @@ tr.even td:last-child{
     width: 90%!important;
     padding: 1px 2%!important;
     margin: 0 0 2px 0!important;
-    display: block!important;
+    display: block;
     box-shadow: none!important;
     text-shadow: none!important;
     border-radius: 5px!important;
