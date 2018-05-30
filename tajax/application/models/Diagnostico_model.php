@@ -412,6 +412,9 @@ SQL;
 				ON te.id_turnos = t.id_turnos
             WHERE
                 m.estado = 1 AND
+                te.estado = 1 AND
+                t.estado = 1 AND
+                t.id_turnos_estados IN (2, 7) AND
                 t.fecha BETWEEN ? AND ?
             GROUP BY
                 m.id_medicos
