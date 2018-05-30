@@ -397,7 +397,7 @@ SQL;
 
     public function obtMedicosConEstudios()
     {
-        $aData[] = date("Y-m-d", strtotime("-11 months"));
+        $aData[] = date("Y-m-d", strtotime("-5 months"));
         $aData[] = date("Y-m-d", strtotime("+1 months"));
         $query = <<<SQL
             SELECT
