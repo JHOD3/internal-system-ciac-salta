@@ -14,6 +14,9 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
     width: 98%;
     margin: 0 1%;
 }
+#tblDxI tr > * {
+    padding: 4px;
+}
 .tot {
     text-align: center!important;
     font-size: 14px!important;
@@ -30,6 +33,11 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
 }
 .ms-drop > ul > li > label > span {
     padding-left: 8px;
+}
+.usuFmt {
+    font-size: 10px;
+    font-weight: bold;
+    color: black;
 }
 </style>
 <h1>Prácticas Médicas
@@ -57,21 +65,20 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                     <select id="orderby_field" name="orderby_field" style="width:120px;">
                         <option value="1"<?=$orderby_field == '1' ? $selected : ''?>>Turno</option>
                         <option value="2"<?=$orderby_field == '2' ? $selected : ''?>>Paciente</option>
-                        <option value="3"<?=$orderby_field == '3' ? $selected : ''?>>Usuario</option>
-                        <option value="4"<?=$orderby_field == '4' ? $selected : ''?>>Cód.Pra.</option>
-                        <option value="5"<?=$orderby_field == '5' ? $selected : ''?>>Estudio</option>
-                        <option value="6"<?=$orderby_field == '6' ? $selected : ''?>>Realizador</option>
-                        <option value="7"<?=$orderby_field == '7' ? $selected : ''?>>O.Social</option>
-                        <option value="8"<?=$orderby_field == '8' ? $selected : ''?>>Prestación</option>
-                        <option value="9"<?=$orderby_field == '9' ? $selected : ''?>>Nro.Orden</option>
-                        <option value="10"<?=$orderby_field == '10' ? $selected : ''?>>Nro.Afiliado</option>
-                        <option value="11"<?=$orderby_field == '11' ? $selected : ''?>>Cant.</option>
-                        <option value="12"<?=$orderby_field == '12' ? $selected : ''?>>Tipo</option>
-                        <option value="13"<?=$orderby_field == '13' ? $selected : ''?>>TP</option>
-                        <option value="14"<?=$orderby_field == '14' ? $selected : ''?>>TO</option>
-                        <option value="15"<?=$orderby_field == '15' ? $selected : ''?>>TA</option>
-                        <option value="16"<?=$orderby_field == '16' ? $selected : ''?>>DD</option>
-                        <option value="17"<?=$orderby_field == '17' ? $selected : ''?>>Derivador</option>
+                        <option value="3"<?=$orderby_field == '4' ? $selected : ''?>>Cód.Pra.</option>
+                        <option value="4"<?=$orderby_field == '5' ? $selected : ''?>>Estudio</option>
+                        <option value="5"<?=$orderby_field == '6' ? $selected : ''?>>Realizador</option>
+                        <option value="6"<?=$orderby_field == '7' ? $selected : ''?>>O.Social</option>
+                        <option value="7"<?=$orderby_field == '8' ? $selected : ''?>>Prestación</option>
+                        <option value="8"<?=$orderby_field == '9' ? $selected : ''?>>Nro.Orden</option>
+                        <option value="9"<?=$orderby_field == '10' ? $selected : ''?>>Nro.Afiliado</option>
+                        <option value="10"<?=$orderby_field == '11' ? $selected : ''?>>Cant.</option>
+                        <option value="11"<?=$orderby_field == '12' ? $selected : ''?>>Tipo</option>
+                        <option value="12"<?=$orderby_field == '13' ? $selected : ''?>>TP</option>
+                        <option value="13"<?=$orderby_field == '14' ? $selected : ''?>>TO</option>
+                        <option value="14"<?=$orderby_field == '15' ? $selected : ''?>>TA</option>
+                        <option value="15"<?=$orderby_field == '16' ? $selected : ''?>>DD</option>
+                        <option value="16"<?=$orderby_field == '17' ? $selected : ''?>>Derivador</option>
                     </select>
                     <select id="orderby_order" name="orderby_order" style="width:90px;">
                         <option value="ASC"<?=$orderby_order == 'ASC' ? $selected : ''?>>Ascendiente</option>
@@ -107,7 +114,6 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
             <tr class="inputSearch">
                 <td>&nbsp;</td>
                 <td><input id="spac" name="spac" type="text" value="<?=isset($spac) ? $spac : ''?>" /></td>
-                <td><input id="susu" name="susu" type="text" value="<?=isset($susu) ? $susu : ''?>" /></td>
                 <td><input id="sces" name="sces" type="text" value="<?=isset($sces) ? $sces : ''?>" /></td>
                 <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
                 <td>&nbsp;</td>
@@ -124,7 +130,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                 <td colspan="2"><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
                 <td>&nbsp;</td>
                 <td colspan="2">
-                    <select id="sche" name="sche">
+                    <select id="sche" name="sche" style="width:40px!important;">
                         <option value=""<?=(!isset($sche) or !in_array($sche, array('1', '2'))) ? $selected : ''?>>Todo</option>
                         <option value="1"<?=(isset($sche) and $sche == '1') ? $selected : ''?>>No chequeado</option>
                         <option value="2"<?=(isset($sche) and $sche == '2') ? $selected : ''?>>Chequeado</option>
@@ -132,25 +138,24 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                 </td>
             </tr>
             <tr class="trHead">
-                <td class="dOrder" data-order="1" style="width:36px;">Turno</td>
+                <td class="dOrder" data-order="1" style="width:36px;" title="Turno">Tu.</td>
                 <td class="dOrder" data-order="2">Paciente</td>
-                <td class="dOrder" data-order="3">Usuario</td>
-                <td class="dOrder" data-order="4" style="width:51px;" title="Código de P.M.">Cod.Pra.</td>
-                <td class="dOrder" data-order="5">Estudio</td>
-                <td class="dOrder" data-order="6">Realizador</td>
-                <td class="dOrder" data-order="7" title="Obra Social">O.Social</td>
-                <td class="dOrder" data-order="8" style="width:80px;">Prestación</td>
-                <td class="dOrder" data-order="9" style="width:70px;">Nro.Orden</td>
-                <td class="dOrder" data-order="10">Nro.Afiliado</td>
-                <td class="dOrder" data-order="11" style="width:33px;">Cant.</td>
-                <td class="dOrder" data-order="12" style="width:27px;">Tipo</td>
-                <td class="dOrder" data-order="13" style="width:16px;" title="Trajo Pedido">TP</td>
-                <td class="dOrder" data-order="14" style="width:16px;" title="Trajo Orden">TO</td>
-                <td class="dOrder" data-order="15" style="width:32px;" title="Trajo Arancel">TA</td>
-                <td class="dOrder" data-order="16" style="width:32px;" title="Deja Depósito">DD</td>
-                <td class="dOrder" data-order="17" style="width:60px;">Derivador</td>
+                <td class="dOrder" data-order="3" style="width:51px;" title="Código de Práctica Médica">C.P.M.</td>
+                <td class="dOrder" data-order="4">Estudio</td>
+                <td class="dOrder" data-order="5" title="Realizador">Real.</td>
+                <td class="dOrder" data-order="6" title="Obra Social">O.Social</td>
+                <td class="dOrder" data-order="7" style="width:80px;" title="Fecha de Presentación">Presen.</td>
+                <td class="dOrder" data-order="8" style="width:70px;" title="Nro. de Orden">N&deg;Ord.</td>
+                <td class="dOrder" data-order="9" title="Nro. de Afiliado">N&deg;Afil.</td>
+                <td class="dOrder" data-order="10" style="width:33px;" title="Cantidad">C.</td>
+                <td class="dOrder" data-order="11" style="width:27px;" title="Tipo">T.</td>
+                <td class="dOrder" data-order="12" style="width:16px;" title="Trajo Pedido">TP</td>
+                <td class="dOrder" data-order="13" style="width:16px;" title="Trajo Orden">TO</td>
+                <td class="dOrder" data-order="14" style="width:32px;" title="Trajo Arancel">TA</td>
+                <td class="dOrder" data-order="15" style="width:32px;" title="Deja Depósito">DD</td>
+                <td class="dOrder" data-order="16" style="width:60px;" title="Derivador">Der.</td>
                 <td style="width:120px;">Nombre</td>
-                <td style="width:100px;">Observaciones</td>
+                <td style="width:100px;" title="Observaciones">Obs.</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <?php if ($SUPERUSER > 1): ?>
@@ -165,9 +170,8 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                     $idme = ' class="tdTab" data-mth=';
 ?>
 <tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
-    <td style="text-align:center;"><?=date("d/m", strtotime($item['fecha']))?><br /><?=substr($item['desde'], 0, 5)?></td>
+    <td style="text-align:center;"><?=date("d/m", strtotime($item['fecha']))?><br /><?=substr($item['desde'], 0, 5)?><br /><label class="usuFmt"><?=$item['usuario']?></label></td>
     <td><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
-    <td><?=$item['usuario']?></td>
     <td<?=$idme?>"codigoalternat<?=$item['codigoalternat'] > 0? '" style="color:#C66;' : ''?>"><?=$item['codigoalternat'] ? $item['codigoalternat'] : $item['codigopractica']?></td>
     <td<?=$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
     <td<?=$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
@@ -226,7 +230,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
     </table>
 </form>
 
-<div id="tab_codigoalternat" class="tab_hidden"><input type="text" name="codigoalternat" value="" style="width:70px;"<?=$SUPERUSER < 2 ? ' readonly="readonly"' : ''?> /></div>
+<div id="tab_codigoalternat" class="tab_hidden"><input type="text" name="codigoalternat" value="" style="width:60px;"<?=$SUPERUSER < 2 ? ' readonly="readonly"' : ''?> /></div>
 <div id="tab_estudios" class="tab_hidden">
     <select name="id_estudios" style="width:80px;">
         <option value="">---</option>
@@ -274,9 +278,9 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
 <div id="tab_fecha_presentacion" class="tab_hidden"><input type="text" name="fecha_presentacion" value="" style="width:80px;" class="date_picker" /></div>
 <div id="tab_nro_orden" class="tab_hidden"><input type="text" name="nro_orden" value="" style="width:70px;" /></div>
 <div id="tab_nro_afiliado" class="tab_hidden"><input type="text" name="nro_afiliado" value="" style="width:70px;" /></div>
-<div id="tab_cantidad" class="tab_hidden"><input type="text" name="cantidad" value="" style="width:40px;text-align:right;" /></div>
+<div id="tab_cantidad" class="tab_hidden"><input type="text" name="cantidad" value="" style="width:30px;text-align:right;" /></div>
 <div id="tab_tipo" class="tab_hidden">
-    <select name="tipo" style="width:50px;">
+    <select name="tipo" style="width:35px;">
         <option value="">---</option>
         <option value="1">A</option>
         <option value="2">I</option>
@@ -300,7 +304,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
 </div>
 <div id="tab_trajo_arancel" class="tab_hidden"><input type="number" name="trajo_arancel" value="" style="width:40px;text-align:right;" /></div>
 <div id="tab_deja_deposito" class="tab_hidden"><input type="number" name="deja_deposito" value="" style="width:40px;text-align:right;" /></div>
-<div id="tab_matricula_derivacion" class="tab_hidden"><input type="text" name="matricula_derivacion" value="" style="width:70px;text-align:right;" class="ac_matricula_derivacion" /></div>
+<div id="tab_matricula_derivacion" class="tab_hidden"><input type="text" name="matricula_derivacion" value="" style="width:50px;text-align:right;" class="ac_matricula_derivacion" /></div>
 <div id="tab_observaciones" class="tab_hidden"><input type="text" name="observaciones" value="" style="width:100px;" /></div>
 <div id="tab_save" class="tab_hidden"><input type="button" value="Guardar" /></div>
 <?php if ($SUPERUSER > 1): ?>

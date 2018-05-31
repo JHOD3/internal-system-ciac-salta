@@ -343,21 +343,20 @@ class Diagnostico_model extends CI_Model
         switch ($post['orderby_field']) {
             case "1": $orderby_field = "CONCAT(t.fecha, t.desde, t.hasta) {$ord}, t.id_turnos {$ord}"; break;
             case "2": $orderby_field = "CONCAT(TRIM(p.apellidos), TRIM(p.nombres)) {$ord}, t.id_turnos {$ord}"; break;
-            case "3": $orderby_field = "TRIM(u.usuario) {$ord}, t.id_turnos {$ord}"; break;
-            case "4": $orderby_field = "TRIM(e.codigopractica) {$ord}, t.id_turnos {$ord}"; break;
-            case "5": $orderby_field = "e.nombre {$ord}, t.id_turnos {$ord}"; break;
-            case "6": $orderby_field = "CONCAT(TRIM(m.apellidos), TRIM(m.nombres)) {$ord}, t.id_turnos {$ord}"; break;
-            case "7": $orderby_field = "os.abreviacion {$ord}, t.id_turnos {$ord}"; break;
-            case "8": $orderby_field = "ts.fecha_presentacion {$ord}, t.id_turnos {$ord}"; break;
-            case "9": $orderby_field = "(ts.nro_orden * 1) {$ord}, t.id_turnos {$ord}"; break;
-            case "10": $orderby_field = "(ts.nro_afiliado * 1) {$ord}, t.id_turnos {$ord}"; break;
-            case "11": $orderby_field = "ts.cantidad {$ord}, t.id_turnos {$ord}"; break;
-            case "12": $orderby_field = "ts.tipo {$ord}, t.id_turnos {$ord}"; break;
-            case "13": $orderby_field = "ts.trajo_pedido {$ord}, t.id_turnos {$ord}"; break;
-            case "14": $orderby_field = "ts.trajo_orden {$ord}, t.id_turnos {$ord}"; break;
-            case "15": $orderby_field = "ts.trajo_arancel {$ord}, t.id_turnos {$ord}"; break;
-            case "16": $orderby_field = "ts.deja_deposito {$ord}, t.id_turnos {$ord}"; break;
-            case "17": $orderby_field = "ts.matricula_derivacion {$ord}, t.id_turnos {$ord}"; break;
+            case "3": $orderby_field = "TRIM(e.codigopractica) {$ord}, t.id_turnos {$ord}"; break;
+            case "4": $orderby_field = "e.nombre {$ord}, t.id_turnos {$ord}"; break;
+            case "5": $orderby_field = "CONCAT(TRIM(m.apellidos), TRIM(m.nombres)) {$ord}, t.id_turnos {$ord}"; break;
+            case "6": $orderby_field = "os.abreviacion {$ord}, t.id_turnos {$ord}"; break;
+            case "7": $orderby_field = "ts.fecha_presentacion {$ord}, t.id_turnos {$ord}"; break;
+            case "8": $orderby_field = "(ts.nro_orden * 1) {$ord}, t.id_turnos {$ord}"; break;
+            case "9": $orderby_field = "(ts.nro_afiliado * 1) {$ord}, t.id_turnos {$ord}"; break;
+            case "10": $orderby_field = "ts.cantidad {$ord}, t.id_turnos {$ord}"; break;
+            case "11": $orderby_field = "ts.tipo {$ord}, t.id_turnos {$ord}"; break;
+            case "12": $orderby_field = "ts.trajo_pedido {$ord}, t.id_turnos {$ord}"; break;
+            case "13": $orderby_field = "ts.trajo_orden {$ord}, t.id_turnos {$ord}"; break;
+            case "14": $orderby_field = "ts.trajo_arancel {$ord}, t.id_turnos {$ord}"; break;
+            case "15": $orderby_field = "ts.deja_deposito {$ord}, t.id_turnos {$ord}"; break;
+            case "16": $orderby_field = "ts.matricula_derivacion {$ord}, t.id_turnos {$ord}"; break;
         }
         $query = $this->db
             ->where('ts.estado', 1)
