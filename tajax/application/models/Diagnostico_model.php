@@ -381,7 +381,6 @@ class Diagnostico_model extends CI_Model
                 turnos_tipos AS tt
                 ON mh.id_turnos_tipos = tt.id_turnos_tipos
             WHERE
-                m.estado = 1 AND
                 mh.estado = 1 AND
                 tt.estado = 1 AND
                 tt.tipo = 'ESTUDIOS'
@@ -410,7 +409,6 @@ SQL;
 				turnos_estudios AS te
 				ON te.id_turnos = t.id_turnos
             WHERE
-                m.estado = 1 AND
                 te.estado = 1 AND
                 t.estado = 1 AND
                 t.id_turnos_estados IN (2, 7) AND
@@ -474,7 +472,6 @@ SQL;
                 ON mh.id_turnos_tipos = tt.id_turnos_tipos
             WHERE
                 m.id_medicos = '{$id_medico}' AND
-                m.estado = 1 AND
                 mh.estado = 1 AND
                 tt.estado = 1 AND
                 tt.tipo = 'ESTUDIOS'
@@ -498,7 +495,6 @@ SQL;
             FROM
                 medicos AS m
             WHERE
-                m.estado = 1 AND
                 m.matricula > 0
             GROUP BY
                 m.id_medicos
