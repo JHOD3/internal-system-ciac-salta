@@ -2,15 +2,19 @@
 <link href="[CSS]impresion.css" type="text/css" media="print" />
 
 <script type="text/javascript">
-	
-	
-	$("#cant_turnos_libres").html("Cantidad de Turnos Libres: <span>" + $(".libre").length + "</span>");
-	
+
+
+	$("#cant_turnos_libres").html(
+        "Turnos Libres: <span>" +
+        $(".libre").length +
+        "</span> / Consultorio: <span>[CONSULTORIO]</span> / Interno: <span>[INTERNO]</span>"
+    );
+
 	$(function(){
 		//UN SOLO CLICK PARA MOSTRA DATOS DEL TURNO
 		$(".btn_estado_turno").on("click",function(e){
 			e.preventDefault();
-			
+
 			//MARCO EL TURNO QUE SELECCIONO
 			if($(this).find('div.bloque').hasClass('seleccionado')) {
 				$(".btn_estado_turno").find('div.bloque').removeClass('seleccionado');
@@ -20,18 +24,18 @@
 				$(this).find('div.bloque').addClass('seleccionado');
 				$("#panel_datos_turnos").show();
 			}
-			
+
 			var id = $(this).data('id');
 			var tipo = $(this).data('tipo');
 			//CREO EL PANEL PARA IMPRIMIR
-			$.ajax({ 
+			$.ajax({
 				dataType: "html",
-				type: "POST",   
+				type: "POST",
 				url: "[URL]ajax/imprimir.php",
 				data: {tipo:tipo, id: id},
 				beforeSend: function(data){
-					
-				},						
+
+				},
 				success: function(requestData){
 					var rta = requestData;
 					//EL DIV CONTENEDOR ESTA EN GRILLA TURNOS
@@ -40,18 +44,18 @@
 				complete: function(requestData, exito){
 				},
 				error: function(requestData){
-					alert (requestData);	
+					alert (requestData);
 				}
 			});
 			//LISTADO DE ESTUDIOS POR TURNO
-			$.ajax({ 
+			$.ajax({
 				dataType: "html",
-				type: "POST",   
+				type: "POST",
 				url: "[URL]ajax/generar_control.php",
 				data: {tabla: 'turnos', valor: id, tipo: 'estudios_turno'},
 				beforeSend: function(data){
-					
-				},						
+
+				},
 				success: function(requestData){
 					var rta = requestData;
 					//EL DIV CONTENEDOR ESTA EN GRILLA TURNOS
@@ -60,31 +64,31 @@
 				complete: function(requestData, exito){
 				},
 				error: function(requestData){
-					alert (requestData);	
+					alert (requestData);
 				}
 			});
-			
+
 		});
-		
+
 	});
 	$(document).ready(function(){
 		$(".printer").bind("click",function(){
 			$("#contenedor_imprimir").printArea();
 		});
-		
-		
+
+
 		$("#habilitar").click(function(){
 			var id_horario_inhabilitado = $('#horarios_inhabilitados').val();
 			var fechacompleta = $("#agenda").datepicker('getDate');
-			
-			$.ajax({ 
+
+			$.ajax({
 				dataType: "html",
-				type: "POST",   
+				type: "POST",
 				url: "[URL]ajax/operaciones_varias.php",
 				data: {tipo: 'habilitar', id: id_horario_inhabilitado},
 				beforeSend: function(data){
-					
-				},						
+
+				},
 				success: function(requestData){
 					var rta = requestData;
 					//EL DIV CONTENEDOR ESTA EN GRILLA TURNOS
@@ -94,11 +98,11 @@
 				complete: function(requestData, exito){
 				},
 				error: function(requestData){
-					alert (requestData);	
+					alert (requestData);
 				}
 			});
-			
-			
+
+
 		})
 	});
 </script>
@@ -106,18 +110,18 @@
 	#contenedor_imprimir{
 		display:block;
 		font-family:Arial;
-		font:Arial, Helvetica, sans-serif;	
+		font:Arial, Helvetica, sans-serif;
 	}
 	p{
 		font-family:Arial;
 		font:Arial, Helvetica, sans-serif;
 		font-size:30px
-			
+
 	}
 	h1, h2{
 		margin:0;
 		padding:0;
-		line-height:30px;	
+		line-height:30px;
 	}
 	#detalle{
 		margin:10px -50px;
@@ -125,27 +129,27 @@
 </style>
 <div class="span6 contenedor" id="grilla_turnos" style="margin-bottom:10px;" >
     <div class="inner">
-        <h3 style="float:left">[FECHA_CON_DIA]</h3> 
-        <div class="clear"></div>	
+        <h3 style="float:left">[FECHA_CON_DIA]</h3>
+        <div class="clear"></div>
         <div id="cant_turnos_libres"></div>
         <div class="clear"></div>
         <div id="cuerpo_grilla_turnos" >
         	[MJE]
             [GRILLA_LISTADO]
         </div>
-        
-    </div>                    	
+
+    </div>
 </div>
 
 <div class="span3 contenedor" style="margin-bottom:10px;" id="panel_datos_turnos">
 	<div class="inner">
     	<h3>Datos del Turno</h3>
-    	
-        <div id="contenedor_imprimir"></div> 
+
+        <div id="contenedor_imprimir"></div>
         <div>
         	<p><a href="#" class="imprimir btn printer" value="Imprimir">Imprimir Turno <img src='[IMG]btns/imprimir.png' width='20' /></a></p>
         </div>
-        
+
         <div id="listado_estudios">
         </div>
 	</div>
@@ -166,10 +170,10 @@
         <h3>Habilitar</h3>
         <div class="clear"></div>
         <div>
-            [DROP_HORARIOS_INHABILITADOS] 
+            [DROP_HORARIOS_INHABILITADOS]
         </div>
         <div style="display:inline-block; width:18%; vertical-align:top">
-            
+
             <a href='#' id="habilitar" class='btn'>Habilitar</a>
         </div>
     </div>

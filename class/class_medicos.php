@@ -297,6 +297,11 @@ class Medicos extends Estructura implements iMedicos{
 		$fechav1 = explode('-',$fecha);
 		$diaSemana = $this->diaSemana($fechav1[0], $fechav1[1], $fechav1[2]);
 
+        $consultorio = array(
+            'nro_consultorio' => '-',
+            'interno' => '-'
+        );
+
 		requerir_class("dias_semana");
 		$obj_dia_semana = new Dias_semana($diaSemana);
 
@@ -315,6 +320,8 @@ class Medicos extends Estructura implements iMedicos{
                     'hasta' => $row2['hasta'],
                     'id_turnos_tipos' => $row2['id_turnos_tipos']
                 );
+                $consultorio['nro_consultorio'] = $row2['nro_consultorio'];
+                $consultorio['interno'] = $row2['interno'];
             }
             $keyTurnos = array_keys($aTurnos);
 			$query = $this->db->consulta($query_string);
@@ -507,7 +514,6 @@ class Medicos extends Estructura implements iMedicos{
 							$grillav[$inicio] = $linea;
 						}
 						$htm->Asigna('MJE',"");
-
 					}
 
 				}
@@ -542,7 +548,7 @@ class Medicos extends Estructura implements iMedicos{
                             $aTurnos[$keyTurnos[$i]]['id_turnos_tipos'] = 1;
                         }
                         $grillav[$hor_normal] = <<<HTML
-                            <span class='reservar libre sobreturno' data-desde='{$hor_normal}' data-hasta='{$hor_normal}' data-fecha='{$fecha}' data-turnos_tipos='{$aTurnos[$keyTurnos[$i]]['id_turnos_tipos']}'>
+                            <span class='reservar sobreturno' data-desde='{$hor_normal}' data-hasta='{$hor_normal}' data-fecha='{$fecha}' data-turnos_tipos='{$aTurnos[$keyTurnos[$i]]['id_turnos_tipos']}'>
     							<div class='bloque'>
     								<img src='{$img}btns/tipo_{$tipo_turno}.png' />{$hor_substr} &raquo; <strong>ASIGNAR UN SOBRETURNO</strong>
     							</div>
@@ -618,6 +624,8 @@ HTML;
 
 		$htm->Asigna("ID_MEDICO", $id_medico);
 		$htm->Asigna("ID_ESPECIALIDAD", $id_especialidad);
+        $htm->Asigna('CONSULTORIO', $consultorio['nro_consultorio']);
+        $htm->Asigna('INTERNO', $consultorio['interno']);
 
 		CargarVariablesGrales($htm, $tipo = "");
 

@@ -355,14 +355,23 @@ class Querys implements iQuerys{
 	}
 
 	function GrillaTurnos($id_medico, $id_especialidad, $id_dia){
-		/*$query = "SELECT *
-				FROM medicos_horarios MH
-				INNER JOIN medicos_especialidades ME
-				ON MH.id_medicos = ME.id_medicos
-				WHERE ME.id_medicos = $id_medico AND ME.id_especialidades = $id_especialidad AND MH.id_dias_semana = $id_dia AND MH.estado = 1 AND ME.estado = 1 AND ME.id_medicos_especialidades =(SELECT MAX(id_medicos_especialidades) FROM medicos_especialidades WHERE id_medicos = $id_medico AND id_especialidades = $id_especialidad AND id_dias_semana = $id_dia AND estado = 1 ) ORDER BY MH.desde ASC";*/
-		$query = "SELECT *
-				FROM medicos_horarios MH
-				WHERE MH.id_medicos = $id_medico AND MH.id_especialidades = $id_especialidad AND MH.id_dias_semana = $id_dia AND MH.estado = 1 ORDER BY MH.desde ASC";
+		$query = <<<SQL
+            SELECT
+                MH.*,
+                M.interno
+        	FROM
+                medicos_horarios MH
+            INNER JOIN
+                medicos M
+                ON MH.id_medicos = M.id_medicos
+        	WHERE
+                MH.id_medicos = $id_medico AND
+                MH.id_especialidades = $id_especialidad AND
+                MH.id_dias_semana = $id_dia AND
+                MH.estado = 1
+            ORDER BY
+                MH.desde ASC
+SQL;
 		return $query;
 
 	}
