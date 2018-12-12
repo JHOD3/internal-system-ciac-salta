@@ -27,8 +27,12 @@ switch ($tipo){
 			$nombre = $_POST["nombre_drop"];
 		}else
 			$nombre="";
-
-		$resp = $obj->Drop("nombre","",$valor,$nombre,"ASC");
+        if ($tabla == 'medicos_especialidades') {
+            $id = $_POST['esp'];
+            $resp = $obj->Drop("nombre",$id,$valor,$nombre,"ASC");
+        } else {
+            $resp = $obj->Drop("nombre","",$valor,$nombre,"ASC");
+        }
 		$resp = utf8_decode($resp);
 	break;
 	case "drop_vacio":

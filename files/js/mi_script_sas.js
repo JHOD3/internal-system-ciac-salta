@@ -714,6 +714,7 @@ function HoraActual(){
 }
 
 $(function() {
+    /*
     $("#medicos").keypress(function(event){
         letters = ['á','é','í','ó','ú','ñ','ü','Á','É','Í','Ó','Ú','Ñ','Ü'];
         replace = ['a','e','i','o','u','n','u','A','E','I','O','U','N','U'];
@@ -724,61 +725,92 @@ $(function() {
             return false;
         }
     });
+    */
+    var accentMap = {
+        "á": "a",
+        "é": "e",
+        "í": "i",
+        "ó": "o",
+        "ú": "u",
+        "ñ": "n",
+        "ü": "u",
+        "Á": "A",
+        "É": "E",
+        "Í": "I",
+        "Ó": "O",
+        "Ú": "U",
+        "Ñ": "N",
+        "Ü": "U"
+    };
+    var normalize = function( term ) {
+        var ret = "";
+        for ( var i = 0; i < term.length; i++ ) {
+            ret += accentMap[ term.charAt(i) ] || term.charAt(i);
+        }
+        return ret;
+    };
 	$("#medicos").autocomplete({
-        source: "../ajax/buscar.php",
-		focus: function( event, ui ) {
-			//$( "#medicos" ).val( ui.item.label );
-			return false;
-		},
+        source: function(request, response) {
+            var newTerm = request.term.trim().split(" ");
+            var data = $.grep( sAT, function(value, index) {
+                var newMatch = true;
+                for (i = 0; i < newTerm.length; i++) {
+                    var matcher = new RegExp( newTerm[i], "i" );
+                    myVal = value.saludo + ' ' + value.nombres + ' ' + value.apellidos + ' ' + value.especialidad;
+                    if (
+                        !matcher.test( myVal ) &&
+                        !matcher.test( normalize( myVal ) )
+                    ) {
+                        newMatch = false;
+                    }
+                }
+                return newMatch;
+            });
+            response(data);
+        },
 		select: function( event, ui ) {
 			$( "#medicos" ).val( ui.item.nombres + " " + ui.item.apellidos);
-			$( "#id_medico" ).val( ui.item.id );
-			$( "#medicos_especialidad" ).html( ui.item.especialidad );
-
-			var id_medico = $("#id_medico").val();
-
+			$( "#id_medico" ).val( ui.item.id_medicos );
+			$( "#medicos_especialidad" ).html( ui.item.id_medicos_especialidades );
+			var id_medico = ui.item.id_medicos;
+			var id_medicos_especialidades = ui.item.id_medicos_especialidades;
+            if (console && console.log) console.log('ir a generar el control');
+            dataAEnviar = {tipo: "drop", tabla: "medicos_especialidades", valor: id_medico, esp: id_medicos_especialidades};
+            if (console && console.log) console.log(dataAEnviar);
 			$.ajax({
 				type: "POST",
 				url: "../ajax/generar_control.php",
-				data: {tipo: "drop", tabla: "medicos_especialidades", valor: id_medico},
+				data: dataAEnviar,
 				beforeSend: function() {
 				},
 				success: function(requestData){
 					var rta = requestData;
 					$("#contenedor_drop_especialidades").html(rta);
-
-					var id_especialidad = $("#medicos_especialidades").val();
-
-					if (id_especialidad != null){
+					var id_medicos_especialidades = $("#medicos_especialidades").val();
+					if (id_medicos_especialidades != null){
 						CrearAgenda();
 					}else{
 						$("#contenedor_agenda").html("");
 					}
-
 					var fecha=new Date();
-
 					GrillaInicial(fecha);
-
-
-
-
-
 				},
 				complete: function(requestData, exito){
-
 				},
 				error: function (){
 					alert ("error");
 				}
 			});
-
 			return false;
 		}
 	})
+    .click(function() {
+        $(this).val('');
+    })
 	.data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 		return $( "<li>" )
-		//.append( "<a>" + item.nombres + " " + item.apellidos + "<br><small>" + item.especialidad + "</small></a>" )
-		.append( "<a>" + item.saludo + " " + item.nombres + " " + item.apellidos + "</a>" )
+		.append( "<a>" + item.saludo + " " + item.nombres + " " + item.apellidos + " - <small>" + item.especialidad + "</small></a>" )
+		//.append( "<a>" + item.saludo + " " + item.nombres + " " + item.apellidos + "</a>" )
 		.appendTo( ul );
 	};
 });

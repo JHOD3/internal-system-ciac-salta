@@ -108,12 +108,61 @@ if (
 } else {
     $BTN_MA = '';
 }
+
+$this_db = new MySQL();
+$query_string = <<<SQL
+    SELECT
+        M.id_medicos,
+        M.saludo,
+        M.nombres,
+        M.apellidos,
+        ME.id_medicos_especialidades,
+        E.nombre AS especialidad
+    FROM
+        medicos AS M
+    INNER JOIN
+        medicos_especialidades AS ME
+        ON ME.id_medicos = M.id_medicos
+    INNER JOIN
+        especialidades AS E
+        ON ME.id_especialidades = E.id_especialidades
+    WHERE
+        M.estado = 1 AND
+        ME.estado = 1 AND
+        E.estado = 1
+    ORDER BY
+        M.nombres,
+        M.apellidos,
+        E.nombre
+SQL;
+$query = $this_db->consulta($query_string);
+$data = "";
+while ($row = $this_db->fetch_array($query)) {
+    $data.=
+        "sAT.push({id_medicos: '".
+        utf8_encode($row['id_medicos']).
+        "', id_medicos_especialidades: '".
+        utf8_encode($row['id_medicos_especialidades']).
+        "', saludo: '".
+        utf8_encode($row['saludo']).
+        "', nombres:'".
+        utf8_encode($row['nombres']).
+        "', apellidos:'".
+        utf8_encode($row['apellidos']).
+        "', especialidad:'".
+        utf8_encode($row['especialidad']).
+        "'});\n"
+    ;
+}
+
+$htm_medicos_autocomplete = "<script>var sAT = new Array();{$data}</script>";
+
 $htm_index->Asigna("BTN_MA", $BTN_MA);
 $htm_index->Asigna("AGENDAS_OPTIONS", $obj_estructura->obtAGENDAS_OPTIONS());
 $htm_index->Asigna("FECHA", ucfirst(strftime("%A %d de ")).ucfirst(strftime("%B del %Y")));
 $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));
 $htm_index->Asigna("USUARIO_NOMBRES", utf8_encode($_SESSION['NOMBRES']));
-$htm_index->Asigna("MENU_TABLAS", $htm_menu_tablas->Muestra());
+$htm_index->Asigna("MENU_TABLAS", $htm_menu_tablas->Muestra().$htm_medicos_autocomplete);
 $htm_gral->Asigna("CUERPO", $htm_index->Muestra());
 
 CargarVariablesGrales($htm_gral, $tipo = "");
