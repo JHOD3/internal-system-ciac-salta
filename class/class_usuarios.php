@@ -82,7 +82,8 @@ class Usuarios extends Estructura implements iUsuarios{
                 #print $_SERVER['HTTP_HOST'];
                 if (
                     $_SERVER['HTTP_HOST'] != 'ciacsaltadb.ddns.net' or
-                    $usr[8] > 1
+                    $usr[8] > 1 or
+                    $usr[3] == 'invitado'
                 ) {
     				//variable para controlar tiempo que esta conectado
     				$ultimo_acceso = date("Y-n-j H:i:s");
