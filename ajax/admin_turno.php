@@ -27,11 +27,34 @@ switch ($tipo){
         if ($aviso_demora != 1) {
             $aviso_demora = 0;
         }
+        if ($trae_orden != '0' and $trae_orden != '1') {
+            $valor_orden = explode("|", $trae_orden);
+            $valor_orden = $valor_orden[1];
+            $trae_orden = 2;
+        } elseif ($trae_orden == 1) {
+            $valor_orden = $deposito_consulta ? $deposito_consulta : 0;
+        } else {
+            $valor_orden = 0;
+        }
+        $tmp = explode("|", $trae_pedido);
+        if (count($tmp) == 2) {
+            $trae_pedido = $tmp[0];
+            $valor_pedido = $tmp[1];
+        } else {
+            $trae_pedido = 0;
+            $valor_pedido = 0;
+        }
+
         $query_string = <<<SQL
             UPDATE
                 turnos
             SET
-                aviso_demora = '{$aviso_demora}'
+                aviso_demora = '{$aviso_demora}',
+                trae_orden = '{$trae_orden}',
+                valor_orden = '{$valor_orden}',
+                trae_pedido = '{$trae_pedido}',
+                valor_pedido = '{$valor_pedido}',
+                arancel_diferenciado = '{$arancel_diferenciado}'
             WHERE
                 id_turnos = '{$id_turno}'
             LIMIT 1

@@ -188,6 +188,14 @@ HTML;
 			break;
 		}
 
+        $row["trae_orden_0"] = ($row['trae_orden'] == 0 ? ' checked="checked"' : '');
+        $row["trae_orden_1"] = ($row['trae_orden'] == 1 ? ' checked="checked"' : '');
+        $row["trae_orden_2"] = ($row['trae_orden'] == 2 ? ' checked="checked"' : '');
+        $row["deposito_consulta"] = $row['valor_orden'];
+        $row["trae_pedido_0"] = ($row['trae_pedido'] == 0 ? ' checked="checked"' : '');
+        $row["trae_pedido_1"] = ($row['trae_pedido'] == 1 ? ' checked="checked"' : '');
+        $row["trae_pedido_2"] = ($row['trae_pedido'] == 2 ? ' checked="checked"' : '');
+        $row["arancel_diferenciado"] = $row['valor_pedido'];
 
 		$htm->AsignaBloque('block_registros',$row);
 

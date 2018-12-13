@@ -71,18 +71,23 @@
 		switch (id_turno_tipo){
 			case "1": //CONSULTAS
 				$("#consulta.oculto").show();
-				$('#arancel_diferenciado').prop('disabled','disabled');
 				$('#lbl_arancel_dif').hide();
 			break;
 			case "2": //ESTUDIOS
 				$("#estudios > div.oculto").show();
-				$('#arancel_diferenciado').prop('disabled','');
 				$('#lbl_arancel_dif').show();
 			break;
 		}
 
+        if (!$('#chk_deposito').is(':checked')){
+            $('input#deposito_consulta').attr('disabled', 'disabled');
+        }
+        if (!$('#consulta_arancel_diferenciado').is(':checked')){
+            $('input#arancel_diferenciado').attr('disabled', 'disabled');
+        }
+
 		//CONSULTA - ORDEN
-		$("input[name='orden_consulta']").click(function() {
+		$("input[name='trae_orden']").click(function() {
 			 if($("#chk_deposito").is(':checked')) {
 			 	$('input#deposito_consulta').prop('disabled','');
 				$('#deposito_consulta').focus();
@@ -99,7 +104,7 @@
 		});
 
 		//CONSULTA - VALOR
-		$("input[name='valor_consulta']").change(function() {
+		$("input[name='trae_pedido']").change(function() {
 			 if($("#consulta_arancel_diferenciado").is(':checked')) {
 			 	$('input#arancel_diferenciado').prop('disabled','');
 				$('#arancel_diferenciado').focus();
@@ -110,7 +115,7 @@
 		});
 
 		//CONSULTA
-		$("input[name='valor_consulta']").change(function() {
+		$("input[name='trae_pedido']").change(function() {
 			CalcularTotal()
 		});
 
@@ -538,43 +543,48 @@
         	<h4>Consulta</h4>
 
             <p style="padding-bottom: 0!important;">
-            	<input type="radio" name="orden_consulta"  value="0" id="si_trajo_orden" checked="checked" />
+            	<input type="radio" name="trae_orden"  value="0"[trae_orden_0] id="si_trajo_orden" checked="checked" />
                 <label for="si_trajo_orden">Si Trajo Orden</label><br />
 
-                <input type="radio" name="orden_consulta" id="chk_deposito" value="1" />
+                <input type="radio" name="trae_orden" id="chk_deposito" value="1"[trae_orden_1] />
                 <label for="chk_deposito">No Trajo Orden, Dej&oacute; un deposito de:</label>
-                <input type="text" name="deposito_consulta" id="deposito_consulta" disabled="disabled" value="0"><br />
+                <input type="text" name="deposito_consulta" id="deposito_consulta" value="[deposito_consulta]"><br />
 
-                <input type="radio" name="orden_consulta" value="[IMPORTE_CONSULTA_PARTICULAR]" [CHK_PARTICULAR]  id="consulta_particular" />
+                <input type="radio" name="trae_orden" value="2|[IMPORTE_CONSULTA_PARTICULAR]"[trae_orden_2] [CHK_PARTICULAR]  id="consulta_particular" />
                 <label for="consulta_particular">Particular: $[IMPORTE_CONSULTA_PARTICULAR]</label>
 
 				<h4 style="margin-top: 0!important;"></h4>
                 <span class="sin_pedido importe oculto ">
-                	<input type="radio" name="valor_consulta" value="[IMPORTE_CONSULTA_PARTICULAR]" [CHK_PARTICULAR] id="consulta_particular_oculta" />
+                	<input type="radio" name="trae_pedido"[trae_pedido_0] value="0|[IMPORTE_CONSULTA_PARTICULAR]" [CHK_PARTICULAR] id="consulta_particular_oculta" />
                     <label for="consulta_arancel">Arancel: $[IMPORTE_ARANCEL_OS]</label>
                	</span><br />
                 <span class="con_pedido importe ">
-                	<input type="radio" name="valor_consulta" value="[IMPORTE_ARANCEL_OS]" [CHK_ARANCEL] id="consulta_arancel" />
+                	<input type="radio" name="trae_pedido"[trae_pedido_1] value="1|[IMPORTE_ARANCEL_OS]" [CHK_ARANCEL] id="consulta_arancel" />
                     <label for="consulta_arancel">Arancel: $[IMPORTE_ARANCEL_OS]</label>
                	</span><br />
                 <span class="con_pedido importe ">
-                	<input type="radio" name="valor_consulta" value="[IMPORTE_ARANCEL_OS]" id="consulta_arancel_diferenciado" />
+                	<input type="radio" name="trae_pedido"[trae_pedido_2] value="2|[IMPORTE_ARANCEL_OS]" id="consulta_arancel_diferenciado" />
                     <label for="consulta_arancel_diferenciado">Arancel Diferenciado</label>
               	</span><br />
-
+                <span>
+                    <label id="lbl_arancel_dif">Arancel Diferenciado:</label>
+                    <input type="text" name="arancel_diferenciado" id="arancel_diferenciado" value="[arancel_diferenciado]" />
+                </span><br />
+                <div id="panel_total" class="oculto">
+        	        <h4 id="total">Total a Cobrar: $<span>0</span></h4>
+                </div>
             </p>
 
        	</div>
 
 
 
+<!--
         <div id="estudios" class="[CLASS_ESTUDIO]">
         	<h4>Estudios</h4>
-
             <div class="oculto">
                 <h3>Pedido</h3>
                 <input type="radio" name="pedido_estudios" value="0" checked="checked" />Si Trajo<br />
-
                 <input type="radio" name="pedido_estudios" id="deposito_pedido" value="1" />No Trajo, Deposito:
                 <input type="text" name="deposito_estudios_pedido" id="deposito_estudios_pedido" disabled="disabled" value="0"><br />
                 <input type="radio" name="pedido_estudios" id="particular_estudio_pedido" value="[IMPORTE_ESTUDIOS_PARTICULAR]" />Particular ($[IMPORTE_ESTUDIOS_PARTICULAR])
@@ -582,18 +592,9 @@
                 <input type="radio" name="orden_estudios" value="0" checked="checked" />Si Trajo<br />
                 <input type="radio" name="orden_estudios" id="deposito_orden" value="1" />No Trajo, Deposito:
                 <input type="text" name="deposito_estudios_orden" id="deposito_estudios_orden" disabled="disabled" value="0"><br />
-<!--                <input type="radio" name="orden_estudios" id="particular_estudio_orden" value="[VALOR_PARTICULAR_ESTUDIO]" />Particular ($[VALOR_PARTICULAR_ESTUDIO])-->
-                <!--<input type="text" id="particular_estudios" />
-                <input type="text" id="deposito_estudios" />-->
-
 			</div>
         </div>
-        <label id="lbl_arancel_dif">Arancel Diferenciado:</label>
-        <input type="text" name="arancel_diferenciado" id="arancel_diferenciado" value="0" disabled="disabled" />
-        <br />
-        <div id="panel_total" class="oculto">
-	        <h4 id="total">Total a Cobrar: $<span>0</span></h4>
-        </div>
+-->
     </div>
     <div class="clear"></div>
 
