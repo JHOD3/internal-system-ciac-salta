@@ -128,8 +128,10 @@ $query_string = <<<SQL
         ON ME.id_especialidades = E.id_especialidades
     WHERE
         M.estado = 1 AND
-        ME.estado = 1 AND
-        E.estado = 1
+        ME.estado = 1 AND (
+            E.estado = 1 OR
+            E.id_especialidades IN (60, 61)
+		)
     ORDER BY
         M.nombres,
         M.apellidos,
