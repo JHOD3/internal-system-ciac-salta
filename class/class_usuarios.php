@@ -33,6 +33,7 @@ class Usuarios extends Estructura implements iUsuarios{
 	function FormModificacion(){
 		$htm = $this->Html($this->nombre_tabla."/form_modificacion");
 		$row = $this->registro;
+        $row['fechanac'] = date("d/m/Y", strtotime($row['fechanac']));
 
 		$obj_roles = new Roles();
 		$htm->Asigna("DROP_ROLES", $obj_roles->Drop("", $row["superuser"]));

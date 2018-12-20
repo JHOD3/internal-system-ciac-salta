@@ -45,6 +45,7 @@ class Medicos extends Estructura implements iMedicos{
 	function FormModificacion(){
 		$htm = $this->Html($this->nombre_tabla."/form_modificacion");
 		$row = $this->registro;
+        $row['fechanac'] = date("d/m/Y", strtotime($row['fechanac']));
 
 
 		$obj_tipos_documentos = new Tipos_Documentos();

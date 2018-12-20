@@ -30,7 +30,10 @@
 				},
                 pass: {
 					required: true
-				}
+				},
+                fechanac: {
+                    required: true
+                }
 			},
 			messages: {
 				superuser: {
@@ -47,7 +50,10 @@
 				},
                 pass: {
 					required: "Ingrese Contrase&ntilde;a"
-				}
+				},
+                fechanac: {
+                    requied: "Ingrese la fecha de nacimiento"
+                }
 			},
 			submitHandler: function(){
 				var variables = $("#form_usuarios").serialize();
@@ -92,6 +98,10 @@
                 <input type="text" class="text-long" name="apellidos" style="text-transform:none!important;" />
             </div>
             <div class="bloque">
+                <label>Fecha de nacimiento: </label>
+                <input type="text" class="text-long datepicker" name="fechanac" />
+            </div>
+            <div class="bloque">
                 <label>Usuario: </label>
                 <input type="text" class="text-long" name="usuario" style="text-transform:lowercase!important;" />
             </div>
@@ -106,3 +116,8 @@
         </fieldset>
     </form>
 </div>
+<script>
+$(function(){
+    $(".datepicker").datepicker({dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true, yearRange: '-100:+0'});
+});
+</script>

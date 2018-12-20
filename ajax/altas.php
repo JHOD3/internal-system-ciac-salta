@@ -83,7 +83,8 @@ switch ($tabla){
 					nro_sector,
 					interno,
                     matricula,
-                    saludo
+                    saludo,
+                    fechanac
 					)";
 
 		if (!isset($sectores) || $sectores == "")
@@ -118,7 +119,8 @@ switch ($tabla){
 					'".strtoupper(utf8_decode($nro_sector))."',
 					".$interno.",
 					".$matricula.",
-                    '".$saludo."'
+                    '".$saludo."',
+                    '".implode("-", array_reverse(explode("/", $fechanac)))."'
 					)";
 
 		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
@@ -1040,7 +1042,8 @@ SQL;
                     pass,
                     fecha_alta,
                     fecha_baja,
-                    estado
+                    estado,
+                    fechanac
 					)";
 
 		$valores = "(
@@ -1051,7 +1054,8 @@ SQL;
 					'".base64_encode($pass)."',
 					'".date("Y-m-d")."',
 					NULL,
-                    1
+                    1,
+                    '".implode("-", array_reverse(explode("/", $fechanac)))."'
 					)";
 
 		print $query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);

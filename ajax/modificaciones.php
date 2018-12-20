@@ -84,7 +84,8 @@ switch ($tabla){
 					id_plantas = ".$plantas.",
 					interno = ".$interno.",
 					matricula = ".$matricula.",
-                    saludo = '".$saludo."'
+                    saludo = '".$saludo."',
+                    fechanac = '".implode("-", array_reverse(explode("/", $fechanac)))."'
 					";
 		#usuario = '".lower($obj->QuitarTildes($nombres[0].$apellidos))."',
 		#pass = '".base64_encode($nro_documento)."',
@@ -481,7 +482,8 @@ switch ($tabla){
 			superuser = '".utf8_decode($roles)."',
 			nombres = '".utf8_decode($nombres)."',
 			apellidos = '".utf8_decode($apellidos)."',
-			usuario = '".utf8_decode(strtolower($usuario))."'
+			usuario = '".utf8_decode(strtolower($usuario))."',
+            fechanac = '".implode("-", array_reverse(explode("/", $fechanac)))."'
         ";
         if (isset($pass) and trim($pass)) {
             $asignaciones.= ", pass = '".base64_encode($pass)."' ";

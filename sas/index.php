@@ -2,6 +2,7 @@
 require_once ("../engine/config.php");
 require_once ("../engine/restringir_acceso.php");
 requerir_class("tpl","mysql","querys","estructura","medicos");
+$this_db = new MySQL();
 
 //requerir_class("dias_semana");
 
@@ -29,16 +30,98 @@ if (!$d or $d->format($format) != $date or strlen($hasta) != 10) {
 $d = implode("-", array_reverse(explode("/", $desde)));
 $h = implode("-", array_reverse(explode("/", $hasta)));
 
+$date = date("m-d");
+$query_string = <<<SQL
+    SELECT
+        SUBSTR(U.fechanac, 6, 5) AS mesdia
+    FROM
+        usuarios U
+    WHERE
+        U.estado = 1 AND
+        U.fechanac IS NOT NULL AND
+        SUBSTR(U.fechanac, 6, 5) >= '{$date}'
+    UNION SELECT
+        SUBSTR(M.fechanac, 6, 5) AS mesdia
+    FROM
+        medicos M
+    WHERE
+        M.estado = 1 AND
+        M.fechanac IS NOT NULL AND
+        SUBSTR(M.fechanac, 6, 5) >= '{$date}'
+    GROUP BY
+        mesdia
+    ORDER BY
+        mesdia ASC
+    LIMIT 4
+SQL;
+$result = $this_db->consulta($query_string);
+if ($this_db->num_rows($result) > 0) {
+    $aDates = array();
+    while ($row = $this_db->fetch_assoc($result)) {
+        $aDates[] = "'".$row['mesdia']."'";
+    }
+    $aDates = implode(",", $aDates);
+    if (count($aDates) > 0) {
+        $query_string = <<<SQL
+            SELECT
+                CONCAT(U.nombres, ' ', U.apellidos) AS nombres,
+                SUBSTR(U.fechanac, 6, 5) AS mesdia
+            FROM
+                usuarios U
+            WHERE
+                U.estado = 1 AND
+                U.fechanac IS NOT NULL AND
+                SUBSTR(U.fechanac, 6, 5) IN ({$aDates})
+            UNION SELECT
+                CONCAT(M.saludo, ' ', M.nombres, ' ', M.apellidos) AS nombres,
+                SUBSTR(M.fechanac, 6, 5) AS mesdia
+            FROM
+                medicos M
+            WHERE
+                M.estado = 1 AND
+                M.fechanac IS NOT NULL AND
+                SUBSTR(M.fechanac, 6, 5) IN ({$aDates})
+            ORDER BY
+                mesdia ASC
+SQL;
+        $result = $this_db->consulta($query_string);
+        if ($this_db->num_rows($result) > 0) {
+            $aDates = "";
+            while ($row = $this_db->fetch_assoc($result)) {
+                if ($row['mesdia'] == date("m-d")) {
+                    $aDates.= '<strong style="color:red">';
+                }
+                $aDates.= '&raquo;&nbsp;';
+                $aDates.= date("d/m", strtotime(date("Y")."-".$row['mesdia']));
+                $aDates.= "&nbsp;-&nbsp;";
+                $aDates.= utf8_encode($row['nombres']);
+                if ($row['mesdia'] == date("m-d")) {
+                    $aDates.= '</strong>';
+                }
+                $aDates.= "<br />\n";
+            }
+        }
+        $cumples.= "<div style=\"color: white; width: 400px; min-height: 120px; background-size: 400px auto; background-repeat: no-repeat; padding: 20px; background-image:url(../files/img/1535146937-torta-cumpleaos-istock.jpg);\">";
+        $cumples.= "<strong style=\"color: green;\">Próximos cumpleaños:</strong><br />\n";
+        $cumples.= $aDates;
+        $cumples.= "</div><br /><br />\n";
+    } else {
+        $cumples = "";
+    }
+} else {
+    $cumples = "";
+}
 if ($_SESSION['SUPERUSER'] == '3') {
     $obj_medicos = new Medicos();
     $htm_index->Asigna(
         "DROP_MEDICOS",
+        $cumples.
         "Reporte: ".
         utf8_encode($obj_medicos->Drop("", $_GET['id_medicos'])).
         "<br /><br />"
     );
 } else {
-    $htm_index->Asigna("DROP_MEDICOS", "");
+    $htm_index->Asigna("DROP_MEDICOS", $cumples);
 }
 $htm_index->Asigna("DATE_TODAY", date("d/m/Y"));
 $htm_index->Asigna("DATE_DESDE", $desde);
@@ -58,7 +141,6 @@ if (in_array($_SESSION['SUPERUSER'], array(1, 2))) {
 
 if ($_GET['id_medicos']) {
     $ses_id_medico = $_GET['id_medicos'];
-    $this_db = new MySQL();
     $html_graph.= '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>';
     $desde_text = $desde;
     $hasta_text = $hasta;
@@ -109,7 +191,6 @@ if (
     $BTN_MA = '';
 }
 
-$this_db = new MySQL();
 $query_string = <<<SQL
     SELECT
         M.id_medicos,

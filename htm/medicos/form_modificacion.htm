@@ -34,7 +34,11 @@
 				},
 				email: {
 					required: true
-				}			},
+				},
+                fechanac: {
+                    required: true
+                }
+			},
 			messages: {
 				apellidos: {
 					required: "Ingrese Apellido/s"
@@ -56,6 +60,9 @@
 				},
 				email: {
 					required: "Ingrese Email"
+				},
+				fechanac: {
+					required: "Ingrese la fecha de nacimiento"
 				}
 			},
 			submitHandler: function(){
@@ -141,6 +148,10 @@
                 <input type="text" class="text-long" name="email" value="[email]" />
             </div>
             <div class="bloque">
+                <label>Fecha de nacimiento: </label>
+                <input type="text" class="text-long datepicker" name="fechanac" value="[fechanac]" />
+            </div>
+            <div class="bloque">
                 <label>Sector: </label>
                 [DROP_SECTORES]
             </div>
@@ -171,4 +182,9 @@
         </fieldset>
     </form>
 </div>
+<script>
+$(function(){
+    $(".datepicker").datepicker({dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true, yearRange: '-100:+0'});
+});
+</script>
 [/block: block_registros]
