@@ -2,6 +2,7 @@
 require_once("../engine/config.php");
 require_once("../engine/restringir_acceso.php");
 requerir_class("tpl","querys","mysql","estructura");
+$this_db = new MySQL();
 
 #var_dump($_POST); die;
 
@@ -1059,6 +1060,43 @@ SQL;
 			$rta = $obj->db->ultimo_id_insertado();
 		else
 			$rta = false;
+
+	break;
+	case "notas_impresion":
+		parse_str(stripslashes($datos));
+
+		$columnas = "(
+					nombre,
+                    detalle,
+                    estado
+					)";
+
+		$valores = "(
+					'".utf8_decode($nombre)."',
+					'".utf8_decode($detalle)."',
+                    1
+					)";
+
+		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+		if ($obj->db->consulta($query_string)) {
+			$rta = $obj->db->ultimo_id_insertado();
+            $query_string = <<<SQL
+                DELETE FROM notas_impresion_estudios
+                WHERE id_notas_impresion = '{$rta}';
+SQL;
+            $this_db->consulta($query_string);
+            foreach ($id_estudios as $itm_est) {
+                $query_string = <<<SQL
+                    INSERT INTO notas_impresion_estudios
+                    (id_notas_impresion, id_estudios, estado)
+                    VALUES ('{$rta}', '{$itm_est}', 1);
+SQL;
+                $this_db->consulta($query_string);
+            }
+		} else {
+			$rta = false;
+        }
 
 	break;
 

@@ -2,6 +2,7 @@
 require_once("../engine/config.php");
 require_once("../engine/restringir_acceso.php");
 requerir_class("tpl","querys","mysql","estructura");
+$this_db = new MySQL();
 
 $tabla = $_POST["tabla"];
 $id = $_POST["id"];
@@ -19,6 +20,15 @@ switch ($tabla) {
     case "mantenimientos":
     case "usuarios":
         $rta = $obj->Inhabilitar();
+        break;
+    case "notas_impresion":
+        $rta = $obj->Inhabilitar();
+        $query_string = <<<SQL
+            UPDATE notas_impresion_estudios
+            SET estado = 0
+            WHERE id_notas_impresion = '{$id}';
+SQL;
+        $this_db->consulta($query_string);
         break;
     case "horarios_inhabilitados":
         if (trim($_POST['borrar_horarios_inhabilitados'])) {

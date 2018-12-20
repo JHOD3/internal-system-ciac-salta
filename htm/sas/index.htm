@@ -2,8 +2,25 @@
 <script src="[JS]/propios/medicos.js"></script>
 <script src="[JS]/propios/obras_sociales.js"></script>
 <script src="[JS]/propios/mensajes.js"></script>
-
-
+<style media="print">
+.noPrint, #dl-menu.dl-menuwrapper, #dieAjaxNovedadesDiv {
+    display: none;
+    visibility: hidden;
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+#panel_cuerpo,
+#panel_cuerpo .container,
+#panel_cuerpo .container .row,
+#panel_cuerpo .container .row .span9 {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
+</style>
 <style>
 .ui-autocomplete {
 	max-height: 200px;
@@ -239,6 +256,22 @@
         });
 
         $('.datepicker').datepicker();
+
+        /**********************************************************************/
+        /**********************************************************************/
+        $('#postItPrint').click(function(event) {
+            event.preventDefault();
+			$.ajax({
+				type: "GET",
+				url: "[URL]ajax/panel_imprimir.php",
+				success: function(requestData){
+				   $('#panel_cuerpo #cont_grilla_turnos').html(requestData);
+				}
+			});
+        });
+        /**********************************************************************/
+        /**********************************************************************/
+
 	});
 
 	jQuery(function($){
@@ -249,7 +282,7 @@
 	//CARGO LA FUNCION DE HORA ACTUAL (mi_script.js)
   	window.onload = HoraActual
 </script>
-<section class="bg_negro">
+<section class="bg_negro noPrint">
 	<div class="container">
     	<div class="row" id="datos_usr">
         	<div class="span6">
@@ -262,9 +295,9 @@
     </div>
 </section>
 [MENU_TABLAS]
-<section id="panel_menu" class="bg_verde" style="display:none;"></section>
+<section id="panel_menu" class="bg_verde noPrint" style="display:none;"></section>
 
-<section id="panel_busqueda" class="bg_azul">
+<section id="panel_busqueda" class="bg_azul noPrint">
     <div class="container">
     	<div class="row">
             <div class="span4">
@@ -272,7 +305,9 @@
                 <input type="hidden" id="id_medico">
             </div>
             <div class="span4">
-                <div id="contenedor_drop_especialidades"></div>
+                <div id="contenedor_drop_especialidades">
+                    <a href="#" class="btn btn-info" style="margin-top: 6px;" id="postItPrint">Imprimir</a>
+                </div>
             </div>
             <div class="span4">
                 <input id="dni" type="text" onkeypress="return SoloNros(event)" placeHolder="Paciente" style="width: 130px!important;min-width:0px!important;" class="closeMenu inputSearchBar"/>
@@ -495,7 +530,7 @@ if ([DER_NUMROWS] > 0) {
   </div>
 </div>
                     </div>
-                    <div class="span3 contenedor" id="habilitar_inhabilitar" >
+                    <div class="span3 contenedor noPrint" id="habilitar_inhabilitar" >
                         <div class="inner">
                             <h3>Inhabilitar</h3>
                             <div class="clear"></div>
@@ -532,7 +567,7 @@ if ([DER_NUMROWS] > 0) {
                             </form>
                         </div>
                     </div>
-                    <div class="span3 contenedor" id="cont_duplicados" >
+                    <div class="span3 contenedor noPrint" id="cont_duplicados" >
                         <div class="inner">
                             <h3>Duplicados</h3>
                             <div id="duplicados"></div>
@@ -545,6 +580,6 @@ if ([DER_NUMROWS] > 0) {
 	</div>
 </div>
 
-<div id="dialog_eliminar" title="Borrar Registos Seleccionado?">
+<div id="dialog_eliminar" class="noPrint" title="Borrar Registos Seleccionado?">
     <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Se borrar&aacute;n todos los datos vinculados al registro. Desea continuar?</p>
 </div>

@@ -2,6 +2,7 @@
 require_once("../engine/config.php");
 require_once("../engine/restringir_acceso.php");
 requerir_class("tpl","querys","mysql","estructura");
+$this_db = new MySQL();
 
 $tabla = $_POST["tabla"];
 $datos = $_POST["variables"];
@@ -492,6 +493,37 @@ switch ($tabla){
 			$rta = true;
 		else
 			$rta = false;
+
+	break;
+
+	case "notas_impresion":
+		parse_str(stripslashes($datos));
+
+		$asignaciones = "
+					nombre = '".utf8_decode($nombre)."',
+					detalle = '".utf8_decode($detalle)."'
+					";
+
+        $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
+
+		if ($obj->db->consulta($query_string)) {
+            $query_string = <<<SQL
+                DELETE FROM notas_impresion_estudios
+                WHERE id_notas_impresion = '{$id}';
+SQL;
+            $this_db->consulta($query_string);
+            foreach ($id_estudios as $itm_est) {
+                $query_string = <<<SQL
+                    INSERT INTO notas_impresion_estudios
+                    (id_notas_impresion, id_estudios, estado)
+                    VALUES ('{$id}', '{$itm_est}', 1);
+SQL;
+                $this_db->consulta($query_string);
+            }
+			$rta = true;
+		} else {
+			$rta = false;
+        }
 
 	break;
 

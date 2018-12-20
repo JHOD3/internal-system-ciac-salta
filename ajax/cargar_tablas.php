@@ -29,7 +29,8 @@ requerir_class(
     'roles',
     'encuestas',
     'horarios_inhabilitados',
-    'horarios_inhabilitados_motivos'
+    'horarios_inhabilitados_motivos',
+    'notas_impresion'
 );
 
 $tabla = $_GET["tabla"];
@@ -124,6 +125,9 @@ switch ($tabla){
 	break;
 	case "horarios_inhabilitados":
 		$aColumns = array('id_horarios_inhabilitados','id_medicos','id_especialidades','fecha','desde','hasta','id_horarios_inhabilitados_motivos');
+	break;
+	case "notas_impresion":
+		$aColumns = array('id_notas_impresion','nombre','detalle');
 	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
@@ -2207,6 +2211,12 @@ if ($cant_registros != 0){
                     $row[6] = utf8_encode($horario_inhabilitado_motivo);
                     $row[7] = $horario_inhabilitado_bloqueo;
                 break;
+				case 'notas_impresion':
+					$row[0] = $aRow["id_notas_impresion"];
+					$row[1] = utf8_encode($aRow['nombre']);
+					$row[2] = utf8_encode($aRow['detalle']);
+                    $row[3] = $editar.''.$eliminar.'';
+				break;
 
 			}
             if ($tabla != 'usuarios' or $row[0] >= 0) {
