@@ -124,8 +124,8 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
             <div style="color:#008A47;font-size:20px;"><?=utf8_encode(nl2br($nov['contenido']))?></div>
             <br />
             <div>
-                <input id="dieAjaxNovedadesButton" type="button" data-tipo="<?=$nov['tipo']?>" value="He le&iacute;do" />
-                <input id="dieAjaxNovedadesCancel" type="button" value="Leer despu&eacute;s" />
+                <input id="dieAjaxNovedadesButton" class="btn-success" type="button" data-tipo="<?=$nov['tipo']?>" value="He le&iacute;do" />
+                <input id="dieAjaxNovedadesCancel" class="btn-secondary" type="button" value="Leer despu&eacute;s" />
             </div>
         </div>
         <style>
@@ -176,6 +176,36 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
     die;
 }
 
+if ($_GET['sql'] == 'delete' and !empty($_GET['id'])) {
+    require_once("../engine/config.php");
+    require_once("../engine/restringir_acceso.php");
+    requerir_class("tpl","querys","mysql","estructura","json");
+
+    $this_db = new MySQL();
+    $sql = "
+        DELETE FROM
+            novedades_usuarios
+        WHERE
+            id_novedades = '{$_GET['id']}'
+    ";
+    $this_db->consulta($sql);
+    $sql = "
+        DELETE FROM
+            novedades_medicos
+        WHERE
+            id_novedades = '{$_GET['id']}'
+    ";
+    $this_db->consulta($sql);
+    $sql = "
+        DELETE FROM
+            novedades
+        WHERE
+            id_novedades = '{$_GET['id']}'
+    ";
+    $this_db->consulta($sql);
+    header("Location: ../sas/index.php");
+    die;
+}
 if (
     is_array($_POST) and
     isset($_POST['inpTitulo']) and
@@ -188,17 +218,44 @@ if (
 
     $this_db = new MySQL();
 
-    $sql = "
-        INSERT INTO
-            novedades
-            (titulo, contenido, fechahora)
-        VALUES
-            (
-                '".str_replace("'", "\\'", utf8_decode($_POST['inpTitulo']))."',
-                '".str_replace("'", "\\'", utf8_decode($_POST['textContenido']))."',
-                '".date("Y-m-d H:i:s")."'
-            )
-    ";
+    if (empty($_POST['id_novedades'])) {
+        $sql = "
+            INSERT INTO
+                novedades
+                (titulo, contenido, fechahora)
+            VALUES
+                (
+                    '".str_replace("'", "\\'", utf8_decode($_POST['inpTitulo']))."',
+                    '".str_replace("'", "\\'", utf8_decode($_POST['textContenido']))."',
+                    '".date("Y-m-d H:i:s")."'
+                )
+        ";
+    } elseif(!empty($_POST['id_novedades'])) {
+        $sql = "
+            UPDATE novedades_usuarios
+            SET confirmacion = NULL
+            WHERE id_novedades = '{$_POST['id_novedades']}'
+        ";
+        $this_db->consulta($sql);
+        $sql = "
+            UPDATE novedades_medicos
+            SET confirmacion = NULL
+            WHERE id_novedades = '{$_POST['id_novedades']}'
+        ";
+        $this_db->consulta($sql);
+        $sql = "
+            UPDATE
+                novedades
+            SET
+                titulo = '".str_replace("'", "\\'", utf8_decode($_POST['inpTitulo']))."',
+                contenido = '".str_replace("'", "\\'", utf8_decode($_POST['textContenido']))."',
+                fechahora = '".date("Y-m-d H:i:s")."'
+            WHERE
+                id_novedades = '{$_POST['id_novedades']}'
+        ";
+    } else {
+        $sql = "SELECT 1";
+    }
     $this_db->consulta($sql);
     $last_insert_id = $this_db->ultimo_id_insertado();
 
@@ -234,7 +291,7 @@ if (
     die;
 }
 
-$isAdmin = ($_SESSION['ID_USUARIO'] == '0' and $_SESSION['TIPO_USR'] == 'U');
+$isAdmin = ($_SESSION['SUPERUSER'] > 1 and $_SESSION['TIPO_USR'] == 'U');
 
 $this_db = new MySQL();
 
@@ -278,7 +335,7 @@ $operadores = $this_db->consulta($sql);
                             <strong>Contenido del Comunicado de Gerencia</strong><br />
                             <textarea id="textContenido" name="textContenido" style="min-width:300px;width:98%;height:200px;text-transform:none!important;"></textarea><br />
                             <br />
-                            <input id="inpSubmit" type="submit" value="Guardar" />
+                            <input id="inpSubmit" type="submit" class="btn btn-success" value="Guardar" />
                         </td>
                         <td>&nbsp;&nbsp;&nbsp;</td>
                         <td>
@@ -334,8 +391,23 @@ $novedades = $this_db->consulta($sql);
             <tbody>
                 <tr valign="top">
                     <td<?=$isAdmin ? ' style="width:40%;"' : ''?>>
-                        <div><strong><?=utf8_encode($nov['titulo'])?></strong> - <?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</div>
-                        <div><?=utf8_encode(nl2br($nov['contenido']))?></div>
+                        <div class="cntnt">
+                            <div><strong><?=utf8_encode($nov['titulo'])?></strong> - <?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</div>
+                            <div><?=utf8_encode(nl2br($nov['contenido']))?></div>
+                        </div>
+                        <?php if ($isAdmin): ?>
+                            <div class="noPrint" data-id="<?=$nov['id_novedades']?>">
+                                <input type="button" class="btnEditar btn btn-success" value="Editar" />
+                                <input type="button" class="btnPrint btn btn-secondary" value="Imprimir" />
+                                <input type="button" class="btnBorrar btn btn-danger" value="Borrar" />
+                                <form action="../ajax/novedades.php" method="post" style="display: none;">
+                                    <input type="hidden" name="id_novedades" value="<?=$nov['id_novedades']?>" />
+                                    <input type="text" name="inpTitulo" value="<?=utf8_encode($nov['titulo'])?>" />
+                                    <textarea name="textContenido"><?=utf8_encode($nov['contenido'])?></textarea>
+                                    <input type="submit" class="btn btn-success" value="Guardar" />
+                                </form>
+                            </div>
+                        <?php endif; ?>
                     </td>
                     <?php if ($isAdmin): ?>
                         <td style="width:35%;">
@@ -434,6 +506,28 @@ $novedades = $this_db->consulta($sql);
         </table>
     </div>
 <?php endwhile; ?>
+<script>
+$(function() {
+    $('.btnEditar').click(function(event){
+        event.preventDefault();
+        $(this).parent().find('form').show();
+    });
+    $('.btnPrint').click(function(event){
+        event.preventDefault();
+        var myWindow = window.open("", "MsgWindow", "top=0,left=0,width=10,height=10");
+        myWindow.document.write($(this).parent().parent().find('.cntnt').html());
+        myWindow.print();
+        myWindow.close();
+    });
+    $('.btnBorrar').click(function(event){
+        event.preventDefault();
+        window.location =
+            '../ajax/novedades.php?sql=delete&id=' +
+            $(this).parent().data('id');
+        ;
+    });
+});
+</script>
 
 <?php
 
