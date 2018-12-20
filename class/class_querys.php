@@ -850,7 +850,8 @@ SQL;
                 M.nro_sector,
                 M.telefonos,
                 M.domicilio,
-                M.email
+                M.email,
+                P.nombre AS PLANTA
             FROM
                 medicos M
             INNER JOIN
@@ -859,6 +860,9 @@ SQL;
             INNER JOIN
                 especialidades E
                 ON ME.id_especialidades = E.id_especialidades
+            LEFT JOIN
+                plantas P
+                ON M.id_plantas = P.id_plantas
             WHERE
                 M.estado = 1 AND
                 ME.estado = 1
