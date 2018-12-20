@@ -149,7 +149,7 @@ SQL;
                     $result2 = $this_db->consulta($query_string2);
                     while ($row2 = $this_db->fetch_assoc($result2)):
                         ?>
-                        <div><?=$row2['detalle']?></div>
+                        <div><?=utf8_encode($row2['detalle'])?></div>
                         <?php
                     endwhile;
                     ?>
