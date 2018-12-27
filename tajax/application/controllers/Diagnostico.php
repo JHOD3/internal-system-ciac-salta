@@ -257,6 +257,16 @@ class Diagnostico extends CI_Controller {
         print utf8_decode($this->load->view($this->router->fetch_class().'/Exportar_view', $dataView, true));
     }
 
+    public function turnos_estudios_historicos($id_turnos_estudios)
+    {
+        $aData['aTEH'] = $this->Model->getTurnosEstudiosHistoricos($id_turnos_estudios);
+        if (count($aData['aTEH']) > 0) {
+            $this->load->view('diagnostico/turnos_estudios_historicos_view', $aData);
+        } else {
+            print "no hay datos históricos";
+        }
+    }
+
 }
 
 //EOF Diagnostico.php

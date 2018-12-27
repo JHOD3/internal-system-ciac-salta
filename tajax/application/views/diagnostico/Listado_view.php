@@ -39,6 +39,10 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
     font-weight: bold;
     color: black;
 }
+.openTurnoEstudio {
+    color: green;
+    font-size: 10px;
+}
 </style>
 <h1>Prácticas Médicas
     <?php if (!$isMedico): ?>
@@ -170,7 +174,14 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                     $idme = ' class="tdTab" data-mth=';
 ?>
 <tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
-    <td style="text-align:center;"><?=date("d/m", strtotime($item['fecha']))?><br /><?=substr($item['desde'], 0, 5)?><br /><label class="usuFmt"><?=$item['usuario']?></label></td>
+    <td style="text-align:center;">
+        <?=date("d/m", strtotime($item['fecha']))?><br />
+        <?=substr($item['desde'], 0, 5)?><br />
+        <?php if ($SUPERUSER > 1): ?>
+            <a href="../tajax/index.php/<?=$this->router->fetch_class()?>/turnos_estudios_historicos/<?=$item['id_turnos_estudios']?>" class="openTurnoEstudio">Historial</a><br />
+        <?php endif; ?>
+        <label class="usuFmt"><?=$item['usuario']?></label>
+    </td>
     <td><?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?></td>
     <td<?=$idme?>"codigoalternat<?=$item['codigoalternat'] > 0? '" style="color:#C66;' : ''?>"><?=$item['codigoalternat'] ? $item['codigoalternat'] : $item['codigopractica']?></td>
     <td<?=$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
@@ -576,6 +587,16 @@ $(document).ready(function(){
 
     $('select#srea').multipleSelect({
         filter: true
+    });
+
+    $('.openTurnoEstudio').click(function(event){
+        event.preventDefault();
+        if (myWindow && myWindow.location != '') {
+            myWindow.document.getElementsByTagName('body')[0].innerHTML = '';
+            myWindow.location = $(this).attr('href');
+            myWindow.focus();
+        };
+        myWindow = window.open($(this).attr('href'), 'popupTurnoEstudio', 'width=1000,height=300');
     });
 });
 </script>

@@ -1022,6 +1022,88 @@ SQL;
         return $ultimo_horreal;
     }
 
+    public function getTurnosEstudiosHistoricos($id_turnos_estudios)
+    {
+        $query = $this->db
+            ->select("
+                teh.fechahora,
+                teh.codigoalternat,
+                CONCAT(
+                    m.saludo,
+                    ' ',
+                    m.apellidos,
+                    ', ',
+                    m.nombres
+                ) AS medicos,
+                os.abreviacion AS obras_sociales,
+                teh.fecha_presentacion,
+                teh.nro_orden,
+                teh.nro_afiliado,
+                teh.cantidad,
+                teh.tipo,
+                teh.trajo_pedido,
+                teh.trajo_orden,
+                teh.trajo_arancel,
+                teh.deja_deposito,
+                teh.deja_deposito_diferencia,
+                teh.deja_deposito_fecha,
+                teh.matricula_derivacion,
+                teh.observaciones,
+                CONCAT(
+                    u.apellidos,
+                    ', ',
+                    u.nombres
+                ) AS usuarios
+            ")
+            ->from('turnos_estudios_historicos teh')
+            ->join('obras_sociales os', 'teh.id_obras_sociales = os.id_obras_sociales', 'left')
+            ->join('medicos m', 'teh.id_medicos = m.id_medicos', 'left')
+            ->join('usuarios u', 'teh.id_usuarios = u.id_usuarios', 'left')
+            ->where('teh.id_turnos_estudios', $id_turnos_estudios)
+            ->order_by('teh.fechahora')
+            ->get()
+            ->result_array()
+        ;
+        for ($i = 0; $i < count($query); $i++) {
+            $query[$i]['fecha_presentacion'] = date("d/m/Y", strtotime($query[$i]['fecha_presentacion']));
+            switch ($query[$i]['tipo']) {
+                case "1": $query[$i]['tipo'] = 'A'; break;
+                case "2": $query[$i]['tipo'] = 'I'; break;
+            }
+            switch ($query[$i]['trajo_pedido']) {
+                case '1': $query[$i]['trajo_pedido'] = 'TP'; break;
+                case '2': $query[$i]['trajo_pedido'] = 'No'; break;
+                case '3': $query[$i]['trajo_pedido'] = '<strong style="color:red">Debe</strong>'; break;
+                default: $query[$i]['trajo_pedido'] = '---'; break;
+            }
+            switch ($query[$i]['trajo_orden']) {
+                case '1': $query[$i]['trajo_orden'] = 'TO'; break;
+                case '2': $query[$i]['trajo_orden'] = 'No'; break;
+                case '3': $query[$i]['trajo_orden'] = '<strong style="color:red">Debe</strong>'; break;
+                default: $query[$i]['trajo_orden'] = '---'; break;
+            }
+            if ($query[$i]['trajo_arancel'] > 0) {
+                $query[$i]['trajo_arancel'] = '$&nbsp;'.$query[$i]['trajo_arancel'];
+            } else {
+                $query[$i]['trajo_arancel'] = '';
+            }
+            if ($query[$i]['deja_deposito'] > 0) {
+                $query[$i]['deja_deposito'] = '$&nbsp;'.$query[$i]['deja_deposito'];
+            } else {
+                $query[$i]['deja_deposito'] = '';
+            }
+            if ($query[$i]['deja_deposito_diferencia'] > 0) {
+                $query[$i]['deja_deposito_diferencia'] = '$&nbsp;'.$query[$i]['deja_deposito_diferencia'];
+            } else {
+                $query[$i]['deja_deposito_diferencia'] = '';
+            }
+            $query[$i]['deja_deposito_fecha'] = date("d/m/Y", strtotime($query[$i]['deja_deposito_fecha']));
+            $query[$i]['fechahora'] = date("d/m/Y H:i", strtotime($query[$i]['fechahora']))."hs";
+        }
+        return $query;
+
+    }
+
 }
 
 //EOF Diagnostico_model.php
