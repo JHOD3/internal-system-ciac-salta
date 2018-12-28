@@ -46,8 +46,7 @@ $SQL_med = <<<SQL
     WHERE
         m.estado = 1 AND
         mh.estado = 1 AND
-        tt.estado = 1 AND
-        tt.tipo = 'ESTUDIOS'
+        tt.estado = 1
     GROUP BY
         m.id_medicos
     ORDER BY
@@ -118,7 +117,7 @@ $SQL_Estudios = <<<SQL
         te.estado = 1 AND
         te.id_turnos = '{$_POST['id_turno']}'
     ORDER BY
-        e.nombre
+        te.id_turnos_estudios
 SQL;
 $query = $this_db->consulta($SQL_Estudios);
 ?>
@@ -159,7 +158,7 @@ $query = $this_db->consulta($SQL_Estudios);
                                 <?=utf8_encode($row['estudios'])?>
                             </td>
                             <td>
-                                <select name="id_medicos[]" style="width:120px;">
+                                <select class="searchFilter" name="id_medicos[]" style="width:120px;">
                                     <option value="">---</option>
                                     <?php
                                     $query_med = $this_db->consulta($SQL_med);
@@ -187,7 +186,7 @@ $query = $this_db->consulta($SQL_Estudios);
                                 </select>
                             </td>
                             <td>
-                                <select name="id_obras_sociales[]" style="width:80px;">
+                                <select class="searchFilter" name="id_obras_sociales[]" style="width:80px;">
                                     <option value="">---</option>
                                     <?php
                                     $query_os = $this_db->consulta($SQL_os);
@@ -342,6 +341,10 @@ $query = $this_db->consulta($SQL_Estudios);
         var ta_input = $(this).parent().parent().find('input[name="trajo_arancel[]"]');
         ta_input.val(new_value);
     });
+    $('select.searchFilter').multipleSelect({
+        single: true,
+        filter: true
+    });
 //});
 </script>
 <style>
@@ -368,6 +371,11 @@ $query = $this_db->consulta($SQL_Estudios);
     width:300px!important;
     z-index:848745;
     background-color: #fff;
+}
+.ms-drop.bottom {
+    position: absolute;
+    min-width: 300px;
+    width: auto;
 }
 </style>
 <?php
