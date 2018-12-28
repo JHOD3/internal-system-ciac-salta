@@ -32,21 +32,22 @@ $query_esp = $this_db->consulta($SQL_esp);
 if ($row_tur = $this_db->fetch_assoc($query_esp)) {
 // IF NO ANIDADO
 
-$SQL_med = <<<SQL
+$SQL_med_est = <<<SQL
     SELECT
         m.*
     FROM
         medicos AS m
     INNER JOIN
-        medicos_horarios AS mh
-        ON mh.id_medicos = m.id_medicos
+        medicos_estudios AS me
+        ON me.id_medicos = m.id_medicos
     INNER JOIN
-        turnos_tipos AS tt
-        ON mh.id_turnos_tipos = tt.id_turnos_tipos
+        estudios AS e
+        ON me.id_estudios = e.id_estudios
     WHERE
         m.estado = 1 AND
-        mh.estado = 1 AND
-        tt.estado = 1
+        me.estado = 1 AND
+        e.estado = 1 AND
+        e.id_estudios = '[ID_ESTUDIOS]'
     GROUP BY
         m.id_medicos
     ORDER BY
@@ -161,7 +162,13 @@ $query = $this_db->consulta($SQL_Estudios);
                                 <select class="searchFilter" name="id_medicos[]" style="width:120px;">
                                     <option value="">---</option>
                                     <?php
-                                    $query_med = $this_db->consulta($SQL_med);
+                                    $query_med = $this_db->consulta(
+                                        str_replace(
+                                            "[ID_ESTUDIOS]",
+                                            $row['id_estudios'],
+                                            $SQL_med_est
+                                        )
+                                    );
                                     ?>
                                     <?php while ($row_med = $this_db->fetch_array($query_med)): ?>
                                         <option
