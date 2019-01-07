@@ -392,20 +392,28 @@ $novedades = $this_db->consulta($sql);
                 <tr valign="top">
                     <td<?=$isAdmin ? ' style="width:40%;"' : ''?>>
                         <div class="cntnt">
-                            <div><strong><?=utf8_encode($nov['titulo'])?></strong> - <?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</div>
-                            <div><?=utf8_encode(nl2br($nov['contenido']))?></div>
+                            <div id="divNov<?=$nov['id_novedades']?>">
+                                <div><strong><?=utf8_encode($nov['titulo'])?></strong> - <?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</div>
+                                <div><?=utf8_encode(nl2br($nov['contenido']))?></div>
+                            </div>
+                            <form id="formNov<?=$nov['id_novedades']?>" action="../ajax/novedades.php" method="post" style="display: none;">
+                                <input type="hidden" name="id_novedades" value="<?=$nov['id_novedades']?>" />
+                                <div>
+                                    <input type="text" name="inpTitulo" value="<?=utf8_encode($nov['titulo'])?>" style="width: 90%;" />
+                                </div>
+                                <div>
+                                    <textarea name="textContenido" style="width: 90%;min-height:210px;"><?=utf8_encode($nov['contenido'])?></textarea>
+                                </div>
+                                <div>
+                                    <input type="submit" class="btn btn-success" value="Guardar" />
+                                </div>
+                            </form>
                         </div>
                         <?php if ($isAdmin): ?>
                             <div class="noPrint" data-id="<?=$nov['id_novedades']?>">
                                 <input type="button" class="btnEditar btn btn-success" value="Editar" />
                                 <input type="button" class="btnPrint btn btn-secondary" value="Imprimir" />
                                 <input type="button" class="btnBorrar btn btn-danger" value="Borrar" />
-                                <form action="../ajax/novedades.php" method="post" style="display: none;">
-                                    <input type="hidden" name="id_novedades" value="<?=$nov['id_novedades']?>" />
-                                    <input type="text" name="inpTitulo" value="<?=utf8_encode($nov['titulo'])?>" />
-                                    <textarea name="textContenido"><?=utf8_encode($nov['contenido'])?></textarea>
-                                    <input type="submit" class="btn btn-success" value="Guardar" />
-                                </form>
                             </div>
                         <?php endif; ?>
                     </td>
@@ -510,7 +518,8 @@ $novedades = $this_db->consulta($sql);
 $(function() {
     $('.btnEditar').click(function(event){
         event.preventDefault();
-        $(this).parent().find('form').show();
+        $('#divNov' + $(this).parent().data('id')).remove();
+        $('#formNov' + $(this).parent().data('id')).show();
     });
     $('.btnPrint').click(function(event){
         event.preventDefault();
