@@ -591,12 +591,18 @@ $(document).ready(function(){
 
     $('.openTurnoEstudio').click(function(event){
         event.preventDefault();
-        if (myWindow && myWindow.location != '') {
-            myWindow.document.getElementsByTagName('body')[0].innerHTML = '';
-            myWindow.location = $(this).attr('href');
-            myWindow.focus();
-        };
-        myWindow = window.open($(this).attr('href'), 'popupTurnoEstudio', 'width=1000,height=300');
+        try {
+            if (myWindow && myWindow.location != '') {
+                myWindow.document.getElementsByTagName('body')[0].innerHTML = '';
+                myWindow.location = $(this).attr('href');
+                myWindow.focus();
+            } else {
+                myWindow = window.open($(this).attr('href'), 'popupTurnoEstudio', 'width=1000,height=300');
+            }
+        }
+        catch(err) {
+            myWindow = window.open($(this).attr('href'), 'popupTurnoEstudio', 'width=1000,height=300');
+        }
     });
 });
 </script>
