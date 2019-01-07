@@ -316,8 +316,6 @@ $query = $this_db->consulta($SQL_Estudios);
             var trhi = 'tr#id_medicos_tr_' + $(this).attr('id').replace($(this).attr('class') + '_', '') + ' input';
             var trds = 'tr#id_medicos_tr_' + $(this).val() + ' select';
             var trdi = 'tr#id_medicos_tr_' + $(this).val() + ' input';
-            $(trhs + '[name="id_medicos[]"]').val($(trds + '[name="id_medicos[]"]').val());
-            $(trhs + '[name="id_obras_sociales[]"]').val($(trds + '[name="id_obras_sociales[]"]').val());
             $(trhi + '[name="fecha_presentacion[]"]').val($(trdi + '[name="fecha_presentacion[]"]').val());
             $(trhi + '[name="nro_orden[]"]').val($(trdi + '[name="nro_orden[]"]').val());
             $(trhi + '[name="nro_afiliado[]"]').val($(trdi + '[name="nro_afiliado[]"]').val());
@@ -329,6 +327,13 @@ $query = $this_db->consulta($SQL_Estudios);
             $(trhi + '[name="deja_deposito[]"]').val($(trdi + '[name="deja_deposito[]"]').val());
             $(trhi + '[name="matricula_derivacion[]"]').val($(trdi + '[name="matricula_derivacion[]"]').val());
             $(trhi + '[name="observaciones[]"]').val($(trdi + '[name="observaciones[]"]').val());
+
+            $(trhs + '[name="id_medicos[]"]').val([$(trds + '[name="id_medicos[]"]').val()]);
+            $(trhs + '[name="id_medicos[]"]').multipleSelect('refresh', []);
+            $(trhs + '[name="id_obras_sociales[]"]').val([$(trds + '[name="id_obras_sociales[]"]').val()]);
+            $(trhs + '[name="id_obras_sociales[]"]').multipleSelect('refresh', []);
+            $(trhs + 'input[name="cantidad[]"]').change();
+
             $(this).val('');
         }
     });
