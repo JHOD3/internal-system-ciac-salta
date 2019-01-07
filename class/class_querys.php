@@ -1101,13 +1101,20 @@ SQL;
     }
 
     function obtMotivosDeInhabilitaciones(){
+        if ($_SESSION['SUPERUSER'] < 2) {
+            $where = "AND bloqueo_superadmin = 0";
+        } else {
+            $where = "";
+
+        }
         $query = "
             SELECT
                 *
             FROM
                 `horarios_inhabilitados_motivos`
             WHERE
-                `id_horarios_inhabilitados_motivos` > 1 AND
+                `id_horarios_inhabilitados_motivos` > 1
+                {$where}                AND
                 `id_horarios_inhabilitados_motivos` != 5
             ORDER BY
                 `motivo_orden`, `motivo_descripcion`
