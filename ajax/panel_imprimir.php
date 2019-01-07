@@ -108,7 +108,7 @@ SQL;
                     </strong>
                 </div>
                 <?php if (trim($row['requisitos'])): ?>
-                    <div><strong>Requisitos:</strong> <?=utf8_encode($row['requisitos'])?></div>
+                    <div><strong>Requisitos:</strong> <?=nl2br(utf8_encode($row['requisitos']))?></div>
                 <?php endif; ?>
                 <div>
                     <?php
