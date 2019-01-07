@@ -7,12 +7,6 @@ $this_db = new MySQL();
 /******************************************************************************/
 if (empty($_POST['opc'])):
     ?>
-    <img
-        src="../files/img/logo_imprimir.png"
-        style="width:100%; margin:auto; text-align:center; display: inherit; max-width: 600px;"
-        alt=""
-    />
-    <h2 style="font-size:12px; font-family:Arial; text-align:center; font-weight:normal; line-height: normal;">Santiago del Estero 449 &shy; A4400BKI - Salta - Argentina<br />Tel: 4214738 - 4213251<br />administracion@ciacsalta.com.ar<br />Lunes a viernes de 7.30 a 21 hs</h2>
     <a href="#" class="btn btn-info noPrint" style="margin-top: 6px;" id="postItSend">Imprimir</a>
     <a href="#" class="btn btn-success noPrint" style="margin-top: 6px;" id="postItClean">Limpiar</a>
     <?php
@@ -77,6 +71,13 @@ SQL;
     </script>
     <div id="panelEstudioList" style="background-color:#fff;"></div>
     <textarea></textarea>
+    <img
+        src="../files/img/logo_imprimir.png"
+        style="width:100%; margin:auto; text-align:center; display: inherit; max-width: 600px;"
+        alt=""
+        class="onlyPrint"
+    />
+    <h2 class="onlyPrint" style="font-size:12px; font-family:Arial; text-align:center; font-weight:normal; line-height: normal;">Santiago del Estero 449 &shy; A4400BKI - Salta - Argentina<br />Tel: 4214738 - 4213251<br />administracion@ciacsalta.com.ar<br />Lunes a viernes de 7.30 a 21 hs</h2>
     <?php
 /******************************************************************************/
 elseif($_POST['opc'] == 'getEstudio'):
@@ -96,7 +97,6 @@ SQL;
     if ($row = $this_db->fetch_assoc($result)):
         ?>
         <div class="divClose">
-            <hr />
             <a
                 href="#"
                 class="btnClose"
@@ -105,30 +105,11 @@ SQL;
                 <div>
                     <strong>
                         ESTUDIO: <?=utf8_encode($row['nombre'])?>
-                        <?php if (trim($row['codigopractica'])): ?>
-                            / CÓD:
-                            <?=utf8_encode(number_format($row['codigopractica'], 0, ",", "."))?>
-                        <?php endif; ?>
                     </strong>
                 </div>
                 <?php if (trim($row['requisitos'])): ?>
                     <div><strong>Requisitos:</strong> <?=utf8_encode($row['requisitos'])?></div>
                 <?php endif; ?>
-                <div class="divClose">
-                    <a
-                        href="#"
-                        class="btnClose"
-                    >quitar importes</a>
-                    <?php if ($row['importe'] > 0): ?>
-                        <strong>Importe:</strong> $<?=utf8_encode(number_format($row['importe'], 0, ",", "."))?>
-                    <?php endif; ?>
-                    <?php if ($row['importe'] > 0 and $row['arancel'] > 0): ?>
-                        /
-                    <?php endif; ?>
-                    <?php if ($row['arancel'] > 0): ?>
-                        <strong>Arancel:</strong> $<?=utf8_encode(number_format($row['arancel'], 0, ",", "."))?>
-                    <?php endif; ?>
-                </div>
                 <div>
                     <?php
                     $query_string2 = <<<SQL
@@ -149,12 +130,14 @@ SQL;
                     $result2 = $this_db->consulta($query_string2);
                     while ($row2 = $this_db->fetch_assoc($result2)):
                         ?>
+                        <br />
                         <div><?=nl2br(utf8_encode($row2['detalle']))?></div>
                         <?php
                     endwhile;
                     ?>
                 </div>
             </div>
+            <hr />
         </div>
         <script>
         $('.countChildRemove').each(function(){
@@ -192,6 +175,10 @@ textarea {
     color: #2f96b4;
     text-align: right;
 }
+.onlyPrint{
+    display: none;
+    visibility: hidden;
+}
 </style>
 <style media="print">
 textarea {
@@ -202,8 +189,7 @@ textarea {
     padding: 0px;
     font-style: italic;
 }
-.btnClose,
-hr {
+.btnClose{
     display: none;
     visibility: hidden;
     width: 0px;
