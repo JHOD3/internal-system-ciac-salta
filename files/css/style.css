@@ -895,7 +895,6 @@ div.bloque input[type=text].text-long, div.bloque input[type=password].text-long
 
 div.bloque textarea.text-long {
 	height:100px;
-	display:inline-table;
 	vertical-align:middle
 }
 
