@@ -189,7 +189,9 @@ textarea {
     padding: 0px;
     font-style: italic;
 }
-.btnClose{
+.btnClose,
+#contenedor_agenda,
+#panel_paciente{
     display: none;
     visibility: hidden;
     width: 0px;
