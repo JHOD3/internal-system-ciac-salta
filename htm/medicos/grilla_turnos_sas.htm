@@ -101,9 +101,20 @@
 					alert (requestData);
 				}
 			});
+		});
 
+        $('#postItPrinu').click(function(event) {
+            event.preventDefault();
+            $('#contenedor_agenda').html('');
+			$.ajax({
+				type: "GET",
+				url: "[URL]ajax/panel_imprimir.php",
+				success: function(requestData){
+				   $('#panel_cuerpo #cont_grilla_turnos').html(requestData);
+				}
+			});
+        });
 
-		})
 	});
 </script>
 <style media="print" type="text/css">
@@ -161,6 +172,7 @@
         <div>
             <a href='#' id="imprimir_todos_turnos" class='imprimir btn' data-tipo='turnos_todos' data-id='[ID_MEDICO]' data-id_especialidad='[ID_ESPECIALIDAD]' data-fecha="[FECHA]">Imprimir Turnos <img src='[IMG]btns/imprimir.png' width='20' /></a>
             <a href='#' id="imprimir_cobros" class='imprimir btn' data-tipo='cobros' data-id='[ID_MEDICO]' data-id_especialidad='[ID_ESPECIALIDAD]' data-fecha="[FECHA]">Imprimir Cobros <img src='[IMG]btns/imprimir.png' width='20' /></a>
+            <a href="#" class="btn btn-info" style="margin-top: 6px;" id="postItPrinu">Preparaciones</a>
         </div>
 	</div>
 </div>

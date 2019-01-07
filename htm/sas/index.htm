@@ -257,10 +257,9 @@
 
         $('.datepicker').datepicker();
 
-        /**********************************************************************/
-        /**********************************************************************/
         $('#postItPrint').click(function(event) {
             event.preventDefault();
+            $('#contenedor_agenda').html('');
 			$.ajax({
 				type: "GET",
 				url: "[URL]ajax/panel_imprimir.php",
@@ -269,8 +268,6 @@
 				}
 			});
         });
-        /**********************************************************************/
-        /**********************************************************************/
 
 	});
 
@@ -306,7 +303,7 @@
             </div>
             <div class="span4">
                 <div id="contenedor_drop_especialidades">
-                    <a href="#" class="btn btn-info" style="margin-top: 6px;" id="postItPrint">Imprimir</a>
+                    <a href="#" class="btn btn-info" style="margin-top: 6px;" id="postItPrint">Preparaciones</a>
                 </div>
             </div>
             <div class="span4">
