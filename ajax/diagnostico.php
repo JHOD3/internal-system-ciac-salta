@@ -44,6 +44,7 @@ $SQL_med_est = <<<SQL
         estudios AS e
         ON me.id_estudios = e.id_estudios
     WHERE
+        m.id_medicos != 205 AND
         m.estado = 1 AND
         me.estado = 1 AND
         e.estado = 1 AND
