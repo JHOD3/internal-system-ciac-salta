@@ -31,80 +31,84 @@ $d = implode("-", array_reverse(explode("/", $desde)));
 $h = implode("-", array_reverse(explode("/", $hasta)));
 
 $date = date("m-d");
-$query_string = <<<SQL
-    SELECT
-        SUBSTR(U.fechanac, 6, 5) AS mesdia
-    FROM
-        usuarios U
-    WHERE
-        U.estado = 1 AND
-        U.fechanac IS NOT NULL AND
-        SUBSTR(U.fechanac, 6, 5) >= '{$date}'
-    UNION SELECT
-        SUBSTR(M.fechanac, 6, 5) AS mesdia
-    FROM
-        medicos M
-    WHERE
-        M.estado = 1 AND
-        M.fechanac IS NOT NULL AND
-        SUBSTR(M.fechanac, 6, 5) >= '{$date}'
-    GROUP BY
-        mesdia
-    ORDER BY
-        mesdia ASC
-    LIMIT 4
+if ($_SESSION['SUPERUSER'] > 1) {
+    $query_string = <<<SQL
+        SELECT
+            SUBSTR(U.fechanac, 6, 5) AS mesdia
+        FROM
+            usuarios U
+        WHERE
+            U.estado = 1 AND
+            U.fechanac IS NOT NULL AND
+            SUBSTR(U.fechanac, 6, 5) >= '{$date}'
+        UNION SELECT
+            SUBSTR(M.fechanac, 6, 5) AS mesdia
+        FROM
+            medicos M
+        WHERE
+            M.estado = 1 AND
+            M.fechanac IS NOT NULL AND
+            SUBSTR(M.fechanac, 6, 5) >= '{$date}'
+        GROUP BY
+            mesdia
+        ORDER BY
+            mesdia ASC
+        LIMIT 4
 SQL;
-$result = $this_db->consulta($query_string);
-if ($this_db->num_rows($result) > 0) {
-    $aDates = array();
-    while ($row = $this_db->fetch_assoc($result)) {
-        $aDates[] = "'".$row['mesdia']."'";
-    }
-    $aDates = implode(",", $aDates);
-    if (count($aDates) > 0) {
-        $query_string = <<<SQL
-            SELECT
-                CONCAT(U.nombres, ' ', U.apellidos) AS nombres,
-                SUBSTR(U.fechanac, 6, 5) AS mesdia
-            FROM
-                usuarios U
-            WHERE
-                U.estado = 1 AND
-                U.fechanac IS NOT NULL AND
-                SUBSTR(U.fechanac, 6, 5) IN ({$aDates})
-            UNION SELECT
-                CONCAT(M.saludo, ' ', M.nombres, ' ', M.apellidos) AS nombres,
-                SUBSTR(M.fechanac, 6, 5) AS mesdia
-            FROM
-                medicos M
-            WHERE
-                M.estado = 1 AND
-                M.fechanac IS NOT NULL AND
-                SUBSTR(M.fechanac, 6, 5) IN ({$aDates})
-            ORDER BY
-                mesdia ASC
-SQL;
-        $result = $this_db->consulta($query_string);
-        if ($this_db->num_rows($result) > 0) {
-            $aDates = "";
-            while ($row = $this_db->fetch_assoc($result)) {
-                if ($row['mesdia'] == date("m-d")) {
-                    $aDates.= '<strong style="color:red">';
-                }
-                $aDates.= '&raquo;&nbsp;';
-                $aDates.= date("d/m", strtotime(date("Y")."-".$row['mesdia']));
-                $aDates.= "&nbsp;-&nbsp;";
-                $aDates.= utf8_encode($row['nombres']);
-                if ($row['mesdia'] == date("m-d")) {
-                    $aDates.= '</strong>';
-                }
-                $aDates.= "<br />\n";
-            }
+    $result = $this_db->consulta($query_string);
+    if ($this_db->num_rows($result) > 0) {
+        $aDates = array();
+        while ($row = $this_db->fetch_assoc($result)) {
+            $aDates[] = "'".$row['mesdia']."'";
         }
-        $cumples.= "<div style=\"color: white; width: 400px; min-height: 120px; background-size: 400px auto; background-repeat: no-repeat; padding: 20px; background-image:url(../files/img/1535146937-torta-cumpleaos-istock.jpg);\">";
-        $cumples.= "<strong style=\"color: green;\">Próximos cumpleaños:</strong><br />\n";
-        $cumples.= $aDates;
-        $cumples.= "</div><br /><br />\n";
+        $aDates = implode(",", $aDates);
+        if (count($aDates) > 0) {
+            $query_string = <<<SQL
+                SELECT
+                    CONCAT(U.nombres, ' ', U.apellidos) AS nombres,
+                    SUBSTR(U.fechanac, 6, 5) AS mesdia
+                FROM
+                    usuarios U
+                WHERE
+                    U.estado = 1 AND
+                    U.fechanac IS NOT NULL AND
+                    SUBSTR(U.fechanac, 6, 5) IN ({$aDates})
+                UNION SELECT
+                    CONCAT(M.saludo, ' ', M.nombres, ' ', M.apellidos) AS nombres,
+                    SUBSTR(M.fechanac, 6, 5) AS mesdia
+                FROM
+                    medicos M
+                WHERE
+                    M.estado = 1 AND
+                    M.fechanac IS NOT NULL AND
+                    SUBSTR(M.fechanac, 6, 5) IN ({$aDates})
+                ORDER BY
+                    mesdia ASC
+SQL;
+            $result = $this_db->consulta($query_string);
+            if ($this_db->num_rows($result) > 0) {
+                $aDates = "";
+                while ($row = $this_db->fetch_assoc($result)) {
+                    if ($row['mesdia'] == date("m-d")) {
+                        $aDates.= '<strong style="color:red">';
+                    }
+                    $aDates.= '&raquo;&nbsp;';
+                    $aDates.= date("d/m", strtotime(date("Y")."-".$row['mesdia']));
+                    $aDates.= "&nbsp;-&nbsp;";
+                    $aDates.= utf8_encode($row['nombres']);
+                    if ($row['mesdia'] == date("m-d")) {
+                        $aDates.= '</strong>';
+                    }
+                    $aDates.= "<br />\n";
+                }
+            }
+            $cumples.= "<div style=\"color: white; width: 400px; min-height: 120px; background-size: 400px auto; background-repeat: no-repeat; padding: 20px; background-image:url(../files/img/1535146937-torta-cumpleaos-istock.jpg);\">";
+            $cumples.= "<strong style=\"color: green;\">Próximos cumpleaños:</strong><br />\n";
+            $cumples.= $aDates;
+            $cumples.= "</div><br /><br />\n";
+        } else {
+            $cumples = "";
+        }
     } else {
         $cumples = "";
     }
