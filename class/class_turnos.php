@@ -195,7 +195,7 @@ HTML;
         $row["trae_pedido_0"] = ($row['trae_pedido'] == 0 ? ' checked="checked"' : '');
         $row["trae_pedido_1"] = ($row['trae_pedido'] == 1 ? ' checked="checked"' : '');
         $row["trae_pedido_2"] = ($row['trae_pedido'] == 2 ? ' checked="checked"' : '');
-        $row["arancel_diferenciado"] = $row['valor_pedido'];
+        #$row["arancel_diferenciado"] = $row['valor_pedido'];
 
 		$htm->AsignaBloque('block_registros',$row);
 

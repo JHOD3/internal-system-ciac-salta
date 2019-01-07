@@ -380,7 +380,19 @@ class Medicos extends Estructura implements iMedicos{
 										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
 										<div class='dat_paciente'>".
 											upper(trim($row["apellidos"])). ", ".upper(trim($row["nombres"]))."
-											(".$row["nombre_estado"].")";
+											(".$row["nombre_estado"].")"
+                                ;
+                                $cnct = " ";
+                                if ($row['trae_orden'] == 0) {
+                                    $linea.= " <sup>TO</sup>";
+                                    $cnct = "<sup>+</sup>";
+                                } elseif ($row['trae_orden'] > 0 and $row['valor_orden'] > 0) {
+                                    $linea.= " <sup>\${$row['valor_orden']}</sup>";
+                                    $cnct = "<sup>+</sup>";
+                                }
+                                if ($row['arancel_diferenciado'] > 0) {
+                                    $linea.= "{$cnct}<sup>\${$row['arancel_diferenciado']}</sup>";
+                                }
                                 if ($row['aviso_demora'] == '1') {
                                     $linea .= " <sup style=\"color:#c00;\">DEMORADO</sup>";
                                 }
