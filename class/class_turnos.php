@@ -128,17 +128,17 @@ HTML;
 					$obj_medicos_obras_sociales = new Medicos_obras_sociales();
 					$atiende_os = $obj_medicos_obras_sociales->Atiende($row['id_medicos'], $obj_paciente->id_obras_sociales, $obj_paciente->id_obras_sociales_planes);
 					if ($atiende_os){
-						$htm->Asigna("CHK_ARANCEL","checked");
+						$htm->Asigna("CHK_ARANCEL","");
 						$htm->Asigna("CHK_PARTICULAR","");
 						$valor_consulta = $arancel_os;
 					}else{
 						$htm->Asigna("CHK_ARANCEL","");
-						$htm->Asigna("CHK_PARTICULAR","checked");
+						$htm->Asigna("CHK_PARTICULAR","");
 						$valor_consulta = $particular_consulta;
 					}
 				}else{
 					$htm->Asigna("CHK_ARANCEL","");
-					$htm->Asigna("CHK_PARTICULAR","checked");
+					$htm->Asigna("CHK_PARTICULAR","");
 					$valor_consulta = $particular_consulta;
 				}
 				$htm->Asigna("IMPORTE_CONSULTA",$valor_consulta);

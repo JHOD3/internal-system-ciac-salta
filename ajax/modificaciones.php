@@ -201,23 +201,9 @@ switch ($tabla){
 		if (isset($_POST['tipo'])){
 			$trae_orden = 0;
 			$trae_pedido = 0;
-			if ($id_turno_tipo == 1){
-				//CONSULTA
-				if($orden_consulta == 0){
-					$trae_orden = 1;
-				}
-			}else{
-				//ESTUDIOS
-				if($pedido_estudios == 0){
-					$trae_pedido = 1;
-				}
-				if($orden_estudios == 0){
-					$trae_orden = 1;
-				}
-			}
-
-			if (!isset($arancel_diferenciado))
+			if (!isset($arancel_diferenciado)) {
 				$arancel_diferenciado = 0;
+            }
 
 			requerir_class("turnos");
 			$obj_turno = new Turnos($id_turno);
