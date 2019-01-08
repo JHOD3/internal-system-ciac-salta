@@ -105,10 +105,10 @@
 
 		//CONSULTA - VALOR
 		$("input[name='trae_pedido']").change(function() {
-			 if($("#consulta_arancel_diferenciado").is(':checked')) {
+			if ($("#consulta_arancel_diferenciado").is(':checked')) {
 			 	$('input#arancel_diferenciado').prop('disabled','');
 				$('#arancel_diferenciado').focus();
-			}else{
+			} else {
 				$('input#arancel_diferenciado').prop('disabled','disabled');
 			}
 			CalcularTotal();
@@ -166,34 +166,27 @@
 		var total_cobrar = 0;
 
 		if (id_turno_tipo == 1){//CONSULTAS
-			if ($('#consulta_arancel').is(':checked')){
-				total_cobrar += parseInt($('#consulta_arancel').val());
-			}
-			if ($('#consulta_particular').is(':checked')){
-				total_cobrar += parseInt($('#consulta_particular').val());
-			}
-
-			if($("#chk_deposito").is(':checked')) {
-				total_cobrar += parseInt($('#deposito_consulta').val());
-			}
-		}else{//ESTUDIOS
-			if($("#deposito_pedido").is(':checked')) {
-				total_cobrar += parseInt($('#deposito_estudios_pedido').val());
-			}
-
-			if($("#deposito_orden").is(':checked')) {
-				total_cobrar += parseInt($('#deposito_estudios_orden').val());
-			}
-
-			if($("#particular_estudio_pedido").is(':checked')) {
-				total_cobrar += parseInt($('#particular_estudio_pedido').val());
-			}
-			/*if($("#particular_estudio_orden").is(':checked')) {
-				total_cobrar += parseInt($('#particular_estudio_orden').val());
-			}*/
+            switch ($('[name="trae_orden"]:checked').val()) {
+                case '0':
+            		total_cobrar += 0;
+                    break;
+                case '1':
+            		total_cobrar += parseInt($('#deposito_consulta').val());
+                    break;
+                default:
+            		total_cobrar += parseInt($('[name="trae_orden"]:checked').val().split("|").pop());
+                    break;
+            }
+            switch ($('[name="trae_pedido"]:checked').val().split('|').shift()) {
+                case '2':
+            		total_cobrar += parseInt($('#arancel_diferenciado').val());
+                    break;
+                default:
+            		total_cobrar += parseInt($('[name="trae_pedido"]:checked').val().split("|").pop());
+                    break;
+            }
+     		$('h4#total span').html(total_cobrar);
 		}
-		total_cobrar += parseInt($("#arancel_diferenciado").val());
- 		$('h4#total span').html(total_cobrar);
 
 	}
 
