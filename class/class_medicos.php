@@ -383,7 +383,7 @@ class Medicos extends Estructura implements iMedicos{
 											(".$row["nombre_estado"].")"
                                 ;
                                 $cnct = " ";
-                                if ($row['id_turnos_estados'] != 1) {
+                                if ($row['id_turnos_estados'] > 1) {
                                     if ($row['trae_orden'] == 0) {
                                         $linea.= " <sup>TO</sup>";
                                         $cnct = "<sup>+</sup>";
