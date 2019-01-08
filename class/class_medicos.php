@@ -383,15 +383,19 @@ class Medicos extends Estructura implements iMedicos{
 											(".$row["nombre_estado"].")"
                                 ;
                                 $cnct = " ";
-                                if ($row['trae_orden'] == 0) {
-                                    $linea.= " <sup>TO</sup>";
-                                    $cnct = "<sup>+</sup>";
-                                } elseif ($row['trae_orden'] > 0 and $row['valor_orden'] > 0) {
-                                    $linea.= " <sup>\${$row['valor_orden']}</sup>";
-                                    $cnct = "<sup>+</sup>";
-                                }
-                                if ($row['arancel_diferenciado'] > 0) {
-                                    $linea.= "{$cnct}<sup>\${$row['arancel_diferenciado']}</sup>";
+                                if ($row['id_turnos_estados'] != 1) {
+                                    if ($row['trae_orden'] == 0) {
+                                        $linea.= " <sup>TO</sup>";
+                                        $cnct = "<sup>+</sup>";
+                                    } elseif ($row['trae_orden'] > 0 and $row['valor_orden'] > 0) {
+                                        $linea.= " <sup>\${$row['valor_orden']}</sup>";
+                                        $cnct = "<sup>+</sup>";
+                                    }
+                                    if ($row['arancel_diferenciado'] == 0) {
+                                        $linea.= "{$cnct}<sup>DD</sup>";
+                                    } else {
+                                        $linea.= "{$cnct}<sup>\${$row['arancel_diferenciado']}</sup>";
+                                    }
                                 }
                                 if ($row['aviso_demora'] == '1') {
                                     $linea .= " <sup style=\"color:#c00;\">DEMORADO</sup>";
