@@ -391,9 +391,9 @@ class Medicos extends Estructura implements iMedicos{
                                         $linea.= " <sup>\${$row['valor_orden']}</sup>";
                                         $cnct = "<sup>+</sup>";
                                     }
-                                    if ($row['arancel_diferenciado'] == 0) {
+                                    if ($row['trae_pedido'] == 1) {
                                         $linea.= "{$cnct}<sup>DD</sup>";
-                                    } else {
+                                    } elseif ($row['trae_pedido'] == 2 and $row['arancel_diferenciado'] > 0) {
                                         $linea.= "{$cnct}<sup>\${$row['arancel_diferenciado']}</sup>";
                                     }
                                 }
