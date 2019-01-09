@@ -115,7 +115,7 @@ switch ($tabla){
 	break;
 	case "mantenimientos":
     case "mantenimhistoricos":
-		$aColumns = array('id_mantenimientos','creado','fecha','id_sectores','solicitador','tarea','especialista','observaciones','id_mantenimientos_estados','id_usuarios');
+		$aColumns = array('id_mantenimientos','id_sectores','solicitador','tarea','especialista','observaciones','id_mantenimientos_estados','id_usuarios');
 	break;
 	case "encuestas":
 		$aColumns = array('er.id_encuestas_respuestas','t.fecha_alta','t.hora_alta','paciente','respuesta1','respuesta2','medico','especialidad');
