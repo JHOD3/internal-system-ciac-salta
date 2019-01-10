@@ -302,9 +302,9 @@ $sql = "
     WHERE
         estado = 1
     ORDER BY
-        saludo,
+        apellidos,
         nombres,
-        apellidos
+        saludo
 ";
 $medicos = $this_db->consulta($sql);
 
@@ -316,8 +316,8 @@ $sql = "
         estado = 1 AND
         id_usuarios NOT IN (-1, 0, 1)
     ORDER BY
-        nombres,
-        apellidos
+        apellidos,
+        nombres
 ";
 $operadores = $this_db->consulta($sql);
 ?>
@@ -342,7 +342,7 @@ $operadores = $this_db->consulta($sql);
                             <strong>Operadores que la leer&aacute;n</strong><br />
                             <select id="selOperadores" name="selOperadores[]" multiple="1" size="16" style="width:300px;">
                                 <?php while ($ope = $this_db->fetch_array($operadores)): ?>
-                                    <option value="<?=$ope['id_usuarios']?>"><?=utf8_encode($ope['nombres'].", ".$ope['apellidos'])?></option>
+                                    <option value="<?=$ope['id_usuarios']?>"><?=utf8_encode($ope['apellidos'].", ".$ope['nombres'])?></option>
                                 <?php endwhile; ?>
                             </select>
                         </td>
@@ -351,7 +351,7 @@ $operadores = $this_db->consulta($sql);
                             <strong>M&eacute;dicos que la leer&aacute;n</strong><br />
                             <select id="selMedicos" name="selMedicos[]" multiple="1" size="16" style="width:300px;">
                                 <?php while ($med = $this_db->fetch_array($medicos)): ?>
-                                    <option value="<?=$med['id_medicos']?>"><?=utf8_encode($med['saludo']." ".$med['nombres'].", ".$med['apellidos'])?></option>
+                                    <option value="<?=$med['id_medicos']?>"><?=utf8_encode($med['saludo']." ".$med['apellidos'].", ".$med['nombres'])?></option>
                                 <?php endwhile; ?>
                             </select>
                         </td>
