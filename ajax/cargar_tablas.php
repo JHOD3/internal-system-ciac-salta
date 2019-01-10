@@ -115,7 +115,7 @@ switch ($tabla){
 	break;
 	case "mantenimientos":
     case "mantenimhistoricos":
-		$aColumns = array('id_mantenimientos','id_sectores','solicitador','tarea','especialista','observaciones','id_mantenimientos_estados','id_usuarios');
+		$aColumns = array('id_mantenimientos','creado','fecha','id_sectores','solicitador','tarea','especialista','observaciones','id_mantenimientos_estados','id_usuarios');
 	break;
 	case "encuestas":
 		$aColumns = array('er.id_encuestas_respuestas','t.fecha_alta','t.hora_alta','paciente','respuesta1','respuesta2','medico','especialidad');
@@ -733,6 +733,11 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 								}
 							}
 						break;
+						case 'creado':
+						case 'fecha':
+							$buscar = implode("-", array_reverse(explode("/", $_GET['sSearch'])));
+							$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' OR ";
+                        break;
 						default:
 							$buscar = $_GET['sSearch'];
 							$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' OR ";
@@ -1300,9 +1305,15 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 							$sWhere .= $aColumns[$i]." = ".$buscar;
 						}
 					break;
+					case 'creado':
+					case 'fecha':
+						$buscar = implode("-", array_reverse(explode("/", $_GET['sSearch_'.$i])));
+						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%'";
+                    break;
 					default:
 						$buscar = utf8_decode($_GET['sSearch_'.$i]);
 						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
+                    break;
 				}
 			break;
 			case 'novedades_diarias':
@@ -2158,7 +2169,7 @@ if ($cant_registros != 0){
 				break;
 				case 'mantenimientos':
                 case 'mantenimhistoricos':
-					$row[0] = $aRow["id_mantenimientos"];
+                    $row[0] = $aRow["id_mantenimientos"];
 					$row[1] = utf8_encode(date("d/m/Y H:i", strtotime($aRow['creado']))."hs");
 					$row[2] = utf8_encode(date("d/m/Y H:i", strtotime($aRow['fecha']))."hs");
 					$row[3] = utf8_encode($sector);
