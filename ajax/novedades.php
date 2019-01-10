@@ -530,10 +530,12 @@ $(function() {
     });
     $('.btnBorrar').click(function(event){
         event.preventDefault();
-        window.location =
-            '../ajax/novedades.php?sql=delete&id=' +
-            $(this).parent().data('id');
-        ;
+        if (confirm('Está seguro que desea borrar?')) {
+            window.location =
+                '../ajax/novedades.php?sql=delete&id=' +
+                $(this).parent().data('id');
+            ;
+        }
     });
 });
 </script>
