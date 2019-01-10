@@ -395,6 +395,13 @@ $novedades = $this_db->consulta($sql);
                             <div id="divNov<?=$nov['id_novedades']?>">
                                 <div><strong><?=utf8_encode($nov['titulo'])?></strong> - <?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</div>
                                 <div><?=utf8_encode(nl2br($nov['contenido']))?></div>
+                                <?php if ($isAdmin): ?>
+                                    <div class="noPrint" data-id="<?=$nov['id_novedades']?>">
+                                        <input type="button" class="btnEditar btn btn-success" value="Editar" />
+                                        <input type="button" class="btnPrint btn btn-secondary" value="Imprimir" />
+                                        <input type="button" class="btnBorrar btn btn-danger" value="Borrar" />
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <form id="formNov<?=$nov['id_novedades']?>" action="../ajax/novedades.php" method="post" style="display: none;">
                                 <input type="hidden" name="id_novedades" value="<?=$nov['id_novedades']?>" />
@@ -404,18 +411,12 @@ $novedades = $this_db->consulta($sql);
                                 <div>
                                     <textarea name="textContenido" style="width: 90%;min-height:210px;"><?=utf8_encode($nov['contenido'])?></textarea>
                                 </div>
-                                <div>
+                                <div data-id="<?=$nov['id_novedades']?>">
                                     <input type="submit" class="btn btn-success" value="Guardar" />
+                                    <input type="button" class="btnCancelar btn btn-secondary" value="Cancelar" />
                                 </div>
                             </form>
                         </div>
-                        <?php if ($isAdmin): ?>
-                            <div class="noPrint" data-id="<?=$nov['id_novedades']?>">
-                                <input type="button" class="btnEditar btn btn-success" value="Editar" />
-                                <input type="button" class="btnPrint btn btn-secondary" value="Imprimir" />
-                                <input type="button" class="btnBorrar btn btn-danger" value="Borrar" />
-                            </div>
-                        <?php endif; ?>
                     </td>
                     <?php if ($isAdmin): ?>
                         <td style="width:35%;">
@@ -518,7 +519,7 @@ $novedades = $this_db->consulta($sql);
 $(function() {
     $('.btnEditar').click(function(event){
         event.preventDefault();
-        $('#divNov' + $(this).parent().data('id')).remove();
+        $('#divNov' + $(this).parent().data('id')).hide();
         $('#formNov' + $(this).parent().data('id')).show();
     });
     $('.btnPrint').click(function(event){
@@ -536,6 +537,11 @@ $(function() {
                 $(this).parent().data('id');
             ;
         }
+    });
+    $('.btnCancelar').click(function(event){
+        event.preventDefault();
+        $('#divNov' + $(this).parent().data('id')).show();
+        $('#formNov' + $(this).parent().data('id')).hide();
     });
 });
 </script>
