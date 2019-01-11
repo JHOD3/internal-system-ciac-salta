@@ -344,7 +344,9 @@ $query = $this_db->consulta($SQL_Estudios);
             parseInt($(this).parent().parent().find('input[name="cantidad[]"]').val())
         ;
         var ta_input = $(this).parent().parent().find('input[name="trajo_arancel[]"]');
-        ta_input.val(new_value);
+        if (ta_input.val() == '' || ta_input.val() == 0) {
+            ta_input.val(new_value);
+        }
     });
     $('input[name="cantidad[]"]').change(function(){
         var new_value =
