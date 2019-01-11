@@ -338,6 +338,7 @@ $query = $this_db->consulta($SQL_Estudios);
             $(this).val('');
         }
     });
+    /*
     $('select[name="id_obras_sociales[]"]').change(function(){
         var new_value =
             parseInt($(this).find('option[value="'+$(this).val()+'"]').data('ta')) *
@@ -355,6 +356,16 @@ $query = $this_db->consulta($SQL_Estudios);
         ;
         var ta_input = $(this).parent().parent().find('input[name="trajo_arancel[]"]');
         ta_input.val(new_value);
+    });
+    */
+    $('input[name="trajo_arancel[]"]').focus(function(){
+        if ($(this).val() == '') {
+            var new_value =
+                parseInt($(this).parent().parent().find('select[name="id_obras_sociales[]"] > option[value="'+$(this).parent().parent().find('select[name="id_obras_sociales[]"]').val()+'"]').data('ta')) *
+                parseInt($(this).parent().parent().find('input[name="cantidad[]"]').val())
+            ;
+            $(this).val(new_value);
+        }
     });
     $('select.searchFilter').multipleSelect({
         single: true,
