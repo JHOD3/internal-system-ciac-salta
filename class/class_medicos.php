@@ -1273,7 +1273,7 @@ HTML;
 				$row['VALUE'] = $row['id_horarios_inhabilitados'];
         	    if (
                     $_SESSION['SISTEMA'] == 'sas' and
-                    $_SESSION['SUPERUSER'] < '3' and
+                    $_SESSION['SUPERUSER'] <= '3' and
                     $row['bloqueo_superadmin'] == '1'
                 ) {
     				$row['SELECTED'] = ' disabled="disabled"';
