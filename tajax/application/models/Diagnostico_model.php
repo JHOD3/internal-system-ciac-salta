@@ -314,6 +314,7 @@ class Diagnostico_model extends CI_Model
                 t.*,
                 LEFT(t.desde, 5) AS hora,
                 CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres)) AS pacientes,
+                p.nro_documento,
                 CONCAT(TRIM(m.saludo), ' ', TRIM(m.apellidos), ', ', TRIM(m.nombres)) AS medicos,
                 os.abreviacion AS obras_sociales,
                 e.nombre AS estudios,
