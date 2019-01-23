@@ -456,13 +456,19 @@ $(document).ready(function(){
                         });
                         $(this).find('input[type="button"]').attr('data-id', $(this).parent().data('id'));
                         $(this).find('input[type="button"]').click(function(){
-                            $(this).parent().html('');
-                            var pre_d = '#id_te_' + $(this).data('id') + ' *[data-mth="';
-                            var pre_i = '#id_te_' + $(this).data('id') + ' input[name="';
-                            var pre_s = '#id_te_' + $(this).data('id') + ' select[name="';
+                            var this_button =
+                                'input[type="button"][data-id="' +
+                                $(this).data('id') +
+                                '"]'
+                            ;
+                            $(this_button).attr('disabled', 'disabled');
+                            $(this_button).parent().next().html('');
+                            var pre_d = '#id_te_' + $(this_button).data('id') + ' *[data-mth="';
+                            var pre_i = '#id_te_' + $(this_button).data('id') + ' input[name="';
+                            var pre_s = '#id_te_' + $(this_button).data('id') + ' select[name="';
                             var pos = '"]';
                             var serialized;
-                            serialized = 'id_turnos_estudios=' + $(this).data('id');
+                            serialized = 'id_turnos_estudios=' + $(this_button).data('id');
                             serialized+= '&codigoalternat=' + $(pre_i + 'codigoalternat' + pos).val();
                             serialized+= '&id_estudios=' + $(pre_s + 'id_estudios' + pos).val();
                             serialized+= '&id_medicos=' + $(pre_s + 'id_medicos' + pos).val();
@@ -478,27 +484,28 @@ $(document).ready(function(){
                             serialized+= '&deja_deposito=' + $(pre_i + 'deja_deposito' + pos).val();
                             serialized+= '&matricula_derivacion=' + $(pre_i + 'matricula_derivacion' + pos).val();
                             serialized+= '&observaciones=' + $(pre_i + 'observaciones' + pos).val();
-                            $(pre_d + 'codigoalternat' + pos).html('&#8634;');
-                            $(pre_d + 'estudios' + pos).html('&#8634;');
-                            $(pre_d + 'medicos' + pos).html('&#8634;');
-                            $(pre_d + 'obras_sociales' + pos).html('&#8634;');
-                            $(pre_d + 'fecha_presentacion' + pos).html('&#8634;');
-                            $(pre_d + 'nro_orden' + pos).html('&#8634;');
-                            $(pre_d + 'nro_afiliado' + pos).html('&#8634;');
-                            $(pre_d + 'cantidad' + pos).html('&#8634;');
-                            $(pre_d + 'tipo' + pos).html('&#8634;');
-                            $(pre_d + 'trajo_pedido' + pos).html('&#8634;');
-                            $(pre_d + 'trajo_orden' + pos).html('&#8634;');
-                            $(pre_d + 'trajo_arancel' + pos).html('&#8634;');
-                            $(pre_d + 'deja_deposito' + pos).html('&#8634;');
-                            $(pre_d + 'matricula_derivacion' + pos).html('&#8634;');
-                            $(pre_d + 'observaciones' + pos).html('&#8634;');
+//                            $(pre_d + 'codigoalternat' + pos).html('&#8634;');
+//                            $(pre_d + 'estudios' + pos).html('&#8634;');
+//                            $(pre_d + 'medicos' + pos).html('&#8634;');
+//                            $(pre_d + 'obras_sociales' + pos).html('&#8634;');
+//                            $(pre_d + 'fecha_presentacion' + pos).html('&#8634;');
+//                            $(pre_d + 'nro_orden' + pos).html('&#8634;');
+//                            $(pre_d + 'nro_afiliado' + pos).html('&#8634;');
+//                            $(pre_d + 'cantidad' + pos).html('&#8634;');
+//                            $(pre_d + 'tipo' + pos).html('&#8634;');
+//                            $(pre_d + 'trajo_pedido' + pos).html('&#8634;');
+//                            $(pre_d + 'trajo_orden' + pos).html('&#8634;');
+//                            $(pre_d + 'trajo_arancel' + pos).html('&#8634;');
+//                            $(pre_d + 'deja_deposito' + pos).html('&#8634;');
+//                            $(pre_d + 'matricula_derivacion' + pos).html('&#8634;');
+//                            $(pre_d + 'observaciones' + pos).html('&#8634;');
                             ajxM = $.ajax({
                                 type: 'POST',
                                 data: serialized,
                                 url: '../tajax/index.php/<?=$this->router->fetch_class()?>/savediagnostico',
-                                context: $('#id_te_' + $(this).data('id'))
+                                context: $('#id_te_' + $(this_button).data('id'))
                             }).done(function(data) {
+                                $(this_button).parent().html('');
                                 var dataJSON = JSON && JSON.parse(data) || $.parseJSON(data);
                                 $(pre_d + 'codigoalternat' + pos).html(dataJSON['codigoalternat']);
                                 $(pre_d + 'estudios' + pos).html(dataJSON['id_estudios']);
@@ -516,6 +523,9 @@ $(document).ready(function(){
                                 $(pre_d + 'matricula_derivacion' + pos).html(dataJSON['matricula_derivacion']);
                                 $(pre_d + 'medicos_derivacion' + pos).html(dataJSON['medicos_derivacion']);
                                 $(pre_d + 'observaciones' + pos).html(dataJSON['observaciones']);
+                            }).fail(function(){
+                                $(this_button).removeAttr('disabled');
+                                alert('ha ocurrido un error el sistema no responde, por favor intente guardarlo nuevamente', 'Error');
                             });
                         });
                         <?php if ($SUPERUSER > 1): ?>

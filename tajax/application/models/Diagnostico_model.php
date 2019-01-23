@@ -1095,6 +1095,8 @@ SQL;
             }
             if ($query[$i]['deja_deposito_diferencia'] > 0) {
                 $query[$i]['deja_deposito_diferencia'] = '$&nbsp;'.$query[$i]['deja_deposito_diferencia'];
+            } elseif ($query[$i]['deja_deposito_diferencia'] < 0) {
+                $query[$i]['deja_deposito_diferencia'] = '-&nbsp;$&nbsp;'.abs($query[$i]['deja_deposito_diferencia']);
             } else {
                 $query[$i]['deja_deposito_diferencia'] = '';
             }
