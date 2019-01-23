@@ -19,6 +19,7 @@ switch ($tabla) {
     case "agendas":
     case "mantenimientos":
     case "usuarios":
+    case "pacientes_observaciones":
         $rta = $obj->Inhabilitar();
         break;
     case "notas_impresion":

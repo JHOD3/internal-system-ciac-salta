@@ -152,6 +152,7 @@ class Querys implements iQuerys{
 			case "turnos_estudios":
 			case "mensajes":
 			case "pacientes":
+			case "pacientes_observaciones":
 			case "medicos":
 			case "medicosext":
 			case "cobros":
@@ -203,6 +204,7 @@ class Querys implements iQuerys{
 
 		switch ($tabla){
 			case "pacientes":
+			case "pacientes_observaciones":
 			case "medicos":
 			case "medicosext":
 			case "medicos_horarios":
@@ -1295,5 +1297,27 @@ SQL;
 SQL;
         return $query;
     }
+
+	function ObservacionesDePacientes($id_pacientes){
+		$query = <<<SQL
+            SELECT
+                po.*,
+                u.usuario
+            FROM
+                pacientes_observaciones AS po
+            LEFT JOIN
+                usuarios AS u
+                ON po.id_usuarios = u.id_usuarios
+            WHERE
+                po.estado = 1 AND
+                po.id_pacientes = '{$id_pacientes}'
+            ORDER BY
+                po.fechahora DESC
+            LIMIT
+                3
+SQL;
+		return $query;
+
+	}
 
 }

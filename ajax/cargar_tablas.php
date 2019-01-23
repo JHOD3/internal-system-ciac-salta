@@ -30,7 +30,9 @@ requerir_class(
     'encuestas',
     'horarios_inhabilitados',
     'horarios_inhabilitados_motivos',
-    'notas_impresion'
+    'notas_impresion',
+    'pacientes',
+    'pacientes_observaciones'
 );
 
 $tabla = $_GET["tabla"];
@@ -52,6 +54,9 @@ $obj = new $clase();
 switch ($tabla){
 	case "pacientes":
 		$aColumns = array('id_pacientes', 'nro_documento', 'apellidos', 'nombres', 'id_obras_sociales');
+	break;
+	case "pacientes_observaciones":
+		$aColumns = array('id_pacientes_observaciones', 'id_pacientes', 'fechahora','id_usuarios','observacion','estado');
 	break;
 	case "medicos":
 		$aColumns = array('id_medicos', 'saludo', 'apellidos', 'nombres', 'nro_documento', 'email', 'telefonos', 'id_sectores', 'id_subsectores', 'interno', 'id_plantas', 'matricula');
@@ -251,6 +256,7 @@ switch ($tabla){
 		$sWhere = "WHERE ( id_pacientes = ".$id_padre." AND reintegro <> 1";
 	break;
 	case 'turnos':
+    case 'pacientes_observaciones':
 		$id_padre = $_GET["id"];
 		$sWhere = "WHERE ( id_pacientes = ".$id_padre;
 	break;
@@ -654,6 +660,63 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 								}
 							}
 						break;
+                    }
+                break;
+                case 'pacientes_observaciones':
+					switch($aColumns[$i]){
+						case "id_pacientes":
+							$obj = new Pacientes();
+							$query = $obj->RegistroXAtributo("apellidos",$_GET['sSearch'],"like");
+
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
+						break;
+						case "id_usuarios":
+							$obj = new Usuarios();
+							$query = $obj->RegistroXAtributo("usuario",$_GET['sSearch'],"like");
+
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
+						break;
+						default:
+							$buscar = utf8_decode($_GET['sSearch']);
+							$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' OR ";
                     }
                 break;
                 case 'mantenimientos':
@@ -1475,6 +1538,57 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
 				}
 			break;
+			case 'pacientes_observaciones':
+				switch($aColumns[$i]){
+					case "id_pacientes":
+						$obj = new Pacientes();
+						$query = $obj->RegistroXAtributo("apellidos",$_GET['sSearch_'.$i],"like");
+
+						$ids = "(";
+						$band = 0;
+						while ($row = $obj->db->fetch_array($query)){
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
+							$band = 1;
+						}
+						$ids = trim($ids, ", ");
+						$ids .= ")";
+
+
+						if ($band == 1){
+							$buscar = $ids;
+							$sWhere .= $aColumns[$i]." IN ".$buscar;
+						}else{
+							$buscar = 0;
+							$sWhere .= $aColumns[$i]." = ".$buscar;
+						}
+					break;
+					case "id_usuarios":
+						$obj = new Usuarios();
+						$query = $obj->RegistroXAtributo("usuario",$_GET['sSearch_'.$i],"like");
+
+						$ids = "(";
+						$band = 0;
+						while ($row = $obj->db->fetch_array($query)){
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
+							$band = 1;
+						}
+						$ids = trim($ids, ", ");
+						$ids .= ")";
+
+
+						if ($band == 1){
+							$buscar = $ids;
+							$sWhere .= $aColumns[$i]." IN ".$buscar;
+						}else{
+							$buscar = 0;
+							$sWhere .= $aColumns[$i]." = ".$buscar;
+						}
+					break;
+					default:
+						$buscar = utf8_decode($_GET['sSearch_'.$i]);
+						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
+				}
+			break;
 			default:
 				$buscar = $_GET['sSearch_'.$i];
 				$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
@@ -1812,6 +1926,11 @@ if ($cant_registros != 0){
 					$sector = $obj_sectores->nombre;
 				}
 
+				if ($aColumns[$i] == "id_pacientes"){
+					$obj_pacientes = new Pacientes($aRow[$aColumns[$i]]);
+					$paciente = $obj_pacientes->apellidos.", ".$obj_pacientes->nombres;
+				}
+
 				if ($aColumns[$i] == "id_usuarios"){
 					$obj_usuarios = new Usuarios($aRow[$aColumns[$i]]);
 					$usuario = $obj_usuarios->usuario;
@@ -1876,6 +1995,7 @@ if ($cant_registros != 0){
 					$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
 					$cobros = "<a class='btn_opciones' href='#' data-id='".$aRow["id_pacientes"]."' data-tipo_btn='tabla_hija' data-hija='cobros' data-nombre='Pagos Realizados'><img src='".URL."files/img/btns/cobros.png' border='0'></a>";
 					$turnos = "<a class='btn_opciones' href='#' data-id='".$aRow["id_pacientes"]."' data-tipo_btn='tabla_hija' data-hija='turnos' data-nombre='Turnos Reservados'><img src='".URL."files/img/btns/turnos.png' border='0'></a>";
+					$observ = "<a class='btn_opciones' href='#' data-id='".$aRow["id_pacientes"]."' data-tipo_btn='tabla_hija' data-hija='pacientes_observaciones' data-nombre='Observaciones'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
 
 					$row[0] = utf8_encode($aRow["id_pacientes"]);
 					$row[1] = "<span class='paciente_buscado' data-id='".$aRow["id_pacientes"]."'>".$aRow["nro_documento"]."</span>";
@@ -1896,11 +2016,19 @@ if ($cant_registros != 0){
                     }
 
                     if ($_SESSION['SUPERUSER'] > 1 or $TurnosCant == 0) {
-                        $row[5] = $editar.''.$turnos.''.$cobros.''.$eliminar.'';
+                        $row[5] = $editar.''.$turnos.''.$cobros.''.$observ.''.$eliminar.'';
                     } else {
-                        $row[5] = $editar.''.$turnos.''.$cobros.'';
+                        $row[5] = $editar.''.$turnos.''.$cobros.''.$observ.'';
                     }
 
+				break;
+				case "pacientes_observaciones":
+					$row[0] = $aRow["id_pacientes_observaciones"];
+					$row[1] = utf8_encode($paciente);
+					$row[2] = date("d/m/Y H:i", strtotime($aRow['fechahora'])).'hs';
+					$row[3] = utf8_encode($usuario);
+					$row[4] = utf8_encode($aRow['observacion']);
+					$row[5] = $editar.''.$eliminar.'';
 				break;
 				case "medicos":
 					$especialidades = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='medicos_especialidades' data-nombre='Especialidades por M&eacute;dicos'><img src='".URL."files/img/btns/medicos_especialidades.png' border='0'></a>";

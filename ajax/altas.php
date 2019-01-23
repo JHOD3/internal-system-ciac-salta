@@ -63,6 +63,36 @@ switch ($tabla){
 			$rta = false;
 
 	break;
+	case "pacientes_observaciones":
+		parse_str(stripslashes($datos));
+
+
+		$columnas = "(
+					id_pacientes,
+					fechahora,
+					observacion,
+					estado,
+					id_usuarios
+					)";
+
+		$valores = "(
+					'".$id_pacientes."',
+					'".date("Y-m-d H:i:s")."',
+					'".str_replace("'", "\\'", utf8_decode($observacion))."',
+					1,
+					'{$_SESSION['ID_USUARIO']}'
+					)";
+
+		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+		//error_log($query_string); die;
+
+		if ($obj->db->consulta($query_string))
+			$rta = $obj->db->ultimo_id_insertado();
+		else
+			$rta = false;
+
+	break;
 	case "medicos":
 		parse_str(stripslashes($datos));
 

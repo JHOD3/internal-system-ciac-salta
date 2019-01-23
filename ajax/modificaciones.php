@@ -49,6 +49,22 @@ switch ($tabla){
 			$rta = false;
 
 	break;
+	case "pacientes_observaciones":
+		parse_str(stripslashes($datos));
+
+		$asignaciones = "
+			observacion = '".str_replace("'", "\\'", utf8_decode($observacion))."',
+			id_usuarios = '{$_SESSION['ID_USUARIO']}'
+		";
+
+		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
+
+		if ($obj->db->consulta($query_string))
+			$rta = true;
+		else
+			$rta = false;
+
+	break;
 	case "medicos":
 		parse_str(stripslashes($datos));
 

@@ -56,6 +56,7 @@ switch ($tipo){
 			case "obras_sociales_planes":
 			case "medicos_especialidades":
 			case "medicos_horarios":
+            case "pacientes_observaciones":
 				$id_padre = $_POST["id_padre"];
 				$rta = $obj->FormAlta($id_padre);
 			break;

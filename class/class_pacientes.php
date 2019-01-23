@@ -127,6 +127,84 @@ class Pacientes extends Estructura implements iPacientes{
 
 				$row['nombres'] = upper($row['nombres']);
 				$row['apellidos'] = upper($row['apellidos']);
+
+
+                if ($_SESSION['SISTEMA'] == 'sas') {
+            		$query_string_po = $this->querys->ObservacionesDePacientes($row['id_pacientes']);
+            		$query_po = $this->db->consulta($query_string_po);
+                    $pacientes_observaciones = '';
+                    if ($this->db->num_rows($query_po) > 0) {
+            			while ($row_po = $this->db->fetch_array($query_po)) {
+                            $fechahora = date("d/m/y H:i", strtotime($row_po['fechahora']))."hs";
+                            $pacientes_observaciones = <<<HTML
+                                <div>
+                                    <div><strong>{$fechahora} - {$row_po['usuario']}</strong></div>
+                                    <div>{$row_po['observacion']}</div>
+                                </div>
+                                <hr style="margin:10px 0;" />
+                                {$pacientes_observaciones}
+HTML;
+            		    }
+                    } else {
+                        $pacientes_observaciones.= <<<HTML
+                            <div>
+                                <div>no hay observaciones</div>
+                            </div>
+                            <hr style="margin:10px 0;" />
+HTML;
+                    }
+                    $URL = URL;
+                    $pacientes_observaciones.= <<<HTML
+                        <div>
+                            <a
+                                href="#"
+                                class="btn_tabla_ready"
+                                data-id_padre="{$row['id_pacientes']}"
+                                data-nombre="pacientes_observaciones"
+                                style="color: #838383"
+                            ><img src='{$URL}files/img/btns/detalle.png' border='0'>&nbsp;Administrar Observaciones</a>
+                        </div>
+                        <script>
+                		$(".btn_tabla_ready").click(function(event) {
+                		    event.preventDefault();
+                        	var id_padre = $(this).data("id_padre");
+                            var tabla = $(this).data("nombre");
+                			if (tabla != "mensajes"){
+                				IniciarVentana("ventana_menu", "abrir", tabla);
+                				$.ajax({
+                					type: "POST",
+                					url: "{$URL}ajax/admin_tabla.php",
+                					data: {tabla: tabla, id_padre: id_padre},
+                					beforeSend: function() {
+                						$(ventana_menu).html("");
+                					},
+                					success: function(requestData){
+                						var rta = requestData;
+                						$(ventana_menu).html(rta);
+                					},
+                					complete: function(requestData, exito){
+                					},
+                					error: function (){
+                						alert ("error");
+                					}
+                				});
+                				$(ventana_menu).dialog('option', 'title', 'Administraci\u00f3n de Observaciones de Pacientes');
+                				$(ventana_menu).dialog( "open" );
+                				$(ventana_menu).focus();
+                			}else{
+                				alert('M\u00f3dulo Inhabilitado.<br /> Temporalmente en Construcci\u00f3n.','ATENCI\u00d3N')
+                			}
+                		});
+                        </script>
+HTML;
+                    $row['PACIENTES_OBSERVACIONES'] =
+                        '<strong>OBSERVACIONES:</strong><hr style="margin:10px 0;" />'.
+                        $pacientes_observaciones
+                    ;
+                } else {
+                    $row['PACIENTES_OBSERVACIONES'] = '';
+                }
+
                 $htm->AsignaBloque('block_registros',$row);
 			}
 

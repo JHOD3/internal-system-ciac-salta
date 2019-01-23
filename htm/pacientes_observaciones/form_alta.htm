@@ -1,0 +1,69 @@
+<script src="[JS]jquery.validate.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#nro_documento").focus();
+
+		$("a#cargar").click(function(e){
+			e.preventDefault();
+			$("#form_pacientes_observaciones").submit();
+		});
+
+		$("a#cancelar").click(function(){
+			IniciarVentana("ventana_opciones", "cerrar");
+			$(ventana_opciones).dialog('destroy').remove();
+		});
+
+		$("#form_pacientes_observaciones").validate({
+			rules: {
+				observacion: {
+					required: true
+				}
+			},
+			messages: {
+				observacion: {
+					required: "Ingrese la Observación"
+				}
+			},
+			submitHandler: function(){
+				var variables = $("#form_pacientes_observaciones").serialize();
+				$.ajax({
+					type: "POST",
+					url: "[URL]ajax/altas.php",
+					data: {variables: variables, tabla: "[TABLA]"},
+					beforeSend: function() {
+						$("#mje").html("Enviando información...");
+					},
+					success: function(requestData){
+						var rta = requestData;
+
+						alert ("Observación Cargada Correctamente.");
+						IniciarVentana("ventana_opciones", "cerrar");
+						TablePacientesObservaciones.fnDraw();
+						$(ventana_opciones).dialog('destroy').remove();
+					},
+					complete: function(requestData, exito){},
+					error: function (){
+						alert ("Ocurri&oacute; un error. Vuelva a Intentarlo.");
+					}
+				});
+			}
+		});
+	});
+</script>
+
+<div id="panel_alta">
+    <form name="form_pacientes_observaciones" id="form_pacientes_observaciones" class="jNice">
+        <fieldset>
+            <input type="hidden" name="id_pacientes" value="[id_padre]" />
+            <div class="bloque">
+                <label>Observaci&oacute;n: </label>
+                <textarea class="text-long" name="observacion" style="text-transform:none!important;"></textarea>
+            </div>
+            <div class="bloque botones">
+                <a href="#" id="cargar" class="boton_gris">Cargar</a>
+                <a href="#" id="cancelar" class="boton_gris">Cancelar</a>
+            </div>
+        </fieldset>
+    </form>
+</div>
