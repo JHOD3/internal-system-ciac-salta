@@ -2,7 +2,7 @@
 			<script type="text/javascript">
 				var oTable;
 				var asInitVals = new Array();
-			
+
 				$(document).ready(function(){
 					oTable = $("#t_medicos").dataTable( {
 						//"bProcessing": true,
@@ -50,8 +50,8 @@
 						}
 					});
 				});
-			</script>		
-					
+			</script>
+
 			<table id="t_medicos" class="display ex_highlight_row">
     			<thead>
 					<tr>
@@ -61,7 +61,7 @@
 						<th>Apellidos</th>
 						<th>Nombres</th>
 						<th>Telefonos</th>
-						<th>Nro Documento</th>
+						<th>Nro.</th>
 						<th>Domicilio</th>
 						<th>Email</th>
 						<th>Estado</th>
@@ -69,16 +69,16 @@
 				</thead>
 				<tbody>
 					[block: block_registros]
-					<tr> 
-						<td class="id">[id_medicos]</td> 
-						<td>[TIPOS_DOCUMENTOS]</td> 
-						<td>[USUARIOS]</td> 
-						<td>[apellidos]</td> 
-						<td>[nombres]</td> 
-						<td>[telefonos]</td> 
-						<td>[nro_documento]</td> 
-						<td>[domicilio]</td> 
-						<td>[email]</td> 
+					<tr>
+						<td class="id">[id_medicos]</td>
+						<td>[TIPOS_DOCUMENTOS]</td>
+						<td>[USUARIOS]</td>
+						<td>[apellidos]</td>
+						<td>[nombres]</td>
+						<td>[telefonos]</td>
+						<td>[nro_documento]</td>
+						<td>[domicilio]</td>
+						<td>[email]</td>
 						<td>[estado]</td>
 					</tr>
 					[/block: block_registros]
@@ -91,11 +91,10 @@
 						<th><input type="text" id="i-3" name="tb_apellidos" value="Buscar Apellidos" class="search_init" /></th>
 						<th><input type="text" id="i-4" name="tb_nombres" value="Buscar Nombres" class="search_init" /></th>
 						<th><input type="text" id="i-5" name="tb_telefonos" value="Buscar Telefonos" class="search_init" /></th>
-						<th><input type="text" id="i-6" name="tb_nro_documento" value="Buscar Nro Documento" class="search_init" /></th>
+						<th><input type="text" id="i-6" name="tb_nro_documento" value="Buscar Nro." class="search_init" /></th>
 						<th><input type="text" id="i-7" name="tb_domicilio" value="Buscar Domicilio" class="search_init" /></th>
 						<th><input type="text" id="i-8" name="tb_email" value="Buscar Email" class="search_init" /></th>
 						<th><input type="text" id="i-9" name="tb_estado" value="Buscar Estado" class="search_init" /></th>
 					</tr>
-				</tfoot> 
+				</tfoot>
 			</table>
-			

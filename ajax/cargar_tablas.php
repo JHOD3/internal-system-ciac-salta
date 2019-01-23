@@ -2042,7 +2042,11 @@ if ($cant_registros != 0){
 					$row[1] = utf8_encode($aRow["saludo"]);
 					$row[2] = utf8_encode($aRow["apellidos"]);
 					$row[3] = utf8_encode($aRow["nombres"]);
-					$row[4] = number_format(utf8_encode($aRow["nro_documento"]), 0, ",", ".");
+                    if (strpos($aRow["nro_documento"], "-") !== false) {
+    					$row[4] = utf8_encode($aRow["nro_documento"]);
+                    } else {
+    					$row[4] = number_format(utf8_encode($aRow["nro_documento"]), 0, ",", ".");
+                    }
 					$row[5] = strtolower(utf8_encode($aRow["email"]));
 					$row[6] = utf8_encode($aRow["telefonos"]);
 					$row[7] = utf8_encode($sector);
