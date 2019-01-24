@@ -169,6 +169,29 @@ $(document).on("dblclick", ".reservar", function(e, date){
     							}
     						});
 
+    					} else {
+                    		IniciarVentana("ventana_estado_turno", "abrir");
+
+                    		$.ajax({
+                    			dataType: "html",
+                    			type: "POST",
+                    			url: "../ajax/admin_turno.php",
+                    			data: {tipo:"panel", tabla: "turnos", id_turno: id_turno},
+                    			beforeSend: function(data){
+                    				$(ventana_estado_turno).html("");
+                    			},
+                    			success: function(requestData){
+                    				var rta = requestData;
+                    				$(ventana_estado_turno).html(rta);
+                    				$(ventana_estado_turno).dialog('option', 'title', 'Estado del Turno')
+                    				$(ventana_estado_turno).dialog( "open" );
+                    			},
+                    			complete: function(requestData, exito){
+                    			},
+                    			error: function(requestData){
+                    				alert (requestData);
+                    			}
+                    		});
     					}
     				}else{
     					alert ('Ya existe un turno reservado en esa horario.');
