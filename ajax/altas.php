@@ -319,9 +319,9 @@ switch ($tabla){
 					'".$desde."',
 					'".$hasta."',
 					1,
-					".$turnos_tipos.",
-					".$plantas.",
-                    ".$nro_consultorio."
+					'".$turnos_tipos."',
+					'".$plantas."',
+                    '".$nro_consultorio."'
 					)";
 
 		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
