@@ -42,23 +42,31 @@ if (empty($_POST['opc'])):
 SQL;
     $result = $this_db->consulta($query_string);
     ?>
-    <select id="ddEstudio" class="noPrint">
+    <select id="ddEstudio" class="noPrint" multiple="multiple">
         <option value="">- Elija un estudio -</option>
         <?php while ($row = $this_db->fetch_assoc($result)): ?>
             <option value="<?=$row['id_estudios']?>"><?=utf8_encode($row['nombre'])?></option>
         <?php endwhile; ?>
     </select>
-    <script>
-    $('#ddEstudio').change(function(event) {
-		$.ajax({
-			type: "POST",
-			url: "../ajax/panel_imprimir.php",
-            data: {'opc': 'getEstudio', 'id_estudios': $('#ddEstudio').val()},
-			success: function(requestData){
-                $('#panelEstudioList').append(requestData);
-                $('#ddEstudio').val('');
-			}
-		});
+    <script>;
+    $('#ddEstudio').multipleSelect({
+        filter: true,
+        onClose: function(event) {
+            var selectedSelect = $('#ddEstudio option:selected');
+            $.each(selectedSelect, function(){
+        		$.ajax({
+        			type: "POST",
+        			url: "../ajax/panel_imprimir.php",
+                    data: {'opc': 'getEstudio', 'id_estudios': $(this).val()},
+        			success: function(requestData){
+                        $('#panelEstudioList').append(requestData);
+                        $('#ddEstudio').next().find('input[type="checkbox"]').attr('checked', false);
+                        $('#ddEstudio').next().find('button > span').html('');
+                        $('#ddEstudio').val('');
+        			}
+        		});
+            });
+        }
     });
     $('#postItSend').click(function(event) {
         event.preventDefault();
