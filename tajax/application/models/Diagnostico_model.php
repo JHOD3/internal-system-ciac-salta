@@ -404,16 +404,16 @@ SQL;
             FROM
                 medicos AS m
             INNER JOIN
-                turnos AS t
-                ON t.id_medicos = m.id_medicos
-			INNER JOIN
-				turnos_estudios AS te
-				ON te.id_turnos = t.id_turnos
+                medicos_estudios AS me
+                ON me.id_medicos = m.id_medicos
+            INNER JOIN
+                estudios AS e
+                ON me.id_estudios = e.id_estudios
             WHERE
-                te.estado = 1 AND
-                t.estado = 1 AND
-                t.id_turnos_estados IN (2, 7) AND
-                t.fecha BETWEEN ? AND ?
+                m.estado = 1 AND
+                me.estado = 1 AND
+                e.estado = 1 AND
+                m.id_medicos != 205
             GROUP BY
                 m.id_medicos
             ORDER BY
