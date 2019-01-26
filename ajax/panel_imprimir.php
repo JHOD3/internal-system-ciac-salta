@@ -42,30 +42,30 @@ if (empty($_POST['opc'])):
 SQL;
     $result = $this_db->consulta($query_string);
     ?>
-    <select id="ddEstudio" class="noPrint" multiple="multiple">
-        <option value="">- Elija un estudio -</option>
-        <?php while ($row = $this_db->fetch_assoc($result)): ?>
-            <option value="<?=$row['id_estudios']?>"><?=utf8_encode($row['nombre'])?></option>
-        <?php endwhile; ?>
-    </select>
+    <input type="text" id="ddEstudio" value="" />
     <script>;
-    $('#ddEstudio').multipleSelect({
-        filter: true,
-        onClose: function(event) {
-            var selectedSelect = $('#ddEstudio option:selected');
-            $.each(selectedSelect, function(){
-        		$.ajax({
-        			type: "POST",
-        			url: "../ajax/panel_imprimir.php",
-                    data: {'opc': 'getEstudio', 'id_estudios': $(this).val()},
-        			success: function(requestData){
-                        $('#panelEstudioList').append(requestData);
-                        $('#ddEstudio').next().find('input[type="checkbox"]').attr('checked', false);
-                        $('#ddEstudio').next().find('button > span').html('');
-                        $('#ddEstudio').val('');
-        			}
-        		});
-            });
+    var tagsESTUDIOS = [
+        <?php $cnct = ''; ?>
+        <?php while ($row = $this_db->fetch_assoc($result)): ?>
+            <?=$cnct?>{label: '<?=utf8_encode($row['nombre'])?>', value: '<?=$row['id_estudios']?>'}
+            <?php $cnct = ','; ?>
+        <?php endwhile; ?>
+    ];
+    $('#ddEstudio').autocomplete({
+        source: tagsESTUDIOS,
+        close: function( event, ui ) {
+            $('#ddEstudio').val('');
+        },
+        select: function( event, ui ) {
+            $.ajax({
+        		type: "POST",
+        		url: "../ajax/panel_imprimir.php",
+                data: {'opc': 'getEstudio', 'id_estudios': ui.item.value},
+        		success: function(requestData){
+                    $('#panelEstudioList').append(requestData);
+                    $('#ddEstudio').val('');
+        		}
+        	});
         }
     });
     $('#postItSend').click(function(event) {
