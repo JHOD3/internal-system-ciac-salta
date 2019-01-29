@@ -39,13 +39,13 @@ EOT;
 if ($_GET['show'] != 'estadisticas') {
 
     $html_button = <<<EOT
-<a id="btnEst" href="index.php?show=estadisticas" class="btn">
-	<i class="fa fa-bar-chart"></i>
-    <span>Estad&iacute;s-<br />ticas</span>
-</a>
 <a href="diagnosticos.php" class="btn">
 	<i class="fa fa-medkit"></i>
     <span>Pr&aacute;cticas<br />M&eacute;dicas</span>
+</a>
+<a id="btnEst" href="index.php?show=estadisticas" class="btn">
+	<i class="fa fa-bar-chart"></i>
+    <span>Estad&iacute;s-<br />ticas</span>
 </a>
 EOT;
 
