@@ -531,6 +531,23 @@ SQL;
 
 	break;
 
+	case "planes_de_contingencia":
+		parse_str(stripslashes($datos));
+
+		$asignaciones = "
+					nombre = '".str_replace("'", "\\'", utf8_decode($nombre))."',
+                    descripcion = '".str_replace("'", "\\'", utf8_decode($descripcion))."'
+					";
+
+        $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
+
+		if ($obj->db->consulta($query_string))
+			$rta = true;
+		else
+			$rta = false;
+
+	break;
+
 }
 echo $rta;
 ?>

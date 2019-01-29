@@ -1133,6 +1133,29 @@ SQL;
         }
 
 	break;
+	case "planes_de_contingencia":
+		parse_str(stripslashes($datos));
+
+		$columnas = "(
+					nombre,
+                    descripcion,
+                    estado
+					)";
+
+		$valores = "(
+					'".str_replace("'", "\\'", utf8_decode($nombre))."',
+                    '".str_replace("'", "\\'", utf8_decode($descripcion))."',
+                    1
+					)";
+
+		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+		if ($obj->db->consulta($query_string))
+			$rta = $obj->db->ultimo_id_insertado();
+		else
+			$rta = false;
+
+	break;
 
 }
 echo $rta;

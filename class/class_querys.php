@@ -176,6 +176,7 @@ class Querys implements iQuerys{
             case "mantenimhistoricos":
             case "usuarios":
             case "notas_impresion":
+            case "planes_de_contingencia":
 				$query = "INSERT INTO ".$tabla." ".$columnas." VALUES ".$valores;
 			break;
 			case "medicos_cancelaciones":
@@ -222,6 +223,7 @@ class Querys implements iQuerys{
             case "mantenimientos":
             case "usuarios":
             case "notas_impresion":
+            case "planes_de_contingencia":
 				$query = "UPDATE ".$tabla." SET ".$asignacion." WHERE id_".$tabla." = ".$id;
 			break;
 		}

@@ -32,7 +32,8 @@ requerir_class(
     'horarios_inhabilitados_motivos',
     'notas_impresion',
     'pacientes',
-    'pacientes_observaciones'
+    'pacientes_observaciones',
+    'planes_de_contingencia'
 );
 
 $tabla = $_GET["tabla"];
@@ -133,6 +134,9 @@ switch ($tabla){
 	break;
 	case "notas_impresion":
 		$aColumns = array('id_notas_impresion','nombre','detalle');
+	break;
+	case "planes_de_contingencia":
+		$aColumns = array('id_planes_de_contingencia','nombre','descripcion');
 	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
@@ -2353,6 +2357,12 @@ if ($cant_registros != 0){
 					$row[0] = $aRow["id_notas_impresion"];
 					$row[1] = utf8_encode($aRow['nombre']);
 					$row[2] = utf8_encode($aRow['detalle']);
+                    $row[3] = $editar.''.$eliminar.'';
+				break;
+				case 'planes_de_contingencia':
+					$row[0] = $aRow["id_planes_de_contingencia"];
+					$row[1] = utf8_encode($aRow['nombre']);
+					$row[2] = utf8_encode($aRow['descripcion']);
                     $row[3] = $editar.''.$eliminar.'';
 				break;
 
