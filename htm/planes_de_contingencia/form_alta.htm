@@ -18,20 +18,22 @@
 			rules: {
 				nombre: {
 					required: true
-				},
-                descripcion: {
-					required: true
 				}
 			},
 			messages: {
 				nombre: {
 					required: "Ingrese el Nombre"
-				},
-                descripcion: {
-					required: "Ingrese la Descripción"
 				}
 			},
 			submitHandler: function(){
+                tinyMCE.triggerSave();
+                $('textarea.text-long[name="descripcion"]').val(
+                    $('#' + $('textarea.text-long[name="descripcion"]').attr('name') + '_ifr')
+                        .contents()
+                        .find('#tinymce')
+                        .html()
+                        .replace('<br data-mce-bogus="1">', '')
+                );
 				var variables = $("#form_planes_de_contingencia").serialize();
 				$.ajax({
 					type: "POST",
@@ -55,6 +57,15 @@
 				});
 			}
 		});
+        tinymce.init({
+            selector: 'textarea.text-long[name="descripcion"]',
+            language: 'es',
+            height: 380,
+            plugins: 'print preview fullpage searchreplace directionality visualblocks visualchars fullscreen image media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount contextmenu colorpicker textpattern',
+            toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+            menubar:false,
+            statusbar: false
+        });
 	});
 </script>
 
@@ -65,9 +76,10 @@
                 <label>Nombre: </label>
                 <input type="text" class="text-long" name="nombre" style="text-transform:none!important;" />
             </div>
-            <div class="bloque">
+            <div>
                 <label>Descripci&oacute;n: </label>
                 <textarea class="text-long" name="descripcion" style="text-transform:none!important;"></textarea>
+                <br />
             </div>
             <div class="bloque botones">
                 <a href="#" id="cargar" class="boton_gris">Cargar</a>

@@ -2362,7 +2362,7 @@ if ($cant_registros != 0){
 				case 'planes_de_contingencia':
 					$row[0] = $aRow["id_planes_de_contingencia"];
 					$row[1] = utf8_encode($aRow['nombre']);
-					$row[2] = utf8_encode($aRow['descripcion']);
+					$row[2] = substr(utf8_encode(strip_tags($aRow['descripcion'])), 0, 100)."...";
                     $row[3] = $editar.''.$eliminar.'';
 				break;
 
