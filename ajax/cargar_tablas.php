@@ -2360,10 +2360,29 @@ if ($cant_registros != 0){
                     $row[3] = $editar.''.$eliminar.'';
 				break;
 				case 'planes_de_contingencia':
+                    $ver =
+                        "<a href='#' class='btn_opciones' data-titulo='Ver ".
+                        $obj->titulo_tabla_singular.
+                        "' data-tipo='detalle' data-id='".
+                        $aRow["id_".$tabla].
+                        "' data-tabla='".
+                        $tabla.
+                        "' data-id_padre='".
+                        $id_padre.
+                        "'><img src='".
+                        URL.
+                        "files/img/btns/detalle.png' border='0'></a>"
+                    ;
 					$row[0] = $aRow["id_planes_de_contingencia"];
 					$row[1] = utf8_encode($aRow['nombre']);
 					$row[2] = substr(utf8_encode(strip_tags($aRow['descripcion'])), 0, 100)."...";
-                    $row[3] = $editar.''.$eliminar.'';
+                    if ($_SESSION['SUPERUSER'] > 2) {
+                        $row[3] = $ver.''.$editar.''.$eliminar.'';
+                    } elseif ($_SESSION['SUPERUSER'] > 1) {
+                        $row[3] = $ver.''.$editar.'';
+                    } else {
+                        $row[3] = $ver.'';
+                    }
 				break;
 
 			}
@@ -2399,3 +2418,5 @@ if ($tabla == 'horarios_inhabilitados') {
 } else {
     echo json_encode( $output );
 }
+
+//EOF cargar_tablas.php

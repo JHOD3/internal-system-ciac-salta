@@ -39,6 +39,19 @@ class Planes_de_contingencia extends Estructura implements iPlanes_de_contingenc
 		return  utf8_encode($htm->Muestra());
 	}
 
+	function Detalle(){
+		$htm = $this->Html($this->nombre_tabla."/form_detalle");
+		$row = $this->registro;
+
+		$htm->Asigna("TABLA",$this->nombre_tabla);
+
+		$htm->AsignaBloque('block_registros',$row);
+
+		CargarVariablesGrales($htm, $tipo = "");
+
+		return  utf8_encode($htm->Muestra());
+	}
+
 	function TablaAdmin(){
 		$tabla = $this->html($this->nombre_tabla."/a_tabla");
 
