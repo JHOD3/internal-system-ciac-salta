@@ -111,7 +111,8 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 						Height = 600;
 					break;
 					case 'medicos':
-						Height = 600;
+                        Width = '90%';
+						Height = 800;
 					break;
 					case 'medicos_estudios':
 						Height = 500;

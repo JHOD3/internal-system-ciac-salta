@@ -106,77 +106,267 @@
             })
         });
         $('#sectores').change();
+
+        $('#form_medicos .bloque .formathour').bind('click focusin', function(){
+            $(this).select();
+        });
+        $('#form_medicos .bloque .formathour').keydown(function(event){
+            if (
+                (event.keyCode < 48 || event.keyCode > 57) &&
+                (event.keyCode < 96 || event.keyCode > 105) &&
+                (event.keyCode < 9  || event.keyCode > 9)
+            ) {
+                if (console && console.log) console.log(event.keyCode);
+                event.preventDefault();
+                return false;
+            }
+        });
+        $('#form_medicos .bloque .formathour').keyup(function(){
+            if ($(this).val().length == 2) {
+                $(this).val($(this).val() + ':');
+            }
+        });
+        $('fieldset.dropNames input, fieldset.dropNames select').each(function(event){
+            $(this).removeAttr('name');
+        });
+        var fsNro = 0;
+        $('fieldset.dropNames .btn_agregar_dinamico').click(function(){
+            fsNro++;
+            var fs = $(this).parent().parent();
+            html = '';
+            cnct = ' ';
+            fs.find('input, select').each(function(){
+                if (!$(this).val()) {
+                    html+= cnct + $(this).prev().html().replace(':', '').trim();
+                    cnct = ', ';
+                }
+            });
+            if (html.trim()) {
+                alert('debe completar el/los campo/s' + html);
+            } else {
+                if (fs.next().prop("tagName") != 'TABLE') {
+                    html = '<table class="tblResult"><thead>';
+                    fs.find('input, select').each(function(){
+                        html+= '<th><strong>';
+                        html+= $(this).prev().html().replace(':', '').trim().substr(0, 3) + '.';
+                        html+= '</strong></th>';
+                    });
+                    html+= '</thead><tbody></tbody></table>';
+                    fs.after(html);
+                }
+                var html = '<tr id="fs' + fsNro + '">';
+                fs.find('input, select').each(function(){
+                    fsName = $(this).attr('id') + '[]';
+                    html+= '<td>';
+                    if ($(this).prop("tagName") == 'SELECT') {
+                        html+= $(this).children("option:selected").html();
+                    } else {
+                        html+= $(this).val();
+                    }
+                    html+= '<input type="hidden" name="fs_' + fsName + '" value="' + $(this).val() + '" /></td>';
+                });
+                html+= '<td><a id="fs' + fsNro + 'lnk" href="#" style="font-weight:bold;color:red;">quitar</a></td>';
+                html+= '</tr>';
+                fs.next().find('tbody').append(html);
+                $('#fs' + fsNro + 'lnk').click(function(event){
+                    event.preventDefault();
+                    $(this).parent().parent().remove();
+                    return false;
+                });
+            }
+        });
+        i = 100;
+        $('fieldset.withDropArancel > select').each(function(){
+            selectName = $(this).attr('id');
+
+            html = '<table class="chkTableList">';
+            $('select#' + selectName + ' option').each(function(){
+                if ($(this).val() != '') {
+                    html+=
+                        '<tr><td>' +
+                        '<input id="' + selectName + '_' + $(this).val() + '" type="checkbox" name="' + selectName + '[]" value="' + $(this).val() + '" />' +
+                        '</td><td>' +
+                        $(this).html() +
+                        '</td><td>' +
+                        '<input type="text" tabindex="' + i + '" class="' + selectName + '_aranceles" name="' + selectName + '_aranceles_' + $(this).val() + '" data-id="' + $(this).val() + '" value="" style="width:60px;" />' +
+                        '</td></tr>'
+                    ;
+                    i++;
+                }
+            });
+            html+= '</table>';
+            $('select#' + selectName).after(html);
+            $('.' + selectName + '_aranceles').focusout(function() {
+                innerSelectName = $(this).attr('class').replace('_aranceles', '').trim();
+                if ($(this).val() === '') {
+                    $(this).parent().parent().remove();
+                } else {
+                    $('#' + innerSelectName + '_' + $(this).data('id')).attr('checked', true);
+                }
+            });
+            $('select#' + selectName).remove();
+        });
 	});
 </script>
+<style>
+#myTblFA > tbody > tr > td {
+    vertical-align: top;
+    width: 25%;
+    min-width: 380px;
+}
+div.bloque label {
+    width: 140px;
+}
+.tblResult thead th,
+.tblResult tbody tr td {
+    vertical-align: middle;
+    padding: 3px 6px;
+}
+.tblResult tbody tr td {
+    border-top: 1px solid #f0f0f0;
+}
+.chkTableList tr td {
+    vertical-align: middle;
+    padding: 2px 10px 2px 0px;
+}
+.chkTableList tr td:last-child {
+    padding-right: 0px;
+}
+</style>
 
 <div id="panel_alta">
 	<form name="form_medicos" id="form_medicos" class="jNice">
-		<fieldset>
-			<div class="bloque">
-				<label>Tipos Documentos: </label>
-				[DROP_TIPOS_DOCUMENTOS]
-			</div>
-            <div class="bloque">
-                <label>Nro.: </label>
-                <input type="text" class="text-long" name="nro_documento" id="nro_documento" />
-            </div>
-            <div class="bloque">
-                <label>Saludo: </label>
-                <input type="text" class="text-long" name="saludo" maxlength="10" style="text-transform:none!important;" />
-            </div>
-            <div class="bloque">
-                <label>Apellidos: </label>
-                <input type="text" class="text-long" name="apellidos" />
-            </div>
-            <div class="bloque">
-                <label>Nombres: </label>
-                <input type="text" class="text-long" name="nombres" />
-            </div>
-            <div class="bloque">
-                <label>Domicilio: </label>
-                <input type="text" class="text-long" name="domicilio" />
-            </div>
-            <div class="bloque">
-                <label>Telefonos: </label>
-                <input type="text" class="text-long" name="telefonos" />
-            </div>
-            <div class="bloque">
-                <label>Email: </label>
-                <input type="text" class="text-long" name="email" />
-            </div>
-            <div class="bloque">
-                <label>Fecha de nacimiento: </label>
-                <input type="text" class="text-long datepicker" name="fechanac" />
-            </div>
-            <div class="bloque">
-                <label>Sector: </label>
-                [DROP_SECTORES]
-            </div>
-            <div class="bloque">
-                <label>Subsector: </label>
-                [DROP_SUBSECTORES]
-            </div>
-            <div class="bloque">
-                <label>Nro. Consultorio: </label>
-                <input type="text" class="text-long" name="nro_sector" value="-" />
-            </div>
-            <div class="bloque">
-                <label>Planta: </label>
-                [DROP_PLANTAS]
-            </div>
-            <div class="bloque">
-                <label>Interno: </label>
-                <input type="text" class="text-long" name="interno" value="0" />
-            </div>
-            <div class="bloque">
-                <label>Matricula: </label>
-                <input type="text" class="text-long" name="matricula" value="0" />
-            </div>
-			<div class="bloque botones">
-				<a href="#" id="cargar" class="boton_gris">Cargar</a>
-				<a href="#" id="cancelar" class="boton_gris">Cancelar</a>
-			</div>
-		</fieldset>
+        <table id="myTblFA">
+            <tr>
+                <td>
+            		<fieldset>
+                        <h4>Datos del Profesional</h4>
+            			<div class="bloque">
+            				<label>Tipos Documentos: </label>
+            				[DROP_TIPOS_DOCUMENTOS]
+            			</div>
+                        <div class="bloque">
+                            <label>Nro.: </label>
+                            <input type="text" class="text-long" name="nro_documento" id="nro_documento" />
+                        </div>
+                        <div class="bloque">
+                            <label>Saludo: </label>
+                            <input type="text" class="text-long" name="saludo" maxlength="10" style="text-transform:none!important;" />
+                        </div>
+                        <div class="bloque">
+                            <label>Apellidos: </label>
+                            <input type="text" class="text-long" name="apellidos" />
+                        </div>
+                        <div class="bloque">
+                            <label>Nombres: </label>
+                            <input type="text" class="text-long" name="nombres" />
+                        </div>
+                        <div class="bloque">
+                            <label>Domicilio: </label>
+                            <input type="text" class="text-long" name="domicilio" />
+                        </div>
+                        <div class="bloque">
+                            <label>Telefonos: </label>
+                            <input type="text" class="text-long" name="telefonos" />
+                        </div>
+                        <div class="bloque">
+                            <label>Email: </label>
+                            <input type="text" class="text-long" name="email" />
+                        </div>
+                        <div class="bloque">
+                            <label>Fecha de nacimiento: </label>
+                            <input type="text" class="text-long datepicker" name="fechanac" />
+                        </div>
+                        <div class="bloque">
+                            <label>Sector: </label>
+                            [DROP_SECTORES]
+                        </div>
+                        <div class="bloque">
+                            <label>Subsector: </label>
+                            [DROP_SUBSECTORES]
+                        </div>
+                        <div class="bloque">
+                            <label>Nro. Consultorio: </label>
+                            <input type="text" class="text-long" name="nro_sector" value="-" />
+                        </div>
+                        <div class="bloque">
+                            <label>Planta: </label>
+                            [DROP_PLANTAS]
+                        </div>
+                        <div class="bloque">
+                            <label>Interno: </label>
+                            <input type="text" class="text-long" name="interno" value="0" />
+                        </div>
+                        <div class="bloque">
+                            <label>Matricula: </label>
+                            <input type="text" class="text-long" name="matricula" value="0" />
+                        </div>
+            		</fieldset>
+                </td>
+                <td>
+            		<fieldset class="dropNames">
+                        <h4>Especialidad / Horario</h4>
+            			<div class="bloque">
+            				<label>Especialidad: </label>
+            				[DROP_ESPECIALIDADES]
+            			</div>
+                        <div class="bloque">
+                            <label>Duraci&oacute;n de Turno: </label>
+                            <input type="text" class="text-long formathour" name="duracion_turno" id="duracion_turno" value="" placeholder="__:__" />
+                        </div>
+                        <div class="bloque">
+            				<label>Tipo de Turno: </label>
+            				[DROP_TURNOS_TIPOS]
+            			</div>
+            			<div class="bloque">
+            				<label>D&iacute;a de la Semana: </label>
+            				[DROP_DIAS_SEMANA]
+            			</div>
+            			<div class="bloque">
+            				<label>Planta: </label>
+            				[DROP_PLANTA]
+            			</div>
+                        <div class="bloque">
+                            <label>Consultorio:</label>
+                            <input type="text" class="text-long" name="nro_consultorio" id="nro_consultorio" value="" style="text-transform: none !important;" />
+                        </div>
+                        <div class="bloque">
+                            <label>Desde: </label>
+                            <input type="text" class="text-long formathour" name="desde" id="desde" value="" placeholder="__:__" />
+                        </div>
+                        <div class="bloque">
+                            <label>Hasta: </label>
+                            <input type="text" class="text-long formathour" name="hasta" id="hasta" value="" placeholder="__:__" />
+                        </div>
+            			<div class="bloque botones">
+            				<a href="#" class="btn_agregar_dinamico boton_gris">Agregar</a>
+            			</div>
+                    </fieldset>
+                </td>
+                <td>
+            		<fieldset class="withDropArancel">
+                        <h4>Obras Sociales</h4>
+                        [DROP_OBRAS_SOCIALES]
+            		</fieldset>
+                </td>
+                <td>
+            		<fieldset class="withDropArancel">
+                        <h4>Estudios</h4>
+                        [DROP_ESTUDIOS]
+            		</fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%">
+                    <fieldset>
+            			<div class="bloque botones">
+            				<a href="#" id="cargar" class="boton_gris">Cargar</a>
+            				<a href="#" id="cancelar" class="boton_gris">Cancelar</a>
+            			</div>
+                    </fieldset>
+                </td>
+            </tr>
+        </table>
 	</form>
 </div>
 <script>

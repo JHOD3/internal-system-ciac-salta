@@ -21,7 +21,7 @@ class Medicos extends Estructura implements iMedicos{
 	function FormAlta(){
 		$htm = $this->Html($this->nombre_tabla."/form_alta");
 
-		requerir_class("tipos_documentos");
+		requerir_class("tipos_documentos", "especialidades", "turnos_tipos", "dias_semana", "plantas", "obras_sociales", "estudios");
 
 		$obj_tipos_documentos = new Tipos_Documentos();
 		$htm->Asigna("DROP_TIPOS_DOCUMENTOS",$obj_tipos_documentos->Drop("", 1));
@@ -34,6 +34,24 @@ class Medicos extends Estructura implements iMedicos{
 
 		$obj_plantas = new Plantas();
 		$htm->Asigna("DROP_PLANTAS", $obj_plantas->Drop());
+
+		$obj_especialidades = new Especialidades();
+		$htm->Asigna("DROP_ESPECIALIDADES",$obj_especialidades->Drop());
+
+		$obj_turnos_tipos = new Turnos_tipos();
+		$htm->Asigna("DROP_TURNOS_TIPOS",$obj_turnos_tipos->Drop());
+
+		$obj_dias_semana = new Dias_semana();
+		$htm->Asigna("DROP_DIAS_SEMANA", $obj_dias_semana->Drop());
+
+		$obj_plantas = new Plantas();
+		$htm->Asigna("DROP_PLANTA", $obj_plantas->Drop());
+
+		$obj_obras_sociales = new Obras_sociales();
+		$htm->Asigna("DROP_OBRAS_SOCIALES", $obj_obras_sociales->Drop('nombre'));
+
+		$obj_estudios = new Estudios();
+		$htm->Asigna("DROP_ESTUDIOS",$obj_estudios->Drop());
 
 		$htm->Asigna("TABLA",$this->nombre_tabla);
 

@@ -112,6 +112,7 @@ switch ($tabla){
 					id_subsectores,
 					nro_sector,
 					interno,
+                    id_plantas,
                     matricula,
                     saludo,
                     fechanac
@@ -132,33 +133,145 @@ switch ($tabla){
 		if (!isset($matricula) || $matricula == "")
 			$matricula = 0;
 
+        if (!isset($plantas) || $plantas == "")
+            $plantas = 0;
+
 		$valores = "(
-					".$tipos_documentos.",
-					".$_SESSION['ID_USUARIO'].",
+					'".$tipos_documentos."',
+					'".$_SESSION['ID_USUARIO']."',
 					'".strtoupper(utf8_decode($apellidos))."',
 					'".strtoupper(utf8_decode($nombres))."',
 					'".$telefonos."',
 					'".$nro_documento."',
 					'".strtoupper(utf8_decode($domicilio))."',
 					'".strtoupper($email)."',
-					1,
+					'1',
 					'".strtolower($obj->QuitarTildes(utf8_encode($nombres[0].$apellidos)))."',
 					'".base64_encode($nro_documento)."',
-					".$sectores.",
-					".$subsectores.",
+					'".$sectores."',
+					'".$subsectores."',
 					'".strtoupper(utf8_decode($nro_sector))."',
-					".$interno.",
-					".$matricula.",
+					'".$interno."',
+                    '".$plantas."',
+					'".$matricula."',
                     '".$saludo."',
                     '".implode("-", array_reverse(explode("/", $fechanac)))."'
 					)";
 
 		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
 
-		if ($obj->db->consulta($query_string))
+		if ($obj->db->consulta($query_string)) {
 			$rta = $obj->db->ultimo_id_insertado();
-		else
+
+            /* INSERT ESPECIALIDADES ******************************************/
+            requerir_class('medicos_especialidades');
+            $clase_me = ucwords('medicos_especialidades');
+            $obj_me = new $clase_me();
+
+            $arr_especialidades = array();
+            for ($i = 0; $i < count($fs_especialidades); $i++) {
+                $arr_especialidades[$fs_especialidades[$i]] = $fs_duracion_turno[$i];
+            }
+            foreach ($arr_especialidades AS $key => $val) {
+        		$columnas_me = "(
+        					id_medicos,
+        					id_especialidades,
+        					duracion_turno,
+        					es_medico_externo,
+        					estado
+        					)";
+
+        		$valores_me = "(
+        					".$rta.",
+        					".$key.",
+        					'".$val."',
+        					0,
+        					1
+        					)";
+
+        		$query_string_me = $obj_me->querys->Alta($obj_me->nombre_tabla, $columnas_me, $valores_me);
+
+                $obj_me->db->consulta($query_string_me);
+            }
+
+            /* INSERT HORARIOS ************************************************/
+            requerir_class('medicos_horarios');
+            $clase_mh = ucwords('medicos_horarios');
+            $obj_mh = new $clase_mh();
+
+            for ($i = 0; $i < count($fs_especialidades); $i++) {
+        		$columnas_mh = "(
+        					id_medicos,
+        					id_especialidades,
+        					id_dias_semana,
+        					desde,
+        					hasta,
+        					estado,
+        					id_turnos_tipos,
+                            id_plantas,
+                            nro_consultorio
+        					)";
+
+        		$valores_mh = "(
+        					".$rta.",
+        					".$fs_especialidades[$i].",
+        					".$fs_dias_semana[$i].",
+        					'".$fs_desde[$i]."',
+        					'".$fs_hasta[$i]."',
+        					1,
+        					'".$fs_turnos_tipos[$i]."',
+        					'".$fs_plantas[$i]."',
+                            '".$fs_nro_consultorio[$i]."'
+        					)";
+
+        		$query_string_mh = $obj_mh->querys->Alta($obj_mh->nombre_tabla, $columnas_mh, $valores_mh);
+
+        		$obj_mh->db->consulta($query_string_mh);
+            }
+
+            /* INSERT OBRAS SOCIALES ARANCELES ********************************/
+            requerir_class('medicos_obras_sociales');
+            $clase_mos = ucwords('medicos_obras_sociales');
+            $obj_mos = new $clase_mos();
+            foreach ($obras_sociales AS $os) {
+                $vpost = "obras_sociales_aranceles_{$os}";
+                $vpost = $$vpost;
+
+        		$columnas_mos = "(id_medicos, id_obras_sociales, arancel, estado)";
+
+    			$valores_mos = "(
+    					'".$rta."',
+    					'".$os."',
+    					'".$vpost."',
+    					1)";
+    			$query_string_mos = $obj_mos->querys->Alta($obj_mos->nombre_tabla, $columnas_mos, $valores_mos);
+
+    			$obj_mos->db->consulta($query_string_mos);
+            }
+
+            /* INSERT ESTUDIOS ARANCELES **************************************/
+            requerir_class('medicos_estudios');
+            $clase_ms = ucwords('medicos_estudios');
+            $obj_ms = new $clase_ms();
+            foreach ($estudios AS $os) {
+                $vpost = "estudios_aranceles_{$os}";
+                $vpost = $$vpost;
+
+        		$columnas_ms = "(id_medicos, id_estudios, particular, estado)";
+
+    			$valores_ms = "(
+    					'".$rta."',
+    					'".$os."',
+    					'".$vpost."',
+    					1)";
+    			$query_string_ms = $obj_ms->querys->Alta($obj_ms->nombre_tabla, $columnas_ms, $valores_ms);
+
+    			$obj_ms->db->consulta($query_string_ms);
+            }
+
+		} else {
 			$rta = false;
+        }
 
 	break;
 	case "medicosext":

@@ -822,7 +822,7 @@ div.clear{
 
 div.bloque{
 	width: 98%;
-	padding: 1%;
+	padding: 2px;
 	float:left;
 	-moz-border-radius: 15px 15px 15px 15px;
 		-webkit-border-radius: 15px 15px 15px 15px;
