@@ -11,37 +11,66 @@
 	});
 </script>
 
+<style>
+.grillaHorariosColores {
+    margin: 10px;
+}
+.grillaHorariosColores thead th,
+.grillaHorariosColores tbody tr td {
+    padding: 2px 14px;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+}
+.grillaHorariosColores thead th {
+    font-weight: bold;
+    font-size: 1.2em;
+    background-color: #ecf0f1;
+    border-top: 1px solid black;
+}
+.grillaHorariosColores thead th:first-child,
+.grillaHorariosColores tbody tr td:first-child {
+    font-weight: bold;
+    background-color: #ecf0f1;
+    border-left: 1px solid black;
+}
+.grillaHorariosColores tbody tr td.lib {
+    background-color: #ffffff;
+}
+.grillaHorariosColores tbody tr td.ocu.col1 {
+    background-color: #e84c3d;
+}
+.grillaHorariosColores tbody tr td.ocu.col2 {
+    background-color: #87bfe4;
+}
+.grillaHorariosColores tbody tr td.ocu.col3 {
+    background-color: #4ce83d;
+}
+.grillaHorariosColores tbody tr td.ocu.col4 {
+    background-color: #bf87e4;
+}
+.grillaHorariosColores tbody tr td.ocu.col5 {
+    background-color: #999999;
+}
+</style>
+
 <div id="panel_alta">
     <fieldset>
-        <div class="bloque">
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-<script type="text/javascript">
-  google.charts.load("current", {packages:["timeline"]});
-  google.charts.setOnLoadCallback(drawChart);
-  function drawChart() {
-
-    var container = document.getElementById('example5.1');
-    var chart = new google.visualization.Timeline(container);
-    var dataTable = new google.visualization.DataTable();
-    dataTable.addColumn({ type: 'string', id: 'Dia' });
-    dataTable.addColumn({ type: 'string', id: 'Consultorio' });
-    dataTable.addColumn({ type: 'date', id: 'Comienzo' });
-    dataTable.addColumn({ type: 'date', id: 'Fin' });
-    dataTable.addRows([
-        [ADDROWS]
-    ]);
-
-    var options = {
-      timeline: { colorByRowLabel: false }
-    };
-
-    chart.draw(dataTable, options);
-  }
-
-</script>
-
-<div id="example5.1" style="width: 100%; height: 480px;"></div>
+        <div>
+            <table class="grillaHorariosColores" cellspacing="0" cellpadding="0" border="0">
+                <thead>
+                    <th>Horarios</th>
+                    <th>LUNES</th>
+                    <th>MARTES</th>
+                    <th>MIERCOLES</th>
+                    <th>JUEVES</th>
+                    <th>VIERNES</th>
+                </thead>
+                <tbody>
+                    [ADDTABLEROWS]
+                </tbody>
+            </table>
         </div>
         <div class="bloque botones">
             <a href="#" id="cancelar" class="boton_gris">Aceptar</a>

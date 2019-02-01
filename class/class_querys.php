@@ -1218,7 +1218,6 @@ SQL;
                 ON `me`.`id_especialidades` = `e`.`id_especialidades`
             WHERE
                 `mh`.`estado` = 1 AND
-                `mh`.`nro_consultorio` IS NOT NULL AND
                 `m`.`estado` = 1 AND
                 `ds`.`estado` = 1 AND
                 `me`.`estado` = 1 AND
