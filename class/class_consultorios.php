@@ -76,7 +76,9 @@ class Consultorios extends Estructura implements iConsultorios{
 
 		$addRows = "";
         $cnct = "";
+        $arrRows = array();
         while ($row = $this->db->fetch_array($query)) {
+            $arrRows[] = $row;
             $desdeH = substr($row['desde'], 0, 2);
             $desdeM = substr($row['desde'], 3, 2);
             $hastaH = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 0, 2);
@@ -90,6 +92,46 @@ class Consultorios extends Estructura implements iConsultorios{
             $addRows = "]);}</script>No se encontraron datos.<script>nul=([";
         }
         $htm->Asigna("ADDROWS", utf8_encode($addRows));
+
+        $dias = array('LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES');
+        $addTableRows = "";
+        $arrEspecialidades = array();
+        for (
+            $hora = '07:00:00';
+            $hora <= '22:00:00';
+            $hora = $this->SumarHorasTime($hora, '00:30:00')
+        ) {
+            $addTableRows.= "<tr><td>".substr($hora, 0, 5)."hs</td>";
+            for ($j = 0; $j < 5; $j++) {
+                $data = null;
+                for ($k = 0; $k < count($arrRows); $k++) {
+                    if (
+                        $arrRows[$k]['nombre'] == utf8_decode($dias[$j]) and
+                        $arrRows[$k]['desde'] <= $hora and
+                        $this->SumarHorasTime($arrRows[$k]['hasta'], $arrRows[$k]['duracion_turno']) >= $hora
+                    ) {
+                        $data = $arrRows[$k];
+                        if (!isset($arrEspecialidades[$data['especialidad']])) {
+                            $arrEspecialidades[$data['especialidad']] = count($arrEspecialidades) + 1;
+                        }
+                    }
+                }
+                if ($data) {
+                    $addTableRows.=
+                        '<td class="ocu col'.
+                        $arrEspecialidades[$data['especialidad']].
+                        '">'.
+                        $data['especialidad'].
+                        '</td>'
+                    ;
+                } else {
+                    $addTableRows.= '<td class="lib"></td>';
+                }
+            }
+            $addTableRows.= "</tr>";
+        }
+
+        $htm->Asigna("ADDTABLEROWS", utf8_encode($addTableRows));
 
 		CargarVariablesGrales($htm, $tipo = "");
 

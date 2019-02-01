@@ -1387,7 +1387,7 @@ HTML;
         $addTableRows = "";
         $arrEspecialidades = array();
         for (
-            $hora = '08:00:00';
+            $hora = '07:00:00';
             $hora <= '22:00:00';
             $hora = $this->SumarHorasTime($hora, '00:30:00')
         ) {
