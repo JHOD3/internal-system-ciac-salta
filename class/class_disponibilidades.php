@@ -76,51 +76,61 @@ class Disponibilidades extends Estructura implements iDisponibilidades{
 
 		$addRows = "";
         $cnct = "";
-        $nro_consultorio = null;
+        $arrRows = array();
+        $columnas = array();
         while ($row = $this->db->fetch_array($query)) {
-            if ($nro_consultorio != $row['nro_consultorio']) {
-                if (isset($desdeH) and isset($desdeM)) {
-                    $dHrs = (int)$desdeH;
-                    if ($desdeM >0) {
-                        $dHrs.= ":".$desdeM;
-                    }
-                    $addRows.= "{$cnct}['Consultorio {$nro_consultorio}', '{$dHrs} a 22hs', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,22,0,0)]";
-                    $cnct = ",\n";
-                }
-                $desdeH = 7;
-                $desdeM = 0;
-                $nro_consultorio = $row['nro_consultorio'];
+            $arrRows[] = $row;
+            if (!in_array($row['nro_consultorio'], $columnas)) {
+                $columnas[] = $row['nro_consultorio'];
             }
-            $hastaH = substr($row['desde'], 0, 2);
-            $hastaM = substr($row['desde'], 3, 2);
-            if (
-                ($desdeH == $hastaH and $desdeM < $hastaM) or
-                ($desdeH < $hastaH)
-            ) {
-                $dHrs = (int)$desdeH;
-                if ($desdeM >0) {
-                    $dHrs.= ":".$desdeM;
-                }
-                $hHrs = (int)$hastaH;
-                if ($hastaM >0) {
-                    $hHrs.= ":".$hastaM;
-                }
-                $addRows.= "{$cnct}['Consultorio {$row['nro_consultorio']}', '{$dHrs} a {$hHrs}hs', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,{$hastaH},{$hastaM},0)]";
-                $cnct = ",\n";
-            }
-            $desdeH = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 0, 2);
-            $desdeM = substr($this->horaMM($row['hasta'], $row['duracion_turno']), 3, 2);
+            $desdeH = (int)substr($row['desde'], 0, 2);
+            $desdeM = (int)substr($row['desde'], 3, 2);
+            $hastaH = (int)substr($this->horaMM($row['hasta'], $row['duracion_turno']), 0, 2);
+            $hastaM = (int)substr($this->horaMM($row['hasta'], $row['duracion_turno']), 3, 2);
+            $doSaludo = $this->doSaludo($row, false);
+            $addRows.= "{$cnct}['Consultorio {$row['nro_consultorio']}', '{$doSaludo} - {$row['especialidad']}', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,{$hastaH},{$hastaM},0)]";
+            $cnct = ",\n";
         }
-        if (trim($addRows)) {
-            $dHrs = (int)$desdeH;
-            if ($desdeM >0) {
-                $dHrs.= ":".$desdeM;
-            }
-            $addRows.= "{$cnct}['Consultorio {$nro_consultorio}', '{$dHrs} a 22hs', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,22,0,0)]";
-        } else {
+        sort($columnas);
+
+        if (!trim($addRows)) {
             $addRows = "]);}</script>No se encontraron datos.<script>nul=([";
         }
+        $htm->Asigna("ADDTABLETHEADS", "<th>Consultorio<br />".implode("</th><th>Consultorio<br />", $columnas)."</th>");
         $htm->Asigna("ADDROWS", utf8_encode($addRows));
+
+        $addTableRows = "";
+        $arrEspecialidades = array();
+        for (
+            $hora = '07:00:00';
+            $hora <= '22:00:00';
+            $hora = $this->SumarHorasTime($hora, '00:30:00')
+        ) {
+            $addTableRows.= "<tr><td>".substr($hora, 0, 5)."hs</td>";
+            for ($j = 0; $j < count($columnas); $j++) {
+                $data = null;
+                for ($k = 0; $k < count($arrRows); $k++) {
+                    if (
+                        $arrRows[$k]['nro_consultorio'] == utf8_decode($columnas[$j]) and
+                        $arrRows[$k]['desde'] <= $hora and
+                        $this->SumarHorasTime($arrRows[$k]['hasta'], $arrRows[$k]['duracion_turno']) >= $hora
+                    ) {
+                        $data = $arrRows[$k];
+                        if (!isset($arrEspecialidades[$data['especialidad']])) {
+                            $arrEspecialidades[$data['especialidad']] = count($arrEspecialidades) + 1;
+                        }
+                    }
+                }
+                if ($data) {
+                    $addTableRows.= '<td class="ocu col1">OCUPADO</td>';
+                } else {
+                    $addTableRows.= '<td class="ocu col2">DISPONIBLE</td>';
+                }
+            }
+            $addTableRows.= "</tr>";
+        }
+
+        $htm->Asigna("ADDTABLEROWS", utf8_encode($addTableRows));
 
 		CargarVariablesGrales($htm, $tipo = "");
 
@@ -139,7 +149,13 @@ class Disponibilidades extends Estructura implements iDisponibilidades{
 
 		$addRows = "";
         $cnct = "";
+        $arrRows = array();
+        $columnas = array();
         while ($row = $this->db->fetch_array($query)) {
+            $arrRows[] = $row;
+            if (!in_array($row['nro_consultorio'], $columnas)) {
+                $columnas[] = $row['nro_consultorio'];
+            }
             $desdeH = (int)substr($row['desde'], 0, 2);
             $desdeM = (int)substr($row['desde'], 3, 2);
             $hastaH = (int)substr($this->horaMM($row['hasta'], $row['duracion_turno']), 0, 2);
@@ -148,10 +164,52 @@ class Disponibilidades extends Estructura implements iDisponibilidades{
             $addRows.= "{$cnct}['Consultorio {$row['nro_consultorio']}', '{$doSaludo} - {$row['especialidad']}', new Date(0,0,0,{$desdeH},{$desdeM},0), new Date(0,0,0,{$hastaH},{$hastaM},0)]";
             $cnct = ",\n";
         }
+        sort($columnas);
+
         if (!trim($addRows)) {
             $addRows = "]);}</script>No se encontraron datos.<script>nul=([";
         }
+        $htm->Asigna("ADDTABLETHEADS", "<th>Consultorio<br />".implode("</th><th>Consultorio<br />", $columnas)."</th>");
         $htm->Asigna("ADDROWS", utf8_encode($addRows));
+
+        $addTableRows = "";
+        $arrEspecialidades = array();
+        for (
+            $hora = '07:00:00';
+            $hora <= '22:00:00';
+            $hora = $this->SumarHorasTime($hora, '00:30:00')
+        ) {
+            $addTableRows.= "<tr><td>".substr($hora, 0, 5)."hs</td>";
+            for ($j = 0; $j < count($columnas); $j++) {
+                $data = null;
+                for ($k = 0; $k < count($arrRows); $k++) {
+                    if (
+                        $arrRows[$k]['nro_consultorio'] == utf8_decode($columnas[$j]) and
+                        $arrRows[$k]['desde'] <= $hora and
+                        $this->SumarHorasTime($arrRows[$k]['hasta'], $arrRows[$k]['duracion_turno']) >= $hora
+                    ) {
+                        $data = $arrRows[$k];
+                        if (!isset($arrEspecialidades[$data['especialidad']])) {
+                            $arrEspecialidades[$data['especialidad']] = count($arrEspecialidades) + 1;
+                        }
+                    }
+                }
+                if ($data) {
+                    $addTableRows.=
+                        '<td class="ocu col'.
+                        ($arrEspecialidades[$data['especialidad']] % 10).
+                        '">'.
+                        $data['especialidad'].
+                        '</td>'
+                    ;
+                } else {
+                    $addTableRows.= '<td class="lib"></td>';
+                }
+            }
+            $addTableRows.= "</tr>";
+        }
+
+        $htm->Asigna("ADDTABLEROWS", utf8_encode($addTableRows));
 
 		CargarVariablesGrales($htm, $tipo = "");
 
