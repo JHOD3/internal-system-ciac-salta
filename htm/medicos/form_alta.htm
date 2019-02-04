@@ -201,10 +201,22 @@
                 if ($(this).val() === '') {
                     $(this).parent().parent().remove();
                 } else {
-                    $('#' + innerSelectName + '_' + $(this).data('id')).attr('checked', true);
+                    $('#' + innerSelectName + '_' + $(this).data('id')).attr('checked', 'checked');
                 }
             });
             $('select#' + selectName).remove();
+        });
+        $('fieldset.withDropArancel a.uns').click(function(event){
+            event.preventDefault();
+            $(this).parent().find('table tr td input[type="checkbox"]').prop('checked', false);
+            $(this).parent().find('table tr td input[type="text"]').val('');
+            return false;
+        });
+        $('fieldset.withDropArancel > a.sel').click(function(event){
+            event.preventDefault();
+            $(this).parent().find('table tr td input[type="checkbox"]').prop('checked', true);
+            $(this).parent().find('table tr td input[type="text"]').val('0');
+            return false;
         });
 	});
 </script>
@@ -213,6 +225,11 @@
     vertical-align: top;
     width: 25%;
     min-width: 380px;
+}
+#myTblFA > tbody > tr > td > .withDropArancel > a.uns,
+#myTblFA > tbody > tr > td > .withDropArancel > a.sel {
+    color: #3333CC;
+    font-weight: bold;
 }
 div.bloque label {
     width: 140px;
@@ -346,12 +363,18 @@ div.bloque label {
                 <td>
             		<fieldset class="withDropArancel">
                         <h4>Obras Sociales</h4>
+                        seleccionar:
+                        <a href="#" class="uns">ninguno</a> |
+                        <a href="#" class="sel">todos</a>
                         [DROP_OBRAS_SOCIALES]
             		</fieldset>
                 </td>
                 <td>
             		<fieldset class="withDropArancel">
                         <h4>Estudios</h4>
+                        seleccionar:
+                        <a href="#" class="uns">ninguno</a> |
+                        <a href="#" class="sel">todos</a>
                         [DROP_ESTUDIOS]
             		</fieldset>
                 </td>
