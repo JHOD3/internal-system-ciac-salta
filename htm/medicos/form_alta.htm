@@ -93,7 +93,6 @@
 
         $('#sectores').change(function(){
             var pid = $(this).val();
-            if (console && console.log) console.log(pid);
             $('#subsectores option').each(function() {
                 if ($(this).data('pid') == pid) {
                     $(this).removeAttr('disabled');
@@ -116,7 +115,6 @@
                 (event.keyCode < 96 || event.keyCode > 105) &&
                 (event.keyCode < 9  || event.keyCode > 9)
             ) {
-                if (console && console.log) console.log(event.keyCode);
                 event.preventDefault();
                 return false;
             }
@@ -154,20 +152,32 @@
                     html+= '</thead><tbody></tbody></table>';
                     fs.after(html);
                 }
-                var html = '<tr id="fs' + fsNro + '">';
-                fs.find('input, select').each(function(){
-                    fsName = $(this).attr('id') + '[]';
-                    html+= '<td>';
-                    if ($(this).prop("tagName") == 'SELECT') {
-                        html+= $(this).children("option:selected").html();
-                    } else {
-                        html+= $(this).val();
-                    }
-                    html+= '<input type="hidden" name="fs_' + fsName + '" value="' + $(this).val() + '" /></td>';
+
+                fs.find('select#dias_semana[multiple="multiple"] > option:checked').each(function(){
+                    var html = '<tr id="fs' + fsNro + '">';
+                    var myThis = $(this);
+                    fs.find('input, select').each(function(){
+                        if (!$(this).attr('multiple')) {
+                            fsName = $(this).attr('id') + '[]';
+                            html+= '<td>';
+                            if ($(this).prop("tagName") == 'SELECT') {
+                                html+= $(this).children("option:selected").html();
+                            } else {
+                                html+= $(this).val();
+                            }
+                            html+= '<input type="hidden" name="fs_' + fsName + '" value="' + $(this).val() + '" /></td>';
+                        } else {
+                            fsName = myThis.attr('id') + '[]';
+                            html+= '<td>';
+                            html+= myThis.html();
+                            html+= '<input type="hidden" name="fs_' + fsName + '" value="' + myThis.val() + '" /></td>';
+                        }
+                    });
+                    html+= '<td><a id="fs' + fsNro + 'lnk" href="#" style="font-weight:bold;color:red;">quitar</a></td>';
+                    html+= '</tr>';
+                    fs.next().find('tbody').append(html);
                 });
-                html+= '<td><a id="fs' + fsNro + 'lnk" href="#" style="font-weight:bold;color:red;">quitar</a></td>';
-                html+= '</tr>';
-                fs.next().find('tbody').append(html);
+
                 $('#fs' + fsNro + 'lnk').click(function(event){
                     event.preventDefault();
                     $(this).parent().parent().remove();
@@ -218,6 +228,12 @@
             $(this).parent().find('table tr td input[type="text"]').val('0');
             return false;
         });
+        $('.forceSelectMultiple > select').attr('multiple', true);
+        $('.forceSelectMultiple > select > option[value=""]').remove();
+        $('.forceSelectMultiple > select').attr(
+            'size',
+            $('.forceSelectMultiple > select > option').length
+        );
 	});
 </script>
 <style>
@@ -335,7 +351,7 @@ div.bloque label {
             				<label>Tipo de Turno: </label>
             				[DROP_TURNOS_TIPOS]
             			</div>
-            			<div class="bloque">
+            			<div class="bloque forceSelectMultiple">
             				<label>D&iacute;a de la Semana: </label>
             				[DROP_DIAS_SEMANA]
             			</div>
