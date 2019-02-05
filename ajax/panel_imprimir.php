@@ -199,7 +199,9 @@ textarea {
 }
 .btnClose,
 #contenedor_agenda,
-#panel_paciente{
+#panel_paciente,
+span.ui-helper-hidden-accessible,
+#ddEstudio{
     display: none;
     visibility: hidden;
     width: 0px;
