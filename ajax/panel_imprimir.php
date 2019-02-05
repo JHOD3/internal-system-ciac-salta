@@ -197,6 +197,12 @@ textarea {
     padding: 0px;
     font-style: italic;
 }
+* {
+    line-height: 0.85em;
+}
+hr {
+    margin: 8px 0;
+}
 .btnClose,
 #contenedor_agenda,
 #panel_paciente,
