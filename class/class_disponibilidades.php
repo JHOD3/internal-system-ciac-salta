@@ -122,9 +122,9 @@ class Disponibilidades extends Estructura implements iDisponibilidades{
                     }
                 }
                 if ($data) {
-                    $addTableRows.= '<td class="ocu col1">OCUPADO</td>';
+                    $addTableRows.= '<td class="ocu col6">OCUPADO</td>';
                 } else {
-                    $addTableRows.= '<td class="ocu col2">DISPONIBLE</td>';
+                    $addTableRows.= '<td class="ocu col3">DISPONIBLE</td>';
                 }
             }
             $addTableRows.= "</tr>";
@@ -199,7 +199,7 @@ class Disponibilidades extends Estructura implements iDisponibilidades{
                         '<td class="ocu col'.
                         ($arrEspecialidades[$data['especialidad']] % 10).
                         '">'.
-                        $data['especialidad'].
+                        $this->doSaludo($data, false).
                         '</td>'
                     ;
                 } else {
