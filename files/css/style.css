@@ -1402,3 +1402,36 @@ tr.even td:last-child{
 .dl-menuwrapper button:hover, .dl-menuwrapper button.dl-active, .dl-menuwrapper ul {
     background-color: #007fa6;
 }
+div.imgHB > a > div *,
+div.imgHB > a:hover > div *,
+div.imgHB > a:link > div *,
+div.imgHB > a:active > div *,
+div.imgHB > a:focus > div *{
+    color: #005580;
+}
+div.imgHB > a > div{
+    width: 426px;
+    height: 426px;
+    padding: 100px;
+}
+div.imgHB > a{
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    width: 626px;
+    height: 626px;
+    margin-left: -313px;
+    margin-top: -313px;
+    z-index:999999;
+}
+div.imgHB {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index:999998;
+}

@@ -251,54 +251,27 @@ $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));
 $htm_index->Asigna("USUARIO_NOMBRES", utf8_encode($_SESSION['NOMBRES']));
 
 // FELICITACIONES DE FELIZ CUMPLEAÑOS
-$cumple = false;
-switch ($_SESSION['TIPO_USR']) {
-    case 'U':
-        $obj_usuarios = new Usuarios($_SESSION['ID_USUARIO']);
-        if (!$_SESSION['felicitado'] and substr($obj_usuarios->fechanac, 5, 5) == date("m-d")) {
-            $cumple = true;
-            $_SESSION['felicitado'] = true;
-        }
-        break;
-}
-if ($cumple) {
-    ob_start();
-?>
-<style>
-div#imgHB > a{
-    position: absolute;
-    display: block;
-    top: 50%;
-    left: 50%;
-    width: 626px;
-    height: 626px;
-    margin-left: -313px;
-    margin-top: -313px;
-    z-index:999999;
-}
-div#imgHB {
-    position: absolute;
-    display: block;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.9);
-    z-index:999998;
-}
-</style>
-<script>
-$('body').prepend('<div id="imgHB"><a href="#"><img src="../files/img/bonita-tarjeta-cumpleanos-elementos_23-2147551587.jpg" alt="" style="position:absolute;z-index:999999;" /></a></div>');
-$('div#imgHB').click(function(event){
-    event.preventDefault();
-    $(this).remove();
-    return false;
-});
-</script>
-<?php
-    $html_cumple = ob_get_clean();
-} else {
+if (!$_SESSION['felicitado']) {
     $html_cumple = '';
+    $cumple = false;
+    switch ($_SESSION['TIPO_USR']) {
+        case 'U':
+            $obj_usuarios = new Usuarios($_SESSION['ID_USUARIO']);
+            if (substr($obj_usuarios->fechanac, 5, 5) == date("m-d")) {
+                $cumple = true;
+            }
+            break;
+    }
+    if ($cumple) {
+        ob_start();
+        ?>
+        <script>
+        $('body').prepend('<div class="imgHB"><a href="#"><img src="../files/img/bonita-tarjeta-cumpleanos-elementos_23-2147551587.jpg" alt="" style="position:absolute;z-index:999999;" /></a></div>');
+        </script>
+        <?php
+        $html_cumple.= ob_get_clean();
+    }
+    include("../sas/salutaciones.php");
 }
 
 $htm_index->Asigna("MENU_TABLAS", $html_cumple.$htm_menu_tablas->Muestra().$htm_medicos_autocomplete);

@@ -218,38 +218,51 @@ if (
 
     $this_db = new MySQL();
 
+    if (!empty($_POST['inpFechaDia']) and !empty($_POST['inpFechaMes'])) {
+        $mesdia = "'";
+        $mesdia.= str_pad(trim($_POST['inpFechaMes']), 2, "0", STR_PAD_LEFT);
+        $mesdia.= "-";
+        $mesdia.= str_pad(trim($_POST['inpFechaDia']), 2, "0", STR_PAD_LEFT);
+        $mesdia.= "'";
+    } else {
+        $mesdia = 'NULL';
+    }
     if (empty($_POST['id_novedades'])) {
         $sql = "
             INSERT INTO
                 novedades
-                (titulo, contenido, fechahora)
+                (titulo, contenido, fechahora, mesdia)
             VALUES
                 (
                     '".str_replace("'", "\\'", utf8_decode($_POST['inpTitulo']))."',
                     '".str_replace("'", "\\'", utf8_decode($_POST['textContenido']))."',
-                    '".date("Y-m-d H:i:s")."'
+                    '".date("Y-m-d H:i:s")."',
+                    {$mesdia}
                 )
         ";
     } elseif(!empty($_POST['id_novedades'])) {
-        $sql = "
-            UPDATE novedades_usuarios
-            SET confirmacion = NULL
-            WHERE id_novedades = '{$_POST['id_novedades']}'
-        ";
-        $this_db->consulta($sql);
-        $sql = "
-            UPDATE novedades_medicos
-            SET confirmacion = NULL
-            WHERE id_novedades = '{$_POST['id_novedades']}'
-        ";
-        $this_db->consulta($sql);
+        if ($mesdia == 'NULL') {
+            $sql = "
+                UPDATE novedades_usuarios
+                SET confirmacion = NULL
+                WHERE id_novedades = '{$_POST['id_novedades']}'
+            ";
+            $this_db->consulta($sql);
+            $sql = "
+                UPDATE novedades_medicos
+                SET confirmacion = NULL
+                WHERE id_novedades = '{$_POST['id_novedades']}'
+            ";
+            $this_db->consulta($sql);
+        }
         $sql = "
             UPDATE
                 novedades
             SET
                 titulo = '".str_replace("'", "\\'", utf8_decode($_POST['inpTitulo']))."',
                 contenido = '".str_replace("'", "\\'", utf8_decode($_POST['textContenido']))."',
-                fechahora = '".date("Y-m-d H:i:s")."'
+                fechahora = '".date("Y-m-d H:i:s")."',
+                mesdia = {$mesdia}
             WHERE
                 id_novedades = '{$_POST['id_novedades']}'
         ";
@@ -259,32 +272,33 @@ if (
     $this_db->consulta($sql);
     $last_insert_id = $this_db->ultimo_id_insertado();
 
-    for ($i = 0; $i < count($_POST['selOperadores']); $i++) {
-        $sql = "
-            INSERT INTO
-                novedades_usuarios
-                (id_novedades, id_usuarios)
-            VALUES
-                (
-                    '{$last_insert_id}',
-                    '{$_POST['selOperadores'][$i]}'
-                )
-        ";
-        $this_db->consulta($sql);
-    }
-
-    for ($i = 0; $i < count($_POST['selMedicos']); $i++) {
-        $sql = "
-            INSERT INTO
-                novedades_medicos
-                (id_novedades, id_medicos)
-            VALUES
-                (
-                    '{$last_insert_id}',
-                    '{$_POST['selMedicos'][$i]}'
-                )
-        ";
-        $this_db->consulta($sql);
+    if ($mesdia == 'NULL') {
+        for ($i = 0; $i < count($_POST['selOperadores']); $i++) {
+            $sql = "
+                INSERT INTO
+                    novedades_usuarios
+                    (id_novedades, id_usuarios)
+                VALUES
+                    (
+                        '{$last_insert_id}',
+                        '{$_POST['selOperadores'][$i]}'
+                    )
+            ";
+            $this_db->consulta($sql);
+        }
+        for ($i = 0; $i < count($_POST['selMedicos']); $i++) {
+            $sql = "
+                INSERT INTO
+                    novedades_medicos
+                    (id_novedades, id_medicos)
+                VALUES
+                    (
+                        '{$last_insert_id}',
+                        '{$_POST['selMedicos'][$i]}'
+                    )
+            ";
+            $this_db->consulta($sql);
+        }
     }
 
     header("Location: ../sas/index.php");
@@ -331,6 +345,33 @@ $operadores = $this_db->consulta($sql);
                         <td style="width:100%;">
                             <strong>T&iacute;tulo del Comunicado de Gerencia</strong><br />
                             <input id="inpTitulo" name="inpTitulo" style="min-width:300px;width:99%;" /><br />
+                            <br />
+                            <div style="background-color: #f0f0f0; padding: 5px 10px; border-radius: 5px;">
+                                <strong>Fecha de Repetición:</strong>
+                                <select id="inpFechaDia" name="inpFechaDia" style="width: 70px;">
+                                    <option value="">- día -</option>
+                                    <?php for ($i = 1; $i <= 31; $i++): ?>
+                                        <option value="<?=$i?>"><?=$i?></option>
+                                    <?php endfor; ?>
+                                </select>
+                                <select id="inpFechaMes" name="inpFechaMes" style="width: 100px;">
+                                    <option value="">- mes -</option>
+                                    <option value="1">Enero</option>
+                                    <option value="2">Febrero</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Mayo</option>
+                                    <option value="6">Junio</option>
+                                    <option value="7">Julio</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select><br />
+                                Si escoges una fecha se notifica a todas las secretarias y todos los médicos, no hace falta que los selecciones
+                                <br />
+                            </div>
                             <br />
                             <strong>Contenido del Comunicado de Gerencia</strong><br />
                             <textarea id="textContenido" name="textContenido" style="min-width:300px;width:98%;height:200px;text-transform:none!important;"></textarea><br />
@@ -391,10 +432,16 @@ $novedades = $this_db->consulta($sql);
             <tbody>
                 <tr valign="top">
                     <td<?=$isAdmin ? ' style="width:40%;"' : ''?>>
-                        <div class="cntnt">
+                        <div>
                             <div id="divNov<?=$nov['id_novedades']?>">
-                                <div><strong><?=utf8_encode($nov['titulo'])?></strong> - <?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</div>
-                                <div><?=utf8_encode(nl2br($nov['contenido']))?></div>
+                                <div class="cntnt">
+                                    <div><strong><?=utf8_encode($nov['titulo'])?></strong> - <?=date("d/m/Y H:i", strtotime($nov['fechahora']))?>hs.</div>
+                                    <?php if ($nov['mesdia']): ?>
+                                        <strong>Fecha de Repetición:</strong>
+                                        <?=implode("/", array_reverse(explode("-", $nov['mesdia'])));?>
+                                    <?php endif; ?>
+                                    <div><?=utf8_encode(nl2br($nov['contenido']))?></div>
+                                </div>
                                 <?php if ($isAdmin): ?>
                                     <div class="noPrint" data-id="<?=$nov['id_novedades']?>">
                                         <input type="button" class="btnEditar btn btn-success" value="Editar" />
@@ -408,6 +455,37 @@ $novedades = $this_db->consulta($sql);
                                 <div>
                                     <input type="text" name="inpTitulo" value="<?=utf8_encode($nov['titulo'])?>" style="width: 90%;" />
                                 </div>
+                                <?php if ($nov['mesdia']): ?>
+                                    <div>
+                                        <strong>Fecha de Repetición:</strong>
+                                        <?php
+                                        $d = (int)substr($nov['mesdia'], 3, 2);
+                                        $m = (int)substr($nov['mesdia'], 0, 2);
+                                        ?>
+                                        <select id="inpFechaDia" name="inpFechaDia" style="width: 70px;">
+                                            <option value="">- día -</option>
+                                            <?php for ($i = 1; $i <= 31; $i++): ?>
+                                                <option value="<?=$i?>"<?=(($d == $i) ? ' selected="selected"' : '')?>><?=$i?></option>
+                                            <?php endfor; ?>
+                                        </select>
+                                        <select id="inpFechaMes" name="inpFechaMes" style="width: 100px;">
+                                            <option value="">- mes -</option>
+                                            <option value="1"<?=(($m == 1) ? ' selected="selected"' : '')?>>Enero</option>
+                                            <option value="2"<?=(($m == 2) ? ' selected="selected"' : '')?>>Febrero</option>
+                                            <option value="3"<?=(($m == 3) ? ' selected="selected"' : '')?>>Marzo</option>
+                                            <option value="4"<?=(($m == 4) ? ' selected="selected"' : '')?>>Abril</option>
+                                            <option value="5"<?=(($m == 5) ? ' selected="selected"' : '')?>>Mayo</option>
+                                            <option value="6"<?=(($m == 6) ? ' selected="selected"' : '')?>>Junio</option>
+                                            <option value="7"<?=(($m == 7) ? ' selected="selected"' : '')?>>Julio</option>
+                                            <option value="8"<?=(($m == 8) ? ' selected="selected"' : '')?>>Agosto</option>
+                                            <option value="9"<?=(($m == 9) ? ' selected="selected"' : '')?>>Septiembre</option>
+                                            <option value="10"<?=(($m == 10) ? ' selected="selected"' : '')?>>Octubre</option>
+                                            <option value="11"<?=(($m == 11) ? ' selected="selected"' : '')?>>Noviembre</option>
+                                            <option value="12"<?=(($m == 12) ? ' selected="selected"' : '')?>>Diciembre</option>
+                                        </select>
+                                        <br />
+                                    </div>
+                                <?php endif; ?>
                                 <div>
                                     <textarea name="textContenido" style="width: 90%;min-height:210px;"><?=utf8_encode($nov['contenido'])?></textarea>
                                 </div>
