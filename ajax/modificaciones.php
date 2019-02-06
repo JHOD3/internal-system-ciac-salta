@@ -24,7 +24,7 @@ switch ($tabla){
 		}
 
 		$asignaciones = "";
-        if ($_SESSION['ID_USUARIO'] == 0) {
+        if ($_SESSION['SUPERUSER'] > 1) {
     		$asignaciones.= "
                 bloqueado = '".$bloqueado."',
     		";
