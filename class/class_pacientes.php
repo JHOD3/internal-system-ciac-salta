@@ -209,7 +209,8 @@ HTML;
 			}
 
 			$rta = $htm->Muestra();
-		}else{
+        } else {
+            $row['PACIENTES_OBSERVACIONES'] = '';
 			$rta = "Paciente no encontrado";
 		}
 
