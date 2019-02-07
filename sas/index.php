@@ -31,7 +31,7 @@ $d = implode("-", array_reverse(explode("/", $desde)));
 $h = implode("-", array_reverse(explode("/", $hasta)));
 
 $date = date("m-d");
-if ($_SESSION['SUPERUSER'] > 1) {
+if ($_SESSION['SUPERUSER'] > 0) {
     $query_string = <<<SQL
         SELECT
             SUBSTR(U.fechanac, 6, 5) AS mesdia
