@@ -43,6 +43,14 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
     color: green;
     font-size: 10px;
 }
+a.closeTagMedico {
+    background-color: #999;
+    padding: 2px 6px;
+    margin: 0 6px 2px 0;
+    border-radius: 4px;
+    color: #ffffff;
+    font-weight: bold;
+}
 </style>
 <h1>Prácticas Médicas
     <?php if (!$isMedico): ?>
@@ -50,7 +58,7 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
     <?php endif; ?>
 </h1>
 <?=$error_rol?>
-<form id="frmInpSrcFilter" method="post">
+<form id="frmInpSrcFilter" method="post" onsubmit="javascript:return false;">
     <table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
         <tbody>
             <tr class="trDate">
@@ -98,20 +106,57 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                 <tr>
                     <td colspan="100%">
                         Realizador:
-                        <select id="srea" name="srea[]" multiple="multiple" style="width:75%!important;max-width:700px!important;">
-                            <?php
-                            for ($i = 0; $i < count($medicos); $i++):
+                        <input type="text" id="srea" value="" />
+                        <?php if (isset($srea)): ?>
+                            <?php for ($i = 0; $i < count($medicos); $i++): ?>
+                                <?php if (in_array($medicos[$i]['id_medicos'], $srea)): ?>
+                                    <a class="closeTagMedico" href="">
+                                        <input type="hidden" name="srea[]" value="<?=$medicos[$i]['id_medicos']?>" />
+                                        <?=
+                                            strtoupper(
+                                                trim($medicos[$i]['saludo'])." ".
+                                                trim($medicos[$i]['apellidos'])." ".
+                                                trim($medicos[$i]['nombres'])
+                                            )
+                                        ?>
+                                        &nbsp;&nbsp;X
+                                    </a>
+                                <?php endif; ?>
+                            <?php endfor; ?>
+                        <?php endif; ?>
+                        <script>;
+                        var tagsMEDICOS = [
+                            <?php $cnct = ''; ?>
+                            <?php for ($i = 0; $i < count($medicos); $i++): ?>
+                                <?php
                                 $m = strtoupper(
                                     trim($medicos[$i]['saludo'])." ".
                                     trim($medicos[$i]['apellidos'])." ".
                                     trim($medicos[$i]['nombres'])
                                 );
                                 ?>
-                                <option value="<?=$medicos[$i]['id_medicos']?>"<?=(isset($srea) and is_array($srea) and in_array($medicos[$i]['id_medicos'], $srea)) ? $selected : ''?>><?=$m?></option>
-                                <?php
-                            endfor;
-                            ?>
-                        </select>
+                                <?=$cnct?>{label: '<?=$m?>', value: '<?=$medicos[$i]['id_medicos']?>'}
+                                <?php $cnct = ','; ?>
+                            <?php endfor; ?>
+                        ];
+                        $('#srea').autocomplete({
+                            source: tagsMEDICOS,
+                            close: function( event, ui ) {
+                                $('#srea').val('');
+                            },
+                            select: function( event, ui ) {
+                                $(this).after('<input type="hidden" name="srea[]" value="' + ui.item.value + '" />')
+                                $('#dateok').click();
+                            }
+                        });
+                        $('a.closeTagMedico').click(function(event){
+                            event.preventDefault();
+                            $(this).remove();
+                            $('#dateok').click();
+                            return false;
+                        });
+                        $('#srea').focus();
+                        </script>
                     </td>
                 </tr>
             <?php endif; ?>
@@ -597,11 +642,6 @@ $(document).ready(function(){
     $(this).find('#sder').autocomplete({
         source: tagsACMD
     });
-
-    $('select#srea').multipleSelect({
-        filter: true
-    });
-
     $('.openTurnoEstudio').click(function(event){
         event.preventDefault();
         try {
