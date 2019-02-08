@@ -271,7 +271,7 @@ if (!$_SESSION['felicitado']) {
         <?php
         $html_cumple.= ob_get_clean();
     }
-    include("../sas/salutaciones.php");
+    include("salutaciones.php");
 }
 
 $htm_index->Asigna("MENU_TABLAS", $html_cumple.$htm_menu_tablas->Muestra().$htm_medicos_autocomplete);
