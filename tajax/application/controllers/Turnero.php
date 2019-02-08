@@ -118,5 +118,12 @@ class Turnero extends CI_Controller {
 		$this->load->view('turnero_search_view', $aData);
     }
 
+    public function tagspro($tipo = '', $filter = '')
+    {
+	    $aData['tipo'] = urldecode($tipo);
+        $aData['filter'] = urldecode($filter);
+        $aData['aMedicos'] = $this->turnero_model->obtMedicosPorEspecialidad($aData['tipo'], $aData['filter']);
+		$this->load->view('turnero_tagspro_view', $aData);
+    }
 }
 //EOF Turnero.php
