@@ -214,6 +214,12 @@ if ( isset( $_GET['iSortCol_0'] ) )
                     H.desde
             ";
             break;
+        case "consultorios":
+            $sOrder = "
+                ORDER BY
+                    C.nro_consultorio + 0
+            ";
+            break;
         default:
     		$sOrder = "ORDER BY  ";
     		for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
