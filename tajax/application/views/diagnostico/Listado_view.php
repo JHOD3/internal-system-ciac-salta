@@ -58,7 +58,7 @@ a.closeTagMedico {
     <?php endif; ?>
 </h1>
 <?=$error_rol?>
-<form id="frmInpSrcFilter" method="post" onsubmit="javascript:return false;">
+<form id="frmInpSrcFilter" method="post">
     <table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
         <tbody>
             <tr class="trDate">
