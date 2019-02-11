@@ -61,7 +61,22 @@ class Tareas_pedidos extends Estructura implements iTareas_pedidos{
 	function PanelAdmin($id_padre = ""){
 		$htm = $this->Html($this->nombre_tabla."/panel_admin");
 
-		$htm->Asigna("LISTADO", $this->TablaAdmin($id_padre));
+        if (!$id_padre) {
+            $btn_alta = '';
+        } else {
+            $btn_alta =
+                '<a href="#" id="btn_alta_tareas_pedidos" class="btn btn_opciones" data-titulo="Alta '.
+                $this->titulo_tabla_singular.
+                '" data-tipo="alta" data-tabla="'.
+                $this->nombre_tabla.
+                '" data-id_padre="'.
+                $id_padre.
+                '">Alta Nuevo '.
+                $this->titulo_tabla_singular.
+                '</a>'
+            ;
+        }
+		$htm->Asigna("LISTADO", $btn_alta.$this->TablaAdmin($id_padre));
 
 		$htm->Asigna("ID_TAREAS_CONFIGURACION", $id_padre);
 		$htm->Asigna("TABLA", $this->nombre_tabla);

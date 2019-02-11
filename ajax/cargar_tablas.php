@@ -4,6 +4,8 @@ require_once("../engine/config.php");
 require_once("../engine/restringir_acceso.php");
 requerir_class("tpl","querys","mysql","estructura");
 
+#error_reporting(E_ALL); ini_set('display_errors', 1);
+
 requerir_class(
     'medicos',
     'medicosext',
@@ -298,8 +300,10 @@ switch ($tabla){
 		$sWhere = "WHERE ((H.fecha >= '{$sDesde}' AND H.fecha <= '{$sHasta}') ";
     break;
 	case "tareas_pedidos":
-		$id_padre = $_GET["id"];
-		$sWhere = "WHERE ( id_tareas_configuracion = '".$id_padre."'";
+        if ($_GET['id']) {
+    		$id_padre = $_GET["id"];
+    		$sWhere = "WHERE ( id_tareas_configuracion = '".$id_padre."'";
+        }
 	break;
 	default:
 		$sWhere = "";
@@ -2411,8 +2415,8 @@ if ($cant_registros != 0){
                     }
 				break;
 				case 'tareas_configuracion':
-					$requisitos = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='tareas_requisitos' data-nombre='Editar Requisitos'><img src='".URL."files/img/btns/medicos_obras_sociales.png' border='0'></a>";
-					$pedidos = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='tareas_pedidos' data-nombre='Editar Pedidos'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
+					$requisitos = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='tareas_requisitos' data-nombre='Requisitos'><img src='".URL."files/img/btns/medicos_obras_sociales.png' border='0'></a>";
+					$pedidos = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='tareas_pedidos' data-nombre='Pedidos'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
 					$row[0] = $aRow["id_tareas_configuracion"];
 					$row[1] = utf8_encode($aRow['nombre']);
                     if ($_SESSION['SUPERUSER'] > 2) {
