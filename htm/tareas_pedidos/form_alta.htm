@@ -6,7 +6,7 @@
 
 		$("a#cargar").click(function(e){
 			e.preventDefault();
-			$("#form_tareas_requisitos").submit();
+			$("#form_tareas_pedidos").submit();
 		});
 
 		$("a#cancelar").click(function(){
@@ -14,7 +14,7 @@
 			$(ventana_opciones).dialog('destroy').remove();
 		});
 
-		$("#form_tareas_requisitos").validate({
+		$("#form_tareas_pedidos").validate({
 			rules: {
 				nombre: {
 					required: true
@@ -32,7 +32,7 @@
 				}
 			},
 			submitHandler: function(){
-				var variables = $("#form_tareas_requisitos").serialize();
+				var variables = $("#form_tareas_pedidos").serialize();
 				$.ajax({
 					type: "POST",
 					url: "[URL]ajax/altas.php",
@@ -43,9 +43,9 @@
 					success: function(requestData){
 						var rta = requestData;
 
-						alert ("Requisito de Tarea Cargado Correctamente.");
+						alert ("Pedido de Tarea Cargado Correctamente.");
 						IniciarVentana("ventana_opciones", "cerrar");
-						TableTareasRequisitos.fnDraw();
+						TableTareasPedidos.fnDraw();
 						$(ventana_opciones).dialog('destroy').remove();
 					},
 					complete: function(requestData, exito){},
@@ -55,19 +55,22 @@
 				});
 			}
 		});
+    	$(".datepicker").datepicker({
+    		dateFormat: 'dd/mm/yy'
+    	});
 	});
 </script>
 
 <div id="panel_alta">
-    <form name="form_tareas_requisitos" id="form_tareas_requisitos" class="jNice">
+    <form name="form_tareas_pedidos" id="form_tareas_pedidos" class="jNice">
         <fieldset>
 			<div class="bloque oculto">
 				<label>ID: </label>
 				<input type="text" class="text-long" name="id_tareas_configuracion" id="id_tareas_configuracion" value="[ID_TAREAS_CONFIGURACION]" />
 			</div>
             <div class="bloque">
-                <label>N&deg; de Orden: </label>
-                <input type="text" class="text-long" name="nombre" style="text-transform:none!important;" />
+                <label>Fecha: </label>
+                <input type="text" class="text-long datepicker" name="nombre" style="text-transform:none!important;" />
             </div>
             <div class="bloque">
                 <label>Descripci&oacute;n: </label>

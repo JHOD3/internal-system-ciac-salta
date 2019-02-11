@@ -567,6 +567,9 @@ SQL;
 	case "tareas_requisitos":
 		parse_str(stripslashes($datos));
 
+        $nombre = (int)$nombre;
+        if ($nombre < 1) $nombre = 1;
+
 		$asignaciones = "
 					nombre = '".str_replace("'", "\\'", utf8_decode($nombre))."',
                     descripcion = '".str_replace("'", "\\'", utf8_decode($descripcion))."'
@@ -607,6 +610,23 @@ SQL;
 		} else {
 			$rta = false;
         }
+
+	break;
+
+	case "tareas_pedidos":
+		parse_str(stripslashes($datos));
+
+		$asignaciones = "
+					nombre = '".implode("-", array_reverse(explode("/", $nombre)))."',
+                    descripcion = '".str_replace("'", "\\'", utf8_decode($descripcion))."'
+					";
+
+        $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
+
+		if ($obj->db->consulta($query_string))
+			$rta = true;
+		else
+			$rta = false;
 
 	break;
 

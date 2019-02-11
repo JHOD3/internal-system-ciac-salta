@@ -42,6 +42,7 @@ switch ($tipo){
 			case "medicos_especialidades":
 			//case "medicos_horarios":
             case "tareas_requisitos":
+            case "tareas_pedidos":
 				$id_padre = $_POST["id_padre"];
 				$rta = $obj->FormModificacion($id_padre);
 			break;
@@ -59,6 +60,7 @@ switch ($tipo){
 			case "medicos_horarios":
             case "pacientes_observaciones":
             case "tareas_requisitos":
+            case "tareas_pedidos":
 				$id_padre = $_POST["id_padre"];
 				$rta = $obj->FormAlta($id_padre);
 			break;

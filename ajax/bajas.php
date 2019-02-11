@@ -23,6 +23,7 @@ switch ($tabla) {
     case "planes_de_contingencia":
     case "tareas_configuracion":
     case "tareas_requisitos":
+    case "tareas_pedidos":
         $rta = $obj->Inhabilitar();
         break;
     case "notas_impresion":

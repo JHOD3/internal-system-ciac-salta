@@ -1292,6 +1292,7 @@ SQL;
 	break;
 	case "tareas_requisitos":
 		parse_str(stripslashes($datos));
+
         $nombre = (int)$nombre;
         if ($nombre < 1) $nombre = 1;
 
@@ -1344,6 +1345,31 @@ SQL;
 		} else {
 			$rta = false;
         }
+
+	break;
+	case "tareas_pedidos":
+		parse_str(stripslashes($datos));
+
+		$columnas = "(
+                    id_tareas_configuracion,
+					nombre,
+                    descripcion,
+                    estado
+					)";
+
+		$valores = "(
+					'".$id_tareas_configuracion."',
+					'".implode("-", array_reverse(explode("/", $nombre)))."',
+                    '".str_replace("'", "\\'", utf8_decode($descripcion))."',
+                    1
+					)";
+
+		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+        if ($obj->db->consulta($query_string))
+			$rta = $obj->db->ultimo_id_insertado();
+		else
+			$rta = false;
 
 	break;
 

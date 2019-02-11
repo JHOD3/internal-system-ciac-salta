@@ -1,17 +1,17 @@
 <?php
-interface iTareas_requisitos{
+interface iTareas_pedidos{
 
 }
 
-class Tareas_requisitos extends Estructura implements iTareas_requisitos{
+class Tareas_pedidos extends Estructura implements iTareas_pedidos{
 
 	function __construct($id = ""){
-		$this->nombre_tabla = "tareas_requisitos";
-		$this->titulo_tabla = "Requisitos de Tareas";
-        $this->titulo_tabla_singular = "Requisito de Tarea";
+		$this->nombre_tabla = "tareas_pedidos";
+		$this->titulo_tabla = "Pedidos de Tareas";
+        $this->titulo_tabla_singular = "Pedido de Tarea";
 		$this->tabla_padre = "";
 
-		$this->drop_label_elija = "Elija un Requisito de Tarea";
+		$this->drop_label_elija = "Elija un Pedido de Tarea";
 
 		parent::__construct($id);
 	}
@@ -30,6 +30,7 @@ class Tareas_requisitos extends Estructura implements iTareas_requisitos{
 	function FormModificacion($id_padre){
 		$htm = $this->Html($this->nombre_tabla."/form_modificacion");
 		$row = $this->registro;
+        $row['nombre'] = date("d/m/Y", strtotime($row['nombre']));
 
 		$htm->Asigna("ID_TAREAS_CONFIGURACION", $id_padre);
 		$htm->Asigna("TABLA",$this->nombre_tabla);
