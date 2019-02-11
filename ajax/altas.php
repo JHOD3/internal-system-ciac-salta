@@ -1269,7 +1269,83 @@ SQL;
 			$rta = false;
 
 	break;
+	case "tareas_configuracion":
+		parse_str(stripslashes($datos));
+
+		$columnas = "(
+					nombre,
+                    estado
+					)";
+
+		$valores = "(
+					'".str_replace("'", "\\'", utf8_decode($nombre))."',
+                    1
+					)";
+
+		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+		if ($obj->db->consulta($query_string))
+			$rta = $obj->db->ultimo_id_insertado();
+		else
+			$rta = false;
+
+	break;
+	case "tareas_requisitos":
+		parse_str(stripslashes($datos));
+        $nombre = (int)$nombre;
+        if ($nombre < 1) $nombre = 1;
+
+		$columnas = "(
+                    id_tareas_configuracion,
+					nombre,
+                    descripcion,
+                    estado
+					)";
+
+		$valores = "(
+					'".$id_tareas_configuracion."',
+					'".str_replace("'", "\\'", utf8_decode($nombre))."',
+                    '".str_replace("'", "\\'", utf8_decode($descripcion))."',
+                    1
+					)";
+
+		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+        /**********************************************************************/
+        $query_correr_ids = <<<SQL
+            UPDATE tareas_requisitos
+            SET nombre = nombre + 1
+            WHERE id_tareas_configuracion = '{$id_tareas_configuracion}' AND nombre >= {$nombre}
+SQL;
+		$obj->db->consulta($query_correr_ids);
+        /**********************************************************************/
+
+        if ($obj->db->consulta($query_string)) {
+			$rta = $obj->db->ultimo_id_insertado();
+            /******************************************************************/
+            $query_correr_ids = <<<SQL
+                SELECT id_tareas_requisitos
+                FROM tareas_requisitos
+                WHERE id_tareas_configuracion = '{$id_tareas_configuracion}' and estado = 1
+                ORDER BY nombre, id_tareas_requisitos
+SQL;
+    		$result = $obj->db->consulta($query_correr_ids);
+            $i = 1;
+            while ($row = $obj->db->fetch_assoc($result)) {
+                $query_correr_ids = <<<SQL
+                    UPDATE tareas_requisitos
+                    SET nombre = {$i}
+                    WHERE id_tareas_requisitos = '{$row['id_tareas_requisitos']}'
+SQL;
+        		$obj->db->consulta($query_correr_ids);
+                $i++;
+            }
+            /******************************************************************/
+		} else {
+			$rta = false;
+        }
+
+	break;
 
 }
 echo $rta;
-?>

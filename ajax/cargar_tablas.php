@@ -33,7 +33,9 @@ requerir_class(
     'notas_impresion',
     'pacientes',
     'pacientes_observaciones',
-    'planes_de_contingencia'
+    'planes_de_contingencia',
+    'tareas_configuracion',
+    'tareas_requisitos'
 );
 
 $tabla = $_GET["tabla"];
@@ -137,6 +139,12 @@ switch ($tabla){
 	break;
 	case "planes_de_contingencia":
 		$aColumns = array('id_planes_de_contingencia','nombre','descripcion');
+	break;
+    case "tareas_configuracion":
+        $aColumns = array('id_tareas_configuracion','nombre');
+    break;
+	case "tareas_requisitos":
+		$aColumns = array('id_tareas_requisitos','nombre','descripcion');
 	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
@@ -285,6 +293,10 @@ switch ($tabla){
         $sHasta = date("Y-m-d", strtotime($sHasta));
 		$sWhere = "WHERE ((H.fecha >= '{$sDesde}' AND H.fecha <= '{$sHasta}') ";
     break;
+	case "tareas_requisitos":
+		$id_padre = $_GET["id"];
+		$sWhere = "WHERE ( id_tareas_configuracion = '".$id_padre."'";
+	break;
 	default:
 		$sWhere = "";
 }
@@ -318,6 +330,10 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 				$id_especialidad = $_GET["id_especialidad"];
 				$sWhere = "WHERE id_medicos = ".$id_medico." AND id_especialidades = ".$id_especialidad.' AND (';
 			break;
+        	case "tareas_requisitos":
+        		$id_padre = $_GET["id"];
+        		$sWhere = "WHERE id_tareas_configuracion = '".$id_padre."' AND (";
+        	break;
 			default:
 				$sWhere = "WHERE (";
 				$parentesis = false;
@@ -2388,6 +2404,30 @@ if ($cant_registros != 0){
                         $row[3] = $ver.''.$editar.'';
                     } else {
                         $row[3] = $ver.'';
+                    }
+				break;
+				case 'tareas_configuracion':
+					$requisitos = "<a class='btn_opciones' href='#' data-id='".$aRow[$aColumns[0]]."' data-tipo_btn='tabla_hija' data-hija='tareas_requisitos' data-nombre='Editar Requisitos'><img src='".URL."files/img/btns/medicos_obras_sociales.png' border='0'></a>";
+					$row[0] = $aRow["id_tareas_configuracion"];
+					$row[1] = utf8_encode($aRow['nombre']);
+                    if ($_SESSION['SUPERUSER'] > 2) {
+                        $row[2] = $editar.''.$requisitos.''.$eliminar.'';
+                    } elseif ($_SESSION['SUPERUSER'] > 1) {
+                        $row[2] = $editar.''.$requisitos.'';
+                    } else {
+                        $row[2] = $requisitos.'';
+                    }
+				break;
+				case 'tareas_requisitos':
+					$row[0] = $aRow["id_tareas_requisitos"];
+					$row[1] = utf8_encode($aRow['nombre']);
+					$row[2] = utf8_encode($aRow['descripcion']);
+                    if ($_SESSION['SUPERUSER'] > 2) {
+                        $row[3] = $editar.''.$eliminar.'';
+                    } elseif ($_SESSION['SUPERUSER'] > 1) {
+                        $row[3] = $editar.'';
+                    } else {
+                        $row[3] = '';
                     }
 				break;
 

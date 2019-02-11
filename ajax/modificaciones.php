@@ -548,6 +548,67 @@ SQL;
 
 	break;
 
+	case "tareas_configuracion":
+		parse_str(stripslashes($datos));
+
+		$asignaciones = "
+					nombre = '".str_replace("'", "\\'", utf8_decode($nombre))."'
+					";
+
+        $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
+
+		if ($obj->db->consulta($query_string))
+			$rta = true;
+		else
+			$rta = false;
+
+	break;
+
+	case "tareas_requisitos":
+		parse_str(stripslashes($datos));
+
+		$asignaciones = "
+					nombre = '".str_replace("'", "\\'", utf8_decode($nombre))."',
+                    descripcion = '".str_replace("'", "\\'", utf8_decode($descripcion))."'
+					";
+
+        $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
+
+        /**********************************************************************/
+        $query_correr_ids = <<<SQL
+            UPDATE tareas_requisitos
+            SET nombre = nombre + 1
+            WHERE id_tareas_configuracion = '{$id_tareas_configuracion}' AND nombre >= {$nombre}
+SQL;
+		$obj->db->consulta($query_correr_ids);
+        /**********************************************************************/
+
+		if ($obj->db->consulta($query_string)) {
+			$rta = true;
+            /******************************************************************/
+            $query_correr_ids = <<<SQL
+                SELECT id_tareas_requisitos
+                FROM tareas_requisitos
+                WHERE id_tareas_configuracion = '{$id_tareas_configuracion}' and estado = 1
+                ORDER BY nombre, id_tareas_requisitos
+SQL;
+    		$result = $obj->db->consulta($query_correr_ids);
+            $i = 1;
+            while ($row = $obj->db->fetch_assoc($result)) {
+                $query_correr_ids = <<<SQL
+                    UPDATE tareas_requisitos
+                    SET nombre = {$i}
+                    WHERE id_tareas_requisitos = '{$row['id_tareas_requisitos']}'
+SQL;
+        		$obj->db->consulta($query_correr_ids);
+                $i++;
+            }
+            /******************************************************************/
+		} else {
+			$rta = false;
+        }
+
+	break;
+
 }
 echo $rta;
-?>
