@@ -150,7 +150,7 @@ switch ($tabla){
 		$aColumns = array('id_tareas_requisitos','nombre','descripcion');
 	break;
 	case "tareas_pedidos":
-		$aColumns = array('id_tareas_pedidos','nombre','descripcion');
+		$aColumns = array('id_tareas_pedidos','id_tareas_configuracion','nombre','descripcion');
 	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
@@ -300,6 +300,7 @@ switch ($tabla){
 		$sWhere = "WHERE ((H.fecha >= '{$sDesde}' AND H.fecha <= '{$sHasta}') ";
     break;
 	case "tareas_pedidos":
+    case "tareas_requisitos":
         if ($_GET['id']) {
     		$id_padre = $_GET["id"];
     		$sWhere = "WHERE ( id_tareas_configuracion = '".$id_padre."'";
@@ -339,6 +340,7 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 				$sWhere = "WHERE id_medicos = ".$id_medico." AND id_especialidades = ".$id_especialidad.' AND (';
 			break;
         	case "tareas_pedidos":
+            case "tareas_requisitos":
         		$id_padre = $_GET["id"];
         		$sWhere = "WHERE id_tareas_configuracion = '".$id_padre."' AND (";
         	break;
@@ -1039,16 +1041,41 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 						break;
                     }
                 break;
-				default:
+				case "tareas_pedidos":
 					switch($aColumns[$i]){
-						case 'id_especialidades':
+						case "id_tareas_configuracion":
+							$obj = new Tareas_configuracion();
+							$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch'],"like");
 
+							$cant = $obj->db->num_rows($query);
+
+							if ($cant > 0){
+								$ids = "(";
+								$band = 0;
+								while ($row = $obj->db->fetch_array($query)){
+									$ids .= $row["id_".$obj->nombre_tabla].", ";
+									$band = 1;
+								}
+								$ids = rtrim($ids, ", ");
+								$ids = $ids.")";
+
+								if ($band == 1){
+									$buscar = $ids;
+									$sWhere .= $aColumns[$i]." IN ".$buscar.' OR ';
+								}else{
+									$buscar = 0;
+									$sWhere .= $aColumns[$i]." = ".$buscar.' OR ';
+								}
+							}
 						break;
 						default:
-							$buscar = $_GET['sSearch'];
+							$buscar = utf8_decode($_GET['sSearch']);
 							$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' OR ";
 					}
-
+				break;
+				default:
+					$buscar = $_GET['sSearch'];
+					$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' OR ";
 			}
 
 		}
@@ -1623,6 +1650,36 @@ for ( $i=0 ; $i<count($aColumns) ; $i++ ){
 						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
 				}
 			break;
+			case 'tareas_pedidos':
+				switch($aColumns[$i]){
+					case "id_tareas_configuracion":
+						$obj = new Tareas_configuracion();
+						$query = $obj->RegistroXAtributo("nombre",$_GET['sSearch_'.$i],"like");
+
+						$ids = "(";
+						$band = 0;
+						while ($row = $obj->db->fetch_array($query)){
+							$ids .= $row["id_".$obj->nombre_tabla].", ";
+							$band = 1;
+						}
+						$ids = trim($ids, ", ");
+						$ids .= ")";
+
+
+						if ($band == 1){
+							$buscar = $ids;
+							$sWhere .= $aColumns[$i]." IN ".$buscar;
+						}else{
+							$buscar = 0;
+							$sWhere .= $aColumns[$i]." = ".$buscar;
+						}
+					break;
+					default:
+						$buscar = utf8_decode($_GET['sSearch_'.$i]);
+						$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
+                    break;
+				}
+			break;
 			default:
 				$buscar = $_GET['sSearch_'.$i];
 				$sWhere .= $aColumns[$i]." LIKE '%".$buscar."%' ";
@@ -2004,6 +2061,11 @@ if ($cant_registros != 0){
 					$obj_horarios_inhabilitados_motivos = new Horarios_inhabilitados_motivos($aRow[$aColumns[$i]]);
 					$horario_inhabilitado_motivo = $obj_horarios_inhabilitados_motivos->motivo_descripcion;
                     $horario_inhabilitado_bloqueo = $obj_horarios_inhabilitados_motivos->bloqueo_superadmin;
+				}
+
+				if ($aColumns[$i] == "id_tareas_configuracion"){
+					$obj_tareas_configuracion = new Tareas_configuracion($aRow[$aColumns[$i]]);
+					$tareas_configuracion = $obj_tareas_configuracion->nombre;
 				}
 
 				if ($aColumns[$i] == "fecha"){
@@ -2440,15 +2502,17 @@ if ($cant_registros != 0){
                     }
 				break;
 				case 'tareas_pedidos':
+					$cumplidas = "<a class='btn_opciones' href='#' data-id='".$aRow['id_tareas_configuracion']."' data-tipo_btn='tabla_hija' data-hija='tareas_requisitos' data-nombre='Requisitos'><img src='".URL."files/img/btns/medicos_obras_sociales.png' border='0'></a>";
 					$row[0] = $aRow["id_tareas_pedidos"];
-					$row[1] = utf8_encode(date("d/m/Y", strtotime($aRow['nombre'])));
-					$row[2] = utf8_encode($aRow['descripcion']);
+					$row[1] = utf8_encode($tareas_configuracion);
+					$row[2] = utf8_encode(date("d/m/Y", strtotime($aRow['nombre'])));
+					$row[3] = utf8_encode($aRow['descripcion']);
                     if ($_SESSION['SUPERUSER'] > 2) {
-                        $row[3] = $editar.''.$eliminar.'';
+                        $row[4] = $editar.''.$cumplidas.''.$eliminar.'';
                     } elseif ($_SESSION['SUPERUSER'] > 1) {
-                        $row[3] = $editar.'';
+                        $row[4] = $editar.''.$cumplidas.'';
                     } else {
-                        $row[3] = '';
+                        $row[4] = $cumplidas.'';
                     }
 				break;
 
