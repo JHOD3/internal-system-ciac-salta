@@ -1092,21 +1092,33 @@ HTML;
 				$row["I"] =$i;
 				$i++;
 
-				if ($row['trae_orden'] == 0){
-					$row['trae_orden'] = "NO";
-				}else{
-					$row['trae_orden'] = "SI";
-					$total_ordenes += 1;
+				switch ($row['trae_orden']) {
+				    case '0':
+    					$row['trae_orden'] = "SI";
+                        break;
+				    case '1':
+				    case '2':
+    					$row['trae_orden'] = "NO";
+    					$total_ordenes += 1;
+                        break;
 				}
 
-				if ($row['trae_pedido'] == 0){
-					$row['trae_pedido'] = "NO";
-				}else{
-					$row['trae_pedido'] = "SI";
-					$total_pedidos += 1;
-				}
-
-				$total += $row['arancel_diferenciado'];
+                switch ($row['trae_pedido']) {
+                    case '0':
+    					$row['trae_pedido'] = "NO";
+                        break;
+                    case '1':
+    					$row['trae_pedido'] = "SI";
+    					$total_pedidos += 1;
+        				$row['arancel_diferenciado'] = $row['valor_pedido'];
+        				$total += $row['arancel_diferenciado'];
+                        break;
+                    case '2':
+    					$row['trae_pedido'] = "SI";
+    					$total_pedidos += 1;
+        				$total += $row['arancel_diferenciado'];
+                        break;
+                }
 
 				$htm->AsignaBloque('block_registros',$row);
 
