@@ -630,5 +630,50 @@ SQL;
 
 	break;
 
+	case "tareas_realizadas":
+		parse_str(stripslashes($datos));
+
+		$asignaciones = "
+			fechahora = '".date("Y-m-d H:i:s")."',
+            id_usuarios = '{$_SESSION['ID_USUARIO']}',
+            status = 1
+		";
+
+        $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $_POST['id_tareas_realizadas']);
+
+		if ($obj->db->consulta($query_string)) {
+			$rta = true;
+            /******************************************************************/
+            $query_cerrar_tarea = <<<SQL
+                SELECT
+                    tr1.id_tareas_pedidos,
+                    COUNT(tr1.id_tareas_pedidos) AS Total
+                FROM tareas_realizadas AS tr1
+                INNER JOIN tareas_realizadas AS tr2
+                    ON tr1.id_tareas_pedidos = tr2.id_tareas_pedidos
+                WHERE
+                    tr1.id_tareas_realizadas = '{$_POST['id_tareas_realizadas']}' AND
+                    tr1.estado = 1 AND
+                    tr2.estado = 1 AND
+                    tr2.status = 0
+SQL;
+    		$result = $obj->db->consulta($query_cerrar_tarea);
+            if ($row = $obj->db->fetch_assoc($result)) {
+                if ($row['Total'] == 0) {
+                    $query_cerrar_tarea = <<<SQL
+                        UPDATE tareas_pedidos
+                        SET status = 1
+                        WHERE id_tareas_pedidos = '{$row['id_tareas_pedidos']}'
+SQL;
+            		$obj->db->consulta($query_cerrar_tarea);
+                }
+            }
+            /******************************************************************/
+		} else {
+			$rta = false;
+        }
+
+	break;
+
 }
 echo $rta;

@@ -38,7 +38,8 @@ requerir_class(
     'planes_de_contingencia',
     'tareas_configuracion',
     'tareas_requisitos',
-    'tareas_pedidos'
+    'tareas_pedidos',
+    'tareas_realizadas'
 );
 
 $tabla = $_GET["tabla"];
@@ -150,7 +151,10 @@ switch ($tabla){
 		$aColumns = array('id_tareas_requisitos','nombre','descripcion');
 	break;
 	case "tareas_pedidos":
-		$aColumns = array('id_tareas_pedidos','id_tareas_configuracion','nombre','descripcion');
+		$aColumns = array('id_tareas_pedidos','id_tareas_configuracion','nombre','descripcion','status');
+	break;
+	case "tareas_realizadas":
+		$aColumns = array('id_tareas_realizadas','nombre','descripcion','status','fechahora','id_usuarios');
 	break;
 	default:
 		$aColumns = $obj->NombreColumnas();
@@ -300,10 +304,23 @@ switch ($tabla){
 		$sWhere = "WHERE ((H.fecha >= '{$sDesde}' AND H.fecha <= '{$sHasta}') ";
     break;
 	case "tareas_pedidos":
+        if ($_GET['id']) {
+    		$id_padre = $_GET["id"];
+    		$sWhere = "WHERE ( id_tareas_configuracion = '".$id_padre."'";
+        } else {
+            $sWhere.= "WHERE ( status = 0";
+        }
+    break;
     case "tareas_requisitos":
         if ($_GET['id']) {
     		$id_padre = $_GET["id"];
     		$sWhere = "WHERE ( id_tareas_configuracion = '".$id_padre."'";
+        }
+	break;
+    case "tareas_realizadas":
+        if ($_GET['id']) {
+    		$id_padre = $_GET["id"];
+    		$sWhere = "WHERE ( id_tareas_pedidos = '".$id_padre."'";
         }
 	break;
 	default:
@@ -340,9 +357,20 @@ if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 				$sWhere = "WHERE id_medicos = ".$id_medico." AND id_especialidades = ".$id_especialidad.' AND (';
 			break;
         	case "tareas_pedidos":
+                if ($_GET['id']) {
+            		$id_padre = $_GET["id"];
+            		$sWhere = "WHERE (id_tareas_configuracion = '".$id_padre."' AND (";
+                } else {
+                    $sWhere = "WHERE (status = 0 AND (";
+                }
+        	break;
             case "tareas_requisitos":
         		$id_padre = $_GET["id"];
-        		$sWhere = "WHERE id_tareas_configuracion = '".$id_padre."' AND (";
+        		$sWhere = "WHERE (id_tareas_configuracion = '".$id_padre."' AND (";
+        	break;
+            case "tareas_realizadas":
+        		$id_padre = $_GET["id"];
+        		$sWhere = "WHERE (id_tareas_pedidos = '".$id_padre."' AND (";
         	break;
 			default:
 				$sWhere = "WHERE (";
@@ -2502,17 +2530,41 @@ if ($cant_registros != 0){
                     }
 				break;
 				case 'tareas_pedidos':
-					$cumplidas = "<a class='btn_opciones' href='#' data-id='".$aRow['id_tareas_configuracion']."' data-tipo_btn='tabla_hija' data-hija='tareas_requisitos' data-nombre='Requisitos'><img src='".URL."files/img/btns/medicos_obras_sociales.png' border='0'></a>";
+					$requisitos = "<a class='btn_opciones' href='#' data-id='".$aRow['id_tareas_configuracion']."' data-tipo_btn='tabla_hija' data-hija='tareas_requisitos' data-nombre='Requisitos'><img src='".URL."files/img/btns/medicos_obras_sociales.png' border='0'></a>";
+					$realizadas = "<a class='btn_opciones' href='#' data-id='".$aRow['id_tareas_pedidos']."' data-tipo_btn='tabla_hija' data-hija='tareas_realizadas' data-nombre='Realizadas'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
 					$row[0] = $aRow["id_tareas_pedidos"];
 					$row[1] = utf8_encode($tareas_configuracion);
 					$row[2] = utf8_encode(date("d/m/Y", strtotime($aRow['nombre'])));
 					$row[3] = utf8_encode($aRow['descripcion']);
+					$row[4] = $aRow['status'] ? 'Resuelta' : 'Pendiente';
                     if ($_SESSION['SUPERUSER'] > 2) {
-                        $row[4] = $editar.''.$cumplidas.''.$eliminar.'';
+                        $row[5] = $editar.''.$requisitos.''.$realizadas.''.$eliminar.'';
                     } elseif ($_SESSION['SUPERUSER'] > 1) {
-                        $row[4] = $editar.''.$cumplidas.'';
+                        $row[5] = $editar.''.$requisitos.''.$realizadas.'';
                     } else {
-                        $row[4] = $cumplidas.'';
+                        $row[5] = $realizadas.'';
+                    }
+				break;
+				case 'tareas_realizadas':
+					$realizar = "<a class='btn_realizar' href='#' data-id='".$aRow[$aColumns[0]]."' data-nombre='Confirmar'><img src='".URL."files/img/btns/confirmar.png' border='0'></a>";
+					$row[0] = $aRow["id_tareas_realizadas"];
+					$row[1] = utf8_encode($aRow['nombre']);
+					$row[2] = utf8_encode($aRow['descripcion']);
+					$row[3] = $aRow['status'] ? 'Resuelta' : 'Pendiente';
+                    if ($aRow['fechahora']) {
+    					$row[4] = date("d/m/Y H:i", strtotime($aRow['fechahora'])).'hs';
+                    } else {
+    					$row[4] = '';
+                    }
+                    if ($aRow['id_usuarios']) {
+    					$row[5] = $usuario;
+                    } else {
+    					$row[5] = '';
+                    }
+                    if ($aRow['status']) {
+                        $row[6] = '';
+                    } else {
+                        $row[6] = $realizar.'';
                     }
 				break;
 

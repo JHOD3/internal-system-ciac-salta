@@ -230,6 +230,7 @@ class Querys implements iQuerys{
             case "tareas_configuracion":
             case "tareas_requisitos":
             case "tareas_pedidos":
+            case "tareas_realizadas":
 				$query = "UPDATE ".$tabla." SET ".$asignacion." WHERE id_".$tabla." = ".$id;
 			break;
 		}
