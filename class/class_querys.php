@@ -60,7 +60,7 @@ class Querys implements iQuerys{
 				$query = "SELECT *
 					FROM medicos_horarios
 					WHERE
-                        nro_consultorio = ".$id." AND
+                        nro_consultorio = '".$id."' AND
                         nro_consultorio IS NOT NULL
                     GROUP BY nro_consultorio";
                 break;
