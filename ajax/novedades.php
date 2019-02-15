@@ -453,7 +453,7 @@ $novedades = $this_db->consulta($sql);
                             <form id="formNov<?=$nov['id_novedades']?>" action="../ajax/novedades.php" method="post" style="display: none;">
                                 <input type="hidden" name="id_novedades" value="<?=$nov['id_novedades']?>" />
                                 <div>
-                                    <input type="text" name="inpTitulo" value="<?=utf8_encode($nov['titulo'])?>" style="width: 90%;" />
+                                    <input type="text" name="inpTitulo" value="<?=utf8_encode($nov['titulo'])?>" style="width: 90%;text-transform:none!important;" />
                                 </div>
                                 <?php if ($nov['mesdia']): ?>
                                     <div>
@@ -487,7 +487,7 @@ $novedades = $this_db->consulta($sql);
                                     </div>
                                 <?php endif; ?>
                                 <div>
-                                    <textarea name="textContenido" style="width: 90%;min-height:210px;"><?=utf8_encode($nov['contenido'])?></textarea>
+                                    <textarea name="textContenido" style="width: 90%;min-height:210px;text-transform:none!important;"><?=utf8_encode($nov['contenido'])?></textarea>
                                 </div>
                                 <div data-id="<?=$nov['id_novedades']?>">
                                     <input type="submit" class="btn btn-success" value="Guardar" />
