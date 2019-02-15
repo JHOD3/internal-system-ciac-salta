@@ -1384,8 +1384,7 @@ SQL;
                             nombre,
                             descripcion,
                             estado,
-                            status,
-
+                            status
                         )
                     VALUES
                         (
