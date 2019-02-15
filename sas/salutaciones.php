@@ -30,7 +30,7 @@ if ($this_db->num_rows($result) > 0) {
 });
 </script>
 <?php
-$html_cumple.= ob_get_clean();
+$html_cumple.= utf8_encode(ob_get_clean());
 
 $_SESSION['felicitado'] = true;
 
