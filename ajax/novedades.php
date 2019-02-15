@@ -344,7 +344,7 @@ $operadores = $this_db->consulta($sql);
                     <tr valign="top">
                         <td style="width:100%;">
                             <strong>T&iacute;tulo del Comunicado de Gerencia</strong><br />
-                            <input id="inpTitulo" name="inpTitulo" style="min-width:300px;width:99%;" /><br />
+                            <input id="inpTitulo" name="inpTitulo" style="min-width:300px;width:99%;text-transform:none!important;" /><br />
                             <br />
                             <div style="background-color: #f0f0f0; padding: 5px 10px; border-radius: 5px;">
                                 <strong>Fecha de Repetición:</strong>
