@@ -1366,10 +1366,42 @@ SQL;
 
 		$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
 
-        if ($obj->db->consulta($query_string))
+        if ($obj->db->consulta($query_string)) {
 			$rta = $obj->db->ultimo_id_insertado();
-		else
+            /******************************************************************/
+            $query_traer_requisitos = <<<SQL
+                SELECT *
+                FROM tareas_requisitos
+                WHERE id_tareas_configuracion = '{$id_tareas_configuracion}' and estado = 1
+                ORDER BY nombre, id_tareas_requisitos
+SQL;
+    		$result = $obj->db->consulta($query_traer_requisitos);
+            while ($row = $obj->db->fetch_assoc($result)) {
+                $query_agregar_realizadas = <<<SQL
+                    INSERT INTO tareas_realizadas
+                        (
+                            id_tareas_pedidos,
+                            nombre,
+                            descripcion,
+                            estado,
+                            status,
+
+                        )
+                    VALUES
+                        (
+                            '{$rta}',
+                            '{$row['nombre']}',
+                            '{$row['descripcion']}',
+                            '1',
+                            '0'
+                        )
+SQL;
+        		$obj->db->consulta($query_agregar_realizadas);
+            }
+            /******************************************************************/
+		} else {
 			$rta = false;
+        }
 
 	break;
 
