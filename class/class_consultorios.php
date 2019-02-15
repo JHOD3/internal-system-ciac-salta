@@ -117,10 +117,13 @@ class Consultorios extends Estructura implements iConsultorios{
                     }
                 }
                 if ($data) {
+                    $doSaludo = $this->doSaludo($data, false);
                     $addTableRows.=
                         '<td class="ocu col'.
                         $arrEspecialidades[$data['especialidad']].
                         '">'.
+                        $doSaludo.
+                        ' - '.
                         $data['especialidad'].
                         '</td>'
                     ;
