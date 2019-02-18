@@ -99,6 +99,7 @@ class Diagnostico extends CI_Controller {
 
     public function listado($date1, $date2, $id_usuario = null, $isMedico = false)
     {
+        ini_set('memory_limit', '512M');
         if (isset($id_usuario)) {
             if ($isMedico) {
                 $this->session->set_userdata(array(
