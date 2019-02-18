@@ -733,7 +733,7 @@ SQL;
 	function Atiende($id_medico, $id_obra_social, $id_obra_social_plan){
 		$query = "SELECT *
 				FROM medicos_obras_sociales
-				WHERE id_medicos = $id_medico AND id_obras_sociales = $id_obra_social AND estado = 1";
+				WHERE id_medicos = $id_medico AND id_obras_sociales = '$id_obra_social' AND estado = 1";
 				//error_log($query);
 		/*$query = "SELECT *
 				FROM medicos_obras_sociales
@@ -759,7 +759,7 @@ SQL;
 	}
 
 	function ArancelConsulta($id_medico, $id_obra_social){
-		$query = 'SELECT * FROM medicos_obras_sociales WHERE id_medicos = '.$id_medico.' AND id_obras_sociales = '.$id_obra_social.' AND estado = 1';
+		$query = 'SELECT * FROM medicos_obras_sociales WHERE id_medicos = '.$id_medico.' AND id_obras_sociales = \''.$id_obra_social.'\' AND estado = 1';
 		return $query;
 	}
 
