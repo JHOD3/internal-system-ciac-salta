@@ -1,7 +1,7 @@
 <?php
 require_once ("../engine/config.php");
 require_once ("../engine/restringir_acceso.php");
-requerir_class("tpl","mysql","querys","estructura");
+requerir_class("tpl","mysql","querys","estructura","menus");
 
 //requerir_class("dias_semana");
 
@@ -10,17 +10,20 @@ $obj_estructura = new Estructura();
 
 $htm_gral = $obj_estructura->html("sas/gral");
 $htm_index = $obj_estructura->html("sas/diagnosticos");
-$htm_menu_tablas = $obj_estructura->html("menu/tablas_sas_{$_SESSION['SUPERUSER']}");
+
+//MENU
+$obj_menu = new Menus();
+$htm_menu_tablas = $obj_menu->armarMenu();
 
 /*$htm_index->Asigna("FORM_HORARIOS", $obj_dias_semana->FormHorarios());*/
 
-$desde = $_POST['desde'];
+$desde = isset($_POST['desde']) ? $_POST['desde'] : null;
 $d = DateTime::createFromFormat('Y-m-d', $desde);
 if (!$d or $d->format($format) != $date or strlen($desde) != 10) {
     $desde = date('Y-m-d', strtotime('-1 month +1 day'));
 }
 
-$hasta = $_POST['hasta'];
+$hasta = isset($_POST['hasta']) ? $_POST['hasta'] : null;
 $d = DateTime::createFromFormat('Y-m-d', $hasta);
 if (!$d or $d->format($format) != $date or strlen($hasta) != 10) {
     $hasta = date('Y-m-d');

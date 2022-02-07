@@ -24,43 +24,43 @@
 </style>
 <style>
 .ui-autocomplete {
-	max-height: 200px;
-	overflow-y: auto;
-	/* prevent horizontal scrollbar */
-	overflow-x: hidden;
+    max-height: 200px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
 }
 /* IE 6 doesn't support max-height
 * we use height instead, but this forces the menu to always be this tall
 */
 * html .ui-autocomplete {
-	height: 100px;
+    height: 100px;
 }
 
 .panel_medicos{
-	width:70%;
-	float:left
+    width:70%;
+    float:left
 }
 
 .panel_paciente{
-	width:30%;
-	float:left
+    width:30%;
+    float:left
 }
 
 #panel_menu{
-	position:relative;
+    position:relative;
 }
 
 #panel_menu a#btn_mostrar{
-	width:20px;
-	padding:5px;
-	position:absolute;
-	bottom:-6px;
-	right:10%;
-	background:#fff
+    width:20px;
+    padding:5px;
+    position:absolute;
+    bottom:-6px;
+    right:10%;
+    background:#fff
 }
 
 #form_inhabilitado #desde, #form_inhabilitado #hasta{
-	width:70%
+    width:70%
 }
 
 #myChat,
@@ -100,22 +100,22 @@
 }
 </style>
 <script>
-	$(document).ready(function(){
+    $(document).ready(function(){
 
-		//BOTON INHABILITAR
-		$("#inhabilitar").click(function(e){
-			e.preventDefault();
+        //BOTON INHABILITAR
+        $("#inhabilitar").click(function(e){
+            e.preventDefault();
 
-			if (($("#desde").val().length > 0) && ($("#hasta").val().length > 0) ){
-				var date = $("#agenda").datepicker('getDate');
+            if (($("#desde").val().length > 0) && ($("#hasta").val().length > 0) ){
+                var date = $("#agenda").datepicker('getDate');
 
-				day  = date.getDate(),
-				month = date.getMonth() + 1,
-				year =  date.getFullYear();
-				var fecha = year + '-' + month + '-' + day;
+                day  = date.getDate(),
+                month = date.getMonth() + 1,
+                year =  date.getFullYear();
+                var fecha = year + '-' + month + '-' + day;
 
-				var variables = $("#form_inhabilitado").serialize();
-				variables +=
+                var variables = $("#form_inhabilitado").serialize();
+                variables +=
                     "&medico=" + $("#id_medico").val() +
                     "&especialidad=" + $("#medicos_especialidades").val() +
                     "&fecha=" + fecha
@@ -128,46 +128,52 @@
                         "&medicos_especialidades=" + $('#id_medicos_especialidades').val()
                     ;
                 }
-				$.ajax({
-					type: "POST",
-					url: "[URL]ajax/altas.php",
-					data: {variables: variables, tabla: "horarios_inhabilitados"},
-					beforeSend: function() {
-						$("#mje").html("Enviando información...");
-					},
-					success: function(requestData){
-						var rta = requestData;
-						//alert (rta);
-						alert ('Horarios Inhabilitados Correctamente');
-						GrillaInicial(date);
+                $.ajax({
+                    type: "POST",
+                    url: "[URL]ajax/altas.php",
+                    data: {variables: variables, tabla: "horarios_inhabilitados"},
+                    beforeSend: function() {
+                        $("#mje").html("Enviando información...");
+                    },
+                    success: function(requestData){
+                        var rta = requestData;
+                        //alert (rta);
+                        alert ('Horarios Inhabilitados Correctamente');
+                        GrillaInicial(date);
 
-					},
-					complete: function(requestData, exito){},
-					error: function (){
-						alert ("Ocurri&oacute; un error. Vuelva a Intentarlo.");
-					}
-				});
-			}else{
-				alert ('Debe ingresar hoarario DESDE y HASTA para inhabilitar turnos.')
-			}
+                    },
+                    complete: function(requestData, exito){},
+                    error: function (){
+                        alert ("Ocurri&oacute; un error. Vuelva a Intentarlo.");
+                    }
+                });
+            }else{
+                alert ('Debe ingresar hoarario DESDE y HASTA para inhabilitar turnos.')
+            }
 
-		});
+        });
 
         $('#inhabilitar_mas_agendas').click(function(event){
             event.preventDefault();
             $(this).hide();
             $('#div_inhabilitar_mas_agendas').show();
             $('#id_medicos_especialidades').removeAttr('disabled');
+            $('#id_medicos_especialidades').focus();
+        });
+
+        $('#div_inhabilitar_mas_agendas').focusout(function(event){
+            $('#inhabilitar_mas_agendas').show();
+            setTimeout(function () {$('#div_inhabilitar_mas_agendas').hide();}, 500);
         });
 
 
-		$("#medicos").focus(function(){
-			$(this).val('');
-		})
+        $("#medicos").focus(function(){
+            $(this).val('');
+        })
 
-		$("#dni").focus(function(){
-			$(this).val('');
-		})
+        $("#dni").focus(function(){
+            $(this).val('');
+        })
 
         /** CHAT **
         setInterval(function doMyChat(){
@@ -260,33 +266,33 @@
 
         $('#postItPrint').click(function(event) {
             event.preventDefault();
-			$.ajax({
-				type: "GET",
-				url: "[URL]ajax/panel_imprimir.php",
-				success: function(requestData){
-				   $('#panel_cuerpo #cont_grilla_turnos').html(requestData);
-				}
-			});
+            $.ajax({
+                type: "GET",
+                url: "[URL]ajax/panel_imprimir.php",
+                success: function(requestData){
+                   $('#panel_cuerpo #cont_grilla_turnos').html(requestData);
+                }
+            });
         });
 
-	});
+    });
 
-	jQuery(function($){
-	   $("#desde").mask("99:99");
-	   $("#hasta").mask("99:99");
-	});
+    jQuery(function($){
+       $("#desde").mask("99:99");
+       $("#hasta").mask("99:99");
+    });
 
-	//CARGO LA FUNCION DE HORA ACTUAL (mi_script.js)
-  	window.onload = HoraActual
+    //CARGO LA FUNCION DE HORA ACTUAL (mi_script.js)
+    window.onload = HoraActual
 </script>
 <section class="bg_negro noPrint">
-	<div class="container">
-    	<div class="row" id="datos_usr">
-        	<div class="span6">
-        	Bienvenido/a [USUARIO_APELLIDOS], [USUARIO_NOMBRES]
+    <div class="container">
+        <div class="row" id="datos_usr">
+            <div class="span6">
+            Bienvenido/a [USUARIO_APELLIDOS], [USUARIO_NOMBRES]
             </div>
             <div id="fecha_hora_actual" class="span6">
-            	<span>[FECHA]</span>  -  <span id="liveclock" ></span>
+                <span>[FECHA]</span>  -  <span id="liveclock" ></span>
             </div>
         </div>
     </div>
@@ -296,7 +302,7 @@
 
 <section id="panel_busqueda" class="bg_azul noPrint">
     <div class="container">
-    	<div class="row">
+        <div class="row">
             <div class="span4">
                 <input id="medicos" type="text" placeHolder="Medico" class="closeMenu inputSearchBar">
                 <input type="hidden" id="id_medico">
@@ -313,20 +319,24 @@
             </div>
 
         </div>
-   	</div>
+    </div>
 </section>
 
 <section id="panel_cuerpo">
-	<div class="container">
+    <div class="container">
         <div class="row">
             <div class="span3">
 
                 <div class="row">
-                	<div id="contenedor_agenda" class="span3 contenedor" style="margin-bottom:10px;">
+                    <div id="contenedor_agenda" class="span3 contenedor" style="margin-bottom:10px;">
+                    </div>
+                    <div align="center">
+                        <div id="btn_bajo_calendario_1" style="display: -webkit-inline-box;"></div>
+                        <div id="btn_bajo_calendario_2" style="display: -webkit-inline-box;"></div>
                     </div>
                 </div>
                 <div class="row">
-                	<div id="contenedor_paciente" class="span3 contenedor" >
+                    <div id="contenedor_paciente" class="span3 contenedor" >
                     </div>
                 </div>
                 <div id="mensajes_nuevos">
@@ -334,150 +344,159 @@
                 </div>
             </div>
             <div class="span9">
-            	<div class="row">
+                <div class="row">
                     <div id="cont_grilla_turnos">
-                        <form id="frmGraphG" action="index.php[get_id_medicos]" method="post">
-                            [DROP_MEDICOS]
+                        <form id="frmGraphG" action="index.php[get_id_medicos]" method="post" align="center" >
+                            <div class="row-fluid">
+                                <div class="span6">[DROP_MEDICOS]</div>
+                                <div class="span6">[DROP_MEDICOS_DOS]</div>
+                                
+                            </div>
+                                
+                            
+                            
                             Desde: <input type="text" name="desde" value="[DATE_DESDE]" style="width:150px;" class="datepicker" />
                             Hasta: <input type="text" name="hasta" value="[DATE_HASTA]" style="width:150px;" class="datepicker" />
                             <input type="submit" value="ok" class="btn btn-success" />
                         </form>
 
-[ESTADISTICAS_GRAPH]
+            [ESTADISTICAS_GRAPH]
+            
+            [ESTADISTICASM_GRAPH]
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-google.charts.load('current', {'packages':['corechart']});
+    google.charts.load('current', {'packages':['corechart']});
 
-if ([TOT_NUMROWS] > 0) {
-    google.charts.setOnLoadCallback(drawBar1Chart);
-    function drawBar1Chart() {
-        var dataBar1 = google.visualization.arrayToDataTable([
-            ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
-            [TOT]
-        ]);
-        var options = {
-            title: '',
-            legend: {position: 'none'},
-            chartArea:{top:10, height:"100%"},
-        };
-        var chart = new google.visualization.BarChart(document.getElementById('bar1chart'));
-        chart.draw(dataBar1, options);
+    if ([TOT_NUMROWS] > 0) {
+        google.charts.setOnLoadCallback(drawBar1Chart);
+        function drawBar1Chart() {
+            var dataBar1 = google.visualization.arrayToDataTable([
+                ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
+                [TOT]
+            ]);
+            var options = {
+                title: '',
+                legend: {position: 'none'},
+                chartArea:{top:10, height:"100%"},
+            };
+            var chart = new google.visualization.BarChart(document.getElementById('bar1chart'));
+            chart.draw(dataBar1, options);
+        }
     }
-}
 
-if ([TPD_NUMROWS] > 0) {
-    google.charts.setOnLoadCallback(drawLineChart);
-    function drawLineChart() {
-        var dataLine = google.visualization.arrayToDataTable([
-            ['', 'Otorgados', { role: 'style' }, {role: 'annotation'}]
-            [TPD]
-        ]);
-        var options = {
-            title: '',
-            legend: {position: 'none'},
-            chartArea:{top:10, height:"100%"},
-        };
-        var chart = new google.visualization.LineChart(document.getElementById('linechart'));
-        chart.draw(dataLine, options);
+    if ([TPD_NUMROWS] > 0) {
+        google.charts.setOnLoadCallback(drawLineChart);
+        function drawLineChart() {
+            var dataLine = google.visualization.arrayToDataTable([
+                ['', 'Otorgados', { role: 'style' }, {role: 'annotation'}]
+                [TPD]
+            ]);
+            var options = {
+                title: '',
+                legend: {position: 'none'},
+                chartArea:{top:10, height:"100%"},
+            };
+            var chart = new google.visualization.LineChart(document.getElementById('linechart'));
+            chart.draw(dataLine, options);
+        }
     }
-}
 
-if ([TPM_NUMROWS] > 0) {
-    google.charts.setOnLoadCallback(drawBar2Chart);
-    function drawBar2Chart() {
-        var dataBar2 = google.visualization.arrayToDataTable([
-            ['', 'Otorgados', { role: 'style' }]
-            [TPM]
-        ]);
-        var options = {
-            title: '',
-            legend: {position: 'none'},
-            chartArea:{top:10, height:"100%"},
-        };
-        var chart = new google.visualization.BarChart(document.getElementById('bar2chart'));
-        chart.draw(dataBar2, options);
+    if ([TPM_NUMROWS] > 0) {
+        google.charts.setOnLoadCallback(drawBar2Chart);
+        function drawBar2Chart() {
+            var dataBar2 = google.visualization.arrayToDataTable([
+                ['', 'Otorgados', { role: 'style' }]
+                [TPM]
+            ]);
+            var options = {
+                title: '',
+                legend: {position: 'none'},
+                chartArea:{top:10, height:"100%"},
+            };
+            var chart = new google.visualization.BarChart(document.getElementById('bar2chart'));
+            chart.draw(dataBar2, options);
+        }
     }
-}
 
-if ([OST_NUMROWS] > 0) {
-    google.charts.setOnLoadCallback(drawBar3Chart);
-    function drawBar3Chart() {
-        var dataBar3 = google.visualization.arrayToDataTable([
-            ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
-            [OST]
-        ]);
-        var options = {
-            title: '',
-            legend: {position: 'none'},
-            chartArea:{top:10, height:"100%"},
-        };
-        var chart = new google.visualization.BarChart(document.getElementById('bar3chart'));
-        chart.draw(dataBar3, options);
+    if ([OST_NUMROWS] > 0) {
+        google.charts.setOnLoadCallback(drawBar3Chart);
+        function drawBar3Chart() {
+            var dataBar3 = google.visualization.arrayToDataTable([
+                ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
+                [OST]
+            ]);
+            var options = {
+                title: '',
+                legend: {position: 'none'},
+                chartArea:{top:10, height:"100%"},
+            };
+            var chart = new google.visualization.BarChart(document.getElementById('bar3chart'));
+            chart.draw(dataBar3, options);
+        }
     }
-}
 
-if ([EST_NUMROWS] > 0) {
-    google.charts.setOnLoadCallback(drawBar4Chart);
-    function drawBar4Chart() {
-        var dataBar4 = google.visualization.arrayToDataTable([
-            ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
-            [EST]
-        ]);
-        var options = {
-            title: '',
-            legend: {position: 'none'},
-            chartArea:{top:10, height:"100%"},
-        };
-        var chart = new google.visualization.BarChart(document.getElementById('bar4chart'));
-        chart.draw(dataBar4, options);
+    if ([EST_NUMROWS] > 0) {
+        google.charts.setOnLoadCallback(drawBar4Chart);
+        function drawBar4Chart() {
+            var dataBar4 = google.visualization.arrayToDataTable([
+                ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
+                [EST]
+            ]);
+            var options = {
+                title: '',
+                legend: {position: 'none'},
+                chartArea:{top:10, height:"100%"},
+            };
+            var chart = new google.visualization.BarChart(document.getElementById('bar4chart'));
+            chart.draw(dataBar4, options);
+        }
     }
-}
 
-if ([ENC_NUMROWS] > 0) {
-    google.charts.setOnLoadCallback(drawBar5Chart);
-    function drawBar5Chart() {
-        var dataBar5 = google.visualization.arrayToDataTable([
-            ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
-            [ENC]
-        ]);
-        var options = {
-            title: '',
-            legend: {position: 'none'},
-            chartArea:{top:10, height:"100%"},
-        };
-        var chart = new google.visualization.BarChart(document.getElementById('bar5chart'));
-        chart.draw(dataBar5, options);
+    if ([ENC_NUMROWS] > 0) {
+        google.charts.setOnLoadCallback(drawBar5Chart);
+        function drawBar5Chart() {
+            var dataBar5 = google.visualization.arrayToDataTable([
+                ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
+                [ENC]
+            ]);
+            var options = {
+                title: '',
+                legend: {position: 'none'},
+                chartArea:{top:10, height:"100%"},
+            };
+            var chart = new google.visualization.BarChart(document.getElementById('bar5chart'));
+            chart.draw(dataBar5, options);
+        }
     }
-}
 
-if ([DER_NUMROWS] > 0) {
-    google.charts.setOnLoadCallback(drawBar6Chart);
-    function drawBar6Chart() {
-        var dataBar6 = google.visualization.arrayToDataTable([
-            ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
-            [DER]
-        ]);
-        var options = {
-            title: '',
-            legend: {position: 'none'},
-            chartArea:{top:10, height:"100%"},
-        };
-        var chart = new google.visualization.BarChart(document.getElementById('bar6chart'));
-        chart.draw(dataBar6, options);
+    if ([DER_NUMROWS] > 0) {
+        google.charts.setOnLoadCallback(drawBar6Chart);
+        function drawBar6Chart() {
+            var dataBar6 = google.visualization.arrayToDataTable([
+                ['', 'Otorgados', {role: 'style'}, {role: 'annotation'}]
+                [DER]
+            ]);
+            var options = {
+                title: '',
+                legend: {position: 'none'},
+                chartArea:{top:10, height:"100%"},
+            };
+            var chart = new google.visualization.BarChart(document.getElementById('bar6chart'));
+            chart.draw(dataBar6, options);
 
-        /**********************************************************************/
-        /**********************************************************************/
-        /*CARGAR TABS CUANDO SE CARGUEN LOS GRÁFICOS***************************/
-        $("#tabs").tabs().attr(
-            'style',
-            'position:absolute;left:0.5%;margin:0 auto;width:99%;height:100%;visibility:show;'
-        );
-        /**********************************************************************/
-        /**********************************************************************/
-        /**********************************************************************/
+            /**********************************************************************/
+            /**********************************************************************/
+            /*CARGAR TABS CUANDO SE CARGUEN LOS GRÁFICOS***************************/
+            $("#tabs").tabs().attr(
+                'style',
+                'position:absolute;left:0.5%;margin:0 auto;width:99%;height:100%;visibility:show;'
+            );
+            /**********************************************************************/
+            /**********************************************************************/
+            /**********************************************************************/
+        }
     }
-}
 
 </script>
 <style>
@@ -574,9 +593,12 @@ if ([DER_NUMROWS] > 0) {
             </div>
 
         </div>
-	</div>
+    </div>
 </div>
 
 <div id="dialog_eliminar" class="noPrint" title="Borrar Registos Seleccionado?">
     <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Se borrar&aacute;n todos los datos vinculados al registro. Desea continuar?</p>
+</div>
+<div id="dialog_estado" class="noPrint" title="Se cambiara el estado del registro">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Se cambiara el estado del registro. Desea continuar?</p>
 </div>

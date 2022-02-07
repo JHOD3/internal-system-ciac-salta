@@ -41,22 +41,22 @@
 		});
 		
 		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
-		$('#t_'+nombre+" tfoot input").keyup( function () {
-			oTable.fnFilter( this.value, $('#t_'+nombre+" tfoot input").index(this) );
+		$('#t_'+nombre+" thead input").keyup( function () {
+			oTable.fnFilter( this.value, $('#t_'+nombre+" thead input").index(this) );
 		});
-		$('#t_'+nombre+" tfoot input").each( function (i) {
+		$('#t_'+nombre+" thead input").each( function (i) {
 			asInitVals[i] = this.value;
 		});
-		$('#t_'+nombre+" tfoot input").focus( function () {
+		$('#t_'+nombre+" thead input").focus( function () {
 			if ( this.className == "search_init" ){
 				this.className = "";
 				this.value = "";
 			}
 		});
-		$('#t_'+nombre+" tfoot input").blur( function (i) {
+		$('#t_'+nombre+" thead input").blur( function (i) {
 			if ( this.value == "" ){
 				this.className = "search_init";
-				this.value = asInitVals[$('#t_'+nombre+" tfoot input").index(this)];
+				this.value = asInitVals[$('#t_'+nombre+" thead input").index(this)];
 			}
 		});
 		///////////////////////////////////////////////////////
@@ -75,15 +75,15 @@
             <th>Hasta</th>
         </tr>
     </thead> 
-    <tfoot>
+    <thead>
         <tr>
-            <th><input type="text" name="tb_id_turnos" value="ID" class="search_init" /></th>
-            <th><input type="text" name="tb_id_medicos" value="Medicos" class="search_init" /></th>
-            <th><input type="text" name="tb_fecha" value="Fecha" class="search_init" /></th>
-            <th><input type="text" name="tb_desde" value="Desde" class="search_init" /></th>
-            <th><input type="text" name="tb_hasta" value="Hasta" class="search_init" /></th>
+            <th><input type="text" name="tb_id_turnos" value="ID" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_id_medicos" value="Medicos" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_fecha" value="Fecha" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_desde" value="Desde" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_hasta" value="Hasta" class="search_init" style="width: 100%;" /></th>
         </tr>
-    </tfoot>    
+    </thead>    
     <tbody>
         <tr>
             <td></td>

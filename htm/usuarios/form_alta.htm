@@ -80,6 +80,179 @@
 			}
 		});
 	});
+
+	$('select[name=roles]').on('change', function(e){
+		var RolPermisos = [];
+		selectedRol = $(this).val();
+		//console.log("selectedRol ="+selectedRol);
+
+		switch (selectedRol){
+			case '3':
+				RolPermisos = ['agenda','comunicacion','comunicados_gerencia','novedades_diarias','notas_imprecion','encuestas','especialidades','estudios','mantenimiento',
+				'medicos', 'medicos_ciac', 'medicos_externos', 'medicos_empresas', 'obras_sociales', 'pacientes', 'planes_contingencia',
+				'practicas_medicas', 'sectores', 'sectores_uno', 'subsectores', 'consultorios', 'disponibilidades', 'tareas', 'tareas_configuracion', 'tareas_pendientes',
+				'cumples', 'usuarios_permiso'];
+			break;
+			case '2':
+				RolPermisos = ['agenda','comunicacion','comunicados_gerencia','novedades_diarias','notas_imprecion','especialidades','estudios','mantenimiento',
+				'medicos', 'medicos_externos', 'obras_sociales', 'pacientes', 'planes_contingencia',
+				'practicas_medicas', 'sectores', 'consultorios', 'disponibilidades', 'tareas', 'tareas_configuracion', 'tareas_pendientes',
+				'cumples'];
+			break;
+			case '1':
+				RolPermisos = ['agenda','comunicacion','novedades_diarias','especialidades','estudios','mantenimiento',
+				'medicos', 'medicos_externos', 'obras_sociales', 'pacientes', 'planes_contingencia',
+				'practicas_medicas', 'tareas', 'tareas_pendientes',
+				'cumples'];
+			break;
+			case '0':
+				RolPermisos = ['agenda','comunicacion','novedades_diarias','especialidades','estudios','mantenimiento',
+				'medicos', 'medicos_externos', 'obras_sociales', 'pacientes', 'planes_contingencia',
+				'practicas_medicas','tareas', 'tareas_pendientes',
+				'cumples'];
+			break;
+		}
+
+		$('input[type="checkbox"]').each(function () {
+			nombre = $(this).attr("name");
+			if(jQuery.inArray(nombre, RolPermisos)!= -1){
+				$('input[name='+nombre+']').prop('checked', true);
+				$('input[name='+nombre+']').trigger("change");
+			}
+			else{
+				$('input[name='+nombre+']').prop('checked', false);
+				$('input[name='+nombre+']').trigger("change");
+			}
+		});
+
+	});
+
+	$('input[type="checkbox"]').on('change', function(e){
+		nombre = $(this).attr("name");
+	    if (this.checked) {
+	       $('input[name='+nombre+']').val('1');
+	    } else {
+	        $('input[name='+nombre+']').val('0');
+		}
+		
+		switch(nombre){
+			case "comunicacion":
+				if(this.checked){
+					$('input[name=comunicados_gerencia]').val('1');
+					$('input[name=comunicados_gerencia]').prop('checked', true);
+					$('input[name=comunicados_gerencia]').prop('disabled', false);
+
+					$('input[name=novedades_diarias]').val('1');
+					$('input[name=novedades_diarias]').prop('checked', true);
+					$('input[name=novedades_diarias]').prop('disabled', false);
+
+					$('input[name=notas_imprecion]').val('1');
+					$('input[name=notas_imprecion]').prop('checked', true);
+					$('input[name=notas_imprecion]').prop('disabled', false);
+				}
+				else{
+					$('input[name=comunicados_gerencia]').val('0');
+					$('input[name=comunicados_gerencia]').prop('checked', false);
+					$('input[name=comunicados_gerencia]').prop('disabled', true);
+
+					$('input[name=novedades_diarias]').val('0');
+					$('input[name=novedades_diarias]').prop('checked', false);
+					$('input[name=novedades_diarias]').prop('disabled', true);
+
+					$('input[name=notas_imprecion]').val('0');
+					$('input[name=notas_imprecion]').prop('checked', false);
+					$('input[name=notas_imprecion]').prop('disabled', true);
+				}
+				break
+			case "medicos":
+				if(this.checked){
+						$('input[name=medicos_ciac]').val('1');
+						$('input[name=medicos_ciac]').prop('checked', true);
+						$('input[name=medicos_ciac]').prop('disabled', false);
+
+						$('input[name=medicos_externos]').val('1');
+						$('input[name=medicos_externos]').prop('checked', true);
+						$('input[name=medicos_externos]').prop('disabled', false);
+
+						$('input[name=medicos_empresas]').val('1');
+						$('input[name=medicos_empresas]').prop('checked', true);
+						$('input[name=medicos_empresas]').prop('disabled', false);
+					}
+					else{
+						$('input[name=medicos_ciac]').val('0');
+						$('input[name=medicos_ciac]').prop('checked', false);
+						$('input[name=medicos_ciac]').prop('disabled', true);
+
+						$('input[name=medicos_externos]').val('0');
+						$('input[name=medicos_externos]').prop('checked', false);
+						$('input[name=medicos_externos]').prop('disabled', true);
+
+						$('input[name=medicos_empresas]').val('0');
+						$('input[name=medicos_empresas]').prop('checked', false);
+						$('input[name=medicos_empresas]').prop('disabled', true);
+					}
+				break
+			case "sectores":
+				if(this.checked){
+					$('input[name=sectores_uno]').val('1');
+					$('input[name=sectores_uno]').prop('checked', true);
+					$('input[name=sectores_uno]').prop('disabled', false);
+					
+					$('input[name=subsectores]').val('1');
+					$('input[name=subsectores]').prop('checked', true);
+					$('input[name=subsectores]').prop('disabled', false);
+
+					$('input[name=consultorios]').val('1');
+					$('input[name=consultorios]').prop('checked', true);
+					$('input[name=consultorios]').prop('disabled', false);
+
+					$('input[name=disponibilidades]').val('1');
+					$('input[name=disponibilidades]').prop('checked', true);
+					$('input[name=disponibilidades]').prop('disabled', false);
+				}
+				else{
+					$('input[name=sectores_uno]').val('0');
+					$('input[name=sectores_uno]').prop('checked', false);
+					$('input[name=sectores_uno]').prop('disabled', true);
+					
+					$('input[name=subsectores]').val('0');
+					$('input[name=subsectores]').prop('checked', false);
+					$('input[name=subsectores]').prop('disabled', true);
+
+					$('input[name=consultorios]').val('0');
+					$('input[name=consultorios]').prop('checked', false);
+					$('input[name=consultorios]').prop('disabled', true);
+
+					$('input[name=disponibilidades]').val('0');
+					$('input[name=disponibilidades]').prop('checked', false);
+					$('input[name=disponibilidades]').prop('disabled', true);
+				}
+				break
+			case "tareas":
+				if(this.checked){
+					$('input[name=tareas_configuracion]').val('1');
+					$('input[name=tareas_configuracion]').prop('checked', true);
+					$('input[name=tareas_configuracion]').prop('disabled', false);
+
+					$('input[name=tareas_pendientes]').val('1');
+					$('input[name=tareas_pendientes]').prop('checked', true);
+					$('input[name=tareas_pendientes]').prop('disabled', false);
+				}
+				else{
+					$('input[name=tareas_configuracion]').val('0');
+					$('input[name=tareas_configuracion]').prop('checked', false);
+					$('input[name=tareas_configuracion]').prop('disabled', true);
+
+					$('input[name=tareas_pendientes]').val('0');
+					$('input[name=tareas_pendientes]').prop('checked', false);
+					$('input[name=tareas_pendientes]').prop('disabled', true);
+				}
+				break
+			default:
+				break
+		}
+		//console.log("Name= "+nombre +" value= " + $('input[name='+nombre+']').val());
+	});
 </script>
 
 <div id="panel_alta">
@@ -109,6 +282,55 @@
                 <label>Contrase&ntilde;a: </label>
                 <input type="text" class="text-long" name="pass" style="text-transform:none!important;" />
             </div>
+             <h3 style="text-align: center;">Permisos para usuario nuevo</h3>
+            <table style="margin-left: auto;margin-right: auto;">
+            	<tr>
+	            	<td style="padding: 10px;">
+
+	            		<input type="checkbox" name="agenda" > Agenda<br>
+			            <input type="checkbox" name="comunicacion" > Comunicacion<br>
+			            <input type="checkbox" name="comunicados_gerencia" disabled> Comunicados Gerencia<br>
+			            <input type="checkbox" name="novedades_diarias" disabled> Novedades Diarias<br>
+						
+						<input type="checkbox" name="notas_imprecion" disabled> Notas Imprecion<br>
+			            <input type="checkbox" name="encuestas" > Encuestas<br>
+			            <input type="checkbox" name="especialidades" > Especialidades<br>
+			            <input type="checkbox" name="estudios" > Estudios<br>
+						<input type="checkbox" name="mantenimiento" > Mantenimiento Imprecion<br>
+			           
+	            	</td>
+	            	<td style="padding: 10px;">
+						
+			            <input type="checkbox" name="mantenimiento_reciente" disabled> Mantenimiento Reciente<br>
+			            <input type="checkbox" name="mantenimiento_historico" disabled> Mantenimiento Historico<br>
+			            <input type="checkbox" name="medicos" > Medicos<br>	
+
+			            <input type="checkbox" name="medicos_ciac" disabled> Medicos Ciac<br>
+	           			<input type="checkbox" name="medicos_externos" disabled> Medicos Externos<br>
+	            		<input type="checkbox" name="medicos_empresas" disabled> Medicos Empresas<br>
+			            <input type="checkbox" name="obras_sociales" > Obras Sociales<br>
+
+			            <input type="checkbox" name="pacientes" > Pacientes<br>
+			            <input type="checkbox" name="planes_contingencia" > Planes Contingencia<br>
+			            <input type="checkbox" name="practicas_medicas" > Practicas Medicas<br>
+			        </td>
+	            	<td style="padding: 10px;">
+	            		<input type="checkbox" name="sectores" > Sectores<br>
+	            		<input type="checkbox" name="sectores_uno" disabled> Sectores<br>
+			            <input type="checkbox" name="subsectores" disabled> Subsectores<br>
+			            <input type="checkbox" name="consultorios" disabled> Consultorios<br>
+			            <input type="checkbox" name="disponibilidades" disabled> Disponibilidades<br>	
+
+			            <input type="checkbox" name="tareas" > Tareas<br>
+			            <input type="checkbox" name="tareas_configuracion" disabled> Tareas Configuracion<br>
+	            		<input type="checkbox" name="tareas_pendientes" disabled> Tareas Pendientes<br>
+	            		<input type="checkbox" name="cumples" > Cumplea&ntilde;os<br>
+	            		<input type="checkbox" name="usuarios_permiso" > Usuarios<br>
+
+	            	</td>
+	            </tr>
+            </table>
+            <hr>
             <div class="bloque botones">
                 <a href="#" id="cargar" class="boton_gris">Cargar</a>
                 <a href="#" id="cancelar" class="boton_gris">Cancelar</a>

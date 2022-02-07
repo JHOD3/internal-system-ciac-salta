@@ -26,6 +26,9 @@
 			"oLanguage": {
 				"sSearch": "Buscar en todas las Columnas:"
 			},
+			"aoColumnDefs": [
+				{"bVisible": false , "aTargets": [9, 10, 11]}
+			],
 			"fnDrawCallback": function(){
 			      $('table td').bind('mouseenter', function () { $(this).parent().children().each(function(){$(this).addClass('marcado');}); });
                   $('table td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('marcado');}); });
@@ -35,37 +38,37 @@
 			"aoColumns" : [
 				{ sWidth: '1px' },
 				{ sWidth: '1px' },
+				{ sWidth: '1px'},
+				{ sWidth: '1px'},
+				{ sWidth: '1px'},
+				{ sWidth: '1px'},
+				{ sWidth: '1px'},
+				{ sWidth: '1px'},
+				{ sWidth: '1px'},
 				{ sWidth: ''},
 				{ sWidth: ''},
-				{ sWidth: '1px'},
 				{ sWidth: ''},
-				{ sWidth: ''},
-				{ sWidth: '1px'},
-				{ sWidth: '1px'},
-				{ sWidth: '1px'},
-				{ sWidth: '1px'},
-				{ sWidth: '1px'},
-				{ sWidth: '400px'}
+				{ sWidth: '200px'}
             ]
 		});
 
 		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
-		$('#t_'+nombre+" tfoot input").keyup( function () {
-			TableMedicos.fnFilter( this.value, $('#t_'+nombre+" tfoot input").index(this) );
+		$('#t_'+nombre+" thead input").keyup( function () {
+			TableMedicos.fnFilter( this.value, $('#t_'+nombre+" thead input").index(this) );
 		});
-		$('#t_'+nombre+" tfoot input").each( function (i) {
+		$('#t_'+nombre+" thead input").each( function (i) {
 			asInitVals[i] = this.value;
 		});
-		$('#t_'+nombre+" tfoot input").focus( function () {
+		$('#t_'+nombre+" thead input").focus( function () {
 			if ( this.className == "search_init" ){
 				this.className = "";
 				this.value = "";
 			}
 		});
-		$('#t_'+nombre+" tfoot input").blur( function (i) {
+		$('#t_'+nombre+" thead input").blur( function (i) {
 			if ( this.value == "" ){
 				this.className = "search_init";
-				this.value = asInitVals[$('#t_'+nombre+" tfoot input").index(this)];
+				this.value = asInitVals[$('#t_'+nombre+" thead input").index(this)];
 			}
 		});
 		///////////////////////////////////////////////////////
@@ -81,32 +84,32 @@
             <th>Apellidos</th>
             <th>Nombres</th>
             <th>Documento</th>
+			<th>Matr&iacute;cula</th>
+			<th>Tel&eacute;fonos</th>
             <th>E-mail</th>
-            <th>Tel&eacute;fonos</th>
+			<th>Interno</th>
             <th>Sector</th>
             <th>Subsector</th>
-            <th>Interno</th>
             <th>Planta</th>
-            <th>Matr&iacute;cula</th>
-            <th>Acci&oacute;n</th>
+			<th>Acci&oacute;n</th>
         </tr>
     </thead>
-    <tfoot>
+    <thead>
         <tr>
-            <th><input type="text" name="tb_id_medicos" value="ID" class="search_init" /></th>
-            <th><input type="text" name="tb_saludo" value="Saludo" class="search_init" /></th>
-            <th><input type="text" name="tb_apellidos" value="Apellidos" class="search_init" /></th>
-            <th><input type="text" name="tb_nombres" value="Nombres" class="search_init" /></th>
-            <th><input type="text" name="tb_nro_documento" value="Documento" class="search_init" /></th>
-            <th><input type="text" name="tb_email" value="E-mail" class="search_init" /></th>
-            <th><input type="text" name="tb_telefonos" value="Telefonos" class="search_init" /></th>
-            <th><input type="text" name="tb_sector" value="Sector" class="search_init" style="display:none;" /></th>
-            <th><input type="text" name="tb_subsector" value="Subsector" class="search_init" style="display:none;" /></th>
+            <th><input type="text" name="tb_id_medicos" value="ID" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_saludo" value="Saludo" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_apellidos" value="Apellidos" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_nombres" value="Nombres" class="search_init" style="width: 100%;" /></th>
+			<th><input type="text" name="tb_nro_documento" value="Documento" class="search_init" style="width: 100%;" /></th>
+			<th><input type="text" name="tb_matricula" value="Matricula" class="search_init" style="display:none;" /></th>
+            <th><input type="text" name="tb_telefonos" value="Telefonos" class="search_init" style="width: 100%;" /></th>
+			<th><input type="text" name="tb_email" value="E-mail" class="search_init" style="display:none;" /></th>
             <th><input type="text" name="tb_interno" value="Interno" class="search_init" style="display:none;" /></th>
-            <th><input type="text" name="tb_planta" value="Planta" class="search_init" style="display:none;" /></th>
-            <th><input type="text" name="tb_matricula" value="Matricula" class="search_init" style="display:none;" /></th>
+            <th><input type="text" name="tb_sector" value="Sector" class="search_init" style="display:none;" /></th>
+            <!-- <th><input type="text" name="tb_subsector" value="Subsector" class="search_init" style="display:none;" /></th>
+            <th><input type="text" name="tb_planta" value="Planta" class="search_init" style="display:none;" /></th> -->
         </tr>
-    </tfoot>
+    </thead>
     <tbody>
         <tr>
             <td></td>

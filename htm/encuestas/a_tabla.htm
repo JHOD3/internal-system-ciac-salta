@@ -45,22 +45,22 @@
 		});
 
 		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
-		$('#t_'+nombre+" tfoot input").keyup( function () {
-			TableEncuestas.fnFilter( this.value, $('#t_'+nombre+" tfoot input").index(this) );
+		$('#t_'+nombre+" thead input").keyup( function () {
+			TableEncuestas.fnFilter( this.value, $('#t_'+nombre+" thead input").index(this) );
 		});
-		$('#t_'+nombre+" tfoot input").each( function (i) {
+		$('#t_'+nombre+" thead input").each( function (i) {
 			asInitVals[i] = this.value;
 		});
-		$('#t_'+nombre+" tfoot input").focus( function () {
+		$('#t_'+nombre+" thead input").focus( function () {
 			if ( this.className == "search_init" ){
 				this.className = "";
 				this.value = "";
 			}
 		});
-		$('#t_'+nombre+" tfoot input").blur( function (i) {
+		$('#t_'+nombre+" thead input").blur( function (i) {
 			if ( this.value == "" ){
 				this.className = "search_init";
-				this.value = asInitVals[$('#t_'+nombre+" tfoot input").index(this)];
+				this.value = asInitVals[$('#t_'+nombre+" thead input").index(this)];
 			}
 		});
 		///////////////////////////////////////////////////////
@@ -82,18 +82,19 @@
             <th>Acci&oacute;n</th>
         </tr>
     </thead>
-    <tfoot>
+    <thead>
         <tr>
-            <th><input type="text" name="tb_id" value="ID" class="search_init" /></th>
-            <th><input type="text" name="tb_fecha_alta" value="Fecha" class="search_init" /></th>
-            <th><input type="text" name="tb_hora_alta" value="Hora" class="search_init" /></th>
-            <th><input type="text" name="tb_paciente" value="Paciente" class="search_init" /></th>
-            <th><input type="text" name="tb_respuesta1" value="Respuesta 1" class="search_init" /></th>
-            <th><input type="text" name="tb_respuesta2" value="Respuesta 2" class="search_init" /></th>
-            <th><input type="text" name="tb_medico" value="M&eacute;dico" class="search_init" /></th>
-            <th><input type="text" name="tb_especialidad" value="Especialidad" class="search_init" /></th>
+            <th><input type="text" name="tb_id" value="ID" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_fecha_alta" value="Fecha" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_hora_alta" value="Hora" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_paciente" value="Paciente" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_respuesta1" value="Respuesta 1" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_respuesta2" value="Respuesta 2" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_medico" value="M&eacute;dico" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_especialidad" value="Especialidad" class="search_init" style="width: 100%;" /></th>
+            <th></th>
         </tr>
-    </tfoot>
+    </thead>
     <tbody>
         <tr>
             <td align="center"></td>

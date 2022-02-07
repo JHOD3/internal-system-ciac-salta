@@ -207,6 +207,9 @@ class Querys implements iQuerys{
 		$fecha_hora_actual = date("Y-m-d H:i:s");
 
 		switch ($tabla){
+            case "medicos_especialidades":
+                $query = "UPDATE ".$tabla." SET ".$asignacion." WHERE id_medicos = ".$id[0]. " AND id_especialidades = ".$id[1];
+            break;
 			case "pacientes":
 			case "pacientes_observaciones":
 			case "medicos":
@@ -390,7 +393,7 @@ SQL;
 	}
 
 	function TurnosReservados($fecha, $id_medico, $id_especialidad, $id_dia){
-		$query = "SELECT *, TE.nombre AS nombre_estado, OS.nombre AS nombre_os, OS.abreviacion
+		$query = "SELECT T.*, TE.*, P.*, OS.*, TE.nombre AS nombre_estado, OS.nombre AS nombre_os, U.apellidos AS uApellidos, U.usuario AS uUsuario, U.nombres AS uNombres, URec.apellidos AS recApellidos, URec.nombres AS recNombres, URec.usuario AS recUsuario
 				FROM turnos T
 				INNER JOIN turnos_estados TE
 				ON T.id_turnos_estados = TE.id_turnos_estados
@@ -398,6 +401,10 @@ SQL;
 				ON T.id_pacientes = P.id_pacientes
 				LEFT JOIN obras_sociales OS
 				ON P.id_obras_sociales = OS.id_obras_sociales
+                LEFT JOIN usuarios AS U
+	            ON T.id_usuarios = U.id_usuarios
+                LEFT JOIN usuarios AS URec
+	            ON T.id_usuarios_recepcion = URec.id_usuarios
 				WHERE T.id_medicos = $id_medico AND T.id_especialidades = $id_especialidad AND T.fecha = '".$fecha."' AND T.estado = 1 AND (T.id_turnos_estados = 1 OR T.id_turnos_estados = 2 OR T.id_turnos_estados = 4 OR T.id_turnos_estados = 7)
 				ORDER BY T.desde ASC";
 		return $query;
@@ -411,8 +418,12 @@ SQL;
                 TE.*,
                 OS.*,
                 OS.nombre AS nombre_os,
+                U.usuario AS uUsuario,
                 U.apellidos AS uApellidos,
-                U.nombres AS uNombres
+                U.nombres AS uNombres,
+                URec.apellidos AS recApellidos, 
+                URec.nombres AS recNombres, 
+                URec.usuario AS recUsuario
             FROM
                 turnos T
             INNER JOIN
@@ -427,6 +438,9 @@ SQL;
             LEFT JOIN
                 usuarios AS U
                 ON T.id_usuarios = U.id_usuarios
+            LEFT JOIN 
+                usuarios AS URec
+	            ON T.id_usuarios_recepcion = URec.id_usuarios
             WHERE
                 T.id_medicos = {$id_medico} AND
                 T.id_especialidades = {$id_especialidad} AND
@@ -819,6 +833,19 @@ SQL;
 
 	function DuracionTurno($id_medico, $id_especialidad){
 		$query = "SELECT * FROM medicos_especialidades WHERE id_medicos = $id_medico AND id_especialidades = $id_especialidad ORDER BY id_medicos_especialidades DESC LIMIT 0,1";
+		return  $query;
+	}
+
+    function DuracionTurnoDia($id_medico, $id_especialidad, $id_dias_semana){
+		$query = "
+        SELECT * FROM medicos_horarios AS mh
+        INNER JOIN `dias_semana` AS `ds` ON `mh`.`id_dias_semana` = `ds`.`id_dias_semana`   
+        WHERE mh.id_medicos = $id_medico AND 
+        mh.id_especialidades = $id_especialidad AND 
+        `ds`.`estado` = 1 AND
+        `ds`.`id_dias_semana` = '{$id_dias_semana}' 
+        ORDER BY id_medicos_horarios DESC LIMIT 0,1
+        ";
 		return  $query;
 	}
 
@@ -1302,6 +1329,23 @@ SQL;
             	m.apellidos,
             	m.nombres,
             	e.nombre
+SQL;
+        return $query;
+    }
+
+    function obtMEDICOS_OPTIONS()
+    {
+        $query = <<<SQL
+            SELECT
+                m.id_medicos,
+                m.apellidos,
+                m.nombres
+            FROM medicos AS m
+            WHERE
+            	m.estado = 1 
+            ORDER BY
+            	m.apellidos,
+            	m.nombres
 SQL;
         return $query;
     }

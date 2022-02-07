@@ -16,6 +16,17 @@ $hora_actual = date("H:i:s");
 $fecha_actual = date('Y-m-d');
 
 switch ($tabla){
+	case "medicos_especialidades":
+		parse_str(stripslashes($datos));
+		$ids = [$id_medico,$id_especialidad];
+		$asignaciones = "duracion_turno = '".$duracion_turno."'";
+		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $ids);
+
+		if ($obj->db->consulta($query_string))
+			$rta = true;
+		else
+			$rta = false;			
+	break;
 	case "pacientes":
 		parse_str(stripslashes($datos));
 
@@ -103,6 +114,9 @@ switch ($tabla){
                     saludo = '".$saludo."',
                     fechanac = '".implode("-", array_reverse(explode("/", $fechanac)))."'
 					";
+		if (!isset($contrasena) || trim($contrasena) != "")
+		$asignaciones .= ", pass = '" . base64_encode($contrasena)."' ";
+		
 		#usuario = '".lower($obj->QuitarTildes($nombres[0].$apellidos))."',
 		#pass = '".base64_encode($nro_documento)."',
 
@@ -124,7 +138,11 @@ switch ($tabla){
 			apellidos = '".upper(utf8_decode($apellidos))."',
 			nombres = '".upper(utf8_decode($nombres))."',
 			matricula = ".$matricula.",
-            saludo = '".$saludo."'
+            saludo = '".$saludo."',
+            email = '".upper($email)."',
+            domicilio = '".upper(utf8_decode($domicilio))."',
+            telefonos = '".$telefonos."',
+            fechanac = '".implode("-", array_reverse(explode("/", $fechanac)))."'
 		";
 
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
@@ -144,6 +162,7 @@ switch ($tabla){
 		$asignaciones = "
 					desde = '".$desde."',
 					hasta = '".$hasta."',
+					duracion_turno = '".$duracion_turno."',
 					id_turnos_tipos = '".$turnos_tipos."',
 					id_plantas = '".$plantas."',
                     nro_consultorio = '".$nro_consultorio."'
@@ -301,7 +320,8 @@ switch ($tabla){
 	case "medicos_estudios":
 		parse_str(stripslashes($datos));
 		$asignaciones = "
-					particular = '".$particular."'
+					particular = '".$particular."',
+					arancel = '".$arancel."'
 					";
 
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
@@ -485,7 +505,37 @@ switch ($tabla){
 			nombres = '".utf8_decode($nombres)."',
 			apellidos = '".utf8_decode($apellidos)."',
 			usuario = '".utf8_decode(strtolower($usuario))."',
-            fechanac = '".implode("-", array_reverse(explode("/", $fechanac)))."'
+            fechanac = '".implode("-", array_reverse(explode("/", $fechanac)))."',
+            agenda = '".utf8_decode(strtolower($agenda))."',
+			comunicacion = '".utf8_decode(strtolower($comunicacion))."',
+			comunicados_gerencia = '".utf8_decode(strtolower($comunicados_gerencia))."',
+			novedades_diarias = '".utf8_decode(strtolower($novedades_diarias))."',
+			notas_imprecion = '".utf8_decode(strtolower($notas_imprecion))."',
+			encuestas = '".utf8_decode(strtolower($encuestas))."',
+			especialidades = '".utf8_decode(strtolower($especialidades))."',
+			estudios = '".utf8_decode(strtolower($estudios))."',
+			mantenimiento = '".utf8_decode(strtolower($mantenimiento))."',
+			mantenimiento_reciente = '".utf8_decode(strtolower($mantenimiento_reciente))."',
+			mantenimiento_historico = '".utf8_decode(strtolower($mantenimiento_historico))."',
+			medicos = '".utf8_decode(strtolower($medicos))."',
+			medicos_ciac = '".utf8_decode(strtolower($medicos_ciac))."',
+			medicos_externos = '".utf8_decode(strtolower($medicos_externos))."',
+			medicos_empresas = '".utf8_decode(strtolower($medicos_empresas))."',
+			obras_sociales = '".utf8_decode(strtolower($obras_sociales))."',
+			pacientes = '".utf8_decode(strtolower($pacientes))."',
+			planes_contingencia = '".utf8_decode(strtolower($planes_contingencia))."',
+			practicas_medicas = '".utf8_decode(strtolower($practicas_medicas))."',
+			sectores = '".utf8_decode(strtolower($sectores))."',
+			sectores_uno = '".utf8_decode(strtolower($sectores_uno))."',
+			subsectores = '".utf8_decode(strtolower($subsectores))."',
+			consultorios = '".utf8_decode(strtolower($consultorios))."',
+			disponibilidades = '".utf8_decode(strtolower($disponibilidades))."',
+			tareas = '".utf8_decode(strtolower($tareas))."',
+			tareas_configuracion = '".utf8_decode(strtolower($tareas_configuracion))."',
+			tareas_pendientes = '".utf8_decode(strtolower($tareas_pendientes))."',
+			cumples = '".utf8_decode(strtolower($cumples))."',
+			usuarios_permiso = '".utf8_decode(strtolower($usuarios_permiso))."'
+
         ";
         if (isset($pass) and trim($pass)) {
             $asignaciones.= ", pass = '".base64_encode($pass)."' ";

@@ -66,6 +66,7 @@ class Medicos_horarios extends Estructura implements iMedicos_horarios{
 
         $row['desde'] = substr($row['desde'], 0, 5);
         $row['hasta'] = substr($row['hasta'], 0, 5);
+		$row['duracion_turno'] = substr($row['duracion_turno'], 0, 5);
 
 		$htm->AsignaBloque('block_registros',$row);
 

@@ -45,6 +45,9 @@ function CrearAgenda(){
 		success: function(requestData){
 			var rta = requestData;
 			$("#contenedor_agenda").html(rta).fadeIn("slow");
+			$("#btn_bajo_calendario_1").html('<a class="btn_opciones-1 btn" href="#" data-id="'+id_medico+'" data-tipo_btn="tabla_hija" data-hija="medicos_especialidades" data-nombre="Especialidades por Médicos" alt="Especialidades por Médicos" style="padding: 4px 0px 0px 12px;"> Horarios<img src="https://ciacsaltadb.ddns.net/files/img/btns/medicos_especialidades.png" border="0"></a>').fadeIn("slow");
+			$("#btn_bajo_calendario_2").html('<a class="btn_opciones-1 btn" href="#" data-id="'+id_medico+'"  data-tipo_btn="tabla_hija" data-hija="medicos_obras_sociales" data-nombre="Planes de Obras Sociales por Médicos" alt="Planes de Obras Sociales por Médicos" style="padding: 4px 0px 0px 12px;">Obras Sociales<img src="https://ciacsaltadb.ddns.net/files/img/btns/medicos_obras_sociales.png" border="0"></a>').fadeIn("slow");
+			
 			
 		},
 		complete: function(requestData, exito){

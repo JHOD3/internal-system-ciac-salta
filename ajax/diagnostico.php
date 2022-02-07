@@ -121,6 +121,10 @@ $SQL_Estudios = <<<SQL
     ORDER BY
         te.id_turnos_estudios
 SQL;
+
+
+
+
 $query = $this_db->consulta($SQL_Estudios);
 ?>
 <?php if ($this_db->num_rows($query) > 0): ?>
@@ -141,6 +145,7 @@ $query = $this_db->consulta($SQL_Estudios);
                     <th>TO</th>
                     <th>($) TA</th>
                     <th>($) DD</th>
+                    <th>($) Coseguro</th>
                     <th>Derivador</th>
                     <th>Observaciones</th>
                     <th>Acciones</th>
@@ -239,6 +244,7 @@ $query = $this_db->consulta($SQL_Estudios);
                             </td>
                             <td><input type="number" name="trajo_arancel[]" value="<?=$row['trajo_arancel']?>" alt="<?=$row['trajo_arancel'] ? 'Viejo valor: $'.$row['trajo_arancel'] : ''?>" title="<?=$row['trajo_arancel'] ? 'Viejo valor: $'.$row['trajo_arancel'] : ''?>" style="width:40px;text-align:right;" /></td>
                             <td><input type="number" name="deja_deposito[]" value="<?=$row['deja_deposito']?>" style="width:40px;text-align:right;" /></td>
+                            <td><input type="number" name="trajo_arancel_coseguro[]" value="<?=$row['trajo_arancel_coseguro']?>" alt="<?=$row['trajo_arancel_coseguro'] ? 'Viejo valor: $'.$row['trajo_arancel_coseguro'] : ''?>" title="<?=$row['trajo_arancel_coseguro'] ? 'Viejo valor: $'.$row['trajo_arancel_coseguro'] : ''?>" style="width:40px;text-align:right;" /></td>
                             <td><input type="text" name="matricula_derivacion[]" value="<?=$row['matricula_derivacion']?>" style="width:70px;text-align:right;" class="ac_matricula_derivacion" /></td>
                             <td><input type="text" name="observaciones[]" value="<?=$row['observaciones']?>" style="width:100px;" /></td>
                             <td>
@@ -273,136 +279,141 @@ $query = $this_db->consulta($SQL_Estudios);
     <a class="btn salir" href="#">Salir</a>
 </div>
 <script>
-//$(document).ready(function(){
-    $('a#btn_modificar_diagnostico').click(function(event){
-        event.preventDefault();
-        $('#ventana_diagnostico .botones #alert').html('');
-        ajxM = $.ajax({
-            type: 'POST',
-            url:'../ajax/diagnostico.save.php',
-			data: $('#frm_diagnostico').serialize(),
-            context: document.body
-        }).done(function(data) {
-        	IniciarVentana("ventana_diagnostico", "cerrar");
-        	$(ventana_diagnostico).dialog('destroy').remove();
-        }).error(function(requestData) {
-            $('#ventana_diagnostico .botones #alert').html('Ocurrió un error al intentar guardar, por favor intente nuevamente');
+    //$(document).ready(function(){
+        $('a#btn_modificar_diagnostico').click(function(event){
+            event.preventDefault();
+            $('#ventana_diagnostico .botones #alert').html('');
+            ajxM = $.ajax({
+                type: 'POST',
+                url:'../ajax/diagnostico.save.php',
+                data: $('#frm_diagnostico').serialize(),
+                context: document.body
+            }).done(function(data) {
+                if (typeof ObtenerArancelEstudios === "function") { 
+                    //Actualizar aranceles de estudios en ventana "estado del turno"
+                    ObtenerArancelEstudios();
+                }
+                IniciarVentana("ventana_diagnostico", "cerrar");
+                $(ventana_diagnostico).dialog('destroy').remove();
+            }).error(function(requestData) {
+                $('#ventana_diagnostico .botones #alert').html('Ocurrió un error al intentar guardar, por favor intente nuevamente');
+            });
         });
-    });
-    $("a.salir").click(function(){
-    	IniciarVentana("ventana_diagnostico", "cerrar");
-    	$(ventana_diagnostico).dialog('destroy').remove();
-    });
-    <?php if ($this_db->num_rows($query) == 0): ?>
-    	IniciarVentana("ventana_diagnostico", "cerrar");
-    	$(ventana_diagnostico).dialog('destroy').remove();
-    <?php endif; ?>
-    $(".datepicker").datepicker();
-    var tagsACMD = [
-        <?php
-        $query_med_cm = $this_db->consulta($SQL_med_cm);
-        ?>
-        <?php $cnct = ''; ?>
-        <?php while ($row_med_cm = $this_db->fetch_array($query_med_cm)): ?>
-            <?=$cnct?>{label: '<?=utf8_encode(trim($row_med_cm['apellidos']))?>, <?=utf8_encode(trim($row_med_cm['nombres']))?><?=($row_med_cm['externo'] == 1 ? ' (Externo)' : '')?> - <?=$row_med_cm['matricula']?>', value: '<?=$row_med_cm['matricula']?>'}
-            <?php $cnct = ','; ?>
-        <?php endwhile; ?>
-    ];
-    $(".ac_matricula_derivacion").autocomplete({
-        source: tagsACMD
-    });
-    $('select.copy_id_medicos').change(function(){
-        if ($(this).val() != '') {
-            var trhs = 'tr#id_medicos_tr_' + $(this).attr('id').replace($(this).attr('class') + '_', '') + ' select';
-            var trhi = 'tr#id_medicos_tr_' + $(this).attr('id').replace($(this).attr('class') + '_', '') + ' input';
-            var trds = 'tr#id_medicos_tr_' + $(this).val() + ' select';
-            var trdi = 'tr#id_medicos_tr_' + $(this).val() + ' input';
-            $(trhi + '[name="fecha_presentacion[]"]').val($(trdi + '[name="fecha_presentacion[]"]').val());
-            $(trhi + '[name="nro_orden[]"]').val($(trdi + '[name="nro_orden[]"]').val());
-            $(trhi + '[name="nro_afiliado[]"]').val($(trdi + '[name="nro_afiliado[]"]').val());
-            $(trhi + '[name="cantidad[]"]').val($(trdi + '[name="cantidad[]"]').val());
-            $(trhs + '[name="tipo[]"]').val($(trds + '[name="tipo[]"]').val());
-            $(trhs + '[name="trajo_pedido[]"]').val($(trds + '[name="trajo_pedido[]"]').val());
-            $(trhs + '[name="trajo_orden[]"]').val($(trds + '[name="trajo_orden[]"]').val());
-            $(trhi + '[name="trajo_arancel[]"]').val($(trdi + '[name="trajo_arancel[]"]').val());
-            $(trhi + '[name="deja_deposito[]"]').val($(trdi + '[name="deja_deposito[]"]').val());
-            $(trhi + '[name="matricula_derivacion[]"]').val($(trdi + '[name="matricula_derivacion[]"]').val());
-            $(trhi + '[name="observaciones[]"]').val($(trdi + '[name="observaciones[]"]').val());
+        $("a.salir").click(function(){
+            IniciarVentana("ventana_diagnostico", "cerrar");
+            $(ventana_diagnostico).dialog('destroy').remove();
+        });
+        <?php if ($this_db->num_rows($query) == 0): ?>
+            IniciarVentana("ventana_diagnostico", "cerrar");
+            $(ventana_diagnostico).dialog('destroy').remove();
+        <?php endif; ?>
+        $(".datepicker").datepicker();
+        var tagsACMD = [
+            <?php
+            $query_med_cm = $this_db->consulta($SQL_med_cm);
+            ?>
+            <?php $cnct = ''; ?>
+            <?php while ($row_med_cm = $this_db->fetch_array($query_med_cm)): ?>
+                <?=$cnct?>{label: '<?=utf8_encode(trim($row_med_cm['apellidos']))?>, <?=utf8_encode(trim($row_med_cm['nombres']))?><?=($row_med_cm['externo'] == 1 ? ' (Externo)' : '')?> - <?=$row_med_cm['matricula']?>', value: '<?=$row_med_cm['matricula']?>'}
+                <?php $cnct = ','; ?>
+            <?php endwhile; ?>
+        ];
+        $(".ac_matricula_derivacion").autocomplete({
+            source: tagsACMD
+        });
+        $('select.copy_id_medicos').change(function(){
+            if ($(this).val() != '') {
+                var trhs = 'tr#id_medicos_tr_' + $(this).attr('id').replace($(this).attr('class') + '_', '') + ' select';
+                var trhi = 'tr#id_medicos_tr_' + $(this).attr('id').replace($(this).attr('class') + '_', '') + ' input';
+                var trds = 'tr#id_medicos_tr_' + $(this).val() + ' select';
+                var trdi = 'tr#id_medicos_tr_' + $(this).val() + ' input';
+                $(trhi + '[name="fecha_presentacion[]"]').val($(trdi + '[name="fecha_presentacion[]"]').val());
+                $(trhi + '[name="nro_orden[]"]').val($(trdi + '[name="nro_orden[]"]').val());
+                $(trhi + '[name="nro_afiliado[]"]').val($(trdi + '[name="nro_afiliado[]"]').val());
+                $(trhi + '[name="cantidad[]"]').val($(trdi + '[name="cantidad[]"]').val());
+                $(trhs + '[name="tipo[]"]').val($(trds + '[name="tipo[]"]').val());
+                $(trhs + '[name="trajo_pedido[]"]').val($(trds + '[name="trajo_pedido[]"]').val());
+                $(trhs + '[name="trajo_orden[]"]').val($(trds + '[name="trajo_orden[]"]').val());
+                $(trhi + '[name="trajo_arancel[]"]').val($(trdi + '[name="trajo_arancel[]"]').val());
+                $(trhi + '[name="deja_deposito[]"]').val($(trdi + '[name="deja_deposito[]"]').val());
+                $(trhi + '[name="trajo_arancel_coseguro[]"]').val($(trdi + '[name="trajo_arancel_coseguro[]"]').val());
+                $(trhi + '[name="matricula_derivacion[]"]').val($(trdi + '[name="matricula_derivacion[]"]').val());
+                $(trhi + '[name="observaciones[]"]').val($(trdi + '[name="observaciones[]"]').val());
 
-            $(trhs + '[name="id_medicos[]"]').val([$(trds + '[name="id_medicos[]"]').val()]);
-            $(trhs + '[name="id_medicos[]"]').multipleSelect('refresh', []);
-            $(trhs + '[name="id_obras_sociales[]"]').val([$(trds + '[name="id_obras_sociales[]"]').val()]);
-            $(trhs + '[name="id_obras_sociales[]"]').multipleSelect('refresh', []);
-            $(trhs + 'input[name="cantidad[]"]').change();
+                $(trhs + '[name="id_medicos[]"]').val([$(trds + '[name="id_medicos[]"]').val()]);
+                $(trhs + '[name="id_medicos[]"]').multipleSelect('refresh', []);
+                $(trhs + '[name="id_obras_sociales[]"]').val([$(trds + '[name="id_obras_sociales[]"]').val()]);
+                $(trhs + '[name="id_obras_sociales[]"]').multipleSelect('refresh', []);
+                $(trhs + 'input[name="cantidad[]"]').change();
 
-            $(this).val('');
-        }
-    });
-    /*
-    $('select[name="id_obras_sociales[]"]').change(function(){
-        var new_value =
-            parseInt($(this).find('option[value="'+$(this).val()+'"]').data('ta')) *
-            parseInt($(this).parent().parent().find('input[name="cantidad[]"]').val())
-        ;
-        var ta_input = $(this).parent().parent().find('input[name="trajo_arancel[]"]');
-        if (ta_input.val() === '') {
-            ta_input.val(new_value);
-        }
-    });
-    $('input[name="cantidad[]"]').change(function(){
-        var new_value =
-            parseInt($(this).parent().parent().find('select[name="id_obras_sociales[]"] > option[value="'+$(this).parent().parent().find('select[name="id_obras_sociales[]"]').val()+'"]').data('ta')) *
-            parseInt($(this).val())
-        ;
-        var ta_input = $(this).parent().parent().find('input[name="trajo_arancel[]"]');
-        ta_input.val(new_value);
-    });
-    */
-    $('input[name="trajo_arancel[]"]').focus(function(){
-        if ($(this).val() == '') {
+                $(this).val('');
+            }
+        });
+        /*
+        $('select[name="id_obras_sociales[]"]').change(function(){
             var new_value =
-                parseInt($(this).parent().parent().find('select[name="id_obras_sociales[]"] > option[value="'+$(this).parent().parent().find('select[name="id_obras_sociales[]"]').val()+'"]').data('ta')) *
+                parseInt($(this).find('option[value="'+$(this).val()+'"]').data('ta')) *
                 parseInt($(this).parent().parent().find('input[name="cantidad[]"]').val())
             ;
-            $(this).val(new_value);
-        }
-    });
-    $('select.searchFilter').multipleSelect({
-        single: true,
-        filter: true
-    });
-//});
+            var ta_input = $(this).parent().parent().find('input[name="trajo_arancel[]"]');
+            if (ta_input.val() === '') {
+                ta_input.val(new_value);
+            }
+        });
+        $('input[name="cantidad[]"]').change(function(){
+            var new_value =
+                parseInt($(this).parent().parent().find('select[name="id_obras_sociales[]"] > option[value="'+$(this).parent().parent().find('select[name="id_obras_sociales[]"]').val()+'"]').data('ta')) *
+                parseInt($(this).val())
+            ;
+            var ta_input = $(this).parent().parent().find('input[name="trajo_arancel[]"]');
+            ta_input.val(new_value);
+        });
+        */
+        $('input[name="trajo_arancel[]"]').focus(function(){
+            if ($(this).val() == '') {
+                var new_value =
+                    parseInt($(this).parent().parent().find('select[name="id_obras_sociales[]"] > option[value="'+$(this).parent().parent().find('select[name="id_obras_sociales[]"]').val()+'"]').data('ta')) *
+                    parseInt($(this).parent().parent().find('input[name="cantidad[]"]').val())
+                ;
+                $(this).val(new_value);
+            }
+        });
+        $('select.searchFilter').multipleSelect({
+            single: true,
+            filter: true
+        });
+    //});
 </script>
 <style>
-#vntDiag input[type=number]::-webkit-outer-spin-button,
-#vntDiag input[type=number]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-#vntDiag input[type=number] {
-    -moz-appearance:textfield;
-}
-#vntDiag table tbody tr td{
-    padding: 2px 4px 0 0;
-}
-#vntDiag table thead th{
-    font-weight: bold;
-    color: #007FA6;
-    text-align: center;
-}
-#vntDiag table thead th:first-child{
-    text-align: left;
-}
-.ui-datepicker {
-    width:300px!important;
-    z-index:848745;
-    background-color: #fff;
-}
-.ms-drop.bottom {
-    position: absolute;
-    min-width: 300px;
-    width: auto;
-}
+    #vntDiag input[type=number]::-webkit-outer-spin-button,
+    #vntDiag input[type=number]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    #vntDiag input[type=number] {
+        -moz-appearance:textfield;
+    }
+    #vntDiag table tbody tr td{
+        padding: 2px 4px 0 0;
+    }
+    #vntDiag table thead th{
+        font-weight: bold;
+        color: #007FA6;
+        text-align: center;
+    }
+    #vntDiag table thead th:first-child{
+        text-align: left;
+    }
+    .ui-datepicker {
+        width:300px!important;
+        z-index:848745;
+        background-color: #fff;
+    }
+    .ms-drop.bottom {
+        position: absolute;
+        min-width: 300px;
+        width: auto;
+    }
 </style>
 <?php
 

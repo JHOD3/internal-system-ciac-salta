@@ -13,6 +13,7 @@
             <td>TP</td>
             <td>TO</td>
             <td>TA</td>
+            <td>Coseguro</td>
             <td>DD</td>
             <td>Diferencia</td>
             <td>Depósito Fecha</td>
@@ -37,6 +38,7 @@
                 <?=compare($tmpTEH, $itmTEH, 'trajo_pedido')?><?=$itmTEH['trajo_pedido']?></td>
                 <?=compare($tmpTEH, $itmTEH, 'trajo_orden')?><?=$itmTEH['trajo_orden']?></td>
                 <?=compare($tmpTEH, $itmTEH, 'trajo_arancel')?><?=$itmTEH['trajo_arancel']?></td>
+                <?=compare($tmpTEH, $itmTEH, 'trajo_arancel_coseguro')?><?=$itmTEH['trajo_arancel_coseguro']?></td>
                 <?=compare($tmpTEH, $itmTEH, 'deja_deposito')?><?=$itmTEH['deja_deposito']?></td>
                 <?=compare($tmpTEH, $itmTEH, 'deja_deposito_diferencia')?><?=$itmTEH['deja_deposito_diferencia']?></td>
                 <?=compare($tmpTEH, $itmTEH, 'deja_deposito_fecha')?><?=$itmTEH['deja_deposito_fecha']?></td>

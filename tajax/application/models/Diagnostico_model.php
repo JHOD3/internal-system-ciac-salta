@@ -75,7 +75,8 @@ class Diagnostico_model extends CI_Model
             #->where('tt.tipo', 'ESTUDIOS')
             ->where_in('t.id_turnos_estados', array(2, 7))
             ->where('t.estado', 1)
-            ->where("CONCAT({$cualFecha}, ' ', t.desde) BETWEEN '{$date1} {$post['hour1']}:00' AND '{$date2} {$post['hour2']}:00'")
+            ->where("CONCAT({$cualFecha}, ' ', t.desde) BETWEEN '{$date1} 00:00:00' AND '{$date2} 23:59:00'")
+            ->where("t.desde BETWEEN '{$post['hour3']}:00' AND '{$post['hour4']}:00'")
         ;
         if (
             $isMedico and
@@ -83,6 +84,7 @@ class Diagnostico_model extends CI_Model
         ) {
             $this->db->where('t.id_medicos', ($id_usuario - 1000000));
         }
+
         $aPost = array(
             'spac' => "CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres))",
             'susu' => "u.usuario",
@@ -100,23 +102,41 @@ class Diagnostico_model extends CI_Model
         );
         $cnct = "";
         $where = "";
+        $filterPass = 0;
         foreach ($aPost AS $kP => $rP) {
             if (isset($post[$kP]) and (is_array($post[$kP]) or trim($post[$kP]))) {
                 switch ($kP) {
                     case "srea":
+                        ($filterPass>0) ?$cnct = "AND": $cnct = "";
                         $in = implode(', ', $post[$kP]);
                         $where.= "
                             {$cnct} {$rP} IN ({$in})
                         ";
-                        $cnct = "AND";
+                        break;
+                    case "sest":
+                        ($filterPass>0) ?$cnct = "AND(": $cnct = "(";
+                        foreach($post[$kP] AS $val){
+                            $where.= "
+                                {$cnct} {$rP} LIKE '%$val%'
+                            ";
+                            $cnct = "OR";
+                        }
+                        $where.= ")";
+                        /*$in = implode(', ', $post[$kP]);
+                        $where.= "
+                            {$cnct} {$rP} IN ({$in})
+                        ";
+                        $cnct = "AND";*/
                         break;
                     case "sden":
+                        ($filterPass>0) ?$cnct = "AND": $cnct = "";
                         $where.= "
                             {$cnct} {$rP} = '{$post[$kP]}'
                         ";
                         $cnct = "AND";
                         break;
                     case "spac":
+                        ($filterPass>0) ?$cnct = "AND": $cnct = "";
                         $Palabras = explode(' ', $post[$kP]);
                         foreach ($Palabras AS $pal) {
                             $where.= "
@@ -126,6 +146,7 @@ class Diagnostico_model extends CI_Model
                         }
                         break;
                     case "sche":
+                        ($filterPass>0) ?$cnct = "AND": $cnct = "";
                         if (in_array($post[$kP], array('1', '2'))) {
                             if ($post[$kP] == '1') {
                                 $where.= "
@@ -140,12 +161,14 @@ class Diagnostico_model extends CI_Model
                         }
                         break;
                     default:
+                        ($filterPass>0) ?$cnct = "AND": $cnct = "";
                         $where.= "
                             {$cnct} {$rP} LIKE '%{$post[$kP]}%'
                         ";
                         $cnct = "AND";
                         break;
                 }
+                $filterPass++;
             }
         }
         if (trim($where)) {
@@ -225,7 +248,30 @@ class Diagnostico_model extends CI_Model
             $suma2+= $query[0]['Suma'];
         }
 
-        return array($suma1, $suma2);
+        $suma3 = 0;
+        $this->db
+            ->select('SUM(ts.trajo_arancel_coseguro) AS Suma')
+            ->from('turnos AS t')
+            ->join('turnos_tipos AS tt', 't.id_turnos_tipos = tt.id_turnos_tipos')
+            ->join('pacientes AS p', 't.id_pacientes = p.id_pacientes', 'left')
+            ->join('turnos_estados AS te', 't.id_turnos_estados= te.id_turnos_estados', 'left')
+            ->join('turnos_estudios AS ts', 'ts.id_turnos = t.id_turnos', 'left')
+            ->join('medicos AS m', 'ts.id_medicos = m.id_medicos', 'left')
+            ->join('obras_sociales AS os', 'ts.id_obras_sociales = os.id_obras_sociales', 'left')
+            ->join('estudios AS e', 'ts.id_estudios = e.id_estudios', 'left')
+            ->join('usuarios AS u', 't.id_usuarios = u.id_usuarios', 'left')
+        ;
+        $this->_filtroListado($date1, $date2, $post, null, $id_usuario, $isMedico);
+        $query = $this->db
+            ->where('ts.estado', 1)
+            ->get()
+            ->result_array()
+        ;
+        if (count($query) > 0) {
+            $suma3+= $query[0]['Suma'];
+        }
+
+        return array($suma1, $suma2, $suma3);
     }
 
     function obtenerListadoCount($date1, $date2, $post, $id_usuario = null, $isMedico = false)
@@ -358,6 +404,7 @@ class Diagnostico_model extends CI_Model
             case "14": $orderby_field = "ts.trajo_arancel {$ord}, t.id_turnos {$ord}"; break;
             case "15": $orderby_field = "ts.deja_deposito {$ord}, t.id_turnos {$ord}"; break;
             case "16": $orderby_field = "ts.matricula_derivacion {$ord}, t.id_turnos {$ord}"; break;
+            case "17": $orderby_field = "ts.trajo_arancel_coseguro {$ord}, t.id_turnos {$ord}"; break;
         }
         $query = $this->db
             ->where('ts.estado', 1)
@@ -573,6 +620,7 @@ SQL;
                 ts.trajo_pedido,
                 ts.trajo_orden,
                 ts.trajo_arancel,
+                ts.trajo_arancel_coseguro,
                 ts.deja_deposito,
                 ts.matricula_derivacion,
                 CONCAT(d.saludo, ' ', d.apellidos, ', ', d.nombres) AS medicos_derivacion,
@@ -592,12 +640,44 @@ SQL;
             ->join('usuarios AS u', 't.id_usuarios = u.id_usuarios', 'left')
         ;
         $this->_filtroListado($date1, $date2, $post, 'ts.fecha_presentacion', $id_usuario, $isMedico);
+        
+        $post['orderby_field'] = isset($post['orderby_field']) ? $post['orderby_field'] : '0';
+        $post['orderby_order'] = isset($post['orderby_order']) ? $post['orderby_order'] : 'ASC';
+        $ord = $post['orderby_order'];
+        switch ($post['orderby_field']) {
+            case "0": $orderby_field = ""; break;
+            case "1": $orderby_field = "CONCAT(t.fecha, t.desde, t.hasta) {$ord}, t.id_turnos {$ord}"; break;
+            case "2": $orderby_field = "CONCAT(TRIM(p.apellidos), TRIM(p.nombres)) {$ord}, t.id_turnos {$ord}"; break;
+            case "3": $orderby_field = "TRIM(e.codigopractica) {$ord}, t.id_turnos {$ord}"; break;
+            case "4": $orderby_field = "e.nombre {$ord}, t.id_turnos {$ord}"; break;
+            case "5": $orderby_field = "CONCAT(TRIM(m.apellidos), TRIM(m.nombres)) {$ord}, t.id_turnos {$ord}"; break;
+            case "6": $orderby_field = "os.abreviacion {$ord}, t.id_turnos {$ord}"; break;
+            case "7": $orderby_field = "ts.fecha_presentacion {$ord}, t.id_turnos {$ord}"; break;
+            case "8": $orderby_field = "(ts.nro_orden * 1) {$ord}, t.id_turnos {$ord}"; break;
+            case "9": $orderby_field = "(ts.nro_afiliado * 1) {$ord}, t.id_turnos {$ord}"; break;
+            case "10": $orderby_field = "ts.cantidad {$ord}, t.id_turnos {$ord}"; break;
+            case "11": $orderby_field = "ts.tipo {$ord}, t.id_turnos {$ord}"; break;
+            case "12": $orderby_field = "ts.trajo_pedido {$ord}, t.id_turnos {$ord}"; break;
+            case "13": $orderby_field = "ts.trajo_orden {$ord}, t.id_turnos {$ord}"; break;
+            case "14": $orderby_field = "ts.trajo_arancel {$ord}, t.id_turnos {$ord}"; break;
+            case "15": $orderby_field = "ts.deja_deposito {$ord}, t.id_turnos {$ord}"; break;
+            case "16": $orderby_field = "ts.matricula_derivacion {$ord}, t.id_turnos {$ord}"; break;
+            case "17": $orderby_field = "ts.trajo_arancel_coseguro {$ord}, t.id_turnos {$ord}"; break;
+        }
+
+        if($orderby_field == ""){
+            $this->db->where('ts.estado', 1)->order_by('ts.estado DESC, ts.fecha_presentacion, t.desde, t.hasta, t.id_turnos');
+        }
+        else{
+            $this->db->where('ts.estado', 1)->order_by($orderby_field);
+        }
+
         $query = $this->db
-            ->where('ts.estado', 1)
-            ->order_by('ts.estado DESC, ts.fecha_presentacion, t.desde, t.hasta, t.id_turnos')
             ->get()
             ->result_array()
         ;
+
+
         for ($i = 0; $i < count($query); $i++) {
             $query[$i]['orden'] = $i + 1;
             switch ($query[$i]['tipo']) {
@@ -619,6 +699,9 @@ SQL;
             }
             if ($query[$i]['trajo_arancel'] > 0) {
                 $query[$i]['trajo_arancel'] = "{$query[$i]['trajo_arancel']}";
+            }
+            if ($query[$i]['trajo_arancel_coseguro'] > 0) {
+                $query[$i]['trajo_arancel_coseguro'] = "{$query[$i]['trajo_arancel_coseguro']}";
             }
             if ($query[$i]['deja_deposito'] > 0) {
                 $query[$i]['deja_deposito'] = "{$query[$i]['deja_deposito']}";
@@ -845,6 +928,12 @@ SQL;
                 $query[0]['deja_deposito'] = '---';
             }
 
+            if ($query[0]['trajo_arancel_coseguro'] > 0) {
+                $query[0]['trajo_arancel_coseguro'] = "\$&nbsp;{$query[0]['trajo_arancel_coseguro']}";
+            } else {
+                $query[0]['trajo_arancel_coseguro'] = '---';
+            }
+
             if (trim($query[0]['matricula_derivacion']) == '') {
                 $query[0]['matricula_derivacion'] = '---';
                 $query[0]['medicos_derivacion'] = '---';
@@ -1066,6 +1155,7 @@ SQL;
                 teh.trajo_pedido,
                 teh.trajo_orden,
                 teh.trajo_arancel,
+                teh.trajo_arancel_coseguro,
                 teh.deja_deposito,
                 teh.deja_deposito_diferencia,
                 teh.deja_deposito_fecha,
@@ -1108,6 +1198,11 @@ SQL;
                 $query[$i]['trajo_arancel'] = '$&nbsp;'.$query[$i]['trajo_arancel'];
             } else {
                 $query[$i]['trajo_arancel'] = '';
+            }
+            if ($query[$i]['trajo_arancel_coseguro'] > 0) {
+                $query[$i]['trajo_arancel_coseguro'] = '$&nbsp;'.$query[$i]['trajo_arancel_coseguro'];
+            } else {
+                $query[$i]['trajo_arancel_coseguro'] = '';
             }
             if ($query[$i]['deja_deposito'] > 0) {
                 $query[$i]['deja_deposito'] = '$&nbsp;'.$query[$i]['deja_deposito'];

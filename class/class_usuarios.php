@@ -80,12 +80,12 @@ class Usuarios extends Estructura implements iUsuarios{
 		if ($cant_usr == 1){
 			while ($usr = $this->db->fetch_array($query))
 			{
-                #print $_SERVER['HTTP_HOST'];
-                if (
-                    $_SERVER['HTTP_HOST'] != 'ciacsaltadb.ddns.net' or
-                    $usr[8] > 1 or
-                    $usr[1] == 'invitado'
-                ) {
+                // #print $_SERVER['HTTP_HOST'];
+                // if (
+                //     $_SERVER['HTTP_HOST'] != 'ciacsaltadb.ddns.net' or
+                //     $usr[8] > 1 or
+                //     $usr[1] == 'invitado'
+                // ) {
     				//variable para controlar tiempo que esta conectado
     				$ultimo_acceso = date("Y-n-j H:i:s");
 
@@ -98,9 +98,38 @@ class Usuarios extends Estructura implements iUsuarios{
     				$_SESSION['SISTEMA'] = 'sas';
     				$_SESSION['EMISOR'] = $_SESSION['TIPO_USR']."-".$_SESSION["ID_USUARIO"];
     				$_SESSION['ULTIMO_ACCESO'] = $ultimo_acceso;
-                } else {
-                    return ("4"); //No autorizado vía remota dyndns
-                }
+    				$_SESSION['PERMISO_AGENDA'] = $usr[10];
+    				$_SESSION['PERMISO_COMUNICACION'] = $usr[11];
+    				$_SESSION['PERMISO_COMUNICADOS_GERENCIA'] = $usr[12];
+    				$_SESSION['PERMISO_NOVEDADES_DIARIAS'] = $usr[13];
+    				$_SESSION['PERMISO_NOTAS_IMPRECION'] = $usr[14];
+    				$_SESSION['PERMISO_ENCUESTAS'] = $usr[15];
+    				$_SESSION['PERMISO_ESPECIALIDADES'] = $usr[16];
+    				$_SESSION['PERMISO_ESTUDIOS'] = $usr[17];
+    				$_SESSION['PERMISO_MANTENIMIENTO'] = $usr[18];
+    				$_SESSION['PERMISO_MANTENIMIENTO_RECIENTE'] = $usr[19];
+    				$_SESSION['PERMISO_MANTENIMIENTO_HISTORICO'] = $usr[20];
+    				$_SESSION['PERMISO_MEDICOS'] = $usr[21];
+    				$_SESSION['PERMISO_MEDICOS_CIAC'] = $usr[22];
+    				$_SESSION['PERMISO_MEDICOS_EXTERNOS'] = $usr[23];
+    				$_SESSION['PERMISO_MEDICOS_EMPRESAS'] = $usr[24];
+    				$_SESSION['PERMISO_OBRAS_SOCIALES'] = $usr[25];
+    				$_SESSION['PERMISO_PACIENTES'] = $usr[26];
+    				$_SESSION['PERMISO_PLANES_CONTINGENCIA'] = $usr[27];
+    				$_SESSION['PERMISO_PRACTICAS_MEDICAS'] = $usr[28];
+    				$_SESSION['PERMISO_SECTORES'] = $usr[29];
+    				$_SESSION['PERMISO_SECTORES_UNO'] = $usr[30];
+    				$_SESSION['PERMISO_SUBSECTORES'] = $usr[31];
+    				$_SESSION['PERMISO_CONSULTORIOS'] = $usr[32];
+    				$_SESSION['PERMISO_DISPONIBILIDADES'] = $usr[33];
+    				$_SESSION['PERMISO_TAREAS'] = $usr[34];
+    				$_SESSION['PERMISO_TAREAS_CONFIGURACION'] = $usr[35];
+    				$_SESSION['PERMISO_TAREAS_PENDIENTES'] = $usr[36];
+    				$_SESSION['PERMISO_CUMPLES'] = $usr[37];
+    				$_SESSION['PERMISO_USUARIOS_PERMISO'] = $usr[38];
+                //} else {
+                //    return ("4"); //No autorizado vía remota dyndns
+                //}
 			}
 			return ("1"); //Login Correcto
 		}

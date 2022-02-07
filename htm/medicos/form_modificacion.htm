@@ -2,6 +2,9 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
+        jQuery.validator.addMethod("noSpace", function(value, element) { //Code used for blank space Validation 
+            return value.indexOf(" ") < 0; 
+        }, "No space please"); 
 
 		$("a#modificar").click(function(){
 			$("#form_medicos").submit();
@@ -37,6 +40,16 @@
 				},
                 fechanac: {
                     required: true
+                },
+                contrasena: {
+                    required: false,
+                    minlength: 6,
+                    noSpace: true
+                },
+                contrasena2: {
+                    required: false,
+                    minlength: 6,
+                    equalTo: '#contrasena'
                 }
 			},
 			messages: {
@@ -63,7 +76,17 @@
 				},
 				fechanac: {
 					required: "Ingrese la fecha de nacimiento"
-				}
+                },
+                contrasena: {
+                    required: "Ingrese la contraseña",
+                    minlength: "La contraseña debe tener al menos 6 caracteres",
+                    noSpace: "La contraseña no debe contener espacios"
+                },
+                contrasena2: {
+                    required: "Vuelva a ingresar la contraseña",
+                    minlength: "La contraseña debe tener al menos 6 caracteres",
+                    equalTo: "Las contraseñas no coinciden"
+                }
 			},
 			submitHandler: function(){
 				var variables = $("#form_medicos").serialize();
@@ -114,6 +137,14 @@
         	<div class="bloque oculto">
                 <label>ID: </label>
                 <input type="text" class="text-long" name="id" value="[id_medicos]" />
+            </div>
+            <div class="bloque">
+                <label>Contraseña: </label>
+                <input type="password" class="text-long" name="contrasena" id="contrasena" />
+            </div>
+            <div class="bloque">
+                <label>Repetir Contraseña: </label>
+                <input type="password" class="text-long" name="contrasena2" id="contrasena2" />
             </div>
             <div class="bloque">
 				<label>Tipos Documentos: </label>

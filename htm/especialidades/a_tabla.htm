@@ -35,26 +35,26 @@
 			"bLengthChange": false,
 			"aoColumns" : [{ sWidth: '20px' }, 
 					{ sWidth: '700px' },
-					{ sWidth: '70px', "sClass": "right" }]
+					{ sWidth: '100px', "sClass": "right" }]
 		});
 		
 		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
-		$('#t_'+nombre+" tfoot input").keyup( function () {
-			TableEspecialidades.fnFilter( this.value, $('#t_'+nombre+" tfoot input").index(this) );
+		$('#t_'+nombre+" thead input").keyup( function () {
+			TableEspecialidades.fnFilter( this.value, $('#t_'+nombre+" thead input").index(this) );
 		});
-		$('#t_'+nombre+" tfoot input").each( function (i) {
+		$('#t_'+nombre+" thead input").each( function (i) {
 			asInitVals[i] = this.value;
 		});
-		$('#t_'+nombre+" tfoot input").focus( function () {
+		$('#t_'+nombre+" thead input").focus( function () {
 			if ( this.className == "search_init" ){
 				this.className = "";
 				this.value = "";
 			}
 		});
-		$('#t_'+nombre+" tfoot input").blur( function (i) {
+		$('#t_'+nombre+" thead input").blur( function (i) {
 			if ( this.value == "" ){
 				this.className = "search_init";
-				this.value = asInitVals[$('#t_'+nombre+" tfoot input").index(this)];
+				this.value = asInitVals[$('#t_'+nombre+" thead input").index(this)];
 			}
 		});
 		///////////////////////////////////////////////////////
@@ -70,12 +70,14 @@
             <th>Acci&oacute;n</th>
         </tr>
     </thead> 
-    <tfoot>
+    <thead>
+    	
         <tr>
-            <th><input type="text" name="tb_id" value="ID" class="search_init" /></th>
-            <th><input type="text" name="tb_nombre" value="Nombre" class="search_init" /></th>
+            <th><input type="text" name="tb_id" value="ID" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_nombre" value="Nombre" class="search_init" style="width: 100%;" /></th>
+            <th></th>
         </tr>
-    </tfoot>    
+    </thead>    
     <tbody>
         <tr>
             <td align="center"></td>

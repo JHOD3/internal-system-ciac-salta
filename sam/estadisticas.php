@@ -35,14 +35,13 @@ if (isset($isDiagnosticos) and $isDiagnosticos) {
 EOT;
 
 } else {
-
+/*<a href="diagnosticos.php" class="btn">
+	<i class="fa fa-medkit"></i>
+    <span>Pr&aacute;cticas<br />M&eacute;dicas</span>
+</a>*/
 if ($_GET['show'] != 'estadisticas') {
 
     $html_button = <<<EOT
-<a href="diagnosticos.php" class="btn">
-	<i class="fa fa-medkit"></i>
-    <span>Pr&aacute;cticas<br />M&eacute;dicas</span>
-</a>
 <a id="btnEst" href="index.php?show=estadisticas" class="btn">
 	<i class="fa fa-bar-chart"></i>
     <span>Estad&iacute;s-<br />ticas</span>
@@ -57,10 +56,6 @@ EOT;
 <a id="btnEst" href="index.php" class="btn">
 	<i class="fa fa-calendar"></i>
     <span>Agenda</span>
-</a>
-<a href="diagnosticos.php" class="btn">
-	<i class="fa fa-medkit"></i>
-    <span>Pr&aacute;cticas<br />M&eacute;dicas</span>
 </a>
 EOT;
     $ses_id_medico = $_SESSION['ID_MEDICO'];

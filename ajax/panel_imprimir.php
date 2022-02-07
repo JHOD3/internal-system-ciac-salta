@@ -42,7 +42,7 @@ if (empty($_POST['opc'])):
 SQL;
     $result = $this_db->consulta($query_string);
     ?>
-    <input type="text" id="ddEstudio" value="" />
+    <input type="text" id="ddEstudio" value="" onfocus="javascript: $ (this) .autocomplete ('search', ''); " />
     <script>;
     var tagsESTUDIOS = [
         <?php $cnct = ''; ?>
@@ -52,6 +52,7 @@ SQL;
         <?php endwhile; ?>
     ];
     $('#ddEstudio').autocomplete({
+        minLength: 0,
         source: tagsESTUDIOS,
         close: function( event, ui ) {
             $('#ddEstudio').val('');

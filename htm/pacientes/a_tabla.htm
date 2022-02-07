@@ -84,22 +84,22 @@
 		});
 
 		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
-		$("tfoot input").keyup( function () {
-			TablePacientes.fnFilter( this.value, $("tfoot input").index(this) );
+		$("thead input").keyup( function () {
+			TablePacientes.fnFilter( this.value, $("thead input").index(this) );
 		});
-		$("tfoot input").each( function (i) {
+		$("thead input").each( function (i) {
 			asInitVals[i] = this.value;
 		});
-		$("tfoot input").focus( function () {
+		$("thead input").focus( function () {
 			if ( this.className == "search_init" ){
 				this.className = "";
 				this.value = "";
 			}
 		});
-		$("tfoot input").blur( function (i) {
+		$("thead input").blur( function (i) {
 			if ( this.value == "" ){
 				this.className = "search_init";
-				this.value = asInitVals[$("tfoot input").index(this)];
+				this.value = asInitVals[$("thead input").index(this)];
 			}
 		});
 		///////////////////////////////////////////////////////
@@ -118,15 +118,16 @@
             <th>Acci&oacute;n</th>
         </tr>
     </thead> 
-    <tfoot>
+    <thead>
         <tr>
             <th></th>
-            <th><input type="text" name="tb_nro_documento" value="DNI" class="search_init" /></th>
-            <th><input type="text" name="tb_apellidos" value="Apellidos" class="search_init" /></th>
-            <th><input type="text" name="tb_nombres" value="Nombres" class="search_init" /></th>
-            <th><input type="text" name="tb_obras_sociales" value="Obra Social" class="search_init" /></th>
+            <th><input type="text" name="tb_nro_documento" value="DNI" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_apellidos" value="Apellidos" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_nombres" value="Nombres" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_obras_sociales" value="Obra Social" class="search_init" style="width: 100%;" /></th>
+            <th></th>
         </tr>
-    </tfoot>    
+    </thead>    
     <tbody>
         <tr>
             <td></td>

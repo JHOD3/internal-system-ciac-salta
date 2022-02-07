@@ -130,6 +130,7 @@ class Estudios extends Estructura implements iEstudios{
 
 
 	function EstudiosSeleccionados($id_turno,  $id_medico){
+		//Kcmnt Modificar el query, agregar un ORDER BY por TE.id_turnos_estudios
 		$query_string = $this->querys->EstudiosSeleccionados($id_turno,  $id_medico);
 		$query = $this->db->consulta($query_string);
 		$cant = $this->db->num_rows($query);

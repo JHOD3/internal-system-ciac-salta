@@ -68,17 +68,21 @@
 		})
 
 		var id_turno_tipo = $("#id_turno_tipo").val();
+		debugger
 		switch (id_turno_tipo){
 			case "1": //CONSULTAS
 				$("#consulta.oculto").show();
 				$('#lbl_arancel_dif').hide();
 			break;
-			case "2": //ESTUDIOS
-				$("#estudios > div.oculto").show();
-				$('#lbl_arancel_dif').show();
+			case "2": //ESTUDIOS - ESTA SECCION HTML ESTA INHABILITADA
+				$("#estudios_p").show();
+				ObtenerArancelEstudios();
+				/*$("#estudios > div.oculto").show();
+				$('#lbl_arancel_dif').show();*/
 			break;
 		}
 
+		//Deshabilitar campos $$$ si no estan checked los radios (chk_deposito,consulta_arancel_diferenciado)
         if (!$('#chk_deposito').is(':checked')){
             $('input#deposito_consulta').attr('disabled', 'disabled');
         }
@@ -86,8 +90,9 @@
             $('input#arancel_diferenciado').attr('disabled', 'disabled');
         }
 
-		//CONSULTA - ORDEN
+		//CONSULTA - ORDEN (radios si_trajo_orden,chk_deposito,consulta_particular)
 		$("input[name='trae_orden']").click(function() {
+			debugger
 			 if($("#chk_deposito").is(':checked')) {
 			 	$('input#deposito_consulta').prop('disabled','');
 				$('#deposito_consulta').focus();
@@ -105,6 +110,7 @@
 
 		//CONSULTA - VALOR
 		$("input[name='trae_pedido']").change(function() {
+			debugger
 			if ($("#consulta_arancel_diferenciado").is(':checked')) {
 			 	$('input#arancel_diferenciado').prop('disabled','');
 				$('#arancel_diferenciado').focus();
@@ -114,13 +120,14 @@
 			CalcularTotal();
 		});
 
-		//CONSULTA
+		//CONSULTA - ¿?¿? - repetido
 		$("input[name='trae_pedido']").change(function() {
 			CalcularTotal()
 		});
 
 		//ESTUDIOS - ORDEN
 		$("input[name='orden_estudios']").change(function() {
+			debugger
 			 if($("#deposito_orden").is(':checked')) {
 			 	$('input#deposito_estudios_orden').prop('disabled','');
 				$('#deposito_estudios_orden').focus();
@@ -132,6 +139,7 @@
 
 		//ESTUDIOS - PEDIDOS
 		$("input[name='pedido_estudios']").change(function() {
+			debugger
 			 if($("#deposito_pedido").is(':checked')) {
 			 	$('input#deposito_estudios_pedido').prop('disabled','');
 				$('#deposito_estudios_pedido').focus();
@@ -142,18 +150,22 @@
 		});
 
 		$('#deposito_consulta').keyup(function(){
+			debugger
 			CalcularTotal()
 		});
 
 		$('#deposito_estudios_orden').keyup(function(){
+			debugger
 			CalcularTotal()
 		});
 
 		$('#deposito_estudios_pedido').keyup(function(){
+			debugger
 			CalcularTotal()
 		});
 
 		$("#arancel_diferenciado").keyup(function(){
+			debugger
 			CalcularTotal()
 		});
 
@@ -162,6 +174,7 @@
 
 
 	function CalcularTotal(){
+		debugger
 		var id_turno_tipo = $('#turnos_tipos').val();
 		var total_cobrar = 0;
 
@@ -192,11 +205,12 @@
 
 
 	$("form#datos_turnos #btn_aceptar").on("click", function(e) {
+		debugger
 		e.preventDefault();
 		id_turno = $("#id_turno").val();
 		variables = $("#datos_turnos").serialize();
 		id_turno_estado = $("#turnos_estados").val();
-		id_turno_estado_actual = $("#turno_estado_actual").val();
+		id_turno_estado_actual = $("#turno_estado_actual").val(); //Estado no modificado
 		id_turno_tipo = $('#turnos_tipos').val();
 		//alert (variables);
 		//alert ("Estado Actual: " + id_turno_estado_actual);
@@ -205,8 +219,8 @@
 
 		if (
             id_turno_estado_actual == 2 &&
-            id_turno_estado != 2 &&
-            id_turno_estado != 7
+            id_turno_estado != 2 && //LLego el paciente
+            id_turno_estado != 7	//Ya atendido
         ){
 			$( "#dialog-confirm" ).dialog({
 			  resizable: false,
@@ -255,7 +269,7 @@
 	});
 
 	function CambiarEstado(){
-
+		debugger
 		$.ajax({
 			dataType: "html",
 			type: "POST",
@@ -456,6 +470,26 @@
 				switch (id_turno_tipo){
 					case "1": //CONSULTAS
 						$("#consulta.oculto").show();
+						var plus = parseInt($('#consulta_arancel').val().split("|").pop());
+							//si es particular selecciono options 'particular' y lleno el campo con valor del particular
+						if ($("#ob_social_pac").children("span").text() == "PARTICULAR" && $("#arancel_diferenciado").val() != '' || isNaN(plus) && $("#turnos_estados").val() == 2){
+							$("#consulta_particular").prop('checked', true);
+							$("#consulta_arancel_diferenciado").prop('checked', true);
+							$("#arancel_diferenciado").val($("#importe_parti").val());
+							$('input#arancel_diferenciado').prop('disabled','');
+							$('#arancel_diferenciado').focus();
+							CalcularTotal();
+						}
+						else{
+							//Si el Medico cobra plus, llenar marcar y arancel_diferenciado
+							if(plus !=0 && $("#arancel_diferenciado").val() != ''){
+								$("#consulta_arancel_diferenciado").prop('checked', true);
+								$("#arancel_diferenciado").val(plus);
+								$('input#arancel_diferenciado').prop('disabled','');
+								$('#arancel_diferenciado').focus();
+								CalcularTotal();
+							}
+						}
 					break;
 					case "2": //ESTUDIOS
 						$("#estudios > div.oculto").show();
@@ -471,6 +505,26 @@
 		}
 	});
 
+	function ObtenerArancelEstudios(){
+		$.ajax({
+			type: "POST",
+			url: "[URL]ajax/admin_turno.php",
+			data: {id_turno: $('#id_turno').val(), tipo:"obtener_arancel_estudios"},
+			beforeSend: function() {
+			},
+			success: function(requestData){
+				var rta = requestData;
+				if (rta != false){
+					$('#estudios_turno').empty();
+					$('#estudios_turno').append(rta);
+				}
+			},
+			complete: function(requestData){},
+			error: function (){
+				$('#estudios_turno').empty();
+			}
+		});
+	}
 
 </script>
 [block: block_registros]
@@ -509,15 +563,18 @@
         	Paciente: <br />
 			<span>[PACIENTE]</span><br />
        	</p>
-        <p>
+        <p id="ob_social_pac">
         	Obra Social del Paciente: <br />
 			<span>[OBRA_SOCIAL]</span>
       	</p>
-        <P>
+        <p>
         	Plan: <br />
 			<span>[PLAN]</span>
-       	</P>
-
+		</p>
+        <div style="border-bottom: 1px solid #ccc; margin-right: 10px; padding: 5px 0 10px 0; line-height: 1.6em;">
+        	Observaciones: <br />
+			<div>[PACIENTES_OBSERVACIONES]</div>
+		</div>
     </div>
 
     <div id="cambio_estado">
@@ -525,7 +582,9 @@
         	Tipo de Turno<input type="text" id="turnos_tipos" value="[id_turnos_tipos]" />
         </div>
         <h4>Cambio de Estado</h4>
-        	[DROP_TURNOS_ESTADOS]
+        	<div style="height: 100px;display: flex;">
+        		[DROP_TURNOS_ESTADOS]
+        	</div>
 
         <p>
             [BTN_VER_ESTUDIO]
@@ -542,7 +601,8 @@
                 <input type="radio" name="trae_orden" id="chk_deposito" value="1"[trae_orden_1] />
                 <label for="chk_deposito">No Trajo Orden, Dej&oacute; un deposito de:</label>
                 <input type="text" name="deposito_consulta" id="deposito_consulta" value="[deposito_consulta]"><br />
-
+				
+				<input type="text" value="[IMPORTE_PARTI]" id="importe_parti" style="display: none;"/>
                 <input type="radio" name="trae_orden" value="2|[IMPORTE_CONSULTA_PARTICULAR]"[trae_orden_2] [CHK_PARTICULAR]  id="consulta_particular" />
                 <label for="consulta_particular">Particular: $[IMPORTE_CONSULTA_PARTICULAR]</label>
 
@@ -570,6 +630,11 @@
 
        	</div>
 
+
+        <div id="estudios_p" class="oculto">
+        	<h4>Estudios</h4>
+                <div id="estudios_turno"></div>
+        </div>
 
 
 <!--

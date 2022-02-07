@@ -90,6 +90,23 @@
                 <label>Matrícula: </label>
                 <input type="text" class="text-long" name="matricula" value="[matricula]" style="text-transform:none!important;" />
             </div>
+            <div class="bloque">
+                <label>Email: </label>
+                <input type="email" class="text-long" name="email" value="[email]" style="text-transform:none!important;" />
+            </div>
+            <div class="bloque">
+                <label>Domicilio: </label>
+                <input type="text" class="text-long" name="domicilio" value="[domicilio]" style="text-transform:none!important;" />
+            </div>
+            <div class="bloque">
+                <label>Telefonos: </label>
+                <input type="text" class="text-long" name="telefonos" value="[telefonos]" style="text-transform:none!important;" />
+            </div>
+            <div class="bloque">
+                <label>Fecha de Nacimiento: </label>
+                <input type="text" class="text-long datepicker" name="fechanac" value="[fechanac]" style="text-transform:none!important;" />
+            </div>
+            
             <div class="bloque botones">
                 <a href="#" id="modificar" class="boton_gris">Modificar</a>
                 <a href="#" id="cancelar" class="boton_gris">Cancelar</a>
@@ -97,4 +114,9 @@
         </fieldset>
     </form>
 </div>
+<script>
+$(function(){
+    $(".datepicker").datepicker({dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true, yearRange: '-100:+0'});
+});
+</script>
 [/block: block_registros]

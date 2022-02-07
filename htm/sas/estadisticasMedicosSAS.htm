@@ -1,0 +1,235 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<button id='btn_toggle_estadistica'>Mostrar otras estadisticas</button>
+<select id="id_est_medicos" style="visibility: hidden;">
+    [ESTADISTICA_MEDICOS_OPTIONS]
+</select>
+<script type="text/javascript">
+    var alreadyDraw = false; var tDisplay;
+    $("#btn_toggle_estadistica").click(function (){
+        if ($("#tabs").css("visibility") == "hidden"){
+            $("#tabsm").css("visibility", "hidden");
+            $("#tabs").css("visibility", "visible");
+            $("#id_est_medicos").css("visibility", "hidden");
+        }
+        else{
+            $("#tabs").css("visibility", "hidden");
+            $("#tabsm").css("visibility", "visible");
+            $("#id_est_medicos").css("visibility", "visible");
+        }
+    });
+
+    $("#id_est_medicos").change(function(){
+        var formGraph = $("#frmGraphG");
+        var data = formGraph.serialize() + "&id_medico="+$("#id_est_medicos").val();
+
+        $.ajax({
+            'url': '[URL]/ajax/estadisticas_medicos_sas.php',
+            'data': data,
+            'type': 'post',
+            'dataType': 'json'
+        })
+        .done(function (response) {
+            drawChart1(response[0]);
+            drawChart2(response[1]);
+            drawChart3(response[2]);
+            drawChart4(response[3]);
+            drawChart5(response[4]);
+        })
+        .fail( function (code, status) {
+        })
+        .always( function (xhr, status) {
+        });
+    });
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart1);
+  
+    function drawChart1(est) {
+        if(est){
+            est.splice(est,0,['Fecha', 'Turnos', {role: 'style'}]);
+        }
+        else{
+            est=[['Fecha', 'Turnos', {role: 'style'}]];
+        }
+        var data1 = google.visualization.arrayToDataTable(est);
+        var options1 = {
+            title: '',
+            legend: { position: 'none' },
+            chartArea:{top:10, height:"100%"},
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart1'));
+        tDisplay = $("#tabsm-1").css("display");
+
+        $("#tabsm-1").css('display', 'block');
+        if (alreadyDraw==false){
+            chart.draw(data1, options1);
+            alreadyDraw=true;
+        }
+        else{
+            chart.draw(data1);
+        }
+
+        tDisplay!='block'?$("#tabsm-1").css('display', 'none'):true;
+    }
+
+    //google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart2);
+
+    function drawChart2(est) {
+
+        if(est){
+            graphcount = 10 + (est.length * 41);
+            $("#curve_chart2").css('height', graphcount + 'px');
+            est.splice(est,0,['Obra Social', 'Turnos', {role: 'style'}]);
+        }
+        else
+        {
+            est=[['Obra Social', 'Turnos', {role: 'style'}]];
+        }
+        var data2 = google.visualization.arrayToDataTable(est);
+        var options2 = {
+            title: '',
+            legend: { position: 'none' },
+            chartArea:{top:10, height:"100%"},
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('curve_chart2'));
+        tDisplay = $("#tabsm-2").css("display");
+
+        $("#tabsm-2").css('display', 'block');
+        alreadyDraw == false ? chart.draw(data2, options2) : chart.draw(data2);
+        tDisplay!='block'?$("#tabsm-2").css('display', 'none'):true;
+    }
+
+    //google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart3);
+  
+    function drawChart3(est) {
+        if(est){
+            graphcount = 10 + (est.length * 41);
+            $("#curve_chart3").css('height', graphcount + 'px');
+            est.splice(est,0,['Estado', 'Turnos', {role: 'style'}]);
+        }
+        else{
+            est=[['Estado', 'Turnos', {role: 'style'}]];
+        }
+        var data3 = google.visualization.arrayToDataTable(est);
+    
+        var options3 = {
+            title: '',
+            legend: { position: 'none' },
+            chartArea:{top:10, height:"100%"},
+        };
+    
+        var chart = new google.visualization.BarChart(document.getElementById('curve_chart3'));
+        tDisplay = $("#tabsm-3").css("display");
+
+        $("#tabsm-3").css('display', 'block');
+        alreadyDraw == false ? chart.draw(data3, options3) : chart.draw(data3);
+        tDisplay!='block'?$("#tabsm-3").css('display', 'none'):true;
+    }
+
+    //google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart4);
+  
+    function drawChart4(est) {
+        if(est){
+            graphcount = 10 + (est.length * 41);
+            $("#curve_chart4").css('height', graphcount + 'px');
+            est.splice(est,0,['Estudio', 'Turnos', {role: 'style'}]);
+        }
+        else{
+            est=[['Estudio', 'Turnos', {role: 'style'}]];
+        }
+        var data4 = google.visualization.arrayToDataTable(est);
+  
+        var options4 = {
+            title: '',
+            legend: { position: 'none' },
+            chartArea:{top:10, height:"100%"},
+        };
+  
+        var chart = new google.visualization.BarChart(document.getElementById('curve_chart4'));
+        tDisplay = $("#tabsm-4").css("display");
+        
+        $("#tabsm-4").css('display', 'block');
+        alreadyDraw == false ? chart.draw(data4, options4) : chart.draw(data4);
+        tDisplay!='block'?$("#tabsm-4").css('display', 'none'):true;
+    }
+
+    //google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart5);
+
+    function drawChart5(est) {
+        if(est){
+            graphcount = 10 + (est.length * 41);
+            $("#curve_chart5").css('height', graphcount + 'px');
+            est.splice(est,0,['Usuario', 'Turnos', {role: 'style'}]);
+        }
+        else{
+            est=[['Usuario', 'Turnos', {role: 'style'}]];
+        }
+        var data5 = google.visualization.arrayToDataTable(est);
+    
+        var options5 = {
+            title: '',
+            legend: { position: 'none' },
+            chartArea:{top:10, height:"100%"},
+        };
+    
+        var chart = new google.visualization.BarChart(document.getElementById('curve_chart5'));
+        tDisplay = $("#tabsm-5").css("display");
+
+        $("#tabsm-5").css('display', 'block');
+        alreadyDraw == false ? chart.draw(data5, options5) : chart.draw(data5);
+        tDisplay!='block'?$("#tabsm-5").css('display', 'none'):true;
+
+        /**************************************************************************/
+        /**************************************************************************/
+        /*CARGAR tabsm CUANDO SE CARGUEN LOS GRÁFICOS*******************************/
+        $("#tabsm").tabs().attr(
+            'style',
+            'position:absolute;left:0.5%;margin:0 auto;width:99%;height:100%;visibility:show;'
+        );
+        /**************************************************************************/
+        /**************************************************************************/
+        /**************************************************************************/
+    }
+</script>
+<style>
+    #tabsm .ui-state-active a,
+    #tabsm .ui-state-active a:link,
+    #tabsm .ui-state-active a:visited{
+        color: #ffffff!important;
+    }
+    #tabsm .ui-state-active,
+    #tabsm .ui-widget-content .ui-state-active,
+    #tabsm .ui-widget-header .ui-state-active{
+        background:#008a47!important;
+    }
+</style>
+<div id="tabsm" style="position:absolute;left:0;width:100%;height:100%;visibility:hidden;">
+    <ul>
+        <li><a href="#tabsm-1">HISTÓRICO<br />DE<br />TURNOS</a></li>
+        <li><a href="#tabsm-2">TURNOS<br />POR<br />OBRAS SOCIALES</a></li>
+        <li><a href="#tabsm-3">TURNOS<br />POR<br />ESTADOS</a></li>
+        <li><a href="#tabsm-4">CANTIDAD<br />DE ESTUDIOS<br />REALIZADOS</a></li>
+        <li><a href="#tabsm-5">TURNOS<br />OTORGADOS<br />POR USUARIOS</a></li>
+    </ul>
+    <div id="tabsm-1">
+        <div id="curve_chart1" style="width: 100%; height: 400px"></div>
+    </div>
+    <div id="tabsm-2">
+        <div id="curve_chart2" style="width: 100%; height: 400px"></div>
+    </div>
+    <div id="tabsm-3">
+        <div id="curve_chart3" style="width: 100%; height: 400px"></div>
+    </div>
+    <div id="tabsm-4">
+        <div id="curve_chart4" style="width: 100%; height: 400px"></div>
+    </div>
+    <div id="tabsm-5">
+        <div id="curve_chart5" style="width: 100%; height: 400px"></div>
+    </div>
+</div>

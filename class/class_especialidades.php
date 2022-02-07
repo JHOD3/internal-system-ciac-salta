@@ -15,6 +15,11 @@ class Especialidades extends Estructura implements iEspecialidades{
 		
 		parent::__construct($id);
 	} 
+	function cambiar_estado($tabla, $estado, $id)
+	{
+		$query = "UPDATE ".$tabla." SET estado = ".$estado." WHERE id_".$tabla." = ".$id;
+		return $query;
+	}
 	
 	function FormAlta(){
 		$htm = $this->Html($this->nombre_tabla."/form_alta");

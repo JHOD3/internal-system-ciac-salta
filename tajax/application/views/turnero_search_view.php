@@ -1,7 +1,7 @@
 <?php if (count($aMedicos) > 0): ?>
     <div class="row margin-10">
         <?php foreach ($aMedicos AS $rsM): ?>
-            <div class="col-sm-6 col-md-4">
+            <div class="col-sm-10 col-md-4">
                 <?php if (count($rsM['especialidades']) == 1): ?>
                     <?php foreach ($rsM['especialidades'] AS $rwEsp): ?>
                         <a
@@ -22,7 +22,7 @@
                     <?php endforeach; ?>
                 <?php else: ?>
                     <a
-                        href="#"
+                        href="#onClickButtonAgenda"
                         class="onClickButtonMedico"
                     >
                         <div class="txtBig">
@@ -31,7 +31,7 @@
                         </div>
                     </a>
                     <div>
-                        <?php foreach ($rsM['especialidades'] AS $rwEsp): ?>
+                        <?php foreach ($rsM['especialidades'] AS $rwEsp){  ?>
                             <div>
                                 <a
                                     href="#"
@@ -43,7 +43,7 @@
                                     <?=upper($rwEsp['nombre'])?>
                                 </a>
                             </div>
-                        <?php endforeach; ?>
+                        <?php } ?>
                     </div>
                 <?php endif; ?>
                 <div class="clearfloat30"></div>
@@ -51,6 +51,7 @@
         <?php endforeach; ?>
     </div>
     <script>
+
     $(function(){
         $('.onClickButtonMedico').click(function(event){
             event.preventDefault();
@@ -59,6 +60,7 @@
         });
         $('.onClickButtonAgenda').click(function(event){
             event.preventDefault();
+             $('a[href="#next"]').click();
             id_especialidades = $(this).data('id_especialidades');
             id_medicos = $(this).data('id_medicos');
             $('#id_medicos').val(id_medicos);
@@ -72,7 +74,7 @@
 <?php if ($_SERVER['HTTP_HOST'] == 'localhost' or $_SERVER['HTTP_HOST'] == '192.168.0.10'): ?>
                     'http://<?=$_SERVER['HTTP_HOST']?>/dgadmin/dgadmin2016/ciac/sistema/tajax/index.php/turnero/calendar/' +
 <?php else: ?>
-                    'http://ciacsaltadb.ddns.net/tajax/index.php/turnero/calendar/' +
+                    'https://ciacsaltadb.ddns.net/tajax/index.php/turnero/calendar/' +
 <?php endif; ?>
                     id_especialidades +
                     '/' +
@@ -84,7 +86,10 @@
                 ,
                 context: document.body
             }).done(function(data) {
-                $('#calendar').html(data);
+                var over = dividir(data);
+               
+                $('#calendar').html(over[0]);
+                $('#obraSocial').html(over[1]);
                 $('#divLoading').html('');
             }).fail(function(jqXHR, textStatus, errorThrown ){
                 if (textStatus == 'abort'){
@@ -104,8 +109,8 @@
     </script>
 <?php else: ?>
     <div class="row margin-10">
-        <div class="col-md-6">
-            No se encontraron resultados con los filtros seleccionados
+        <div class="col-md-12">
+            No se encontraron resultados con los filtros seleccionados, presiona <a href="" role="menuitem" onclick="$('a[href=#previous]').click();">Anterior</a> y realiza otra busqueda
         </div>
     </div>
 <?php endif; ?>

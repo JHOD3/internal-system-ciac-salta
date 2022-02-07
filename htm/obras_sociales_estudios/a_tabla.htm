@@ -40,22 +40,22 @@
 		});
 		
 		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
-		$('#t_'+nombre+" tfoot input").keyup( function () {
-			TableObraSocialEstudios.fnFilter( this.value, $('#t_'+nombre+" tfoot input").index(this) );
+		$('#t_'+nombre+" thead input").keyup( function () {
+			TableObraSocialEstudios.fnFilter( this.value, $('#t_'+nombre+" thead input").index(this) );
 		});
-		$('#t_'+nombre+" tfoot input").each( function (i) {
+		$('#t_'+nombre+" thead input").each( function (i) {
 			asInitVals[i] = this.value;
 		});
-		$("tfoot input").focus( function () {
+		$("thead input").focus( function () {
 			if ( this.className == "search_init" ){
 				this.className = "";
 				this.value = "";
 			}
 		});
-		$("tfoot input").blur( function (i) {
+		$("thead input").blur( function (i) {
 			if ( this.value == "" ){
 				this.className = "search_init";
-				this.value = asInitVals[$("tfoot input").index(this)];
+				this.value = asInitVals[$("thead input").index(this)];
 			}
 		});
 		///////////////////////////////////////////////////////
@@ -73,14 +73,14 @@
             <th>Acci&oacute;n</th>
         </tr>
     </thead> 
-    <tfoot>
+    <thead>
         <tr>
-            <th><input type="text" name="tb_nomenclador" value="Nomenclador" class="search_init" /></th>
-            <th><input type="text" name="tb_id_estudios" value="Estudios" class="search_init" /></th>
-            <th><input type="text" name="tb_importe" value="Importe" class="search_init" /></th>
+            <th><input type="text" name="tb_nomenclador" value="Nomenclador" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_id_estudios" value="Estudios" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_importe" value="Importe" class="search_init" style="width: 100%;" /></th>
             <th></th>
         </tr>
-    </tfoot>    
+    </thead>    
     <tbody>
         <tr>
             <td></td>

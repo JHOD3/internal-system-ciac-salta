@@ -36,7 +36,12 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 						Width = 800;
 					break;
 					case 'medicos_especialidades':
-						Width = 600;
+						Width = 900;
+						height = 200;
+					break;
+					case "medicos_obras_sociales":
+						width = 600;
+						height = 500;
 					break;
 				}
 			break;
@@ -111,8 +116,9 @@ function IniciarVentana(nombre, tipo, tabla, tipo_abm){
 						Height = 600;
 					break;
 					case 'medicos':
+						// Height = 800;
                         Width = '90%';
-						Height = 800;
+						Height = 700;
 					break;
 					case 'medicos_estudios':
 						Height = 500;

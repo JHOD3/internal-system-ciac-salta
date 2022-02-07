@@ -147,7 +147,7 @@ switch ($tabla){
 					'".strtoupper($email)."',
 					'1',
 					'".strtolower($obj->QuitarTildes(utf8_encode($nombres[0].$apellidos)))."',
-					'".base64_encode($nro_documento)."',
+					'".base64_encode($contrasena)."',
 					'".$sectores."',
 					'".$subsectores."',
 					'".strtoupper(utf8_decode($nro_sector))."',
@@ -419,6 +419,7 @@ switch ($tabla){
 					id_dias_semana,
 					desde,
 					hasta,
+					duracion_turno,
 					estado,
 					id_turnos_tipos,
                     id_plantas,
@@ -431,6 +432,7 @@ switch ($tabla){
 					".$dias_semana.",
 					'".$desde."',
 					'".$hasta."',
+					'".$duracion_turno."',
 					1,
 					'".$turnos_tipos."',
 					'".$plantas."',
@@ -676,6 +678,8 @@ switch ($tabla){
 SQL;
         #print "{$query_string_del}<br />";
         $obj->db->consulta($query_string_del);
+
+		//Kcmnt Aqui podria agregar logica de ordenado para el orden de turnos Practica Medicas
 
         // DAR DE ALTA LOS QUE SE AGREGARON
         $query_string = <<<SQL
@@ -1186,7 +1190,36 @@ SQL;
                     fecha_alta,
                     fecha_baja,
                     estado,
-                    fechanac
+                    fechanac,
+                    agenda,
+					comunicacion,
+					comunicados_gerencia,
+					novedades_diarias,
+					notas_imprecion,
+					encuestas,
+					especialidades,
+					estudios,
+					mantenimiento,
+					mantenimiento_reciente,
+					mantenimiento_historico,
+					medicos,
+					medicos_ciac,
+					medicos_externos,
+					medicos_empresas,
+					obras_sociales,
+					pacientes,
+					planes_contingencia,
+					practicas_medicas,
+					sectores,
+					sectores_uno,
+					subsectores,
+					consultorios,
+					disponibilidades,
+					tareas,
+					tareas_configuracion,
+					tareas_pendientes,
+					usuarios_permiso,
+					cumples
 					)";
 
 		$valores = "(
@@ -1198,7 +1231,36 @@ SQL;
 					'".date("Y-m-d")."',
 					NULL,
                     1,
-                    '".implode("-", array_reverse(explode("/", $fechanac)))."'
+                    '".implode("-", array_reverse(explode("/", $fechanac)))."',
+                    '".utf8_decode($agenda)."',
+                    '".utf8_decode($comunicacion)."',
+                    '".utf8_decode($comunicados_gerencia)."',
+                    '".utf8_decode($novedades_diarias)."',
+                    '".utf8_decode($notas_imprecion)."',
+                    '".utf8_decode($encuestas)."',
+                    '".utf8_decode($especialidades)."',
+                    '".utf8_decode($estudios)."',
+                    '".utf8_decode($mantenimiento)."',
+                    '".utf8_decode($mantenimiento_reciente)."',
+                    '".utf8_decode($mantenimiento_historico)."',
+                    '".utf8_decode($medicos)."',
+                    '".utf8_decode($medicos_ciac)."',
+                    '".utf8_decode($medicos_externos)."',
+                    '".utf8_decode($medicos_empresas)."',
+                    '".utf8_decode($obras_sociales)."',
+                    '".utf8_decode($pacientes)."',
+                    '".utf8_decode($planes_contingencia)."',
+                    '".utf8_decode($practicas_medicas)."',
+                    '".utf8_decode($sectores)."',
+                    '".utf8_decode($sectores_uno)."',
+                    '".utf8_decode($subsectores)."',
+                    '".utf8_decode($consultorios)."',
+                    '".utf8_decode($disponibilidades)."',
+                    '".utf8_decode($tareas)."',
+                    '".utf8_decode($tareas_configuracion)."',
+                    '".utf8_decode($tareas_pendientes)."',
+                    '".utf8_decode($cumples)."',
+                    '".utf8_decode($usuarios_permiso)."'
 					)";
 
 		print $query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);

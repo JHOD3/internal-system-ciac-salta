@@ -4,15 +4,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Turnero extends CI_Controller {
 
     function __construct()
-    {
+    {   
         parent::__construct();
         $this->output->set_header('Access-Control-Allow-Origin: *');
     }
 
-	public function index()
-	{
+    public function index()
+    {
         show_404();
-	}
+    }
 
     public function calendar(
         $id_especialidades,
@@ -22,6 +22,8 @@ class Turnero extends CI_Controller {
         $day = null,
         $desde = null
     ) {
+
+    
         $aData['proximoTurnoDisponible'] = $this->turnero_model->proximoTurnoDisponible(
             $id_especialidades,
             $id_medicos
@@ -90,6 +92,14 @@ class Turnero extends CI_Controller {
             $day
         );
 
+        $aData['HoraLibre'] = $this->turnero_model->obtHoraLibre(
+            $id_especialidades,
+            $id_medicos,
+            $year,
+            $month,
+            $day
+        );
+
         $prefsCalendar = array (
             #'start_day' => 'monday',
             'show_next_prev'  => TRUE,
@@ -108,22 +118,27 @@ class Turnero extends CI_Controller {
     }
 
     public function search()
-    {
+    {   
         $aData['post'] = $this->input->get();
         $aData['aMedicos'] =
             $this->turnero_model->obtMedicosPorEspecialidadFiltro(
                 $aData['post']
             )
             ;
-		$this->load->view('turnero_search_view', $aData);
+        $this->load->view('turnero_search_view', $aData);
     }
 
-    public function tagspro($tipo = '', $filter = '')
-    {
-	    $aData['tipo'] = urldecode($tipo);
+    public function tagspro($tipo = '', $filter = '', $estudio = '')
+    {  
+        $aData['tipo'] = urldecode($tipo);
         $aData['filter'] = urldecode($filter);
-        $aData['aMedicos'] = $this->turnero_model->obtMedicosPorEspecialidad($aData['tipo'], $aData['filter']);
-		$this->load->view('turnero_tagspro_view', $aData);
+        $aData['estudio'] = urldecode($estudio);
+        if ($filter == 'por-estudio') {
+            $aData['aMedicos'] = $this->turnero_model->obtMedicosPorEstudio($aData['tipo'], $aData['estudio']);
+        }else{
+            $aData['aMedicos'] = $this->turnero_model->obtMedicosPorEspecialidad($aData['tipo'], $aData['filter'], $aData['estudio']);
+        }
+        $this->load->view('turnero_tagspro_view', $aData);
     }
 }
 //EOF Turnero.php

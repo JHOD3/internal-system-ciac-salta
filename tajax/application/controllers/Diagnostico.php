@@ -98,7 +98,10 @@ class Diagnostico extends CI_Controller {
     }
 
     public function listado($date1, $date2, $id_usuario = null, $isMedico = false)
-    {
+    {   
+        if (!$this->input->is_ajax_request()) {
+           header('HTTP/1.1 403 Forbidden'); exit;
+        }
         ini_set('memory_limit', '512M');
         if (isset($id_usuario)) {
             if ($isMedico) {
@@ -120,6 +123,12 @@ class Diagnostico extends CI_Controller {
         }
         if (!isset($post['hour2']) or !$post['hour2']) {
             $post['hour2'] = '23:59';
+        }
+        if (!isset($post['hour3']) or !$post['hour3']) {
+            $post['hour3'] = '00:00';
+        }
+        if (!isset($post['hour4']) or !$post['hour4']) {
+            $post['hour4'] = '23:59';
         }
         $dataView = $post;
         $dataView['id_usuario'] = $id_usuario;
@@ -250,6 +259,7 @@ class Diagnostico extends CI_Controller {
             'TP',
             'TO',
             'TA',
+            'Coseguro',
             'DD',
             'Derivador',
             'Nombre',

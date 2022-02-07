@@ -249,6 +249,7 @@
         						alert(requestData);
                                 $('.btn_eliminar[data-id="' + id + '"]').parent().parent().find('td').attr('style', 'color:#900;font-weight:bold;text-decoration:line-through;');
                                 $('.btn_eliminar[data-id="' + id + '"]').parent().parent().find('td a').remove();
+                               
         					},
         					complete: function(requestData, exito){},
         					error: function (){
@@ -263,6 +264,85 @@
         			}
         		}
         	});
+        });
+
+        $(document).on("click",".btn_estado",function(){
+        	if (console && console.log) console.log('click Cambiar estado');
+        	var tabla = $(this).data("tabla");
+        	var estado = $(this).data("estado");
+        	var id = $(this).data("id");
+            console.log(estado);
+        	$("#dialog_estado").dialog({
+        		resizable: false,
+        		height:200,
+        		modal: true,
+        		buttons: {
+        			"Aceptar": function() {
+        				$.ajax({
+        					type: "POST",
+        					url: "../ajax/cambiar_estado.php",
+        					data: {tabla:tabla, estado:estado, id: id},
+        					beforeSend: function() {
+        						$("#mje").html("Enviando información...");
+                                $('.sorting_asc').click();
+        					},
+        					success: function(requestData){
+                                
+                                $('.sorting_desc').click();
+        					},
+        					complete: function(requestData, exito){},
+        					error: function (){
+        						alert ("ERROR AL CARGAR. Vuelva a Intentarlo.");
+        					}
+        				});
+        				$( this ).dialog( "close" );
+        			},
+        			Cancel: function() {
+        			  $( this ).dialog( "close" );
+        			  return;
+        			}
+        		}
+        	});
+        });
+        $(document).on("click", ".btn_opciones-1", function(e){
+            e.preventDefault();
+            var tipo_btn = $(this).data("tipo_btn");
+            var id = $(this).data("id");
+            var id_padre = $(this).data("id_padre");
+            console.log('hola');
+            if (tipo_btn == "tabla_hija"){
+
+                var tabla_hija = $(this).data("hija");
+                //var ventana_opciones_hijas = "#dialog_tabla_" + tabla_hija;
+
+                IniciarVentana('ventana_menu', "abrir", tabla_hija);
+
+                $.ajax({
+                    type: "POST",
+                    url: "../ajax/admin_tabla.php",
+                    data: {tabla: tabla_hija, id_padre: id},
+                    beforeSend: function() {
+                        $('#ventana_menu').html("");
+
+                    },
+                    success: function(requestData){
+                        var rta = requestData;
+                        $('#ventana_menu').html(rta);
+                    },
+                    complete: function(requestData, exito){
+                    },
+                    error: function (){
+                        alert ("error");
+                    }
+                });
+
+                var nombre = $(this).data('nombre');
+                $('#ventana_menu').dialog('option', 'title', 'Administraci\u00f3n de ' + nombre);
+                $('#ventana_menu').dialog( "open" );
+
+                $('#ventana_menu').focus();
+
+            }
         });
 
 	</script>

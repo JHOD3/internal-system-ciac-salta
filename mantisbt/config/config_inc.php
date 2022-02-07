@@ -1,5 +1,5 @@
 <?php
-$g_hostname               = '192.168.100.156';
+$g_hostname               = '192.168.10.156';
 $g_db_type                = 'mysqli';
 $g_database_name          = 'mantisdb';
 $g_db_username            = 'mantisuser';

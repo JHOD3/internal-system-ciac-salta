@@ -1,28 +1,48 @@
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap');
+	#detalle{
+		width: 500px;
+		max-width: 100%;
+		margin: auto;
+	};
+</style> 
+
 <div id="detalle" >
-[block: block_registros]
-	<img src="[IMG]logo_imprimir.png" style="width:100%; margin:auto; text-align:center; display: inherit; max-width: 600px;" />
-    <h2 style="font-size:12px; font-family:Arial; text-align:center; font-weight:normal">Santiago del Estero 449 &shy; A4400BKI - Salta - Argentina<br />
-Tel: 4214738 - 4213251<br />
-administracion@ciacsalta.com.ar<br />
-Lunes a viernes de 7.30 a 21 hs</h2>
-
-	<p style="font-family:Arial; font-size:12px; padding:2px 0px;">Paciente: <strong>
-	[PACIENTE]</strong></p>
-
-    <p style="font-family:Arial; font-size:12px; padding:2px 0px;">M&eacute;dico: <strong>
-	[MEDICO]</strong></p>
-
-    <p style="font-family:Arial; font-size:12px; padding:2px 0px;">Turno: <strong>
-	[FECHA] - [desde]hs[PLANTA]</strong></p>
-
-    <p style="font-family:Arial; font-size:12px; padding:2px 0px;">Ud. fue atendido por <strong>
-	[SECRETARIA]</strong></p>
-
-    <p>Estimado paciente para retirar estudios presentarse con su DNI</p>
-
-    <p><br />
-	</p>
-<!--	<p>Requisitos:</p>
-    <p>Nada de sexo 24 hs antes del estudio</p>
--->[/block: block_registros]
+	[block: block_registros]
+		<img src="[IMG]logo_imprimir.png" style="width:50%; margin:auto; text-align:center; display: inherit; max-width: 250px;" />
+		<hr>
+		<p style="font-family:'Source Sans Pro', 'Trebuchet MS', Arial; font-size:13px; ">Paciente: <strong>
+		[PACIENTE]</strong></p>
+		<p style="font-family:'Source Sans Pro', 'Trebuchet MS', Arial; font-size:13px; ">M&eacute;dico: <strong>
+		[MEDICO]</strong></p>
+	
+		<p style="font-family:'Source Sans Pro', 'Trebuchet MS', Arial; font-size:13px; ">Turno: <strong>
+		[FECHA] - [desde]hs[PLANTA]</strong></p>
+	
+	<!-- 	<p style="text-align: center;font-size:12px;margin: 0px;"> <strong> Turno </strong> </p>
+		<table style="font-size: 12px; width:100%;border: 0.5px solid;" >
+			<tr>
+				<td>Fecha</td>
+				<td>Desde</td>
+				<td>Planta</td>
+			</tr>
+			<tr>
+				<td>[FECHA]</td>
+				<td>[desde]</td>
+				<td>[PLANTA]</td>
+			</tr>
+		</table> -->
+	
+		<p style="font-family:'Source Sans Pro', 'Trebuchet MS', Arial; font-size:13px; ">Ud. fue atendido por <strong>
+		[SECRETARIA]</strong></p>
+	
+		<p style="font-size: 14px; font-family:'Source Sans Pro', 'Trebuchet MS', Arial; text-align: center;margin-bottom: 0px;">Estimado paciente para retirar estudios presentarse con su DNI</p>
+		<hr> 
+		<h2 style="font-size: 11px; font-family:'Source Sans Pro', 'Trebuchet MS', Arial; text-align:center; font-weight:normal">Santiago del Estero 449 &shy; Tel. 3874214738 / 3875125955<br />
+		Turnos Online - www.ciacsalta.com.ar</h2>
+	
+	<!--	<p>Requisitos:</p>
+		<p>Nada de sexo 24 hs antes del estudio</p>
+	-->
+	[/block: block_registros]
 </div>

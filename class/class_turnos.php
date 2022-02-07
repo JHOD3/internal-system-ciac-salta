@@ -83,6 +83,36 @@ class Turnos extends Estructura implements iTurnos{
             ;
         }
 
+		//Añadir observaciones del Paciente en Panel Turnos
+		if ($_SESSION['SISTEMA'] == 'sas') {
+			$query_string_po = $this->querys->ObservacionesDePacientes($row['id_pacientes']);
+			$query_po = $this->db->consulta($query_string_po);
+			$pacientes_observaciones = '';
+			if ($this->db->num_rows($query_po) > 0) {
+				while ($row_po = $this->db->fetch_array($query_po)) {
+					$fechahora = date("d/m/y H:i", strtotime($row_po['fechahora']))."hs";
+					$pacientes_observaciones = <<<HTML
+						<div>
+							<div><strong>{$fechahora} - {$row_po['usuario']}</strong></div>
+							<div>{$row_po['observacion']}</div>
+						</div>
+						{$pacientes_observaciones}
+HTML;
+				}
+			} else {
+				$pacientes_observaciones.= <<<HTML
+					<div>
+						<div>No hay observaciones</div>
+					</div>
+HTML;
+			}
+			$row['PACIENTES_OBSERVACIONES'] =
+				$pacientes_observaciones
+			;
+		} else {
+			$row['PACIENTES_OBSERVACIONES'] = '';
+		}
+
 		$obj_obra_social = new Obras_sociales($obj_paciente->id_obras_sociales);
 		$row["OBRA_SOCIAL"] =
             '<strong style="color:#007FA6;">'.
@@ -117,7 +147,8 @@ HTML;
 				$row["CLASS_ESTUDIO"] = "oculto";
 
 				$arancel_os = $obj_medico->ArancelConsulta($obj_paciente->id_obras_sociales);
-				$particular_consulta = '0'; //$obj_medico->particular_consulta;
+				$particular_consulta = '0'; //$obj_medico->ArancelConsulta(51); //$obj_medico->particular_consulta;
+				$row['IMPORTE_PARTI'] = $obj_medico->ArancelConsulta(51); //fix temporal para Particulares
 
 				$row['IMPORTE_ARANCEL_OS'] = $arancel_os;
 				$row['IMPORTE_CONSULTA_PARTICULAR'] =  $particular_consulta;

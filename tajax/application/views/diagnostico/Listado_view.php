@@ -4,53 +4,53 @@ $orderby_field = isset($orderby_field) ? $orderby_field : '1';
 $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
 ?>
 <style>
-.tAC {
-    text-align: center;
-}
-.tAR {
-    text-align: right;
-}
-.container{
-    width: 98%;
-    margin: 0 1%;
-}
-#tblDxI tr > * {
-    padding: 4px;
-}
-.tot {
-    text-align: center!important;
-    font-size: 14px!important;
-    font-weight: bold!important;
-}
-.dOrder {
-    cursor: pointer;
-}
-.ms-drop > ul > li > label {
-    padding: 2px 4px;
-}
-.ms-drop > ul > li:nth-child(even) > label {
-    background-color: #f0f0f0;
-}
-.ms-drop > ul > li > label > span {
-    padding-left: 8px;
-}
-.usuFmt {
-    font-size: 10px;
-    font-weight: bold;
-    color: black;
-}
-.openTurnoEstudio {
-    color: green;
-    font-size: 10px;
-}
-a.closeTagMedico {
-    background-color: #999;
-    padding: 2px 6px;
-    margin: 0 6px 2px 0;
-    border-radius: 4px;
-    color: #ffffff;
-    font-weight: bold;
-}
+    .tAC {
+        text-align: center;
+    }
+    .tAR {
+        text-align: right;
+    }
+    .container{
+        width: 98%;
+        margin: 0 1%;
+    }
+    #tblDxI tr > * {
+        padding: 4px;
+    }
+    .tot {
+        text-align: center!important;
+        font-size: 14px!important;
+        font-weight: bold!important;
+    }
+    .dOrder {
+        cursor: pointer;
+    }
+    .ms-drop > ul > li > label {
+        padding: 2px 4px;
+    }
+    .ms-drop > ul > li:nth-child(even) > label {
+        background-color: #f0f0f0;
+    }
+    .ms-drop > ul > li > label > span {
+        padding-left: 8px;
+    }
+    .usuFmt {
+        font-size: 10px;
+        font-weight: bold;
+        color: black;
+    }
+    .openTurnoEstudio {
+        color: green;
+        font-size: 10px;
+    }
+    a.closeTagMedico, a.closeTagEstudio {
+        background-color: #999;
+        padding: 2px 6px;
+        margin: 0 6px 2px 0;
+        border-radius: 4px;
+        color: #ffffff;
+        font-weight: bold;
+    }
 </style>
 <h1>Prácticas Médicas
     <?php if (!$isMedico): ?>
@@ -65,11 +65,14 @@ a.closeTagMedico {
                 <td colspan="100%">
                     Desde:
                     <input type="text" id="date1" value="<?=date("d/m/Y", strtotime($date1))?>" class="datepicker" style="width: 74px;" />
-                    <input type="text" id="hour1" name="hour1" value="<?=$hour1?>" class="formathour" style="width: 38px;" placeholder="__:__" />
                     &nbsp;
                     Hasta:
                     <input type="text" id="date2" value="<?=date("d/m/Y", strtotime($date2))?>" class="datepicker" style="width: 74px;" />
-                    <input type="text" id="hour2" name="hour2" value="<?=$hour2?>" class="formathour" style="width: 38px;" placeholder="__:__" />
+                    &nbsp;
+                    Limitar horas:
+                    <input type="text" id="hour3" name="hour3" value="<?=$hour3?>" class="formathour" style="width: 38px;" placeholder="__:__" />
+                    <input type="text" id="hour4" name="hour4" value="<?=$hour4?>" class="formathour" style="width: 38px;" placeholder="__:__" />
+                    &nbsp;
                     <input type="button" id="dateok" value="ok" />
                     <input type="button" id="dateexport" value="exportar" />
                     &nbsp;
@@ -77,20 +80,21 @@ a.closeTagMedico {
                     <select id="orderby_field" name="orderby_field" style="width:120px;">
                         <option value="1"<?=$orderby_field == '1' ? $selected : ''?>>Turno</option>
                         <option value="2"<?=$orderby_field == '2' ? $selected : ''?>>Paciente</option>
-                        <option value="3"<?=$orderby_field == '4' ? $selected : ''?>>Cód.Pra.</option>
-                        <option value="4"<?=$orderby_field == '5' ? $selected : ''?>>Estudio</option>
-                        <option value="5"<?=$orderby_field == '6' ? $selected : ''?>>Realizador</option>
-                        <option value="6"<?=$orderby_field == '7' ? $selected : ''?>>O.Social</option>
-                        <option value="7"<?=$orderby_field == '8' ? $selected : ''?>>Prestación</option>
-                        <option value="8"<?=$orderby_field == '9' ? $selected : ''?>>Nro.Orden</option>
-                        <option value="9"<?=$orderby_field == '10' ? $selected : ''?>>Nro.Afiliado</option>
-                        <option value="10"<?=$orderby_field == '11' ? $selected : ''?>>Cant.</option>
-                        <option value="11"<?=$orderby_field == '12' ? $selected : ''?>>Tipo</option>
-                        <option value="12"<?=$orderby_field == '13' ? $selected : ''?>>TP</option>
-                        <option value="13"<?=$orderby_field == '14' ? $selected : ''?>>TO</option>
-                        <option value="14"<?=$orderby_field == '15' ? $selected : ''?>>TA</option>
-                        <option value="15"<?=$orderby_field == '16' ? $selected : ''?>>DD</option>
-                        <option value="16"<?=$orderby_field == '17' ? $selected : ''?>>Derivador</option>
+                        <option value="3"<?=$orderby_field == '3' ? $selected : ''?>>Cód.Pra.</option>
+                        <option value="4"<?=$orderby_field == '4' ? $selected : ''?>>Estudio</option>
+                        <option value="5"<?=$orderby_field == '5' ? $selected : ''?>>Realizador</option>
+                        <option value="6"<?=$orderby_field == '6' ? $selected : ''?>>O.Social</option>
+                        <option value="7"<?=$orderby_field == '7' ? $selected : ''?>>Prestación</option>
+                        <option value="8"<?=$orderby_field == '8' ? $selected : ''?>>Nro.Orden</option>
+                        <option value="9"<?=$orderby_field == '9' ? $selected : ''?>>Nro.Afiliado</option>
+                        <option value="10"<?=$orderby_field == '10' ? $selected : ''?>>Cant.</option>
+                        <option value="11"<?=$orderby_field == '11' ? $selected : ''?>>Tipo</option>
+                        <option value="12"<?=$orderby_field == '12' ? $selected : ''?>>TP</option>
+                        <option value="13"<?=$orderby_field == '13' ? $selected : ''?>>TO</option>
+                        <option value="14"<?=$orderby_field == '14' ? $selected : ''?>>TA</option>
+                        <option value="15"<?=$orderby_field == '15' ? $selected : ''?>>DD</option>
+                        <option value="17"<?=$orderby_field == '17' ? $selected : ''?>>Coseguro</option>
+                        <option value="16"<?=$orderby_field == '16' ? $selected : ''?>>Derivador</option>
                     </select>
                     <select id="orderby_order" name="orderby_order" style="width:90px;">
                         <option value="ASC"<?=$orderby_order == 'ASC' ? $selected : ''?>>Ascendiente</option>
@@ -105,13 +109,13 @@ a.closeTagMedico {
             <?php else: ?>
                 <tr>
                     <td colspan="100%">
-                        Realizador:
-                        <input type="text" id="srea" value="" />
+                        <b>Realizador</b>:
+                        <input type="text" id="srea" style="padding-bottom: 0px;padding-top: 0px;" value="" />
                         <?php if (isset($srea)): ?>
                             <?php for ($i = 0; $i < count($medicos); $i++): ?>
                                 <?php if (in_array($medicos[$i]['id_medicos'], $srea)): ?>
                                     <a class="closeTagMedico" href="">
-                                        <input type="hidden" name="srea[]" value="<?=$medicos[$i]['id_medicos']?>" />
+                                        <input type="hidden" name="srea[]" style="padding-bottom: 0px;padding-top: 0px;" value="<?=$medicos[$i]['id_medicos']?>" />
                                         <?=
                                             strtoupper(
                                                 trim($medicos[$i]['saludo'])." ".
@@ -125,46 +129,104 @@ a.closeTagMedico {
                             <?php endfor; ?>
                         <?php endif; ?>
                         <script>;
-                        var tagsMEDICOS = [
+                            var tagsMEDICOS = [
+                                <?php $cnct = ''; ?>
+                                <?php for ($i = 0; $i < count($medicos); $i++): ?>
+                                    <?php
+                                    $m = strtoupper(
+                                        trim($medicos[$i]['saludo'])." ".
+                                        trim($medicos[$i]['apellidos'])." ".
+                                        trim($medicos[$i]['nombres'])
+                                    );
+                                    ?>
+                                    <?=$cnct?>{label: '<?=$m?>', value: '<?=$medicos[$i]['id_medicos']?>'}
+                                    <?php $cnct = ','; ?>
+                                <?php endfor; ?>
+                            ];
+                            $('#srea').autocomplete({
+                                source: tagsMEDICOS,
+                                close: function( event, ui ) {
+                                    $('#srea').val('');
+                                },
+                                select: function( event, ui ) {
+                                    $(this).after('<input type="hidden" name="srea[]" value="' + ui.item.value + '" />')
+                                    $('#dateok').click();
+                                }
+                            });
+                            $('a.closeTagMedico').click(function(event){
+                                event.preventDefault();
+                                $(this).remove();
+                                $('#dateok').click();
+                                return false;
+                            });
+                            $('#srea').focus();
+                        </script>
+                    </td>
+                </tr>
+            <?php endif; ?>
+            <!--                                   ESTUDIOS                                              -->
+            <tr style="background-color: #e9e9e9">
+                <td colspan="100%">
+                    <b>Estudio</b>:
+                    <input type="text" id="sest" style="padding-bottom: 0px;padding-top: 0px;" value="" />
+                    <?php if (isset($sest)): ?>
+                        <?php for ($i = 0; $i < count($sest); $i++): ?>
+                                <a class="closeTagEstudio" href="">
+                                    <input type="hidden" name="sest[]" style="padding-bottom: 0px;padding-top: 0px;" value="<?=$sest[$i]?>" />
+                                    <?=
+                                        strtoupper(
+                                            trim($sest[$i])
+                                        )
+                                    ?>
+                                    &nbsp;&nbsp;X
+                                </a>
+                        <?php endfor; ?>
+                    <?php endif; ?>
+                    <script>;
+                        var tasgESTUDIOS = [
                             <?php $cnct = ''; ?>
-                            <?php for ($i = 0; $i < count($medicos); $i++): ?>
+                            <?php for ($i = 0; $i < count($estudios); $i++): ?>
                                 <?php
-                                $m = strtoupper(
-                                    trim($medicos[$i]['saludo'])." ".
-                                    trim($medicos[$i]['apellidos'])." ".
-                                    trim($medicos[$i]['nombres'])
+                                $e = strtoupper(
+                                    trim($estudios[$i]['nombre'])
                                 );
                                 ?>
-                                <?=$cnct?>{label: '<?=$m?>', value: '<?=$medicos[$i]['id_medicos']?>'}
+                                <?=$cnct?>{label: '<?=$e?>', value: '<?=$estudios[$i]['nombre']?>'}
                                 <?php $cnct = ','; ?>
                             <?php endfor; ?>
                         ];
-                        $('#srea').autocomplete({
-                            source: tagsMEDICOS,
+                        $('#sest').autocomplete({
+                            source: tasgESTUDIOS,
                             close: function( event, ui ) {
-                                $('#srea').val('');
+                                if (this.value.trim() != ''){
+                                    $(this).after('<input type="hidden" name="sest[]" value="' + this.value + '" />');
+                                    $('#dateok').click();
+                                }
+                                else{
+                                    $('#sest').val('');
+                                }
                             },
                             select: function( event, ui ) {
-                                $(this).after('<input type="hidden" name="srea[]" value="' + ui.item.value + '" />')
+                                $(this).after('<input type="hidden" name="sest[]" value="' + ui.item.value + '" />');
                                 $('#dateok').click();
                             }
                         });
-                        $('a.closeTagMedico').click(function(event){
+                        $('a.closeTagEstudio').click(function(event){
                             event.preventDefault();
                             $(this).remove();
                             $('#dateok').click();
                             return false;
                         });
-                        $('#srea').focus();
-                        </script>
-                    </td>
-                </tr>
-            <?php endif; ?>
+                        $('#sest').focus();
+                    </script>
+                </td>
+            </tr>
+
             <tr class="inputSearch">
                 <td>&nbsp;</td>
                 <td><input id="spac" name="spac" type="text" value="<?=isset($spac) ? $spac : ''?>" /></td>
                 <td><input id="sces" name="sces" type="text" value="<?=isset($sces) ? $sces : ''?>" /></td>
-                <td><input id="sest" name="sest" type="text" value="<?=isset($sest) ? $sest : ''?>" /></td>
+                <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td><input id="soso" name="soso" type="text" value="<?=isset($soso) ? $soso : ''?>" /></td>
                 <td>&nbsp;</td>
@@ -174,8 +236,15 @@ a.closeTagMedico {
                 <td>&nbsp;</td>
                 <td class="tot"><?=$cantidad_de_ordenes[1]?></td>
                 <td class="tot"><?=$cantidad_de_ordenes[0]?></td>
-                <td class="tot"><?=isset($deja_deposito_suma[0]) ? '$'.number_format($deja_deposito_suma[0], 0, "", ".") : ''?></td>
-                <td class="tot"><?=isset($deja_deposito_suma[1]) ? '$'.number_format($deja_deposito_suma[1], 0, "", ".") : ''?></td>
+                <?php if($_SESSION['SUPERUSER']>=2): ?>
+                    <td class="tot"><?=isset($deja_deposito_suma[0]) ? '$'.number_format($deja_deposito_suma[0], 0, "", ".") : ''?></td>
+                    <td class="tot"><?=isset($deja_deposito_suma[1]) ? '$'.number_format($deja_deposito_suma[1], 0, "", ".") : ''?></td>
+                    <td class="tot"><?=isset($deja_deposito_suma[2]) ? '$'.number_format($deja_deposito_suma[2], 0, "", ".") : ''?></td>
+                <?php else:?>
+                    <td class="tot"><?=''?></td>
+                    <td class="tot"><?=''?></td>
+                    <td class="tot"><?=''?></td>
+                <?php endif;?>
                 <td colspan="2"><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
                 <td>&nbsp;</td>
                 <td colspan="2">
@@ -202,6 +271,7 @@ a.closeTagMedico {
                 <td class="dOrder" data-order="13" style="width:16px;" title="Trajo Orden">TO</td>
                 <td class="dOrder" data-order="14" style="width:32px;" title="Trajo Arancel">TA</td>
                 <td class="dOrder" data-order="15" style="width:32px;" title="Deja Depósito">DD</td>
+                <td class="dOrder" data-order="17" style="width:32px;" title="Coseguro">Coseguro</td>
                 <td class="dOrder" data-order="16" style="width:60px;" title="Derivador">Der.</td>
                 <td style="width:120px;">Nombre</td>
                 <td style="width:100px;" title="Observaciones">Obs.</td>
@@ -262,6 +332,7 @@ a.closeTagMedico {
     </td>
     <td<?=$idmer?>"trajo_arancel"><?=$item['trajo_arancel'] > 0 ? "\$&nbsp;{$item['trajo_arancel']}" : '---'?></td>
     <td<?=$idmer?>"deja_deposito"><?=$item['deja_deposito'] > 0 ? "\$&nbsp;{$item['deja_deposito']}" : '---'?></td>
+    <td<?=$idmer?>"trajo_arancel_coseguro"><?=$item['trajo_arancel_coseguro'] > 0 ? "\$&nbsp;{$item['trajo_arancel_coseguro']}" : '---'?></td>
     <td<?=$idmer?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
     <td data-mth="medicos_derivacion"><?=$item['medicos_derivacion'] ? $item['medicos_derivacion'] : $item['medicosext_derivacion']?></td>
     <td<?=$idmer?>"observaciones"><?=$item['observaciones']?></td>
@@ -363,8 +434,9 @@ a.closeTagMedico {
 </div>
 <div id="tab_trajo_arancel" class="tab_hidden"><input type="number" name="trajo_arancel" value="" style="width:40px;text-align:right;" /></div>
 <div id="tab_deja_deposito" class="tab_hidden"><input type="number" name="deja_deposito" value="" style="width:40px;text-align:right;" /></div>
+<div id="tab_trajo_arancel_coseguro" class="tab_hidden"><input type="number" name="trajo_arancel_coseguro" value="" style="width:40px;text-align:right;" /></div>
 <div id="tab_matricula_derivacion" class="tab_hidden"><input type="text" name="matricula_derivacion" value="" style="width:50px;text-align:right;" class="ac_matricula_derivacion" /></div>
-<div id="tab_observaciones" class="tab_hidden"><input type="text" name="observaciones" value="" style="width:100px;" /></div>
+<div id="tab_observaciones" class="tab_hidden"><input type="text" name="observaciones" value="" style="width:100px;text-transform: none;" /></div>
 <div id="tab_save" class="tab_hidden"><input type="button" value="Guardar" /></div>
 <?php if ($SUPERUSER > 1): ?>
     <div id="tab_dele" class="tab_hidden"><a href="#" class="dele">Eliminar</a></div>
@@ -527,6 +599,7 @@ $(document).ready(function(){
                             serialized+= '&trajo_orden=' + $(pre_s + 'trajo_orden' + pos).val();
                             serialized+= '&trajo_arancel=' + $(pre_i + 'trajo_arancel' + pos).val();
                             serialized+= '&deja_deposito=' + $(pre_i + 'deja_deposito' + pos).val();
+                            serialized+= '&trajo_arancel_coseguro=' + $(pre_i + 'trajo_arancel_coseguro' + pos).val();
                             serialized+= '&matricula_derivacion=' + $(pre_i + 'matricula_derivacion' + pos).val();
                             serialized+= '&observaciones=' + $(pre_i + 'observaciones' + pos).val();
 //                            $(pre_d + 'codigoalternat' + pos).html('&#8634;');
@@ -565,6 +638,7 @@ $(document).ready(function(){
                                 $(pre_d + 'trajo_orden' + pos).html(dataJSON['trajo_orden']);
                                 $(pre_d + 'trajo_arancel' + pos).html(dataJSON['trajo_arancel']);
                                 $(pre_d + 'deja_deposito' + pos).html(dataJSON['deja_deposito']);
+                                $(pre_d + 'trajo_arancel_coseguro' + pos).html(dataJSON['trajo_arancel_coseguro']);
                                 $(pre_d + 'matricula_derivacion' + pos).html(dataJSON['matricula_derivacion']);
                                 $(pre_d + 'medicos_derivacion' + pos).html(dataJSON['medicos_derivacion']);
                                 $(pre_d + 'observaciones' + pos).html(dataJSON['observaciones']);

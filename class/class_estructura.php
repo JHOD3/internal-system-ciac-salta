@@ -161,8 +161,8 @@ class Estructura{
 				}else{
 					$row["SELECTED"] = "";
 				}
-
-				$texto = $row["nombre"];
+				
+				$texto = isset($row["nombre"]) ? $row["nombre"] : null;
 
                 switch($this->nombre_tabla){
                     case "subsectores":
@@ -1792,6 +1792,10 @@ class Estructura{
     }
 
     function obtMotivosDeInhabilitaciones(){
+		$desde = isset($desde) ? $desde : null;
+		$hasta = isset($hasta) ? $hasta : null;
+		$id_usuarios = isset($id_usuarios) ? $id_usuarios : null;
+
 		$query_string = $this->querys->obtMotivosDeInhabilitaciones($desde, $hasta, $id_usuarios);
 		$query = $this->db->consulta($query_string);
         $data = "";
@@ -1925,4 +1929,16 @@ HTML;
         return utf8_encode($data);
     }
 
+	function obtMEDICOS_OPTIONS()
+    {
+		$query_string = $this->querys->obtMEDICOS_OPTIONS();
+		$query = $this->db->consulta($query_string);
+        $data = '';
+        while ($row = $this->db->fetch_array($query)) {
+            $data.=
+                "<option value=\"{$row['id_medicos']}\">".$row['apellidos']." ".$row['nombres']."</option>"
+            ;
+        }
+        return utf8_encode($data);
+    }
 }

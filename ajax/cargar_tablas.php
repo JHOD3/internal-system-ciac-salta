@@ -69,13 +69,13 @@ switch ($tabla){
 		$aColumns = array('id_medicos', 'saludo', 'apellidos', 'nombres', 'nro_documento', 'email', 'telefonos', 'id_sectores', 'id_subsectores', 'interno', 'id_plantas', 'matricula');
 	break;
 	case "medicosext":
-		$aColumns = array('id_medicosext', 'saludo', 'apellidos', 'nombres', 'matricula');
+		$aColumns = array('id_medicosext', 'saludo', 'apellidos', 'nombres', 'matricula','email','domicilio','telefonos','fechanac');
     break;
 	case "medicosexp":
 		$aColumns = array('mx.id_medicosexp','mx.saludo','mx.apellidos','mx.nombres','turnos_turnos','turnos_sobreturnos','turnos_total','horas_horario','horas_turnos','horas_sobreturnos','horas_total');
 	break;
 	case "especialidades":
-		$aColumns = array('id_especialidades', 'nombre');
+		$aColumns = array('id_especialidades', 'nombre','estado');
 	break;
 	case "estudios":
 		$aColumns = array('id_estudios', 'nombre', 'importe', 'arancel', 'requisitos', 'codigopractica');
@@ -93,10 +93,10 @@ switch ($tabla){
 		$aColumns = array('id_medicos_especialidades', 'id_medicos','id_especialidades', 'duracion_turno');
 	break;
 	case "medicos_horarios":
-		$aColumns = array('id_medicos_horarios', 'id_medicos', 'id_especialidades',  'id_dias_semana', 'id_plantas', 'desde', 'hasta', 'nro_consultorio');
+		$aColumns = array('id_medicos_horarios', 'id_medicos', 'id_especialidades',  'id_dias_semana', 'id_plantas', 'desde', 'hasta', 'nro_consultorio', 'duracion_turno');
 	break;
 	case 'medicos_estudios':
-		$aColumns = array('id_medicos_estudios', 'id_medicos','id_estudios', 'particular');
+		$aColumns = array('id_medicos_estudios', 'id_medicos','id_estudios', 'particular', 'arancel');
 	break;
 	case 'medicos_obras_sociales':
 		$aColumns = array('id_medicos_obras_sociales', 'id_medicos', 'nombre','arancel');
@@ -1724,7 +1724,8 @@ if ( $sWhere == "" ){
         $tabla != 'subsectores' and
         $tabla != 'medicosexp' and
         $tabla != 'encuestas' and
-        $tabla != 'novedades_diarias'
+        $tabla != 'novedades_diarias' and
+        $tabla != 'especialidades'
     ) {
         $sWhere = "WHERE $pfTable.estado = 1";
     }
@@ -1734,7 +1735,8 @@ if ( $sWhere == "" ){
         $tabla != 'subsectores' and
         $tabla != 'medicosexp' and
         $tabla != 'encuestas' and
-        $tabla != 'novedades_diarias'
+        $tabla != 'novedades_diarias'and
+        $tabla != 'especialidades'
     ) {
     	$sWhere = $sWhere.") AND $pfTable.estado = 1";
     } else {
@@ -2109,6 +2111,10 @@ if ($cant_registros != 0){
 			if (!isset($id_padre)){
 				$editar = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
 				$eliminar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Eliminar' data-tabla='".$tabla."' class='btn_eliminar'><img src='".URL."files/img/btns/eliminar.png' border='0' ></a>";
+
+				$estado_cambiar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Cambiar Estado' data-estado='0' data-tabla='".$tabla."' class='btn_estado' data-id_padre='".$id_padre."'><img id='estado' src='".URL."files/img/btns/ojo.png' border='0'></a>";
+
+				$estado_cambiar_2 = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Cambiar Estado' data-estado='1' data-tabla='".$tabla."' class='btn_estado' data-id_padre='".$id_padre."'><img id='estado' src='".URL."files/img/btns/ojo_2.png' border='0'></a>";
 			}else{
 				$editar = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."' data-id_padre='".$id_padre."'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
 				$eliminar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Eliminar' data-tabla='".$tabla."' class='btn_eliminar' data-id_padre='".$id_padre."'><img src='".URL."files/img/btns/eliminar.png' border='0'></a>";
@@ -2171,13 +2177,13 @@ if ($cant_registros != 0){
                     } else {
     					$row[4] = number_format(utf8_encode($aRow["nro_documento"]), 0, ",", ".");
                     }
-					$row[5] = strtolower(utf8_encode($aRow["email"]));
+					$row[5] = utf8_encode($aRow["matricula"]);
 					$row[6] = utf8_encode($aRow["telefonos"]);
-					$row[7] = utf8_encode($sector);
-					$row[8] = utf8_encode($subsector);
-					$row[9] = utf8_encode($aRow["interno"]);
-					$row[10] = utf8_encode($planta);
-					$row[11] = utf8_encode($aRow["matricula"]);
+					$row[7] = strtolower(utf8_encode($aRow["email"]));
+					$row[8] = utf8_encode($aRow["interno"]);
+					$row[9] = utf8_encode($sector);
+					$row[10] = utf8_encode($subsector);
+					$row[11] = utf8_encode($planta);
                     if ($_SESSION['SUPERUSER'] > 1) {
                         $row[12] =
                             $editar.''.
@@ -2202,10 +2208,14 @@ if ($cant_registros != 0){
 					$row[2] = utf8_encode($aRow["apellidos"]);
 					$row[3] = utf8_encode($aRow["nombres"]);
 					$row[4] = utf8_encode($aRow["matricula"]);
+					$row[5] = utf8_encode($aRow["email"]);
+					$row[6] = utf8_encode($aRow["domicilio"]);
+					$row[7] = utf8_encode($aRow["telefonos"]);
+					$row[8] = utf8_encode($aRow["fechanac"]);
                     if ($_SESSION['SUPERUSER'] > 1) {
-                        $row[5] = $editar.''.$eliminar.'';
+                        $row[9] = $editar.''.$eliminar.'';
                     } else {
-                        $row[5] = $editar.'';
+                        $row[9] = $editar.'';
                     }
 
 				break;
@@ -2228,11 +2238,20 @@ if ($cant_registros != 0){
 
 					$row[0] = $aRow["id_especialidades"];
 					$row[1] = utf8_encode($aRow["nombre"]);
+					if ($row[2] == 1) {
                     if ($_SESSION['SUPERUSER'] > 1) {
-                        $row[2] = $editar.''.$eliminar.'';
+	                        $row[2] = $estado_cambiar.''.$editar.''.$eliminar.'';
+	                    } else {
+	                        $row[2] = '';
+	                    }
+					}else{
+						if ($_SESSION['SUPERUSER'] > 1) {
+	                        $row[2] = $estado_cambiar_2.''.$editar.''.$eliminar.'';
                     } else {
                         $row[2] = '';
                     }
+					}
+                    
 
 				break;
 				case "estudios":
@@ -2267,6 +2286,7 @@ if ($cant_registros != 0){
 
 				case "medicos_especialidades":
 					$horarios = "<a class='btn_opciones' href='#' data-id='".$aRow["id_medicos"]."-".$aRow["id_especialidades"]."' data-tipo_btn='tabla_hija' data-hija='medicos_horarios' data-nombre='Horario de Medicos por Especialidad'><img src='".URL."files/img/btns/medicos_horarios.png' border='0'></a>";
+					$editarDuracion = "<a class='btn_opciones' href='#' data-id='".$aRow["id_medicos"]."-".$aRow["id_especialidades"]."' data-tipo='editar' data-tabla='".$tabla."' data-id_padre='".$aRow["id_medicos"]."-".$aRow["id_especialidades"]."' data-nombre='Editar duracion'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
 
 					$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
 
@@ -2278,9 +2298,9 @@ if ($cant_registros != 0){
                     )." min";
 					//$row[3] = $mostrar." ".$editar." ".$horarios;
                     if ($_SESSION['SUPERUSER'] > 1) {
-						$row[3] = $horarios.''.$eliminar.'';
+						$row[3] = $editarDuracion.''.$horarios.''.$eliminar.'';
                     } else {
-						$row[3] = $horarios.'';
+						$row[3] = $editarDuracion.''.$horarios.'';
                     }
 				break;
 
@@ -2289,12 +2309,13 @@ if ($cant_registros != 0){
 					$row[0] = $aRow["id_medicos_estudios"];
 					$row[1] = utf8_encode($estudio);
 					$row[2] = '<input type="text" class="particular" id="'.$aRow["id_medicos_estudios"].'" value="'.$aRow["particular"].'" />';
+					$row[3] = '<input type="text" class="arancel" id="'.$aRow["id_medicos_estudios"].'" value="'.$aRow["arancel"].'" />';
 					//$row[2] = $aRow["particular"];
 					//$row[2] = $mostrar." ".$editar;
                     if ($_SESSION['SUPERUSER'] > 1) {
-                        $row[3] = $eliminar.'';
+                        $row[4] = $eliminar.'';
                     } else {
-                        $row[3] = '';
+                        $row[4] = '';
                     }
 				break;
 
@@ -2343,10 +2364,14 @@ if ($cant_registros != 0){
                     $row[3] = $aRow['nro_consultorio'];
 					$row[4] = utf8_encode(substr($aRow["desde"], 0, 5));
 					$row[5] = utf8_encode(substr($aRow["hasta"], 0, 5));
+					$row[6] = utf8_encode(
+                        substr($aRow["duracion_turno"], 0, 2) * 60 +
+                        substr($aRow["duracion_turno"], 3, 2)
+                    )." min";
                     if ($_SESSION['SUPERUSER'] > 1) {
-                        $row[6] = $editar.''.$eliminar.'';
+                        $row[7] = $editar.''.$eliminar.'';
                     } else {
-                        $row[6] = '';
+                        $row[7] = '';
                     }
 				break;
 				case "cobros":
@@ -2395,7 +2420,7 @@ if ($cant_registros != 0){
                     if ($_SESSION['SUPERUSER'] > 2) {
                         $row[5] = $editar.''.$eliminar.'';
                     } elseif ($_SESSION['SUPERUSER'] > 1) {
-                        $row[5] = $editar.'';
+                        $row[5] = $editar.''.$eliminar.'';
                     } else {
                         $row[5] = '';
                     }
@@ -2406,7 +2431,7 @@ if ($cant_registros != 0){
                     $row[1] = $detalle.'';
 				break;
 				case 'disponibilidades':
-    				$dispon = "<a href='#' class='btn_opciones' data-titulo='Ocupación' data-tipo='disponibles_ocupado' data-id='".$aRow["id_dias_semana"]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
+    				$dispon = "<a href='#' class='btn_opciones' data-titulo='Ocupaci�n' data-tipo='disponibles_ocupado' data-id='".$aRow["id_dias_semana"]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
     				$ocupac = "<a href='#' class='btn_opciones' data-titulo='Disponibilidad' data-tipo='disponibles_libre' data-id='".$aRow["id_dias_semana"]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/detalle.png' border='0'></a>";
 					$row[0] = $aRow['id_dias_semana'];
 					$row[1] = utf8_encode($aRow['nombre']);

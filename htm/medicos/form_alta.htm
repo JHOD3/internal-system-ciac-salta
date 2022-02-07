@@ -2,6 +2,10 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
+        jQuery.validator.addMethod("noSpace", function(value, element) { //Code used for blank space Validation 
+            return value.indexOf(" ") < 0; 
+        }, "No space please"); 
+
 		$("#nro_documento").focus();
 
 		$("a#cargar").click(function(e){
@@ -39,6 +43,16 @@
 				},
                 fechanac: {
                     required: true
+                },
+                contrasena: {
+                    required: true,
+                    minlength: 6,
+                    noSpace: true
+                },
+                contrasena2: {
+                    required: true,
+                    minlength: 6,
+                    equalTo: '#contrasena'
                 }
 			},
 			messages: {
@@ -65,10 +79,20 @@
 				},
 				fechanac: {
 					required: "Ingrese la fecha de nacimiento"
-				}
+                },
+                contrasena: {
+                    required: "Ingrese la contraseña",
+                    minlength: "La contraseña debe tener al menos 6 caracteres",
+                    noSpace: "La contraseña no debe contener espacios"
+                },
+                contrasena2: {
+                    required: "Vuelva a ingresar la contraseña",
+                    minlength: "La contraseña debe tener al menos 6 caracteres",
+                    equalTo: "Las contraseñas no coinciden"
+                }
 			},
 			submitHandler: function(){
-				var variables = $("#form_medicos").serialize();
+                var variables = $("#form_medicos").serialize();
 				$.ajax({
 					type: "POST",
 					url: "[URL]ajax/altas.php",
@@ -128,6 +152,7 @@
             $(this).removeAttr('name');
         });
         var fsNro = 0;
+        //Crea tabla horarios
         $('fieldset.dropNames .btn_agregar_dinamico').click(function(){
             fsNro++;
             var fs = $(this).parent().parent();
@@ -185,6 +210,7 @@
                 });
             }
         });
+        //Crea tablas con lista checkbox //Tiene funcion rara que borra campos (funcion rota)
         i = 100;
         $('fieldset.withDropArancel > select').each(function(){
             selectName = $(this).attr('id');
@@ -216,6 +242,7 @@
             });
             $('select#' + selectName).remove();
         });
+        //Depende de tabla creada dinamicamente
         $('fieldset.withDropArancel a.uns').click(function(event){
             event.preventDefault();
             $(this).parent().find('table tr td input[type="checkbox"]').prop('checked', false);
@@ -237,13 +264,33 @@
 	});
 </script>
 <style>
-#myTblFA > tbody > tr > td {
+.myTblFA{
+    display: flex; 
+    flex-direction: column;
+}
+
+.tRow{
+    display: flex;
+    flex-direction: row;
+}
+
+.tData{
+    overflow: auto;
+}
+
+.tData div.bloque> label{
+    text-align: left;
+}
+
+.myTblFA > .tRow > .tData {
     vertical-align: top;
     width: 25%;
-    min-width: 380px;
+    min-width: 250px;
+    height: 585px;
 }
-#myTblFA > tbody > tr > td > .withDropArancel > a.uns,
-#myTblFA > tbody > tr > td > .withDropArancel > a.sel {
+
+.myTblFA > .tRow > .tData > .withDropArancel > a.uns,
+.myTblFA > .tRow > .tData > .withDropArancel > a.sel {
     color: #3333CC;
     font-weight: bold;
 }
@@ -268,144 +315,150 @@ div.bloque label {
 </style>
 
 <div id="panel_alta">
-	<form name="form_medicos" id="form_medicos" class="jNice">
-        <table id="myTblFA">
-            <tr>
-                <td>
-            		<fieldset>
-                        <h4>Datos del Profesional</h4>
-            			<div class="bloque">
-            				<label>Tipos Documentos: </label>
-            				[DROP_TIPOS_DOCUMENTOS]
-            			</div>
-                        <div class="bloque">
-                            <label>Nro.: </label>
-                            <input type="text" class="text-long" name="nro_documento" id="nro_documento" />
-                        </div>
-                        <div class="bloque">
-                            <label>Saludo: </label>
-                            <input type="text" class="text-long" name="saludo" maxlength="10" style="text-transform:none!important;" />
-                        </div>
-                        <div class="bloque">
-                            <label>Apellidos: </label>
-                            <input type="text" class="text-long" name="apellidos" />
-                        </div>
-                        <div class="bloque">
-                            <label>Nombres: </label>
-                            <input type="text" class="text-long" name="nombres" />
-                        </div>
-                        <div class="bloque">
-                            <label>Domicilio: </label>
-                            <input type="text" class="text-long" name="domicilio" />
-                        </div>
-                        <div class="bloque">
-                            <label>Telefonos: </label>
-                            <input type="text" class="text-long" name="telefonos" />
-                        </div>
-                        <div class="bloque">
-                            <label>Email: </label>
-                            <input type="text" class="text-long" name="email" />
-                        </div>
-                        <div class="bloque">
-                            <label>Fecha de nacimiento: </label>
-                            <input type="text" class="text-long datepicker" name="fechanac" />
-                        </div>
-                        <div class="bloque">
-                            <label>Sector: </label>
-                            [DROP_SECTORES]
-                        </div>
-                        <div class="bloque">
-                            <label>Subsector: </label>
-                            [DROP_SUBSECTORES]
-                        </div>
-                        <div class="bloque">
-                            <label>Nro. Consultorio: </label>
-                            <input type="text" class="text-long" name="nro_sector" value="-" />
-                        </div>
-                        <div class="bloque">
-                            <label>Planta: </label>
-                            [DROP_PLANTAS]
-                        </div>
-                        <div class="bloque">
-                            <label>Interno: </label>
-                            <input type="text" class="text-long" name="interno" value="0" />
-                        </div>
-                        <div class="bloque">
-                            <label>Matricula: </label>
-                            <input type="text" class="text-long" name="matricula" value="0" />
-                        </div>
-            		</fieldset>
-                </td>
-                <td>
-            		<fieldset class="dropNames">
-                        <h4>Especialidad / Horario</h4>
-            			<div class="bloque">
-            				<label>Especialidad: </label>
-            				[DROP_ESPECIALIDADES]
-            			</div>
-                        <div class="bloque">
-                            <label>Duraci&oacute;n de Turno: </label>
-                            <input type="text" class="text-long formathour" name="duracion_turno" id="duracion_turno" value="" placeholder="__:__" />
-                        </div>
-                        <div class="bloque">
-            				<label>Tipo de Turno: </label>
-            				[DROP_TURNOS_TIPOS]
-            			</div>
-            			<div class="bloque forceSelectMultiple">
-            				<label>D&iacute;a de la Semana: </label>
-            				[DROP_DIAS_SEMANA]
-            			</div>
-            			<div class="bloque">
-            				<label>Planta: </label>
-            				[DROP_PLANTA]
-            			</div>
-                        <div class="bloque">
-                            <label>Consultorio:</label>
-                            <input type="text" class="text-long" name="nro_consultorio" id="nro_consultorio" value="" style="text-transform: none !important;" />
-                        </div>
-                        <div class="bloque">
-                            <label>Desde: </label>
-                            <input type="text" class="text-long formathour" name="desde" id="desde" value="" placeholder="__:__" />
-                        </div>
-                        <div class="bloque">
-                            <label>Hasta: </label>
-                            <input type="text" class="text-long formathour" name="hasta" id="hasta" value="" placeholder="__:__" />
-                        </div>
-            			<div class="bloque botones">
-            				<a href="#" class="btn_agregar_dinamico boton_gris">Agregar</a>
-            			</div>
-                    </fieldset>
-                </td>
-                <td>
-            		<fieldset class="withDropArancel">
-                        <h4>Obras Sociales</h4>
-                        seleccionar:
-                        <a href="#" class="uns">ninguno</a> |
-                        <a href="#" class="sel">todos</a>
-                        [DROP_OBRAS_SOCIALES]
-            		</fieldset>
-                </td>
-                <td>
-            		<fieldset class="withDropArancel">
-                        <h4>Estudios</h4>
-                        seleccionar:
-                        <a href="#" class="uns">ninguno</a> |
-                        <a href="#" class="sel">todos</a>
-                        [DROP_ESTUDIOS]
-            		</fieldset>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="100%">
-                    <fieldset>
-            			<div class="bloque botones">
-            				<a href="#" id="cargar" class="boton_gris">Cargar</a>
-            				<a href="#" id="cancelar" class="boton_gris">Cancelar</a>
-            			</div>
-                    </fieldset>
-                </td>
-            </tr>
-        </table>
+	<form name="form_medicos" id="form_medicos" class="myTblFA jNice"><!-- table id="myTblFA" -->
+        <div class="tRow">
+            <div class="tData">
+                <fieldset>
+                    <h4>Datos del Profesional</h4>
+                    <div class="bloque">
+                        <label>Contraseña: </label>
+                        <input type="password" class="text-long" name="contrasena" id="contrasena" />
+                    </div>
+                    <div class="bloque">
+                        <label>Repetir Contraseña: </label>
+                        <input type="password" class="text-long" name="contrasena2" id="contrasena2" />
+                    </div>
+                    <div class="bloque">
+                        <label>Tipos Documentos: </label>
+                        [DROP_TIPOS_DOCUMENTOS]
+                    </div>
+                    <div class="bloque">
+                        <label>Nro.: </label>
+                        <input type="text" class="text-long" name="nro_documento" id="nro_documento" />
+                    </div>
+                    <div class="bloque">
+                        <label>Saludo: </label>
+                        <input type="text" class="text-long" name="saludo" maxlength="10" style="text-transform:none!important;" />
+                    </div>
+                    <div class="bloque">
+                        <label>Apellidos: </label>
+                        <input type="text" class="text-long" name="apellidos" />
+                    </div>
+                    <div class="bloque">
+                        <label>Nombres: </label>
+                        <input type="text" class="text-long" name="nombres" />
+                    </div>
+                    <div class="bloque">
+                        <label>Domicilio: </label>
+                        <input type="text" class="text-long" name="domicilio" />
+                    </div>
+                    <div class="bloque">
+                        <label>Telefonos: </label>
+                        <input type="text" class="text-long" name="telefonos" />
+                    </div>
+                    <div class="bloque">
+                        <label>Email: </label>
+                        <input type="text" class="text-long" name="email" />
+                    </div>
+                    <div class="bloque">
+                        <label>Fecha de nacimiento: </label>
+                        <input type="text" class="text-long datepicker" name="fechanac" />
+                    </div>
+                    <div class="bloque">
+                        <label>Sector: </label>
+                        [DROP_SECTORES]
+                    </div>
+                    <div class="bloque">
+                        <label>Subsector: </label>
+                        [DROP_SUBSECTORES]
+                    </div>
+                    <div class="bloque">
+                        <label>Nro. Consultorio: </label>
+                        <input type="text" class="text-long" name="nro_sector" value="-" />
+                    </div>
+                    <div class="bloque">
+                        <label>Planta: </label>
+                        [DROP_PLANTAS]
+                    </div>
+                    <div class="bloque">
+                        <label>Interno: </label>
+                        <input type="text" class="text-long" name="interno" value="0" />
+                    </div>
+                    <div class="bloque">
+                        <label>Matricula: </label>
+                        <input type="text" class="text-long" name="matricula" value="0" />
+                    </div>
+                </fieldset>
+            </div>
+            <div class="tData">
+                <fieldset class="dropNames">
+                    <h4>Especialidad / Horario</h4>
+                    <div class="bloque">
+                        <label>Especialidad: </label>
+                        [DROP_ESPECIALIDADES]
+                    </div>
+                    <div class="bloque">
+                        <label>Duraci&oacute;n de Turno: </label>
+                        <input type="text" class="text-long formathour" name="duracion_turno" id="duracion_turno" value="" placeholder="__:__" />
+                    </div>
+                    <div class="bloque">
+                        <label>Tipo de Turno: </label>
+                        [DROP_TURNOS_TIPOS]
+                    </div>
+                    <div class="bloque forceSelectMultiple">
+                        <label>D&iacute;a de la Semana: </label>
+                        [DROP_DIAS_SEMANA]
+                    </div>
+                    <div class="bloque">
+                        <label>Planta: </label>
+                        [DROP_PLANTA]
+                    </div>
+                    <div class="bloque">
+                        <label>Consultorio:</label>
+                        <input type="text" class="text-long" name="nro_consultorio" id="nro_consultorio" value="" style="text-transform: none !important;" />
+                    </div>
+                    <div class="bloque">
+                        <label>Desde: </label>
+                        <input type="text" class="text-long formathour" name="desde" id="desde" value="" placeholder="__:__" />
+                    </div>
+                    <div class="bloque">
+                        <label>Hasta: </label>
+                        <input type="text" class="text-long formathour" name="hasta" id="hasta" value="" placeholder="__:__" />
+                    </div>
+                    <div class="bloque botones">
+                        <a href="#" class="btn_agregar_dinamico boton_gris">Agregar</a>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="tData">
+                <fieldset class="withDropArancel">
+                    <h4>Obras Sociales</h4>
+                    seleccionar:
+                    <a href="#" class="uns">ninguno</a> |
+                    <a href="#" class="sel">todos</a>
+                    [DROP_OBRAS_SOCIALES]
+                </fieldset>
+            </div>
+            <div class="tData">
+                <fieldset class="withDropArancel">
+                    <h4>Estudios</h4>
+                    seleccionar:
+                    <a href="#" class="uns">ninguno</a> |
+                    <a href="#" class="sel">todos</a>
+                    [DROP_ESTUDIOS]
+                </fieldset>
+            </div>
+        </div>
+        <div class="tRow">
+            <div style="width: 100%;">
+                <fieldset>
+                    <div class="bloque botones">
+                        <a href="#" id="cargar" class="boton_gris">Cargar</a>
+                        <a href="#" id="cancelar" class="boton_gris">Cancelar</a>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
 	</form>
 </div>
 <script>

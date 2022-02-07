@@ -18,6 +18,16 @@ class MySQL{
   		}
   		return $resultado;
   	}
+
+  	public function consulta_dos_prueba($consulta){
+  		$this->total_consultas++;
+		$resultado = mysql_query($consulta,$this->conexion);
+  		if(!empty($resultado)){
+  			return 0;
+  		}else{
+			return $resultado;
+  		}
+  	}
 	
 	public function fetch_array($consulta){
 		return mysql_fetch_array($consulta);

@@ -1198,7 +1198,7 @@ label.error{
 	width:60%;
 }
 
-#dialog-confirm, #dialog_eliminar{
+#dialog-confirm, #dialog_eliminar, #dialog_estado{
 	display:none;
 	overflow:hidden !important
 }
@@ -1239,10 +1239,11 @@ label.error{
 }
 
 #cant_turnos_libres{
-	padding:4px;
-	background:#999;
-	color:#fff;
-	margin:5px 0
+    padding: 4px;
+    background: #999;
+    color: #abe5ff;
+    margin: 5px 0;
+    font-size: 15px;
 }
 
 #cant_turnos_libres span{

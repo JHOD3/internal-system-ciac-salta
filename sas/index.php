@@ -1,7 +1,7 @@
 <?php
 require_once ("../engine/config.php");
 require_once ("../engine/restringir_acceso.php");
-requerir_class("tpl","mysql","querys","estructura","medicos","usuarios");
+requerir_class("tpl","mysql","querys","estructura","medicos","usuarios","menus");
 $this_db = new MySQL();
 
 //requerir_class("dias_semana");
@@ -11,17 +11,21 @@ $obj_estructura = new Estructura();
 
 $htm_gral = $obj_estructura->html("sas/gral");
 $htm_index = $obj_estructura->html("sas/index");
-$htm_menu_tablas = $obj_estructura->html("menu/tablas_sas_{$_SESSION['SUPERUSER']}");
-
+//$htm_menu_tablas = $obj_estructura->html("menu/tablas_sas_{$_SESSION['SUPERUSER']}");
 /*$htm_index->Asigna("FORM_HORARIOS", $obj_dias_semana->FormHorarios());*/
 
-$desde = $_POST['desde'];
+//MENU
+$obj_menu = new Menus();
+$htm_menu_tablas = $obj_menu->armarMenu();
+
+//CUMPLES
+$desde = isset($_POST['desde']) ? $_POST['desde'] : null;
 $d = DateTime::createFromFormat('d/m/Y', $desde);
 if (!$d or $d->format($format) != $date or strlen($desde) != 10) {
     $desde = date('d/m/Y', strtotime('-1 month +1 day'));
 }
 
-$hasta = $_POST['hasta'];
+$hasta = isset($_POST['hasta']) ? $_POST['hasta'] : null;
 $d = DateTime::createFromFormat('d/m/Y', $hasta);
 if (!$d or $d->format($format) != $date or strlen($hasta) != 10) {
     $hasta = date('d/m/Y');
@@ -102,7 +106,7 @@ SQL;
                     $aDates.= "<br />\n";
                 }
             }
-            $cumples.= "<div style=\"color: white; width: 400px; min-height: 120px; background-size: 400px auto; background-repeat: no-repeat; padding: 20px; background-image:url(../files/img/1535146937-torta-cumpleaos-istock.jpg);\">";
+            $cumples= "<div style=\"color: white; width: 316px; text-align: left; min-height: 120px; background-size: 358px auto; background-repeat: no-repeat; padding: 20px; background-color: #d7e550; background-image:url(../files/img/1535146937-torta-cumpleaos-istock.png);\">";
             $cumples.= "<strong style=\"color: green;\">Próximos cumpleaños:</strong><br />\n";
             $cumples.= $aDates;
             $cumples.= "</div><br /><br />\n";
@@ -115,17 +119,126 @@ SQL;
 } else {
     $cumples = "";
 }
+//CUMPLES PASADOS
+
+
+
+$date = date("m-d");
+if ($_SESSION['SUPERUSER'] > 0) {
+    $query_string_dos = <<<SQL
+        SELECT
+            SUBSTR(U.fechanac, 6, 5) AS mesdia
+        FROM
+            usuarios U
+        WHERE
+            U.estado = 1 AND
+            U.fechanac IS NOT NULL AND
+            SUBSTR(U.fechanac, 6, 5) <= '{$date}'
+        UNION SELECT
+            SUBSTR(M.fechanac, 6, 5) AS mesdia
+        FROM
+            medicos M
+        WHERE
+            M.estado = 1 AND
+            M.fechanac IS NOT NULL AND
+            SUBSTR(M.fechanac, 6, 5) <= '{$date}'
+        GROUP BY
+            mesdia
+        ORDER BY
+            mesdia DESC
+        LIMIT 4
+SQL;
+    $result_dos = $this_db->consulta($query_string_dos);
+    if ($this_db->num_rows($result) > 0) {
+        $aDates_dos = array();
+        while ($row_dos = $this_db->fetch_assoc($result_dos)) {
+            $aDates_dos[] = "'".$row_dos['mesdia']."'";
+        }
+        $aDates_dos = implode(",", $aDates_dos);
+        if (count($aDates_dos) > 0) {
+            $query_string_dos = <<<SQL
+                SELECT
+                    CONCAT(U.nombres, ' ', U.apellidos) AS nombres,
+                    SUBSTR(U.fechanac, 6, 5) AS mesdia
+                FROM
+                    usuarios U
+                WHERE
+                    U.estado = 1 AND
+                    U.fechanac IS NOT NULL AND
+                    SUBSTR(U.fechanac, 6, 5) IN ({$aDates_dos})
+                UNION SELECT
+                    CONCAT(M.saludo, ' ', M.nombres, ' ', M.apellidos) AS nombres,
+                    SUBSTR(M.fechanac, 6, 5) AS mesdia
+                FROM
+                    medicos M
+                WHERE
+                    M.estado = 1 AND
+                    M.fechanac IS NOT NULL AND
+                    SUBSTR(M.fechanac, 6, 5) IN ({$aDates_dos})
+                ORDER BY
+                    mesdia ASC
+SQL;
+            $result_dos = $this_db->consulta($query_string_dos);
+            if ($this_db->num_rows($result_dos) > 0) {
+                $aDates_dos = "";
+                while ($row_dos = $this_db->fetch_assoc($result_dos)) {
+                    if ($row_dos['mesdia'] == date("m-d")) {
+                        $aDates_dos.= '<strong style="color:red">';
+                    }
+                    $aDates_dos.= '&raquo;&nbsp;';
+                    $aDates_dos.= date("d/m", strtotime(date("Y")."-".$row_dos['mesdia']));
+                    $aDates_dos.= "&nbsp;-&nbsp;";
+                    $aDates_dos.= utf8_encode($row_dos['nombres']);
+                    if ($row_dos['mesdia'] == date("m-d")) {
+                        $aDates_dos.= '</strong>';
+                    }
+                    $aDates_dos.= "<br />\n";
+                }
+            }
+            $cumples_dos= "<div style=\"color: white; width: 316px;text-align: left; min-height: 120px; background-size: 358px auto; background-repeat: no-repeat; padding: 20px;background-color: #fa845e9e; background-image:url(../files/img/1535146937-torta-cumpleaos-istock.png);\">";
+            $cumples_dos.= "<strong style=\"color: green;\">Cumpleaños pasados:</strong><br />\n";
+            $cumples_dos.= $aDates_dos;
+            $cumples_dos.= "</div><br /><br />\n";
+        } else {
+            $cumples_dos = "";
+        }
+    } else {
+        $cumples_dos = "";
+    }
+} else {
+    $cumples_dos = "";
+}
+
+
+
+
+
+
+//FIN CUMPLES PASADOS
 if ($_SESSION['SUPERUSER'] == '3') {
     $obj_medicos = new Medicos();
     $htm_index->Asigna(
         "DROP_MEDICOS",
         $cumples.
-        "Reporte: ".
-        utf8_encode($obj_medicos->Drop("", $_GET['id_medicos'])).
+       "<br /><br />"
+    );
+    $htm_index->Asigna(
+        "DROP_MEDICOS_DOS",
+        $cumples_dos.        
         "<br /><br />"
     );
+    if(!isset($_GET['id_medicos'])){
+        $_GET['id_medicos'] = null;
+    }
+    $htm_index->Asigna(
+        "DROP_MEDICOS_TRES",
+         utf8_encode($obj_medicos->Drop("", $_GET['id_medicos'])).        
+        "<br /><br />"
+    );
+
 } else {
     $htm_index->Asigna("DROP_MEDICOS", $cumples);
+    $htm_index->Asigna("DROP_MEDICOS_DOS", $cumples_dos);
 }
 $htm_index->Asigna("DATE_TODAY", date("d/m/Y"));
 $htm_index->Asigna("DATE_DESDE", $desde);
@@ -160,6 +273,15 @@ if ($_GET['id_medicos']) {
     $htm_index->Asigna("OST_NUMROWS", 0);
     $htm_index->Asigna("EST_NUMROWS", 0);
 } else {
+    //Usuario 0 - jsuaina
+    if ($_SESSION['ID_USUARIO']==0){
+        $htm_estadistica_medico = $obj_estructura->html("sas/estadisticasMedicosSAS");
+        $htm_index->Asigna("ESTADISTICASM_GRAPH", $htm_estadistica_medico->Muestra());
+        $htm_index->Asigna("ESTADISTICA_MEDICOS_OPTIONS", $obj_estructura->obtMEDICOS_OPTIONS());
+    }
+    else{
+        $htm_index->Asigna("ESTADISTICASM_GRAPH", '');
+    }
     $dataTOT = $obj_estructura->obtTurnosOtorgadosTotales($d, $h, $_SESSION['ID_USUARIO']);
     $dataTPD = $obj_estructura->obtTurnosOtorgadosPorDia($d, $h, $_SESSION['ID_USUARIO']);
     $dataTPM = $obj_estructura->obtTurnosPorMedicos($d, $h, $_SESSION['ID_USUARIO']);
@@ -185,6 +307,7 @@ if ($_GET['id_medicos']) {
     $htm_index->Asigna("ESTADISTICAS_GRAPH", '');
     $htm_index->Asigna("get_id_medicos", '');
 }
+
 
 if (
     $_SESSION['SISTEMA'] == 'sas' and
@@ -216,7 +339,7 @@ $query_string = <<<SQL
         ME.estado = 1 AND (
             E.estado = 1 OR
             E.id_especialidades IN (60, 61)
-		)
+        )
     ORDER BY
         M.nombres,
         M.apellidos,
@@ -250,6 +373,8 @@ $htm_index->Asigna("FECHA", ucfirst(strftime("%A %d de ")).ucfirst(strftime("%B 
 $htm_index->Asigna("USUARIO_APELLIDOS", utf8_encode($_SESSION['APELLIDOS']));
 $htm_index->Asigna("USUARIO_NOMBRES", utf8_encode($_SESSION['NOMBRES']));
 
+
+$html_cumple = '';
 // FELICITACIONES DE FELIZ CUMPLEAÑOS
 if (!$_SESSION['felicitado']) {
     $html_cumple = '';

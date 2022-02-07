@@ -327,6 +327,7 @@ class Medicos extends Estructura implements iMedicos{
         if ($fecha >= date('y-m-d')){
 			$htm = $this->Html($this->nombre_tabla."/grilla_turnos_".$_SESSION['SISTEMA']);
 
+			//kcmnt aqui ve si el medico atiende en este dia
 			//VERIFICO LOS HORARIOS QUE TIENE CARGADO EL MEDICO PARA UN DIA DETERMINADO
 			$query_string = $this->querys->GrillaTurnos($id_medico, $id_especialidad, $id_dia);
 			$query = $this->db->consulta($query_string);
@@ -348,10 +349,11 @@ class Medicos extends Estructura implements iMedicos{
 			//PREGUNTO SI TIENE CARGADO HORARIOS PARA UN DIA DADO
 			if ($cant > 0){
 
+				//kcmnt Aqui tendria que agregar la nueva logica de Duracion de turno x dia y especialidad
 				//VERIFICO LA DURACION DEL TURNO
 				requerir_class('medicos_especialidades');
 				$obj_medico_especialidad = new Medicos_especialidades();
-				$duracion_turno = $obj_medico_especialidad->DuracionTurno($id_medico, $id_especialidad);
+				$duracion_turno = $obj_medico_especialidad->DuracionTurnoDia($id_medico, $id_especialidad, $diaSemana);
 
 				//TRAIGO TODOS LOS TURNOS RESERVADOS
 				$query_string2 = $this->querys->TurnosReservados($fecha, $id_medico, $id_especialidad, $id_dia);
@@ -428,9 +430,30 @@ class Medicos extends Estructura implements iMedicos{
 									}
 								}
 
-                                $linea .= "<small style='color:#000'> - ".$row["telefonos"]."</small></div>
-                                    </div>
-								</span>";
+                                $linea .= "<small style='color:#000'> - ".$row["telefonos"]."</small><br />";
+								//Mostrar usuario y fecha/hora que registro el turno
+								$usu_details = $row["uApellidos"].", ".$row['uNombres'];
+								$linea .="
+								<small style='color:#464646'><span title='". htmlentities($usu_details, 0, 'UTF-8') ."'>Otorgado: ".$row['uUsuario']."</span> - ".
+									'<span>'.
+										preg_replace('/\b\/\d{4}\b/', '',implode("/", array_reverse(explode("-", $row['fecha_alta'])))).
+										' '.
+										substr($row['hora_alta'], 0, 5).
+									'</span>'.
+								"</small>";
+								if($row['id_usuarios_recepcion']){
+									$usu_rec_details = $row["recApellidos"].", ".$row['recNombres'];
+									//Mostrar usuario y fecha/hora que recepciono el paciente
+									$linea .="
+									<small style='color:#464646'><span title='". htmlentities($usu_rec_details, 0, 'UTF-8') ."'>Recepci&oacuten: ".$row['recUsuario']."</span> - ".
+										'<span>'.
+										preg_replace('/\b\/\d{4}\b/', '',implode("/", array_reverse(explode("-", $row['fecha_recepcion'])))).
+											' '.
+											substr($row['hora_recepcion'], 0, 5).
+										'</span>'.
+									"</small>";
+								}
+								$linea .="</div></div></span>";
 							break;
 							case 'sam':
 								//TRAIGO TODOS LOS TURNOS RESERVADOS
@@ -607,6 +630,7 @@ HTML;
 
 			$htm->Asigna("GRILLA_LISTADO", $listado);
 		}else{
+			//ARMA GRILLA DE TURNOS PASADOS
 			$htm = $this->Html($this->nombre_tabla."/grilla_turnos_pasado");
 			$query_string = $this->querys->GrillaTurnosPasados($id_medico, $id_especialidad, $fecha);
 			$query = $this->db->consulta($query_string);
@@ -619,21 +643,35 @@ HTML;
 				    $row["ESTUDIOS"] = "";
 					if ($cant_estudios > 0){
 						while ($row_estudios = $this->db->fetch_array($query_estudios)){
-							$row["ESTUDIOS"] .= "<br /><div class='estudios' style='color:#b0b0b0;'><small>".$row_estudios['nombre_estudio']."</small></div>";
+							$row["ESTUDIOS"] .= "&nbsp;-&nbsp;<div class='estudios'><small style='color:#b0b0b0'>".$row_estudios['nombre_estudio']."</small></div>";
 						}
+						$row["ESTUDIOS"] .= "<br />";
 					}
 
 					$row["PACIENTE"] = $row["apellidos"].", ".$row['nombres'];
-                    $row["USUARIO"] = $row["uApellidos"].", ".$row['uNombres'];
-                    $row["USUARIO"] = '<span style="color:#b0b0b0;">'.$row['USUARIO'].'</span>';
-                    $row["FECHAHORA"] =
-                        '<span style="color:#b0b0b0;">Otorgado: '.
-                        implode("/", array_reverse(explode("-", $row['fecha_alta']))).
-                        ' '.
-                        substr($row['hora_alta'], 0, 5).
-                        'hs'.
-                        '</span>'
-                    ;
+
+					$usu_details = $row["uApellidos"].", ".$row['uNombres'];
+					$recepcion ="
+					<small style='color:#000'><span style='color:#b0b0b0;' title='". htmlentities($usu_details, 0, 'UTF-8') ."'>Otorgado: ".$row['uUsuario']."</span> - ".
+						'<span style="color:#b0b0b0;">'.
+							preg_replace('/\b\/\d{4}\b/', '',implode("/", array_reverse(explode("-", $row['fecha_alta'])))).
+							' '.
+							substr($row['hora_alta'], 0, 5).
+						'</span>'.
+					"</small>";
+					if($row['id_usuarios_recepcion']){
+						$usu_rec_details = $row["recApellidos"].", ".$row['recNombres'];
+						//Mostrar usuario y fecha/hora que recepciono el paciente
+						$recepcion .="
+						<small style='color:#000'><span style='color:#b0b0b0;' title='". htmlentities($usu_rec_details, 0, 'UTF-8') ."'>Recepci&oacuten: ".$row['recUsuario']."</span> - ".
+							'<span style="color:#b0b0b0;">'.
+							preg_replace('/\b\/\d{4}\b/', '',implode("/", array_reverse(explode("-", $row['fecha_recepcion'])))).
+								' '.
+								substr($row['hora_recepcion'], 0, 5).
+							'</span>'.
+						"</small>";
+					}
+					$row["RECEPCION"] = $recepcion;
 					$obj_turno_estado = new Turnos_estados($row["id_turnos_estados"]);
 					$row["ESTADO"] = $obj_turno_estado->nombre;
                     $row["desde"] = substr($row["desde"], 0, 5);
@@ -1440,4 +1478,136 @@ HTML;
 		return ($htm->Muestra());
 	}
 
+	function EstadisticasSAS($ses_id_medico, $desde, $hasta){
+		$estadistica = array();
+		//GRAPH 1
+		$sql = "
+			SELECT
+				DATE_FORMAT(t.fecha, '%d/%m') AS myfecha,
+				COUNT(t.id_turnos) AS total
+			FROM
+				turnos AS t
+			WHERE
+				t.id_medicos = '{$ses_id_medico}' AND
+				t.fecha BETWEEN '{$desde}' AND '{$hasta}'
+			GROUP BY
+				t.fecha
+		";
+		$query = $this->db->consulta($sql);
+
+		$tEstadistica = array();
+		while ($row = $this->db->fetch_array($query)){
+			array_push($tEstadistica, array($row['myfecha'],(int)$row['total'],'#007FA6'));
+		}
+		array_push($estadistica,$tEstadistica);
+
+		//GRAPH 2
+		$sql = "
+			SELECT
+				o.abreviacion,
+				COUNT(t.id_turnos) AS total
+			FROM
+				turnos AS t
+			INNER JOIN
+				pacientes AS p
+				ON t.id_pacientes = p.id_pacientes
+			INNER JOIN
+				obras_sociales AS o
+				ON p.id_obras_sociales = o.id_obras_sociales
+			WHERE
+				t.id_medicos = '{$ses_id_medico}' AND
+				t.fecha BETWEEN '{$desde}' AND '{$hasta}'
+			GROUP BY
+				p.id_obras_sociales
+			ORDER BY
+				total DESC
+		";
+		$query = $this->db->consulta($sql);
+		$tEstadistica = array();
+		while ($row = $this->db->fetch_array($query)){
+			array_push($tEstadistica, array(utf8_encode($row['abreviacion']),(int)$row['total'],'#007FA6'));
+		}
+		array_push($estadistica,$tEstadistica);
+
+		//GRAPH 3
+		$sql = "
+			SELECT
+				e.nombre,
+				COUNT(t.id_turnos) AS total
+			FROM
+				turnos AS t
+			INNER JOIN
+				turnos_estados AS e
+				ON e.id_turnos_estados = t.id_turnos_estados
+			WHERE
+				t.id_medicos = '{$ses_id_medico}' AND
+				t.fecha BETWEEN '{$desde}' AND '{$hasta}'
+			GROUP BY
+				t.id_turnos_estados
+			ORDER BY
+				total DESC
+		";
+		$query = $this->db->consulta($sql);
+		$tEstadistica = array();
+		while ($row = $this->db->fetch_array($query)){
+			array_push($tEstadistica, array(utf8_encode($row['nombre']),(int)$row['total'],'#007FA6'));
+
+		}
+		array_push($estadistica,$tEstadistica);
+
+		// graph 4
+		$sql = "
+			SELECT
+				e.nombre,
+				COUNT(t.id_turnos) AS total
+			FROM
+				turnos AS t
+			INNER JOIN
+				turnos_estudios AS r
+				ON r.id_turnos = t.id_turnos
+			INNER JOIN
+				estudios AS e
+				ON r.id_estudios = e.id_estudios
+			WHERE
+				t.id_medicos = '{$ses_id_medico}' AND
+				t.fecha BETWEEN '{$desde}' AND '{$hasta}'
+			GROUP BY
+				r.id_estudios
+			ORDER BY
+				total DESC
+		";
+		$query = $this->db->consulta($sql);
+		$tEstadistica = array();
+		while ($row = $this->db->fetch_array($query)){
+			array_push($tEstadistica, array(utf8_encode($row['nombre']),(int)$row['total'],'#007FA6'));
+		}
+		array_push($estadistica,$tEstadistica);
+
+		// graph 5
+		$sql = "
+			SELECT
+				u.nombres,
+				u.apellidos,
+				COUNT(t.id_turnos) AS total
+			FROM
+				turnos AS t
+			INNER JOIN usuarios AS u
+				ON t.id_usuarios = u.id_usuarios
+			WHERE
+				t.id_medicos = '{$ses_id_medico}' AND
+				t.fecha BETWEEN '{$desde}' AND '{$hasta}'
+			GROUP BY
+				t.id_usuarios
+			ORDER BY
+				COUNT(t.id_turnos) DESC
+		";
+		$query = $this->db->consulta($sql);
+		$tEstadistica = array();
+		while ($row = $this->db->fetch_array($query)){
+			array_push($tEstadistica, array(utf8_encode($row['apellidos']),(int)$row['total'],'#007FA6'));
+		}
+		array_push($estadistica,$tEstadistica);
+
+		return $estadistica;
+	}
 }

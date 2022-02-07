@@ -50,8 +50,9 @@
 			},
 			complete: function(requestData, exito){
 			},
-			error: function (){
-				alert ("error");
+			error: function (jqxhr, status, exception){
+				alert ("error...");
+				console.log(jqxhr, status, exception)
 			}
 		});
 	}

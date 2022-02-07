@@ -122,10 +122,10 @@ class Disponibilidades extends Estructura implements iDisponibilidades{
                     }
                 }
                 if ($data) {
-                    $addTableRows.= '<td class="ocu col6">OCUPADO</td>';
                 } else {
-                    $addTableRows.= '<td class="ocu col3">DISPONIBLE</td>';
+                    $addTableRows.= '<td class="ocu col6" style="background-color:#fab8b1;">OCUPADO</td>';
                 }
+                    $addTableRows.= '<td class="ocu col3" style="background-color:#c7fcc2;;">DISPONIBLE</td>';
             }
             $addTableRows.= "</tr>";
         }

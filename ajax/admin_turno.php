@@ -46,7 +46,7 @@ switch ($tipo){
             $valor_pedido = 0;
         }
 
-        $query_string = <<<SQL
+        $query_string = "
             UPDATE
                 turnos
             SET
@@ -55,11 +55,24 @@ switch ($tipo){
                 valor_orden = '{$valor_orden}',
                 trae_pedido = '{$trae_pedido}',
                 valor_pedido = '{$valor_pedido}',
-                arancel_diferenciado = '{$arancel_diferenciado}'
+                arancel_diferenciado = '{$arancel_diferenciado}'"
+		;
+
+		//Anadir fecha/hora, usuario que recepciono el paciente. (estado turno 2)
+		if($turnos_estados != $turno_estado_actual && $turnos_estados==2){
+			$query_string.= " , 
+			id_usuarios_recepcion = '{$_SESSION['ID_USUARIO']}', 
+			fecha_recepcion = '{$fecha_actual}', 
+			hora_recepcion = '{$hora_actual}' "
+			;
+		}
+
+		$query_string.= "
             WHERE
                 id_turnos = '{$id_turno}'
-            LIMIT 1
-SQL;
+            LIMIT 1;"
+		;
+
 		$obj_turno->db->consulta($query_string);
 
 		requerir_class("turnos_cambios_estados");
@@ -123,6 +136,36 @@ SQL;
 
 		$obj_turno = new Turnos($id_turno);
 		$rta = $obj_turno->RestablecerOrdenesyPedidos();
+	break;
+	case 'obtener_arancel_estudios':
+		$query_string.= "
+			SELECT te.id_turnos, te.id_estudios, te.trajo_pedido, te.trajo_orden, te.trajo_arancel, te.deja_deposito, te.trajo_arancel_coseguro, e.nombre
+			FROM turnos_estudios AS te
+			INNER JOIN estudios AS e ON e.id_estudios = te.id_estudios
+			WHERE te.id_turnos = '{$id_turno}' AND te.estado = 1
+			;"
+		;
+		$query = $obj_turno->db->consulta($query_string);
+		$rta = false;
+		
+		if ($obj_turno->db->num_rows($query) > 0){
+			$suma = 0;
+			while ($row = $obj_turno->db->fetch_array($query)){
+				$ta = $row['trajo_arancel'] == null ? 0 : $row['trajo_arancel'];
+				$dd = $row['deja_deposito'] == null ? 0 : $row['deja_deposito'];
+				$tac = $row['trajo_arancel_coseguro'] == null ? 0 : $row['trajo_arancel_coseguro'];
+				$nombre = utf8_encode($row['nombre']);
+				$suma = $suma + $ta;
+				$rta.="				
+				<div>
+				<div style='padding-top: 7px'><b>{$nombre}</b></div>
+					<span style='white-space:nowrap'>TA: $ {$ta} &nbsp</span>
+					<span style='white-space:nowrap'>DD: $ {$dd} &nbsp</span>
+					<span style='white-space:nowrap'>Coseguro: $ {$tac} </span>
+				</div>";
+			}
+			//$rta.= "<div><h4>Total: $ {$suma} </h4></div>";
+		}
 	break;
 }
 

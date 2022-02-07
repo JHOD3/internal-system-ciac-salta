@@ -198,7 +198,7 @@
 			e.preventDefault();
 			var tipo_btn = $(this).data("tipo_btn");
 			var id = $(this).data("id");
-
+			
 			if (tipo_btn == "tabla_hija"){
 
 				var tabla_hija = $(this).data("hija");
@@ -255,7 +255,9 @@
 				  height: 670,
 				  width: "90%",
 				  modal: true,
-				  close: function() {  }
+				  close: function() {
+				  		$(this).dialog('destroy').remove();
+				  }
 				});
 
 				$.ajax({

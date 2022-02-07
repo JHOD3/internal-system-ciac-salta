@@ -35,28 +35,29 @@
             },
 			"bLengthChange": false,
 			"aoColumns" : [{ sWidth: '15%' },
-					{ sWidth: '65%' },
-					{ sWidth: '20%' },
-					{ sWidth: '20%' },]
+					{ sWidth: '61%' },
+					{ sWidth: '10%' },
+					{ sWidth: '10%' },
+					{ sWidth: '4%' },]
 		});
 
 		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
-		$("tfoot input").keyup( function () {
-			TableMedicosEstudios.fnFilter( this.value, $('#t_'+nombre+" tfoot input").index(this) );
+		$("thead input").keyup( function () {
+			TableMedicosEstudios.fnFilter( this.value, $('#t_'+nombre+" thead input").index(this) );
 		});
-		$("tfoot input").each( function (i) {
+		$("thead input").each( function (i) {
 			asInitVals[i] = this.value;
 		});
-		$("tfoot input").focus( function () {
+		$("thead input").focus( function () {
 			if ( this.className == "search_init" ){
 				this.className = "";
 				this.value = "";
 			}
 		});
-		$("tfoot input").blur( function (i) {
+		$("thead input").blur( function (i) {
 			if ( this.value == "" ){
 				this.className = "search_init";
-				this.value = asInitVals[$('#t_'+nombre+" tfoot input").index(this)];
+				this.value = asInitVals[$('#t_'+nombre+" thead input").index(this)];
 			}
 		});
 		///////////////////////////////////////////////////////
@@ -65,16 +66,17 @@
 	}
 
 	//ACTUALIZO ARANCELES A MEDIDA QUE LO CAMBIO...
-	$('#t_medicos_estudios').on("change", ".particular", function(){
+	$('#t_medicos_estudios').on("change", ".particular, .arancel", function(){
 		var id_medico_estudio = $(this).prop('id');
-		var particular = $(this).val();
-		var variables = "id="  + id_medico_estudio + "&particular=" + particular;
+		var particular = $(this).parent().parent().find(".particular").val();
+		var arancel = $(this).parent().parent().find(".arancel").val();
+		var variables = "id="  + id_medico_estudio + "&particular=" + particular + "&arancel=" + arancel;
 		$.ajax({
 			type: "POST",
 			url: "[URL]ajax/modificaciones.php",
 			data: {variables: variables, tabla: "[NOMBRE_TABLA]"},
 			beforeSend: function() {
-				$("#mje").html("Enviando información...");
+				$("#mje").html("Enviando informaci�n...");
 			},
 			success: function(requestData){
 				var rta = requestData;
@@ -98,23 +100,26 @@
             <th>ID</th>
             <th>Estudios</th>
             <th>Particular</th>
+			<th>Arancel</th>
             <th>Acci&oacute;n</th>
         </tr>
     </thead>
-    <tfoot>
+    <thead>
         <tr>
-            <th><input type="text" name="tb_id_medicos_especialidades" value="ID" class="search_init" /></th>
-            <th><input type="text" name="tb_id_estudios" value="Estudio" class="search_init" /></th>
-            <th><input type="text" name="tb_particular" value="Particular" class="search_init" /></th>
+            <th><input type="text" name="tb_id_medicos_especialidades" value="ID" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_id_estudios" value="Estudio" class="search_init" style="width: 100%;" /></th>
+            <th><input type="text" name="tb_particular" value="Particular" class="search_init" style="width: 100%;" /></th>
+			<th><input type="text" name="tb_arancel" value="Arancel" class="search_init" style="width: 100%;" /></th>
             <th></th>
         </tr>
-    </tfoot>
+    </thead>
     <tbody>
         <tr>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
+			<td></td>
         </tr>
     </tbody>
 </table>

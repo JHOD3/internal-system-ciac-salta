@@ -1,0 +1,120 @@
+<link rel="stylesheet" href="[CSS]/smoothness/jquery-ui.css">
+<script src="[JS]/jquery-1.9.1.js"></script>
+<script src="[JS]/jquery-ui-1.10.3.js"></script>
+
+<link rel="stylesheet" type="text/css" href="[CSS]/component.css" />
+<script src="[JS]/modernizr.custom.js"></script>
+<script src="[JS]/jquery.dlmenu.js"></script>
+<script>
+    $(function(){
+    	$('#dl-menu').dlmenu();
+		$(".btn_tabla").click(function() {
+			var tabla = $(this).data("nombre");
+			var nombre = $(this).find('span').html();
+
+			switch (tabla){
+                case "mensajes":
+                    alert('M\u00f3dulo Inhabilitado.<br /> Temporalmente en Construcci\u00f3n.','ATENCI\u00d3N')
+                    break;
+                case "estadisticas":
+                    window.location = 'index.php';
+                    break;
+                case "diagnosticos":
+                    window.location = 'diagnosticos.php';
+                    break;
+                default:
+    				IniciarVentana("ventana_menu", "abrir", tabla);
+
+    				$.ajax({
+    					type: "POST",
+    					url: "[URL]ajax/admin_tabla.php",
+    					data: {tabla: tabla},
+    					beforeSend: function() {
+    						$(ventana_menu).html("");
+    					},
+    					success: function(requestData){
+    						var rta = requestData;
+    						$(ventana_menu).html(rta);
+    					},
+    					complete: function(requestData, exito){
+    					},
+    					error: function (){
+    						alert ("error");
+    					}
+    				});
+
+    				$(ventana_menu).dialog('option', 'title', 'Administraci\u00f3n de '+nombre);
+    				$(ventana_menu).dialog( "open" );
+
+    				$(ventana_menu).focus();
+                    break;
+			}
+
+
+
+		});
+        $.ajax({
+            url: "../ajax/novedades.php?get=-1",
+            context: document.body
+        }).done(function(data) {
+            $('#dieAjaxNovedadesDiv').html(data);
+        });
+	});
+</script>
+
+<div id="dl-menu" class="dl-menuwrapper">
+	<button class="dl-trigger">Abrir Menu</button>
+	<ul class="dl-menu">
+		<li>
+            <!--<a href="form_alta.php?tbl=pacientes" id="create-user" class="btn">Pacientes</a>-->
+            <a href="#" class="btn_tabla" data-nombre="estadisticas">
+                <i class="fa fa-calendar"></i>
+                <span>Inicio</span>
+            </a>
+        </li>
+        [LI_AGENDA]
+        [LI_COMUNICACION]
+        [LI_ENCUESTAS]
+        [LI_ESPECIALIDADES]
+        [LI_ESTUDIOS]
+        [LI_MANTENIMIENTO]
+        <!-- <li id="mantenimiento_menu">
+            <a href="#">
+                <i class="fa fa-cogs"></i>
+                <span>Mantenimiento</span>
+            </a>
+            <ul class="dl-submenu">
+                <li id="mantenimiento_reciente_menu">
+                    <a href="#" class="btn_tabla" data-nombre="mantenimientos">
+                        <i class="fa fa-cog"></i>
+                        <span>Recientes</span>
+                    </a>
+                </li>
+                <li id="mantenimiento_historico_menu">
+                    <a href="#" class="btn_tabla" data-nombre="mantenimhistoricos">
+                        <i class="fa fa-cog"></i>
+                        <span>Hist&oacute;ricos</span>
+                    </a>
+                </li>
+            </ul>
+        </li> -->
+        [LI_MEDICOS]
+        [LI_OBRASSOCIALES]
+        [LI_PACIENTES]
+        [LI_PLANES_CONTINGENCIA]
+        [LI_PRACTICAS_MEDICAS]
+        [LI_SECTORES]
+        [LI_TAREAS]
+        [LI_USUARIO_MENU]
+        <li>
+            <a href="login.php">
+                <img src="[IMG]cerrar-sesion.png" width="30" />
+                <span>Cerrar Sesi&oacute;n</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<!--a href="#" class="btn_tabla" data-nombre="mensajes">
+    <img src="[IMG]btns/mensajes.png" width="30" />
+    <span>Mensajes</span>
+</a//-->

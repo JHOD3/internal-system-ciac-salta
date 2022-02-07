@@ -17,7 +17,7 @@ class Medicos_especialidades extends Estructura implements iMedicos_especialidad
 		
 		
 	} 
-	
+
 	function FormAlta($id_padre){
 		$htm = $this->Html($this->nombre_tabla."/form_alta");
 
@@ -35,6 +35,32 @@ class Medicos_especialidades extends Estructura implements iMedicos_especialidad
 		CargarVariablesGrales($htm, $tipo = "");
 		
 		return utf8_encode($htm->Muestra());
+	}
+
+	function FormModificacion($id_padre){
+		$tabla = $this->html($this->nombre_tabla."/form_modificacion");
+
+		if ($id_padre != ""){
+			$idsv = explode("-", $id_padre);
+			$id_medico = $idsv[0];
+			$id_especialidad = $idsv[1];
+
+			$tabla->Asigna("ID_MEDICO", $id_medico);
+			$tabla->Asigna("ID_ESPECIALIDAD", $id_especialidad);
+
+			$tabla->Asigna("ARGS","tabla=".$this->nombre_tabla."&id_medico=".$id_medico."&id_especialidad=".$id_especialidad);
+
+			requerir_class ("medicos");
+			$obj_medico = new Medicos($id_medico);
+			$tabla->Asigna("DATOS_MEDICO",$obj_medico->Detalle("corto_especialidad", $id_especialidad));
+		}else{
+			$tabla->Asigna("ARGS","tabla=".$this->nombre_tabla);
+		}
+		$tabla->Asigna("TABLA",$this->nombre_tabla);
+
+		CargarVariablesGrales($tabla, $tipo = "");
+		
+		return utf8_encode($tabla->Muestra());
 	}
 	
 	function TablaAdmin($id_padre = ""){
@@ -70,6 +96,23 @@ class Medicos_especialidades extends Estructura implements iMedicos_especialidad
 		return $rta["duracion_turno"];	
 	}
 	
+	//Kcmnt duracion turno dia
+	function DuracionTurnoDia($id_medico, $id_especialidad, $id_dias_semana){
+		$query_string = $this->querys->DuracionTurnoDia($id_medico, $id_especialidad, $id_dias_semana);
+		$query = $this->db->consulta($query_string);
+		$cant = $this->db->num_rows($query);
+		$rta = $this->db->fetch_array($query);
+
+		if ($rta['duracion_turno']==null || $rta['duracion_turno']=="00:00:00"){
+			$query_string = $this->querys->DuracionTurno($id_medico, $id_especialidad);
+			$query = $this->db->consulta($query_string);
+			$cant = $this->db->num_rows($query);
+			$rta = $this->db->fetch_array($query);
+		}
+
+		return $rta["duracion_turno"];	
+	}
+
 	function PanelAdmin($id_padre = ""){
 		$htm = $this->Html($this->nombre_tabla."/panel_admin");
 

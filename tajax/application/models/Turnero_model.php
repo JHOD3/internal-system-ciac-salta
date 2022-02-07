@@ -17,7 +17,74 @@ class Turnero_model extends CI_model
     {
         parent::__construct();
     }
+    public function obtHoraLibre(
+        $id_especialidades,
+        $id_medicos,
+        $year,
+        $month,
+        $day)
+    {   
+        
+        $fecha = $year.'-'.$month.'-'.$day;
+        $hoy = $this->get_nombre_dia($fecha);
+        $HorariosMedico = $this->db
+            ->select('id_dias_semana,desde,hasta')
+            ->from('medicos_horarios')
+            ->where('id_especialidades', $id_especialidades)
+            ->where('id_medicos', $id_medicos)
+            ->where('id_dias_semana',$hoy)
+            ->get()
+            ->result_array()
+        ;
+        $TurnosDia = $this->db
+            ->select('fecha,hasta,desde')
+            ->from('turnos')
+            ->where('id_especialidades', $id_especialidades)
+            ->where('id_medicos', $id_medicos)
+            ->where('fecha',$fecha)
+            ->order_by('desde','asc' )
+            ->get()
+            ->result_array()
+        ;
+        $u = end($TurnosDia);
+        if (count($TurnosDia) == 0) {
+           
+           $retornar = $HorariosMedico[0]['desde']; 
+        }else{
 
+            if (!empty($u['desde']) && $u['desde'] != '00:00:00') {
+                $TurnoDuracion = $this->obtDuracionTurno($id_especialidades, $id_medicos );
+                $ret = horaMM($u['desde'],$TurnoDuracion);
+                if (strtotime($ret) > strtotime($u['hasta'])) {
+                  $retornar = 0;
+                }else{
+                    $retornar = $ret;
+                }
+
+            }else{
+                $retornar = $HorariosMedico[0]['desde']; 
+            }
+        }
+        
+         return substr($retornar, 0, -3);
+
+
+    }
+    function get_nombre_dia($fecha){
+        $fechats = strtotime($fecha); //pasamos a timestamp
+
+        //el parametro w en la funcion date indica que queremos el dia de la semana
+        //lo devuelve en numero 0 domingo, 1 lunes,....
+        switch (date('w', $fechats)){
+            case 0: return "1"; break;
+            case 1: return "2"; break;
+            case 2: return "3"; break;
+            case 3: return "4"; break;
+            case 4: return "5"; break;
+            case 5: return "6"; break;
+            case 6: return "7"; break;
+        }
+    }
     public function obtEspecialidad($id_especialidades)
     {
         $query = $this->db
@@ -131,6 +198,8 @@ class Turnero_model extends CI_model
 
     public function obtMedicosPorEspecialidad($tipo, $filter)
     {
+        
+        
         $this->db
             ->select('m.*, e.*')
             ->from('medicos AS m')
@@ -145,6 +214,7 @@ class Turnero_model extends CI_model
             ->group_by('e.nombre, m.apellidos, m.nombres')
             ->order_by('e.nombre, m.apellidos, m.nombres')
         ;
+
         if (trim($tipo) and trim($filter)) {
             if (in_array($tipo, array('dr', 'dra', 'lic'))) {
                 $search = trim($tipo).". ".trim(str_replace("-", " ", $filter));
@@ -169,7 +239,64 @@ SQL;
             ->get()
             ->result_array()
         ;
+
+        
+
         return $query;
+    }
+
+    public function obtMedicosPorEstudio($tipo, $estudio)
+    {
+            $this->db
+                ->select('m.*, e.*,estudios.*')
+                ->from('medicos AS m')
+                ->join('medicos_especialidades AS me', 'me.id_medicos = m.id_medicos', 'right')
+                ->join('medicos_estudios AS mestudios', 'mestudios.id_medicos = m.id_medicos', 'right')
+                ->join('estudios AS estudios', 'mestudios.id_estudios = estudios.id_estudios', 'right')
+                ->join('especialidades AS e', 'me.id_especialidades = e.id_especialidades', 'right')
+                ->join('medicos_horarios AS tt', 'tt.id_medicos = m.id_medicos AND tt.id_especialidades = e.id_especialidades', 'join')
+                ->where('m.estado', 1)
+                ->where('m.id_medicos !=', 78)
+                ->where('me.estado', 1)
+                ->where('e.estado', 1)
+                ->where('tt.estado', 1)
+                ->where_in('tt.id_turnos_tipos', array(1, 2, 3, 4, 5, 6, 7, 8))
+                ->group_by('e.nombre, m.apellidos, m.nombres')
+                ->order_by('e.nombre, m.apellidos, m.nombres')
+            ;
+
+
+            if (trim($tipo) and trim($estudio)) {
+            if (in_array($tipo, array('dr', 'dra', 'lic'))) {
+                $search = trim($tipo).". ".trim(str_replace("-", " ", $estudio));
+                $where = <<<SQL
+                    CONCAT(
+                        TRIM(m.saludo),
+                        ' ',
+                        TRIM(m.apellidos),
+                        ' ',
+                        TRIM(m.nombres)
+                    ) LIKE '{$search}'
+SQL;
+            } else {
+                
+                $search = trim(str_replace("-", " ", $estudio));
+                
+                $where = <<<SQL
+                    TRIM(estudios.nombre) LIKE '{$search}'
+
+
+SQL;
+            }
+            $this->db->where($where);
+        }
+        $query = $this->db
+            ->get()
+            ->result_array()
+        ;
+
+        return $query;
+        
     }
 
     public function obtDiasSemana(
@@ -573,10 +700,11 @@ SQL;
                 $total +=
                     (
                         ((($hasta[0] * 60) + $hasta[1]) * 60) + $hasta[2] -
-                        ((($desde[0] * 60) + $desde[1]) * 60) + $desde[2]
+                        ((($desde[0] * 60) + $desde[1]) * 60) + $desde[2] + $vcDT
                     ) /
                     $vcDT
                 ;
+				$total += 1; // debo considerar el ultimo turno
             }
             if ($total > 0) {
                 $dados = $this->obtTurnosReservados(
@@ -870,7 +998,7 @@ SQL;
         $this->db
             ->where('m.estado', 1)
             ->where('tt.estado', 1)
-            ->where_in('tt.id_turnos_tipos', array(1, 2, 3, 4, 5, 6, 7, 8))
+            ->where_in('tt.id_turnos_tipos', array(1, 3, 4, 2, 5, 6, 7, 8))
         ;
         if ($where) {
             $this->db->where($where);

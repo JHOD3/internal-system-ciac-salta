@@ -106,6 +106,7 @@ $(document).on("click", ".btn_opciones", function(e){
 	}
 })
 
+//Kcmnt 2.1.Doble click en grilla de turnos para RESERVAR
 $(document).on("dblclick", ".reservar", function(e, date){
 	e.preventDefault();
 	var desde = $(this).data("desde");
@@ -334,6 +335,7 @@ $(document).on("click", ".imprimir", function(){
 
 });
 
+//Kcmnt 2.1.Doble click en grilla de turnos para ABRIR UN TURNO RESERVADO
 //ESTADO DEL TURNO - CLICK EN EL ESTADO DEL TURNO
 $(document).on("dblclick", ".btn_estado_turno", function(e){
 	e.preventDefault();

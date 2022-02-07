@@ -130,6 +130,7 @@ class Pacientes extends Estructura implements iPacientes{
 
 
                 if ($_SESSION['SISTEMA'] == 'sas') {
+					//kcmnt Aqui obtiene de db las observaciones del paciente y arma el html.
             		$query_string_po = $this->querys->ObservacionesDePacientes($row['id_pacientes']);
             		$query_po = $this->db->consulta($query_string_po);
                     $pacientes_observaciones = '';

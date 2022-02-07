@@ -5,7 +5,7 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
     requerir_class("tpl","querys","mysql","estructura","json");
 
     $this_db = new MySQL();
-
+    //kcmnt CONFIRMACION
     if ($_GET['get'] > 0) {
         if ($_SESSION['TIPO_USR'] == 'M') {
             $sql = "
@@ -68,6 +68,8 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
             LIMIT 1
         ";
     } else {
+        //kcmnt No mostrar novedades que tengan antiguedad de 3 meses
+        // Para usuarios nuevos, empezar a mostrar novedades desde la fecha de alta del usuario.
         $sql = "
             SELECT
                 'nov' AS tipo,
@@ -82,7 +84,9 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
                 ON no.id_novedades = n.id_novedades
             WHERE
                 no.id_usuarios = '{$_SESSION['ID_USUARIO']}' AND
-                no.confirmacion IS NULL
+                no.confirmacion IS NULL AND
+                n.fechahora BETWEEN (SELECT fecha_alta FROM usuarios WHERE id_usuarios = '{$_SESSION['ID_USUARIO']}' LIMIT 1) AND '9999-12-31' AND
+                n.fechahora > NOW() - INTERVAL 3 MONTH
             UNION
                 SELECT
                     'dia' AS tipo,
@@ -97,6 +101,8 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
                     usuarios AS u
                     ON nd.id_usuarios = u.id_usuarios
                 WHERE
+                    nd.fechahora BETWEEN (SELECT fecha_alta FROM usuarios WHERE id_usuarios = '{$_SESSION['ID_USUARIO']}' LIMIT 1) AND '9999-12-31' AND
+                    nd.fechahora > NOW() - INTERVAL 3 MONTH AND
                     nd.id_novedades_diarias NOT IN (
                         SELECT id_novedades_diarias
                         FROM novedades_diarias_usuarios AS ndu
@@ -125,7 +131,7 @@ if (is_array($_GET) and $_GET['get'] and ($_GET['get'] > 0 or $_GET['get'] == '-
             <br />
             <div>
                 <input id="dieAjaxNovedadesButton" class="btn-success" type="button" data-tipo="<?=$nov['tipo']?>" value="He le&iacute;do" />
-                <input id="dieAjaxNovedadesCancel" class="btn-secondary" type="button" value="Leer despu&eacute;s" />
+                <input id="dieAjaxNovedadesCancel" class="btn-secondary" type="button" value="Leer despu&eacute;s"/>
             </div>
         </div>
         <style>
