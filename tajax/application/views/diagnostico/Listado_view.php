@@ -275,87 +275,89 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                 <td class="dOrder" data-order="16" style="width:60px;" title="Derivador">Der.</td>
                 <td style="width:120px;">Nombre</td>
                 <td style="width:100px;" title="Observaciones">Obs.</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                <td>1</td>
+                <td>2</td>
                 <?php if ($SUPERUSER > 1): ?>
-                    <td>&nbsp;</td>
+                 <td>&nbsp;</td>
                 <?php endif; ?>
             </tr>
-            <?php
-            if (count($listado) > 0) :
-                foreach($listado as $item):
-                    $idmec = ' class="tdTab tAC" data-mth=';;
-                    $idmer = ' class="tdTab tAR" data-mth=';;
-                    $idme = ' class="tdTab" data-mth=';
-?>
-<tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
-    <td style="text-align:center;">
-        <?=date("d/m", strtotime($item['fecha']))?><br />
-        <?=substr($item['desde'], 0, 5)?><br />
-        <?php if ($SUPERUSER > 1): ?>
-            <a href="../tajax/index.php/<?=$this->router->fetch_class()?>/turnos_estudios_historicos/<?=$item['id_turnos_estudios']?>" class="openTurnoEstudio">Historial</a><br />
-        <?php endif; ?>
-        <label class="usuFmt"><?=$item['usuario']?></label>
-    </td>
-    <td>
-        <?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?><br />
-        <?=number_format($item['nro_documento'], 0, ",", ".")?>
-    </td>
-    <td<?=$idme?>"codigoalternat<?=$item['codigoalternat'] > 0? '" style="color:#C66;' : ''?>"><?=$item['codigoalternat'] ? $item['codigoalternat'] : $item['codigopractica']?></td>
-    <td<?=$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
-    <td<?=$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
-    <td<?=$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
-    <td<?=$idme?>"fecha_presentacion"><?=$item['fecha_presentacion'] ? date("d/m/Y", strtotime($item['fecha_presentacion'])) : '---'?></td>
-    <td<?=$idme?>"nro_orden"><?=$item['nro_orden'] ? $item['nro_orden'] : '---'?></td>
-    <td<?=$idme?>"nro_afiliado"><?=$item['nro_afiliado'] ? $item['nro_afiliado'] : '---'?></td>
-    <td<?=$idmec?>"cantidad"><?=$item['cantidad'] ? $item['cantidad'] : '---'?></td>
-    <td<?=$idme?>"tipo"><?=$item['tipo'] == '1' ? 'A' : ($item['tipo'] == '2' ? 'I' : '---')?></td>
-    <td<?=$idmec?>"trajo_pedido">
-        <?php
-        switch ($item['trajo_pedido']) {
-            case '1': echo 'TP'; break;
-            case '2': echo 'No'; break;
-            case '3': echo '<strong style="color:red">Debe</strong>'; break;
-            default: echo '---'; break;
-        }
-        ?>
-    </td>
-    <td<?=$idmec?>"trajo_orden">
-        <?php
-        switch ($item['trajo_orden']) {
-            case '1': echo 'TO'; break;
-            case '2': echo 'No'; break;
-            case '3': echo '<strong style="color:red">Debe</strong>'; break;
-            default: echo '---'; break;
-        }
-        ?>
-    </td>
-    <td<?=$idmer?>"trajo_arancel"><?=$item['trajo_arancel'] > 0 ? "\$&nbsp;{$item['trajo_arancel']}" : '---'?></td>
-    <td<?=$idmer?>"deja_deposito"><?=$item['deja_deposito'] > 0 ? "\$&nbsp;{$item['deja_deposito']}" : '---'?></td>
-    <td<?=$idmer?>"trajo_arancel_coseguro"><?=$item['trajo_arancel_coseguro'] > 0 ? "\$&nbsp;{$item['trajo_arancel_coseguro']}" : '---'?></td>
-    <td<?=$idmer?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
-    <td data-mth="medicos_derivacion"><?=$item['medicos_derivacion'] ? $item['medicos_derivacion'] : $item['medicosext_derivacion']?></td>
-    <td<?=$idmer?>"observaciones"><?=$item['observaciones']?></td>
-    <?php if (isset($sche) and $sche != ''): ?>
-        <td><input type="checkbox" class="checked"<?=$item['checked'] == '1' ? ' checked="checked"' : ''?> /></td>
-    <?php else: ?>
-        <td><?=$item['checked'] == '1' ? '✓' : '&nbsp;'?></td>
-    <?php endif; ?>
-    <td<?=$idmer?>"save"></td>
-    <?php if ($SUPERUSER > 1): ?>
-        <td<?=$idmer?>"dele"></td>
-    <?php endif; ?>
-</tr>
-<?php
-                endforeach;
-            else:
-                ?>
+            <?php if (count($listado) > 0) :  ?>
+                <?php foreach($listado as $item):?>
+                    <?php
+                        $idmec = ' class="tdTab tAC" data-mth=';
+                        $idmer = ' class="tdTab tAR" data-mth=';
+                        $idme = ' class="tdTab" data-mth=';
+                    ?>
+                    <tr class="tsEst<?=$item['estado']?>" data-id="<?=$item['id_turnos_estudios']?>" id="id_te_<?=$item['id_turnos_estudios']?>">
+                        <td style="text-align:center;">
+                            <?=date("d/m", strtotime($item['fecha']))?><br />
+                            <?=substr($item['desde'], 0, 5)?><br />
+                            <?php if ($SUPERUSER > 1): ?>
+                                <a href="../tajax/index.php/<?=$this->router->fetch_class()?>/turnos_estudios_historicos/<?=$item['id_turnos_estudios']?>" class="openTurnoEstudio">Historial</a><br />
+                            <?php endif; ?>
+                            <label class="usuFmt"><?=$item['usuario']?></label>
+                        </td>
+                        <td>
+                            <?=utf8_encode(ucwords(upper(trim(utf8_decode(str_replace(', ', ',<br />', $item['pacientes']))))))?><br />
+                            <?=number_format($item['nro_documento'], 0, ",", ".")?>
+                        </td>
+                        <td<?=$idme?>"codigoalternat<?=$item['codigoalternat'] > 0? '" style="color:#C66;' : ''?>"><?=$item['codigoalternat'] ? $item['codigoalternat'] : $item['codigopractica']?></td>
+                        <td<?=$idme?>"estudios"><?=trim($item['estudios']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['estudios']))))) : '---'?></td>
+                        <td<?=$idme?>"medicos"><?=trim($item['medicos']) ? utf8_encode(ucwords(upper(trim(utf8_decode($item['medicos']))))) : '---'?></td>
+                        <td<?=$idme?>"obras_sociales"><?=$item['obras_sociales'] ? $item['obras_sociales'] : '---'?></td>
+                        <td<?=$idme?>"fecha_presentacion"><?=$item['fecha_presentacion'] ? date("d/m/Y", strtotime($item['fecha_presentacion'])) : '---'?></td>
+                        <td<?=$idme?>"nro_orden"><?=$item['nro_orden'] ? $item['nro_orden'] : '---'?></td>
+                        <td<?=$idme?>"nro_afiliado"><?=$item['nro_afiliado'] ? $item['nro_afiliado'] : '---'?></td>
+                        <td<?=$idmec?>"cantidad"><?=$item['cantidad'] ? $item['cantidad'] : '---'?></td>
+                        <td<?=$idme?>"tipo"><?=$item['tipo'] == '1' ? 'A' : ($item['tipo'] == '2' ? 'I' : '---')?></td>
+                        <td<?=$idmec?>"trajo_pedido">
+                            <?php
+                            switch ($item['trajo_pedido']) {
+                                case '1': echo 'TP'; break;
+                                case '2': echo 'No'; break;
+                                case '3': echo '<strong style="color:red">Debe</strong>'; break;
+                                default: echo '---'; break;
+                            }
+                            ?>
+                        </td>
+                        <td<?=$idmec?>"trajo_orden">
+                            <?php
+                            switch ($item['trajo_orden']) {
+                                case '1': echo 'TO'; break;
+                                case '2': echo 'No'; break;
+                                case '3': echo '<strong style="color:red">Debe</strong>'; break;
+                                default: echo '---'; break;
+                            }
+                            ?>
+                        </td>
+                        <td<?=$idmer?>"trajo_arancel"><?=$item['trajo_arancel'] > 0 ? "\$&nbsp;{$item['trajo_arancel']}" : '---'?></td>
+                        <td<?=$idmer?>"deja_deposito"><?=$item['deja_deposito'] > 0 ? "\$&nbsp;{$item['deja_deposito']}" : '---'?></td>
+                        <td<?=$idmer?>"trajo_arancel_coseguro"><?=$item['trajo_arancel_coseguro'] > 0 ? "\$&nbsp;{$item['trajo_arancel_coseguro']}" : '---'?></td>
+                        <td<?=$idmer?>"matricula_derivacion"><?=$item['matricula_derivacion'] ? $item['matricula_derivacion'] : '---'?></td>
+                        <td data-mth="medicos_derivacion"><?=$item['medicos_derivacion'] ? $item['medicos_derivacion'] : $item['medicosext_derivacion']?></td>
+                        <td<?=$idmer?>"observaciones"><?=$item['observaciones']?></td>
+                        <?php if (isset($sche) and $sche != ''): ?>
+                            <td><input type="checkbox" class="checked"<?=$item['checked'] == '1' ? ' checked="checked"' : ''?> /></td>
+                        <?php else: ?>
+                            <td>
+                                <?php if($item['checked'] == '1'): ?>
+                                        ✓
+                                <?php else: ?>
+                                    <input type="checkbox" class="checked"<?=$item['checked'] == '1' ? ' checked="checked"' : ''?> />
+                                <?php endif; ?>
+                            </td>
+                        <?php endif; ?>
+                        <td<?=$idmer?>"save"></td>
+                        <?php if ($SUPERUSER > 1): ?>
+                        <td<?=$idmer?>"dele"></td>
+                        <?php endif; ?>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
                 <tr>
                     <td colspan="100%">No se encontró ningún turno</td>
                 </tr>
-                <?php
-            endif;
-            ?>
+            <?php endif; ?>
         </tbody>
     </table>
 </form>

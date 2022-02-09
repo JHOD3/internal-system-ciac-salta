@@ -6,6 +6,7 @@ unset($_SESSION["USUARIO"]);
 session_destroy();
 
 $obj_estructura = new Estructura();
+
 $htm_gral = $obj_estructura->html("gral_login");
 
 $htm_login = $obj_estructura->html("sas/login");

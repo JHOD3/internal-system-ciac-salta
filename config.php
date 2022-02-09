@@ -13,10 +13,10 @@ define("ANIO", "2014");
 
 define("ID_APP_FACEBOOK", "");
 
-define("BD_NOMBRE", "ciacdb");
-define("SERVIDOR", "192.168.10.156");
-define("BD_USUARIO", "sisuser");	
-define("BD_PASS", "JsnQm4q5vrcJG5st");
+define("BD_NOMBRE", "ciacsalta");
+define("SERVIDOR", "127.0.0.1");
+define("BD_USUARIO", "root");
+define("BD_PASS", "");
 
 if (
 	strpos($_SERVER['HTTP_HOST'], "localhost") !== FALSE ||
