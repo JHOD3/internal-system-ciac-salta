@@ -30,9 +30,9 @@ class Diagnostico extends CI_Controller {
         $id_medicos = null,
         $id_especialidades = null
     ) {
-       // $dataView['id_especialidades'] = $id_especialidades;
-        print_r('hola');
-        /*if ($id_medicos) {
+        $dataView['id_especialidades'] = $id_especialidades;
+
+        if ($id_medicos) {
             $dataView['especialidades'] = $this->Model->obtEspecialidadDeMedico($id_medicos);
             if ($id_especialidades) {
                 $this->load->model('Turnero_model');
@@ -73,6 +73,8 @@ class Diagnostico extends CI_Controller {
             }
         }
 
+        print_r($dataView);
+    /*
         $dataView['ultimo_horreal'] = $this->Model->obtUltimoHorReal(
             $fecha,
             $id_medicos,
