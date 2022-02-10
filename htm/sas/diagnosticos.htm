@@ -95,14 +95,14 @@ h1{
     padding: 8px;
 }
 #tblDxI tr:nth-child(even) td:first-child,
-#tblDxI tbody tr.trHead td:first-child{
+#tblDxI thead tr.trHead td:first-child{
     border-radius: 4px 0 0 4px;
 }
 #tblDxI tr:nth-child(even) td:last-child,
-#tblDxI tbody tr.trHead td:last-child{
+#tblDxI thead tr.trHead td:last-child{
     border-radius: 0 4px 4px 0;
 }
-#tblDxI tbody tr.trHead td,
+#tblDxI thead tr.trHead td,
 #tblDxI tfoot tr th{
     font-weight: bold;
     background-color: #007FA6;
@@ -111,7 +111,7 @@ h1{
 #tblDxI tfoot tr th{
     border-radius: 4px;
 }
-#tblDxI tbody tr.trDate td{
+#tblDxI thead tr.trDate td{
     font-size: 1.5em;
     color: #008A47;
     padding: 0 6px 6px 6px;
@@ -288,15 +288,25 @@ h1{
 <section id="panel_menu" class="bg_verde"></section>
 
 <section id="panel_cuerpo" style="margin: 0;">
-	<div class="container">
+    <div class="container">
         <div id="diagnosticos_medicos">
-            <img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Pr&aacute;cticas M&eacute;dicas
+            <div style="justify-content: center; display: flex;height: 100vh;align-items: center;">
+                <img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Pr&aacute;cticas M&eacute;dicas
+            </div>
         </div>
         <div style="float:none;clear:both;">&nbsp;</div>
         <input type="hidden" placeholder="Medico" id="medicos" class="ui-autocomplete-input" autocomplete="off">
-	</div>
-</div>
+    </div>
 
-<div id="dialog_eliminar" title="Borrar Registos Seleccionado?">
-    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Se borrar&aacute;n todos los datos vinculados al registro. Desea continuar?</p>
-</div>
+    <div id="dialog_eliminar" title="Borrar Registos Seleccionado?">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+            Se borrar&aacute;n todos los datos vinculados al registro. Desea continuar?
+        </p>
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        $('#diagnosticos_medicos').scrollTop(0);
+    })
+</script>

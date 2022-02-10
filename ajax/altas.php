@@ -379,8 +379,7 @@ switch ($tabla){
 			$rta = false;
 
 	break;
-
-	case "medicos_especialidades":
+    case "medicos_especialidades":
 		parse_str(stripslashes($datos));
 
 		$columnas = "(
@@ -497,8 +496,7 @@ switch ($tabla){
 				$rta = false;
 		}
 	break;
-
-	case "obras_sociales_estudios":
+    case "obras_sociales_estudios":
 		parse_str(stripslashes($datos));
 
 		$columnas = "(
@@ -548,13 +546,11 @@ switch ($tabla){
 			$rta = false;
 
 	break;
-
-	case "turnos":
+    case "turnos":
 		/*$columnas = $obj->NombreColumnas();
 		$resp = $obj->Alta($datos,$columnas);*/
 		parse_str(stripslashes($datos));
-
-		$columnas = "(id_medicos, id_especialidades, id_pacientes, id_turnos_estados, fecha, desde, hasta, trae_orden, trae_pedido, id_medicos_derivacion, id_especialidades_derivacion, es_derivacion_externa, id_turnos_tipos, estado, tipo_usuario, id_usuarios, fecha_alta, hora_alta, consultorio)";
+        $columnas = "(id_medicos, id_especialidades, id_pacientes, id_turnos_estados, fecha, desde, hasta, trae_orden, trae_pedido, id_medicos_derivacion, id_especialidades_derivacion, es_derivacion_externa, id_turnos_tipos, estado, tipo_usuario, id_usuarios, fecha_alta, hora_alta, consultorio, arancel_diferenciado, aviso_demora)";
 
 		switch ($id_medico){
 			case 158: //ESTETICA... CARGA HASTA TRES VECES PARA UN MISMO PERIODO DE TIEMPO
@@ -633,7 +629,9 @@ switch ($tabla){
                         ).
                         "'".$fecha_actual."',
 						'".$hora_actual."',
-						".$consultorio."
+						".$consultorio.",
+						0,
+						0
 						)";
 					$query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
 

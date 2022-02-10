@@ -59,8 +59,8 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
 </h1>
 <?=$error_rol?>
 <form id="frmInpSrcFilter" method="post">
-    <table id="tblDxI" border="0" cellspacing="0" cellpadding="0">
-        <tbody>
+    <table id="tblDxI" border="0" cellspacing="0" cellpadding="0" style="width: 100%">
+        <thead>
             <tr class="trDate">
                 <td colspan="100%">
                     Desde:
@@ -117,11 +117,11 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                                     <a class="closeTagMedico" href="">
                                         <input type="hidden" name="srea[]" style="padding-bottom: 0px;padding-top: 0px;" value="<?=$medicos[$i]['id_medicos']?>" />
                                         <?=
-                                            strtoupper(
-                                                trim($medicos[$i]['saludo'])." ".
-                                                trim($medicos[$i]['apellidos'])." ".
-                                                trim($medicos[$i]['nombres'])
-                                            )
+                                        strtoupper(
+                                            trim($medicos[$i]['saludo'])." ".
+                                            trim($medicos[$i]['apellidos'])." ".
+                                            trim($medicos[$i]['nombres'])
+                                        )
                                         ?>
                                         &nbsp;&nbsp;X
                                     </a>
@@ -132,15 +132,15 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                             var tagsMEDICOS = [
                                 <?php $cnct = ''; ?>
                                 <?php for ($i = 0; $i < count($medicos); $i++): ?>
-                                    <?php
-                                    $m = strtoupper(
-                                        trim($medicos[$i]['saludo'])." ".
-                                        trim($medicos[$i]['apellidos'])." ".
-                                        trim($medicos[$i]['nombres'])
-                                    );
-                                    ?>
-                                    <?=$cnct?>{label: '<?=$m?>', value: '<?=$medicos[$i]['id_medicos']?>'}
-                                    <?php $cnct = ','; ?>
+                                <?php
+                                $m = strtoupper(
+                                    trim($medicos[$i]['saludo'])." ".
+                                    trim($medicos[$i]['apellidos'])." ".
+                                    trim($medicos[$i]['nombres'])
+                                );
+                                ?>
+                                <?=$cnct?>{label: '<?=$m?>', value: '<?=$medicos[$i]['id_medicos']?>'}
+                                <?php $cnct = ','; ?>
                                 <?php endfor; ?>
                             ];
                             $('#srea').autocomplete({
@@ -171,28 +171,28 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                     <input type="text" id="sest" style="padding-bottom: 0px;padding-top: 0px;" value="" />
                     <?php if (isset($sest)): ?>
                         <?php for ($i = 0; $i < count($sest); $i++): ?>
-                                <a class="closeTagEstudio" href="">
-                                    <input type="hidden" name="sest[]" style="padding-bottom: 0px;padding-top: 0px;" value="<?=$sest[$i]?>" />
-                                    <?=
-                                        strtoupper(
-                                            trim($sest[$i])
-                                        )
-                                    ?>
-                                    &nbsp;&nbsp;X
-                                </a>
+                            <a class="closeTagEstudio" href="">
+                                <input type="hidden" name="sest[]" style="padding-bottom: 0px;padding-top: 0px;" value="<?=$sest[$i]?>" />
+                                <?=
+                                strtoupper(
+                                    trim($sest[$i])
+                                )
+                                ?>
+                                &nbsp;&nbsp;X
+                            </a>
                         <?php endfor; ?>
                     <?php endif; ?>
                     <script>;
                         var tasgESTUDIOS = [
                             <?php $cnct = ''; ?>
                             <?php for ($i = 0; $i < count($estudios); $i++): ?>
-                                <?php
-                                $e = strtoupper(
-                                    trim($estudios[$i]['nombre'])
-                                );
-                                ?>
-                                <?=$cnct?>{label: '<?=$e?>', value: '<?=$estudios[$i]['nombre']?>'}
-                                <?php $cnct = ','; ?>
+                            <?php
+                            $e = strtoupper(
+                                trim($estudios[$i]['nombre'])
+                            );
+                            ?>
+                            <?=$cnct?>{label: '<?=$e?>', value: '<?=$estudios[$i]['nombre']?>'}
+                            <?php $cnct = ','; ?>
                             <?php endfor; ?>
                         ];
                         $('#sest').autocomplete({
@@ -247,13 +247,14 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                 <?php endif;?>
                 <td colspan="2"><input id="sder" name="sder" type="text" value="<?=isset($sder) ? $sder : ''?>" /></td>
                 <td>&nbsp;</td>
-                <td colspan="2">
+                <td colspan="1">
                     <select id="sche" name="sche" style="width:40px!important;">
                         <option value=""<?=(!isset($sche) or !in_array($sche, array('1', '2'))) ? $selected : ''?>>Todo</option>
                         <option value="1"<?=(isset($sche) and $sche == '1') ? $selected : ''?>>No chequeado</option>
                         <option value="2"<?=(isset($sche) and $sche == '2') ? $selected : ''?>>Chequeado</option>
                     </select>
                 </td>
+                <td></td>
             </tr>
             <tr class="trHead">
                 <td class="dOrder" data-order="1" style="width:36px;" title="Turno">Tu.</td>
@@ -275,12 +276,15 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                 <td class="dOrder" data-order="16" style="width:60px;" title="Derivador">Der.</td>
                 <td style="width:120px;">Nombre</td>
                 <td style="width:100px;" title="Observaciones">Obs.</td>
-                <td>1</td>
-                <td>2</td>
+                <td title="Estudio realizado y listo para entregar">R.</td>
+                <td title="Estudio Facturado">F.</td>
+                <td></td>
                 <?php if ($SUPERUSER > 1): ?>
-                 <td>&nbsp;</td>
+                    <td>&nbsp;</td>
                 <?php endif; ?>
             </tr>
+        </thead>
+        <tbody style="overflow-x: scroll;width: 100%">
             <?php if (count($listado) > 0) :  ?>
                 <?php foreach($listado as $item):?>
                     <?php
@@ -337,16 +341,17 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                         <td data-mth="medicos_derivacion"><?=$item['medicos_derivacion'] ? $item['medicos_derivacion'] : $item['medicosext_derivacion']?></td>
                         <td<?=$idmer?>"observaciones"><?=$item['observaciones']?></td>
                         <?php if (isset($sche) and $sche != ''): ?>
-                            <td><input type="checkbox" class="checked"<?=$item['checked'] == '1' ? ' checked="checked"' : ''?> /></td>
+                            <td><input type="checkbox" name="checked" class="checked"<?=$item['checked'] == '1' ? ' checked="checked"' : ''?> /></td>
                         <?php else: ?>
-                            <td>
-                                <?php if($item['checked'] == '1'): ?>
-                                        ✓
-                                <?php else: ?>
-                                    <input type="checkbox" class="checked"<?=$item['checked'] == '1' ? ' checked="checked"' : ''?> />
-                                <?php endif; ?>
-                            </td>
+                            <td><?=$item['checked'] == '1' ? '✓' : '&nbsp;'?></td>
                         <?php endif; ?>
+                        <td>
+                            <?php if($item['facturado'] == '1'): ?>
+                                ✓
+                            <?php else: ?>
+                                <input type="checkbox" name="facturado" class="checked"<?=$item['facturado'] == '1' ? ' checked="checked"' : ''?> />
+                            <?php endif; ?>
+                        </td>
                         <td<?=$idmer?>"save"></td>
                         <?php if ($SUPERUSER > 1): ?>
                         <td<?=$idmer?>"dele"></td>
@@ -670,7 +675,7 @@ $(document).ready(function(){
             }
         });
     <?php endif; ?>
-    $('#frmInpSrcFilter input[type="checkbox"].checked').change(function(){
+    $('#frmInpSrcFilter input[type="checkbox"][name="checked"].checked').change(function(){
         var trRemove = $(this).parent().parent();
         dId = $(this).parent().parent().data('id');
         var vUrl;
@@ -686,6 +691,25 @@ $(document).ready(function(){
             context: document.body
         }).done(function(data) {
             trRemove.remove();
+        });
+    });
+    $('#frmInpSrcFilter input[type="checkbox"][name="facturado"].checked').change(function(){
+        var trRemove = $(this).parent().parent();
+        var td     =  $(this).parent();
+        dId = $(this).parent().parent().data('id');
+        var vUrl;
+        if ($(this)[0].checked) {
+            vUrl = '../tajax/index.php/<?=$this->router->fetch_class()?>/facturado/';
+        } else {
+            vUrl = '../tajax/index.php/<?=$this->router->fetch_class()?>/unfacturado/';
+        }
+        ajxM = $.ajax({
+            type: 'POST',
+            url: vUrl,
+            data: {id_turnos_estudios: dId},
+            context: document.body
+        }).done(function(data) {
+            td.html('✓');
         });
     });
     $('body').on('focus',".datepicker", function(){

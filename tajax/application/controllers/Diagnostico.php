@@ -31,6 +31,7 @@ class Diagnostico extends CI_Controller {
         $id_especialidades = null
     ) {
         $dataView['id_especialidades'] = $id_especialidades;
+
         if ($id_medicos) {
             $dataView['especialidades'] = $this->Model->obtEspecialidadDeMedico($id_medicos);
             if ($id_especialidades) {
@@ -225,11 +226,35 @@ class Diagnostico extends CI_Controller {
         );
     }
 
+    public function facturado()
+    {
+        print utf8_encode(
+            json_encode(
+                $this->Model->checkFacturado(
+                    $this->input->post(),
+                    $this->session->userdata('ID_USUARIO')
+                )
+            )
+        );
+    }
+
     public function uncheck()
     {
         print utf8_encode(
             json_encode(
                 $this->Model->uncheckDiagnostico(
+                    $this->input->post(),
+                    $this->session->userdata('ID_USUARIO')
+                )
+            )
+        );
+    }
+
+    public function unfacturado()
+    {
+        print utf8_encode(
+            json_encode(
+                $this->Model->unfacturadoDiagnostico(
                     $this->input->post(),
                     $this->session->userdata('ID_USUARIO')
                 )

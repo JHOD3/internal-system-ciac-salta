@@ -532,7 +532,7 @@ SQL;
                 medicos_especialidades AS m
             INNER JOIN
                 especialidades AS e
-                ON me.id_especialidades = e.id_especialidades
+                ON m.id_especialidades = e.id_especialidades
             INNER JOIN
                 medicos_horarios AS mh
                 ON mh.id_medicos = m.id_medicos
@@ -543,12 +543,13 @@ SQL;
                 m.id_medicos = '{$id_medico}' AND
                 mh.estado = 1 AND
                 tt.estado = 1 AND
-                tt.tipo = 'ESTUDIOS'
+                tt.tipo = 'ESTUDIOS' AND
                 e.estado = 1
             GROUP BY
                 m.id_medicos,
                 m.id_especialidades
 SQL;
+
         return $this->db->query($query)->result_array();
     }
 
@@ -1001,11 +1002,28 @@ SQL;
         return $post['id_turnos_estudios'];
     }
 
+    function checkFacturado($post, $id_usuario = null)
+    {
+        $query = $this->db
+            ->where('id_turnos_estudios', $post['id_turnos_estudios'])
+            ->update('turnos_estudios', array('facturado' => '1'))
+        ;
+        return $post['id_turnos_estudios'];
+    }
+
     function uncheckDiagnostico($post, $id_usuario = null)
     {
         $query = $this->db
             ->where('id_turnos_estudios', $post['id_turnos_estudios'])
             ->update('turnos_estudios', array('checked' => null))
+        ;
+        return $post['id_turnos_estudios'];
+    }
+    function unfacturadoDiagnostico($post, $id_usuario = null)
+    {
+        $query = $this->db
+            ->where('id_turnos_estudios', $post['id_turnos_estudios'])
+            ->update('turnos_estudios', array('facturado' => null))
         ;
         return $post['id_turnos_estudios'];
     }
