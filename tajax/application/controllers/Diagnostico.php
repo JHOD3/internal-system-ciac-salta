@@ -30,7 +30,7 @@ class Diagnostico extends CI_Controller {
         $id_medicos = null,
         $id_especialidades = null
     ) {
-        $dataView['id_especialidades'] = $id_especialidades;
+       // $dataView['id_especialidades'] = $id_especialidades;
 
         if ($id_medicos) {
             $dataView['especialidades'] = $this->Model->obtEspecialidadDeMedico($id_medicos);
