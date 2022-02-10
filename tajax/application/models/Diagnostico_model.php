@@ -1125,7 +1125,7 @@ SQL;
         }
 
     	//TRAIGO TODOS LOS TURNOS RESERVADOS
-		$query = "SELECT t.desde
+		$query = "SELECT T.desde
 				FROM turnos T
 				INNER JOIN turnos_estados TE
 				ON T.id_turnos_estados = TE.id_turnos_estados
