@@ -74,7 +74,7 @@ class Diagnostico extends CI_Controller {
         }
 
 
-        if(!empty($id_especialidades)) {
+        if($id_especialidades != null) {
             $dataView['ultimo_horreal'] = $this->Model->obtUltimoHorReal(
                 $fecha,
                 $id_medicos,
