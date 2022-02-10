@@ -73,15 +73,16 @@ class Diagnostico extends CI_Controller {
             }
         }
 
-        print_r($dataView);
-    /*
+
+
         $dataView['ultimo_horreal'] = $this->Model->obtUltimoHorReal(
             $fecha,
             $id_medicos,
             $id_especialidades
         );
-
-        $this->load->view('diagnostico/Agregar_grilla_view', $dataView);*/
+        print_r($dataView);
+        /*
+                $this->load->view('diagnostico/Agregar_grilla_view', $dataView);*/
     }
 
     public function buscar_paciente() {
