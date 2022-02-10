@@ -133,7 +133,7 @@ class Querys implements iQuerys{
                     usuario = '". mysql_real_escape_string($usuario)."' AND
                     usuario LIKE '". mysql_real_escape_string($usuario)."' AND
                     pass = '". mysql_real_escape_string($pass) ."'";
-            ////error_log($query);
+            error_log($query);
             return utf8_decode($query);
     }
 

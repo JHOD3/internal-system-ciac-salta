@@ -29,7 +29,6 @@ $(document).ready(function(){
 				},
 				success: function(requestData){
 					var rta = requestData;
-					//alert (rta);
 					if (rta.trim() == "1"){
 						location.href = "index.php";
 					} else {
@@ -62,7 +61,8 @@ $(document).ready(function(){
 					}
 				},
 				error: function(requestData){
-					alert ("error");
+                    console.log(requestData);
+					alert ("error 2");
 				}
 			});
 			return false;
