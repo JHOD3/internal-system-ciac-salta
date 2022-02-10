@@ -31,8 +31,8 @@ class Diagnostico extends CI_Controller {
         $id_especialidades = null
     ) {
        // $dataView['id_especialidades'] = $id_especialidades;
-
-        if ($id_medicos) {
+        print_r('hola');
+        /*if ($id_medicos) {
             $dataView['especialidades'] = $this->Model->obtEspecialidadDeMedico($id_medicos);
             if ($id_especialidades) {
                 $this->load->model('Turnero_model');
@@ -79,7 +79,7 @@ class Diagnostico extends CI_Controller {
             $id_especialidades
         );
 
-        $this->load->view('diagnostico/Agregar_grilla_view', $dataView);
+        $this->load->view('diagnostico/Agregar_grilla_view', $dataView);*/
     }
 
     public function buscar_paciente() {
