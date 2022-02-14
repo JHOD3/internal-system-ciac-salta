@@ -10,10 +10,17 @@ $obj_estructura = new Estructura();
 $htm_gral = $obj_estructura->html("gral_login");
 
 $htm_login = $obj_estructura->html("sas/login");
-
-switch ($_GET['err']) {
-    case "1": $error = '<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />La sesi&oacute;n ha expirado. Por favor identif&iacute;quese nuevamente. Muchas Gracias!'; break;
-    default: $error = ''; break;
+if(!empty($_GET['err'])) {
+    switch ($_GET['err']) {
+        case "1":
+            $error = '<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />La sesi&oacute;n ha expirado. Por favor identif&iacute;quese nuevamente. Muchas Gracias!';
+            break;
+        default:
+            $error = 0;
+            break;
+    }
+}else{
+    $error='';
 }
 $htm_gral->Asigna("ERROR", $error);
 
