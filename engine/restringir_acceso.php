@@ -15,6 +15,33 @@ if (isset($_SESSION['USUARIO'])) {
 	}else
 		$_SESSION["ULTIMO_ACCESO"] = $ahora;
     */
+    if(in_array($_SESSION['SUPERUSER'], [0,1])){
+        echo    "<script type='text/javascript'>
+                    var contadorAfk = 0;
+                    $(document).ready(function () {
+                        //Cada minuto se lanza la función ctrlTiempo
+                        var contadorAfk = setInterval(ctrlTiempo, 60000); 
+                    
+                        //Si el usuario mueve el ratón cambiamos la variable a 0.
+                        $(this).mousemove(function (e) {
+                            contadorAfk = 0;
+                        });
+                        //Si el usuario presiona alguna tecla cambiamos la variable a 0.
+                        $(this).keypress(function (e) {
+                            contadorAfk = 0;
+                        });
+                    });
+                    
+                    function ctrlTiempo() {
+                        //Se aumenta en 1 la variable.
+                        contadorAfk++;
+                        //Se comprueba si ha pasado del tiempo que designemos.
+                        if (contadorAfk > 35) { // Más de 59 minutos, lo detectamos como ausente o inactivo.
+                            location.href = 'login.php';
+                        }
+                    }
+                </script> ";
+    }
 } else {
 	session_destroy(); // destruyo la sesión
     if(

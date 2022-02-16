@@ -80,6 +80,7 @@ class Usuarios extends Estructura implements iUsuarios{
 		if ($cant_usr == 1){
 			while ($usr = $this->db->fetch_array($query))
 			{
+
                 // #print $_SERVER['HTTP_HOST'];
                 // if (
                 //     $_SERVER['HTTP_HOST'] != 'ciacsaltadb.ddns.net' or

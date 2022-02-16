@@ -398,9 +398,7 @@ class Medicos extends Estructura implements iMedicos{
 								$linea = " <span style='color:#".$row["color"]."' class='btn_estado_turno".$clasm."' data-id='".$row["id_turnos"]."' data-id_turnos_tipos='".$row["id_turnos_tipos"]."' data-id_turnos_estados='".$row["id_turnos_estados"]."' data-tipo='turno'>
 									<div class='bloque'>
 										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
-										<div class='dat_paciente'>".
-											upper(trim($row["apellidos"])). ", ".upper(trim($row["nombres"]))."
-											(".$row["nombre_estado"].")"
+										<div class='dat_paciente'>".upper(trim($row["apellidos"])). ", ".upper(trim($row["nombres"]))."(".$row["nombre_estado"].")"."<br />"
                                 ;
                                 $cnct = " ";
                                 if ($tipo_turno	== "consultas" and $row['id_turnos_estados'] > 1) {
@@ -420,15 +418,16 @@ class Medicos extends Estructura implements iMedicos{
                                 if ($row['aviso_demora'] == '1') {
                                     $linea .= " <sup style=\"color:#c00;\">DEMORADO</sup>";
                                 }
-                                $linea .= "<br />
-											<small style='color:#000'>".$row["abreviacion"]."</small>";
+
 
 								if ($cant_estudios > 0){
 									while ($row_estudios = $this->db->fetch_array($query_estudios)){
 
-										$linea .= "&nbsp;-&nbsp;<div class='estudios'><small style='color:#000'>".$row_estudios['nombre_estudio']."</small></div>";
+										$linea .= "<div class='estudios'><small style='color:#000'>".$row_estudios['nombre_estudio']."</small></div>&nbsp;-&nbsp;";
 									}
 								}
+                                
+                                $linea .= "<small style='color:#000'>".$row["abreviacion"]."</small>";
 
                                 $linea .= "<small style='color:#000'> - ".$row["telefonos"]."</small><br />";
 								//Mostrar usuario y fecha/hora que registro el turno

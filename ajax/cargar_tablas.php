@@ -2112,9 +2112,9 @@ if ($cant_registros != 0){
 				$editar = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
 				$eliminar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Eliminar' data-tabla='".$tabla."' class='btn_eliminar'><img src='".URL."files/img/btns/eliminar.png' border='0' ></a>";
 
-				$estado_cambiar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Cambiar Estado' data-estado='0' data-tabla='".$tabla."' class='btn_estado' data-id_padre='".$id_padre."'><img id='estado' src='".URL."files/img/btns/ojo.png' border='0'></a>";
+				$estado_cambiar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Cambiar Estado' data-estado='0' data-tabla='".$tabla."' class='btn_estado' data-id_padre=''><img id='estado' src='".URL."files/img/btns/ojo.png' border='0'></a>";
 
-				$estado_cambiar_2 = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Cambiar Estado' data-estado='1' data-tabla='".$tabla."' class='btn_estado' data-id_padre='".$id_padre."'><img id='estado' src='".URL."files/img/btns/ojo_2.png' border='0'></a>";
+				$estado_cambiar_2 = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Cambiar Estado' data-estado='1' data-tabla='".$tabla."' class='btn_estado' data-id_padre=''><img id='estado' src='".URL."files/img/btns/ojo_2.png' border='0'></a>";
 			}else{
 				$editar = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."' data-id_padre='".$id_padre."'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
 				$eliminar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Eliminar' data-tabla='".$tabla."' class='btn_eliminar' data-id_padre='".$id_padre."'><img src='".URL."files/img/btns/eliminar.png' border='0'></a>";
@@ -2417,11 +2417,9 @@ if ($cant_registros != 0){
 					$row[2] = utf8_encode($aRow['titulo']);
 					$row[3] = utf8_encode($aRow['descripcion']);
 					$row[4] = utf8_encode($usuario);
-                    if ($_SESSION['SUPERUSER'] > 2) {
+                    if (in_array($_SESSION['SUPERUSER'],[0,1,2,3])) {
                         $row[5] = $editar.''.$eliminar.'';
-                    } elseif ($_SESSION['SUPERUSER'] > 1) {
-                        $row[5] = $editar.''.$eliminar.'';
-                    } else {
+                    }else {
                         $row[5] = '';
                     }
 				break;
