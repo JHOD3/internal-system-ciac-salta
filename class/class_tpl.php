@@ -1,11 +1,11 @@
 <?php
 /********************************************************************************/
 /*		NOMBRE:		SpynTPL (Clase)												*/
-/*		AUTOR:		Andrés Nieto Porras											*/
+/*		AUTOR:		Andrï¿½s Nieto Porras											*/
 /*		FECHA:		4/6/05														*/
 /*		DESCRIPCION:															*/
 /*			Clase que implementa un motor de templates con el cual		  		*/
-/*		podemos separar el codigo del diseño									*/
+/*		podemos separar el codigo del diseï¿½o									*/
 /*		MODIFICACIONES:															*/
 /*			- 4/5/05		Creacion del Fichero								*/		
 /*			- 28/7/05		Mejora en sistema de bloques (vacios)				*/		
@@ -41,7 +41,7 @@ class SpynTPL {
 
 	//SpynTPL()
 	//Funcion:		Constructor de la clase.
-	//Parámetros:	$dir	-> Directorio donde estan los templates.
+	//Parï¿½metros:	$dir	-> Directorio donde estan los templates.
 	//				$cache	-> Flag q activa o desactiva el sistema de cache.
     function SpynTPL($dir = '.',$cache = false)
 	{

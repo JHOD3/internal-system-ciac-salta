@@ -226,6 +226,7 @@ class Querys implements iQuerys{
             case "subsectores":
             case "novedades_diarias":
             case "agendas":
+            case "turnos_tipos":
             case "mantenimientos":
             case "usuarios":
             case "notas_impresion":

@@ -46,7 +46,7 @@ switch ($tipo){
 				$id_padre = $_POST["id_padre"];
 				$rta = $obj->FormModificacion($id_padre);
 			break;
-			default:
+            default:
 				$rta = $obj->FormModificacion();
 		}
 	break;

@@ -10,6 +10,15 @@ class Menus{
  	public function armarMenu(){
         $htm_menu_tablas = $this->obj_estructura->html("menu/tablas_sas");
 
+        $tLi='
+            <li id="turnos_tipos_menu">
+                <a href="#" class="btn_tabla" data-nombre="turnos_tipos">
+                    <i class="fa fa-address-book"></i>
+                    <span>Turnos Tipo</span>
+                </a>
+            </li>';
+        $htm_menu_tablas->Asigna("LI_TURNOS_TIPOS", $tLi);
+
         if($_SESSION["PERMISO_AGENDA"] == 1){
             $tLi='
             <li id="agenda_menu">

@@ -43,7 +43,7 @@
 
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart1);
-  
+
     function drawChart1(est) {
         if(est){
             est.splice(est,0,['Fecha', 'Turnos', {role: 'style'}]);

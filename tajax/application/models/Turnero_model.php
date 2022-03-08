@@ -368,13 +368,15 @@ SQL;
             $id_dias_semana++;
         }
         $query = $this->db
+            ->select('medicos_horarios.*, turnos_tipos.mensaje')
             ->from('medicos_horarios')
-            ->where('id_especialidades', $id_especialidades)
-            ->where('id_medicos', $id_medicos)
-            ->where('estado', 1)
-            ->where('id_dias_semana', $id_dias_semana)
-            ->where_not_in('id_turnos_tipos', array(9, 10))
-            ->order_by('desde')
+            ->join('turnos_tipos', 'medicos_horarios.id_turnos_tipos = turnos_tipos.id_turnos_tipos')
+            ->where('medicos_horarios.id_especialidades', $id_especialidades)
+            ->where('medicos_horarios.id_medicos', $id_medicos)
+            ->where('medicos_horarios.estado', 1)
+            ->where('medicos_horarios.id_dias_semana', $id_dias_semana)
+            ->where_not_in('medicos_horarios.id_turnos_tipos', array(9, 10))
+            ->order_by('medicos_horarios.desde')
             ->get()
             ->result_array()
         ;

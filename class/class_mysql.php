@@ -6,7 +6,7 @@ class MySQL{
 	function __construct(){
 		//Variables BD
 		$this->conexion = (mysql_connect(SERVIDOR,BD_USUARIO,BD_PASS)) or die(mysql_error());
-		mysql_select_db(BD_NOMBRE,$this->conexion) or die(mysql_error());
+        mysql_select_db(BD_NOMBRE,$this->conexion) or die(mysql_error());
 	}
 	
  	public function consulta($consulta){

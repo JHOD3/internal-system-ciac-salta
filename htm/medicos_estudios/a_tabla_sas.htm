@@ -38,6 +38,7 @@
 					{ sWidth: '61%' },
 					{ sWidth: '10%' },
 					{ sWidth: '10%' },
+                    { sWidth: '10%' },
 					{ sWidth: '4%' },]
 		});
 
@@ -66,11 +67,17 @@
 	}
 
 	//ACTUALIZO ARANCELES A MEDIDA QUE LO CAMBIO...
-	$('#t_medicos_estudios').on("change", ".particular, .arancel", function(){
+	$('#t_medicos_estudios').on("change", ".particular, .arancel, .titular", function(){
 		var id_medico_estudio = $(this).prop('id');
 		var particular = $(this).parent().parent().find(".particular").val();
 		var arancel = $(this).parent().parent().find(".arancel").val();
-		var variables = "id="  + id_medico_estudio + "&particular=" + particular + "&arancel=" + arancel;
+        var titular = $(this).parent().parent().find(".titular").val();
+		var variables = "id="  + id_medico_estudio + "&particular=" + particular + "&arancel=" + arancel+ "&titular=" + titular;
+        if(titular == 0){
+            $(this).parent().parent().find(".titular").val(1);
+        }else{
+            $(this).parent().parent().find(".titular").val(0);
+        }
 		$.ajax({
 			type: "POST",
 			url: "[URL]ajax/modificaciones.php",
@@ -84,7 +91,7 @@
 				//alert ("Obra Social para Medico Editada Correctamente.");
 				IniciarVentana("ventana_opciones", "cerrar");
 				//TableMedicosEstudios.fnDraw();
-				$(ventana_opciones).dialog('destroy').remove();
+				$("ventana_opciones").dialog('destroy').remove();
 			},
 			complete: function(requestData, exito){},
 			error: function (){
@@ -101,6 +108,7 @@
             <th>Estudios</th>
             <th>Particular</th>
 			<th>Arancel</th>
+            <th>Titular</th>
             <th>Acci&oacute;n</th>
         </tr>
     </thead>
@@ -111,10 +119,12 @@
             <th><input type="text" name="tb_particular" value="Particular" class="search_init" style="width: 100%;" /></th>
 			<th><input type="text" name="tb_arancel" value="Arancel" class="search_init" style="width: 100%;" /></th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

@@ -3,7 +3,6 @@ require_once ("../engine/config.php");
 require_once ("../engine/restringir_acceso.php");
 requerir_class("tpl","mysql","querys","estructura","medicos","usuarios","menus");
 $this_db = new MySQL();
-
 //requerir_class("dias_semana");
 
 $obj_estructura = new Estructura();

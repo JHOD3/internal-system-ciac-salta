@@ -5,7 +5,7 @@ requerir_class("tpl","querys","mysql","estructura","json");
 
 requerir_class ("pacientes");
 if (isset($_POST["dni"])){
-	$dni = $_POST["dni"];
+	$dni = str_replace('.', '',$_POST["dni"]);
 	$obj_pacientes = new Pacientes();
 	$rta = $obj_pacientes->Buscar($dni);
 }else{
