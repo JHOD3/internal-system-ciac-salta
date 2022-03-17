@@ -39,13 +39,38 @@
 			"aoColumns" : [{ sWidth: '15%' }, 
 					{ sWidth: '55%' },
 					{ sWidth: '20%' },
-					{ sWidth: '10%' }]
+                    { sWidth: '10%' },
+                    { sWidth: '10%' }]
 		});
 		
 		//DATATABLES --- GENERAL PARA EL FOOT DE LA TABLA
 		$('#t_'+nombre+" thead input").keyup( function () {
-			TableMedicosObrasSociales.fnFilter( this.value, $('#t_'+nombre+" thead input").index(this) );
+            if ($(this).attr('name')!='tb_selecionar_varios') {
+                TableMedicosObrasSociales.fnFilter(this.value, $('#t_' + nombre + " thead input").index(this));
+            }else{
+                let input = $(this);
+                $('.arancel-checked').each( function (index,element) {
+                    if ($(this).is(':checked')){
+                        $($(this).data('id')).val(input.val());
+                        $($(this).data('id')).change();
+                    }
+                });
+            }
 		});
+
+        $('#t_'+nombre+" thead input").focusout( function () {
+            if ($(this).attr('name') == 'tb_selecionar_varios') {
+                let input = $(this);
+                $('.arancel-checked').each( function (index,element) {
+                    if ($(this).is(':checked')){
+                        $(this).prop('checked', false);
+                        input.val('');
+                    }
+                });
+            }
+        })
+
+
 		$('#t_'+nombre+" thead input").each( function (i) {
 			asInitVals[i] = this.value;
 		});
@@ -98,6 +123,7 @@
             <th>ID</th>
             <th>Obras Sociales</th>
             <th>Arancel</th>
+            <th>Selecciona varios</th>
             <th>Accion</th>
         </tr>
     </thead> 
@@ -106,11 +132,15 @@
             <th><input type="text" name="tb_id_obras_sociales_planes" value="ID" class="search_init" style="width: 100%;" /></th>
             <th><input type="text" name="tb_id_obras_sociales" value="Obra Social" class="search_init" style="width: 100%;" /></th>
             <th><input type="text" name="tb_nombre" value="Plan" class="search_init" style="width: 100%;" /></th>
+            <th>
+                <input type="text" name="tb_selecionar_varios" class="" style="width: 100%;" />
+            </th>
             <th></th>
         </tr>
     </thead>    
     <tbody>
         <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

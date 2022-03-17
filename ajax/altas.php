@@ -1272,8 +1272,8 @@ SQL;
                     '".utf8_decode($tareas)."',
                     '".utf8_decode($tareas_configuracion)."',
                     '".utf8_decode($tareas_pendientes)."',
-                    '".utf8_decode($cumples)."',
-                    '".utf8_decode($usuarios_permiso)."'
+                    '".utf8_decode($usuarios_permiso)."',
+                    '".utf8_decode($cumples)."'                    
 					)";
 
 		print $query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);

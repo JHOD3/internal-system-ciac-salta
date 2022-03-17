@@ -329,7 +329,7 @@ switch ($tabla){
     case "turnos_tipos":
         $sWhere = "WHERE ( id_turnos_tipos NOT IN (1,2,9,10)";
         break;
-	default:
+    default:
 		$sWhere = "";
 }
 
@@ -2334,13 +2334,14 @@ if ($cant_registros != 0){
 					$row[0] = $aRow["id_medicos_obras_sociales"];
 					$row[1] = utf8_encode($aRow["nombre"]);
 					$row[2] = '<input type="text" class="arancel" id="'.$aRow["id_medicos_obras_sociales"].'" value="'.$aRow["arancel"].'" />';
+                    $row[3] = '<input type="checkbox" class="arancel-checked" data-id="#'.$aRow["id_medicos_obras_sociales"].'" />';
                     if (
                         $_SESSION['SUPERUSER'] > 1 OR
                         isset($_SESSION['ID_MEDICO'])
                     ) {
-                        $row[3] = $eliminar.'';
+                        $row[4] = $eliminar.'';
                     } else {
-                        $row[3] = '';
+                        $row[4] = '';
                     }
 				break;
 				case 'obras_sociales_planes':

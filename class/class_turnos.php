@@ -93,7 +93,22 @@ class Turnos extends Estructura implements iTurnos{
 					$fechahora = date("d/m/y H:i", strtotime($row_po['fechahora']))."hs";
 					$pacientes_observaciones = <<<HTML
 						<div>
-							<div><strong>{$fechahora} - {$row_po['usuario']}</strong></div>
+							<div>
+							    <strong>{$fechahora} - {$row_po['usuario']}</strong>
+							    <a
+                                        alt="Editar Paciente Observaciones"
+                                        href="#"
+                                        class="btn_opciones"
+                                        data-titulo="Editar Paciente"
+                                        data-tipo="editar"
+                                        data-id="{$row_po['id_pacientes_observaciones']}"
+                                        data-tabla="pacientes_observaciones"
+                                        data-tipo_btn="tabla_eme"
+                                        style="float:right;"
+                                >
+                                    <img border="0" src="../files/img/btns/editar.png">
+                                </a>
+							</div>
 							<div>{$row_po['observacion']}</div>
 						</div>
 						{$pacientes_observaciones}

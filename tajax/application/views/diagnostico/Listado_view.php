@@ -52,15 +52,21 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
         font-weight: bold;
     }
 </style>
-<h1>Prácticas Médicas
-    <?php if (!$isMedico): ?>
-        <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a>
-    <?php endif; ?>
-</h1>
+
 <?=$error_rol?>
 <form id="frmInpSrcFilter" method="post">
     <table id="tblDxI" border="0" cellspacing="0" cellpadding="0" style="width: 100%">
-        <thead>
+        <thead style="position: fixed;background: white;top: 38px;padding-top: 20px">
+
+            <tr>
+                <td colspan="5">
+                    <h1>Prácticas Médicas
+                        <?php if (!$isMedico): ?>
+                            <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a>
+                        <?php endif; ?>
+                    </h1>
+                </td>
+            </tr>
             <tr class="trDate">
                 <td colspan="100%">
                     Desde:
@@ -501,7 +507,7 @@ $(document).ready(function(){
         date2 = date2.split('/');
         date2 = date2[2] + '-' + date2[1] + '-' + date2[0];
         var frmData = $('#frmInpSrcFilter').serialize();
-        $('#dateok').parent().parent().html('<div style="white-space: nowrap;"><img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Pr&aacute;cticas M&eacute;dicas</div>');
+        $('#dateok').parent().parent().html('<div style="justify-content: center; display: flex;height: 100vh; width: 100vw;align-items: center;"><img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Pr&aacute;cticas M&eacute;dicas</div>');
         $('tr.inputSearch').html('');
         ajxM = $.ajax({
             type: 'POST',
