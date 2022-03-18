@@ -398,7 +398,7 @@ class Medicos extends Estructura implements iMedicos{
 								$linea = " <span style='color:#".$row["color"]."' class='btn_estado_turno".$clasm."' data-id='".$row["id_turnos"]."' data-id_turnos_tipos='".$row["id_turnos_tipos"]."' data-id_turnos_estados='".$row["id_turnos_estados"]."' data-tipo='turno'>
 									<div class='bloque'>
 										<img src='".IMG."btns/tipo_".$tipo_turno.".png' /><span>".substr($row["desde"], 0, 5)." &raquo;</span>
-										<div class='dat_paciente'>".upper(trim($row["apellidos"])). ", ".upper(trim($row["nombres"]))."(".$row["nombre_estado"].")"."<br />"
+										<div class='dat_paciente' style='display: inline-grid;'><div>".upper(trim($row["apellidos"])). ", ".upper(trim($row["nombres"]))."(".$row["nombre_estado"].")"
                                 ;
                                 $cnct = " ";
                                 if ($tipo_turno	== "consultas" and $row['id_turnos_estados'] > 1) {
@@ -410,7 +410,7 @@ class Medicos extends Estructura implements iMedicos{
                                         $cnct = "<sup>+</sup>";
                                     }
                                     if ($row['trae_pedido'] == 1) {
-                                        $linea.= "{$cnct}<sup>DD</sup>";
+                                        $linea.= "{$cnct}<sup>DD</sup><br />";
                                     } elseif ($row['trae_pedido'] == 2 and $row['arancel_diferenciado'] > 0) {
                                         $linea.= "{$cnct}<sup>\${$row['arancel_diferenciado']}</sup>";
                                     }
@@ -418,8 +418,8 @@ class Medicos extends Estructura implements iMedicos{
                                 if ($row['aviso_demora'] == '1') {
                                     $linea .= " <sup style=\"color:#c00;\">DEMORADO</sup>";
                                 }
-
-
+                                $linea .= '</div>';
+                                $linea .= '<div>';
 								if ($cant_estudios > 0){
 									while ($row_estudios = $this->db->fetch_array($query_estudios)){
 
@@ -452,6 +452,7 @@ class Medicos extends Estructura implements iMedicos{
 										'</span>'.
 									"</small>";
 								}
+                                $linea .= '</div>';
 								$linea .="</div></div></span>";
 							break;
 							case 'sam':

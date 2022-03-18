@@ -86,6 +86,17 @@
 				this.value = asInitVals[$('#t_'+nombre+" thead input").index(this)];
 			}
 		});
+        $('input[name="tb_selecionar_varios_check"]').change(function (event) {
+            if ($(this).is(':checked')) {
+                $('.arancel-checked').each(function (index, element) {
+                    $(this).prop('checked', true);
+                });
+            }else{
+                $('.arancel-checked').each(function (index, element) {
+                    $(this).prop('checked', false);
+                });
+            }
+        });
 		///////////////////////////////////////////////////////
 	}
 	
@@ -118,7 +129,7 @@
 </script>
 [DATOS_MEDICO]
 <table border="0" id="t_[NOMBRE_TABLA]" class="display">
-    <thead> 
+    <thead>
         <tr>
             <th>ID</th>
             <th>Obras Sociales</th>
@@ -133,11 +144,14 @@
             <th><input type="text" name="tb_id_obras_sociales" value="Obra Social" class="search_init" style="width: 100%;" /></th>
             <th><input type="text" name="tb_nombre" value="Plan" class="search_init" style="width: 100%;" /></th>
             <th>
-                <input type="text" name="tb_selecionar_varios" class="" style="width: 100%;" />
+                <div style="display: flex;align-items: center">
+                    <input type="checkbox" name="tb_selecionar_varios_check" class="" style="width: 30%;" />
+                    <input type="text" name="tb_selecionar_varios" class="" style="width: 70%;" />
+                </div>
             </th>
             <th></th>
         </tr>
-    </thead>    
+    </thead>
     <tbody>
         <tr>
             <td></td>

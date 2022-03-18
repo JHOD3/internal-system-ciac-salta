@@ -39,8 +39,13 @@
 
 						alert ("Observación Cargada Correctamente.");
 						IniciarVentana("ventana_opciones", "cerrar");
-						TablePacientesObservaciones.fnDraw();
-						$(ventana_opciones).dialog('destroy').remove();
+                        if (typeof TablePacientesObservaciones !== 'undefined') {
+                            TablePacientesObservaciones.fnDraw();
+                        }
+                        if (typeof ventana_opciones !== 'undefined') {
+                            $(ventana_opciones).dialog('destroy').remove();
+                        }
+
 					},
 					complete: function(requestData, exito){},
 					error: function (){
