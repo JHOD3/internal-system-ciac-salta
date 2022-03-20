@@ -45,9 +45,9 @@ function CrearAgenda(){
 		success: function(requestData){
 			var rta = requestData;
 			$("#contenedor_agenda").html(rta).fadeIn("slow");
-			$("#btn_bajo_calendario_1").html('<a class="btn_opciones-1 btn" href="#" data-id="'+id_medico+'" data-tipo_btn="tabla_hija" data-hija="medicos_especialidades" data-nombre="Especialidades por M�dicos" alt="Especialidades por M�dicos" style="padding: 6px 0px 0px 6px;"><img src="https://ciacsaltadb.ddns.net/files/img/btns/medicos_horarios.png" border="0"></a>').fadeIn("slow");
+			$("#btn_bajo_calendario_1").html('<a class="btn_opciones-1 btn" href="#" data-id="'+id_medico+'" data-tipo_btn="tabla_hija" data-hija="medicos_especialidades" data-nombre="Especialidades por M�dicos" alt="Especialidades por M�dicos" style="padding: 6px 0px 0px 6px;">Horarios<img src="https://ciacsaltadb.ddns.net/files/img/btns/medicos_horarios.png" border="0"></a>').fadeIn("slow");
 			$("#btn_bajo_calendario_2").html('<a class="btn_opciones-1 btn" href="#" data-id="'+id_medico+'"  data-tipo_btn="tabla_hija" data-hija="medicos_obras_sociales" data-nombre="Planes de Obras Sociales por M�dicos" alt="Planes de Obras Sociales por M�dicos" style="padding: 6px 0px 0px 6px;">Obras Sociales<img src="https://ciacsaltadb.ddns.net/files/img/btns/medicos_obras_sociales.png" border="0"></a>').fadeIn("slow");
-			$("#btn_bajo_calendario_3").html('<a class="btn_opciones-1 btn" href="#" data-id="'+id_medico+'" data-tipo_btn="tabla_hija" data-hija="medicos_estudios" data-nombre="Especialidades por M�dicos" alt="Especialidades por M�dicos" style="padding: 6px 0px 0px 6px;"><img src="https://ciacsaltadb.ddns.net/files/img/btns/medicos_estudios.png" border="0"></a>').fadeIn("slow");
+			$("#btn_bajo_calendario_3").html('<a class="btn_opciones-1 btn" href="#" data-id="'+id_medico+'" data-tipo_btn="tabla_hija" data-hija="medicos_estudios" data-nombre="Especialidades por M�dicos" alt="Especialidades por M�dicos" style="padding: 6px 0px 0px 6px;">Estudios<img src="https://ciacsaltadb.ddns.net/files/img/btns/medicos_estudios.png" border="0"></a>').fadeIn("slow");
 
 
 		},
