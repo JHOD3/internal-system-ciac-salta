@@ -411,6 +411,24 @@ SQL;
 		return $query;
 	}
 
+    function TurnosReservadosEnMes($init, $end, $id_medico, $id_especialidad){
+        $query = "SELECT T.*, TE.*, P.*, OS.*, TE.nombre AS nombre_estado, OS.nombre AS nombre_os, U.apellidos AS uApellidos, U.usuario AS uUsuario, U.nombres AS uNombres, URec.apellidos AS recApellidos, URec.nombres AS recNombres, URec.usuario AS recUsuario
+				FROM turnos T
+				INNER JOIN turnos_estados TE
+				ON T.id_turnos_estados = TE.id_turnos_estados
+				INNER JOIN pacientes P
+				ON T.id_pacientes = P.id_pacientes
+				LEFT JOIN obras_sociales OS
+				ON P.id_obras_sociales = OS.id_obras_sociales
+                LEFT JOIN usuarios AS U
+	            ON T.id_usuarios = U.id_usuarios
+                LEFT JOIN usuarios AS URec
+	            ON T.id_usuarios_recepcion = URec.id_usuarios
+				WHERE T.id_medicos = $id_medico AND T.id_especialidades = $id_especialidad AND T.fecha >= '".$init."' AND T.fecha <= '".$end."' AND T.estado = 1 AND (T.id_turnos_estados = 1 OR T.id_turnos_estados = 2 OR T.id_turnos_estados = 4 OR T.id_turnos_estados = 7)
+				ORDER BY T.desde ASC";
+        return $query;
+    }
+
 	function GrillaTurnosPasados($id_medico, $id_especialidad, $fecha){
 		$query = "
             SELECT

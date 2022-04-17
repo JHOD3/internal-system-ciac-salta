@@ -346,8 +346,8 @@ class Medicos extends Estructura implements iMedicos{
             $keyTurnos = array_keys($aTurnos);
 			$query = $this->db->consulta($query_string);
 
-			//PREGUNTO SI TIENE CARGADO HORARIOS PARA UN DIA DADO
-			if ($cant > 0){
+			//PREGUNTO SI TIENE CARGADO HORARIOS PARA UN DIA DADO TODO
+			if (/*$cant > 0*/ true){
 
 				//kcmnt Aqui tendria que agregar la nueva logica de Duracion de turno x dia y especialidad
 				//VERIFICO LA DURACION DEL TURNO
@@ -360,10 +360,25 @@ class Medicos extends Estructura implements iMedicos{
 				$query2 = $this->db->consulta($query_string2);
 				$cant2 = $this->db->num_rows($query2);
 
+                $init = date("Y-m-01", strtotime($fechav->format('y-m-d')));
+                $end = date("Y-m-t", strtotime($fechav->format('y-m-d')));
+
+
+                $query_string4 = $this->querys->TurnosReservadosEnMes($init, $end, $id_medico, $id_especialidad, $id_dia);
+                $query4 = $this->db->consulta($query_string4);
+				$cant4 = $this->db->num_rows($query4);
+
 				$turnos_reservadosv = array();
+                $turnos_reservadosEnMes = array();
 				$turnos_libresv = array();
 				$inhabilitadosv = array();
 				$grillav = array();
+
+                if($cant4 > 0){
+                    while ($row = $this->db->fetch_array($query4)){
+                        $turnos_reservadosEnMes[] = $row;
+                    }
+                }
 
 				if ($cant2 > 0){
 					while ($row = $this->db->fetch_array($query2)){
@@ -412,7 +427,7 @@ class Medicos extends Estructura implements iMedicos{
                                     if ($row['trae_pedido'] == 1) {
                                         $linea.= "{$cnct}<sup>DD</sup><br />";
                                     } elseif ($row['trae_pedido'] == 2 and $row['arancel_diferenciado'] > 0) {
-                                        $linea.= "{$cnct}<sup>\${$row['arancel_diferenciado']}</sup>";
+                                        $linea.= "{$cnct}<sup>\$d{$row['arancel_diferenciado']}</sup>";
                                     }
                                 }
                                 if ($row['aviso_demora'] == '1') {
@@ -622,12 +637,15 @@ HTML;
 				foreach ($grillav as $clave => $valor) {
 					$listado .= $valor;
 				}
-
+                if (!empty($listado)){
+                    $htm->Asigna('MJE',"");
+                }else{
+                    $htm->Asigna('MJE',"No hay turnos reservados para este dia.");
+                }
 			}else{
 				$listado = '';
 				$htm->Asigna('MJE',"Hoy no atiende este Profesional.");
 			}
-
 			$htm->Asigna("GRILLA_LISTADO", $listado);
 		}else{
 			//ARMA GRILLA DE TURNOS PASADOS
@@ -1211,33 +1229,63 @@ HTML;
 		return $rta;
 	}
 
-	function DiasTrabajo($id_especialidad){
-		$htm = $this->Html($this->nombre_tabla."/agenda");
+    function DiasTrabajo($id_especialidad, $id_medico, $fecha){
 
-		$query_string = $this->querys->DiasTrabajo($this->id, $id_especialidad);
-		$query = $this->db->consulta($query_string);
-		$cant = $this->db->num_rows($query);
+        $fechav = new DateTime($fecha);
+        $htm = $this->Html($this->nombre_tabla."/agenda");
 
-		$dias = "";
-		if ($cant != 0){
-			while ($row = $this->db->fetch_array($query)){
-				$dia_jquery = $row["id_dias_semana"] - 1;
-				$dias .= "day == ".$dia_jquery." || ";
-			}
-		}
+        $query_string = $this->querys->DiasTrabajo($this->id, $id_especialidad);
+        $query = $this->db->consulta($query_string);
+        $cant = $this->db->num_rows($query);
 
-		$dias = trim($dias, ' || ');
+        $dias = "";
+        if ($cant != 0){
+            while ($row = $this->db->fetch_array($query)){
+                $dia_jquery = $row["id_dias_semana"] - 1;
+                $dias .= "day == ".$dia_jquery." || ";
+            }
+        }
 
-		$htm->Asigna(
-			"MEDICO",
-			utf8_encode($this->saludo)." ".utf8_encode($this->apellidos).", ".utf8_encode($this->nombres)
-		);
-		$htm->Asigna("DIAS_TRABAJO", $dias);
+        $init = date("Y-m-01", strtotime($fechav->format('y-m-d')));
+        $end = date("Y-m-t", strtotime($fechav->format('y-m-d')));
 
-		CargarVariablesGrales($htm);
 
-		return $htm->Muestra();
-	}
+        $query_string4 = $this->querys->TurnosReservadosEnMes($init, $end, $id_medico, $id_especialidad);
+        $query4 = $this->db->consulta($query_string4);
+        $cant4 = $this->db->num_rows($query4);
+
+        $turnos_reservadosEnMes = 'false';
+        if($cant4 > 0){
+            $turnos_reservadosEnMes = '';
+            while ($row = $this->db->fetch_array($query4)){
+                $turnos_reservadosEnMes .= "fecha == '".$row['fecha']."' || ";
+            }
+
+        }
+
+        $dias = trim($dias, ' || ');
+        if ($turnos_reservadosEnMes != false){
+            $turnos_reservadosEnMes = trim($turnos_reservadosEnMes, ' || ');
+        }
+
+
+
+
+
+        $htm->Asigna(
+            "MEDICO",
+            utf8_encode($this->saludo)." ".utf8_encode($this->apellidos).", ".utf8_encode($this->nombres)
+        );
+
+        $htm->Asigna("DIAS_TRABAJO", $dias);
+        $htm->Asigna("FECHAS_TRABAJO", $turnos_reservadosEnMes);
+
+
+
+        CargarVariablesGrales($htm);
+
+        return $htm->Muestra();
+    }
 
 	function PanelAdmin(){
 		$htm = $this->Html($this->nombre_tabla."/panel_admin_".$_SESSION['SISTEMA']);
