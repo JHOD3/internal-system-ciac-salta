@@ -830,10 +830,8 @@ $(function() {
 			$( "#medicos_especialidad" ).html( ui.item.id_medicos_especialidades );
 			var id_medico = ui.item.id_medicos;
 			var id_medicos_especialidades = ui.item.id_medicos_especialidades;
-            if (console && console.log) console.log('ir a generar el control');
             dataAEnviar = {tipo: "drop", tabla: "medicos_especialidades", valor: id_medico, esp: id_medicos_especialidades};
-            if (console && console.log) console.log(dataAEnviar);
-			$.ajax({
+           $.ajax({
 				type: "POST",
 				url: "../ajax/generar_control.php",
 				data: dataAEnviar,

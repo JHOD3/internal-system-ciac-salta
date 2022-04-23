@@ -98,7 +98,8 @@ class Diagnostico_model extends CI_Model
             'scan' => "ts.cantidad",
             'sder' => "ts.matricula_derivacion",
             'sden' => "ts.matricula_derivacion",
-            'sche' => "ts.checked"
+            'sche' => "ts.checked",
+            'fact' => "ts.facturado"
         );
         $cnct = "";
         $where = "";
@@ -146,6 +147,21 @@ class Diagnostico_model extends CI_Model
                         }
                         break;
                     case "sche":
+                        ($filterPass>0) ?$cnct = "AND": $cnct = "";
+                        if (in_array($post[$kP], array('1', '2'))) {
+                            if ($post[$kP] == '1') {
+                                $where.= "
+                                    {$cnct} {$rP} IS NULL
+                                ";
+                            } else {
+                                $where.= "
+                                    {$cnct} {$rP} = '1'
+                                ";
+                            }
+                            $cnct = "AND";
+                        }
+                        break;
+                    case "fact":
                         ($filterPass>0) ?$cnct = "AND": $cnct = "";
                         if (in_array($post[$kP], array('1', '2'))) {
                             if ($post[$kP] == '1') {
@@ -356,7 +372,9 @@ class Diagnostico_model extends CI_Model
         $isMedico = false
     ) {
         $this->db
+            ->distinct('t.id_turnos')
             ->select("
+                
                 t.*,
                 LEFT(t.desde, 5) AS hora,
                 CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres)) AS pacientes,

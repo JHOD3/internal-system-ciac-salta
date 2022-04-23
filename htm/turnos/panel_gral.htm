@@ -68,7 +68,6 @@
 		})
 
 		var id_turno_tipo = $("#id_turno_tipo").val();
-		debugger
 		switch (id_turno_tipo){
 			case "1": //CONSULTAS
 				$("#consulta.oculto").show();
@@ -92,7 +91,6 @@
 
 		//CONSULTA - ORDEN (radios si_trajo_orden,chk_deposito,consulta_particular)
 		$("input[name='trae_orden']").click(function() {
-			debugger
 			 if($("#chk_deposito").is(':checked')) {
 			 	$('input#deposito_consulta').prop('disabled','');
 				$('#deposito_consulta').focus();
@@ -110,7 +108,6 @@
 
 		//CONSULTA - VALOR
 		$("input[name='trae_pedido']").change(function() {
-			debugger
 			if ($("#consulta_arancel_diferenciado").is(':checked')) {
 			 	$('input#arancel_diferenciado').prop('disabled','');
 				$('#arancel_diferenciado').focus();
@@ -127,7 +124,6 @@
 
 		//ESTUDIOS - ORDEN
 		$("input[name='orden_estudios']").change(function() {
-			debugger
 			 if($("#deposito_orden").is(':checked')) {
 			 	$('input#deposito_estudios_orden').prop('disabled','');
 				$('#deposito_estudios_orden').focus();
@@ -139,7 +135,6 @@
 
 		//ESTUDIOS - PEDIDOS
 		$("input[name='pedido_estudios']").change(function() {
-			debugger
 			 if($("#deposito_pedido").is(':checked')) {
 			 	$('input#deposito_estudios_pedido').prop('disabled','');
 				$('#deposito_estudios_pedido').focus();
@@ -150,22 +145,22 @@
 		});
 
 		$('#deposito_consulta').keyup(function(){
-			debugger
+
 			CalcularTotal()
 		});
 
 		$('#deposito_estudios_orden').keyup(function(){
-			debugger
+
 			CalcularTotal()
 		});
 
 		$('#deposito_estudios_pedido').keyup(function(){
-			debugger
+
 			CalcularTotal()
 		});
 
 		$("#arancel_diferenciado").keyup(function(){
-			debugger
+
 			CalcularTotal()
 		});
 
@@ -174,7 +169,6 @@
 
 
 	function CalcularTotal(){
-		debugger
 		var id_turno_tipo = $('#turnos_tipos').val();
 		var total_cobrar = 0;
 
@@ -205,7 +199,7 @@
 
 
 	$("form#datos_turnos #btn_aceptar").on("click", function(e) {
-		debugger
+
 		e.preventDefault();
 		id_turno = $("#id_turno").val();
 		variables = $("#datos_turnos").serialize();
@@ -269,7 +263,7 @@
 	});
 
 	function CambiarEstado(){
-		debugger
+
 		$.ajax({
 			dataType: "html",
 			type: "POST",

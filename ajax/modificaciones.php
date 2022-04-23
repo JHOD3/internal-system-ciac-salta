@@ -234,8 +234,8 @@ switch ($tabla){
 		parse_str(stripslashes($datos));
 
 		if (isset($_POST['tipo'])){
-			$trae_orden = 0;
-			$trae_pedido = 0;
+			//$trae_orden = 0;
+			$trae_pedido = substr($trae_pedido,0,1);
 			if (!isset($arancel_diferenciado)) {
 				$arancel_diferenciado = 0;
             }

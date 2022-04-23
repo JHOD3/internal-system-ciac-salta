@@ -13,6 +13,11 @@
 			IniciarVentana("ventana_opciones", "cerrar");
 			$(ventana_opciones).dialog('destroy').remove();
 		});
+        jQuery.validator.addMethod("phoneUS", function(phone_number, element) {
+            phone_number = phone_number.replace(/\s+/g, "");
+            return this.optional(element) || phone_number.length > 9 &&
+                phone_number.match(/^(\+?1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/);
+        }, "Please specify a valid phone number");
 		
 		$("#form_pacientes").validate({
 			rules: {
@@ -42,7 +47,10 @@
 					required: true
 				},
 				telefonos: {
-					required: true
+					required: true,
+                    phoneUS: true,
+                    minlength:10,
+                    maxlength:10
 				},
 				domicilio: {
 					required: true
@@ -72,7 +80,10 @@
 					required: "Ingrese Domicilio"
 				},
 				telefonos: {
-					required: "Ingrese Telefono"
+                    required: "Ingrese Telefono",
+                    phoneUS: 'El numero es invalido.',
+                    minlength:'El minimo son 10 digitos.',
+                    maxlength:'El maximo son 10 digitos.'
 				},
 				email: {
 					required: "Ingrese Email"
