@@ -12,6 +12,7 @@
     <link href="[CSS]bootstrap.css" rel="stylesheet">
     <link href="[CSS]bootstrap-responsive.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="[CSS]tables.css" />
+    <link rel="stylesheet" type="text/css" href="[CSS]chat.css?v=3" />
 
     <!-- CSS -->
      <!--<link href="files/css/transdmin.css" rel="stylesheet" type="text/css" media="screen" />
@@ -51,6 +52,7 @@
     <script src="[JS]jquery.validate.js?v=6"></script>
 
     <script src="[JS]jquery.maskedinput.min.js?v=6"></script>
+    <script src="[JS]chat-usuarios.js?v=2"></script>
 
    <!-- <script src="files/js/jquery.pnotify.js"></script>
 
@@ -63,7 +65,10 @@
         @import "files/css/demo_page.css";
         @import "files/css/demo_table.css";
     </style>-->
+
     <script type='text/javascript'>
+
+
         var contadorAfk = 0;
         $(document).ready(function () {
             //Cada minuto se lanza la función ctrlTiempo
@@ -383,6 +388,21 @@
             <h1>[TITULO_SITIO]</h1>
         </div>
         [CUERPO]
+        <div class="chat-content">
+
+            <div style="align-items: end;display: flex;">
+                <div class="chat">
+                    <div class="chat-header">
+                        Chat CiacSalta
+                        <a href="" class="open-closed">Open</a>
+                    </div>
+                    <div class="chat-content-body-footer">
+                        <div class="chat-body chat-all-content-person">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <link href="[CSS]multiple-select.css" rel="stylesheet">
         <script src="[JS]/multiple-select.js"></script>
     </body>

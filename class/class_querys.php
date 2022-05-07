@@ -137,6 +137,50 @@ class Querys implements iQuerys{
             return utf8_decode($query);
     }
 
+    function usuariosLogueados()
+    {
+        $query =   "SELECT 
+                    u.id_usuarios, 
+                    CONCAT(u.apellidos,' ',u.nombres) as nombre_completo , 
+                    u.session_state,
+                    COUNT(chats.view_medico) as count
+                    FROM usuarios as u
+                    LEFT JOIN chats ON u.id_usuarios = chats.id_usuarios
+                    GROUP BY u.id_usuarios
+                    ORDER BY count DESC, u.session_state DESC,  nombre_completo ASC";
+        return $query;
+    }
+
+    function loadChat($id_medico, $id_usuario)
+    {
+        $query = "SELECT * FROM chats WHERE id_usuarios = ".$id_usuario." AND id_medicos = ".$id_medico;
+        return $query;
+    }
+
+    function medicosLogueados()
+    {
+        $query =   "SELECT 
+                    m.id_medicos, 
+                    CONCAT(m.apellidos,' ',m.nombres) as nombre_completo , 
+                    m.session_state,
+                    COUNT(chats.view_usuario) as count
+                    FROM medicos as m
+                    LEFT JOIN chats ON m.id_medicos = chats.id_medicos
+                    GROUP BY m.id_medicos
+                    ORDER BY count DESC, m.session_state DESC,  nombre_completo ASC";
+        return $query;
+    }
+
+    function session_state_change($tabla, $id, $state){
+        if ($state == 'null'){
+            $query = "UPDATE ".$tabla." SET session_state = null WHERE id_".$tabla." = ".$id;
+        }else{
+            $query = "UPDATE ".$tabla." SET session_state = '".$state."' WHERE id_".$tabla." = ".$id;
+        }
+
+        return $query;
+    }
+
 	function CambiarEstado($tabla, $id, $id_estado){
 		$query = "UPDATE ".$tabla." SET id_".$tabla."_estados = $id_estado WHERE id_".$tabla." = $id";
 		return $query;

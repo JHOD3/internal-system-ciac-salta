@@ -117,6 +117,110 @@ class Medicos extends Estructura implements iMedicos{
 		return $rta;
 	}
 
+    function logoutSessionState($id_usuario){
+        $this->db->consulta($this->querys->session_state_change($this->nombre_tabla, $id_usuario, 'null'));
+        return true;
+    }
+
+    function cargar_medicos_activos()
+    {
+        $query = $this->db->consulta($this->querys->medicosLogueados());
+        $cant_usr = $this->db->num_rows($query);
+        $usuarios = [];
+        if ($cant_usr > 0){
+            while ($usr = $this->db->fetch_array($query))
+            {
+                $usuarios[] = array(
+                        "id_medico" => $usr[0],
+                        "nombre_completo" => utf8_encode($usr[1]),
+                        "sistema" => 'sam',
+                        "activo" => (!empty($usr[2]))?$usr[2]:false,
+                        "id_usuario" => $_SESSION['ID_USUARIO'],
+                        "count" => $usr[3]
+                    );
+            }
+        }
+        return $usuarios;
+    }
+    function eliminar_acentos($cadena){
+
+        //Reemplazamos la A y a
+        $cadena = str_replace(
+            array('Á', 'À', 'Â', 'Ä', 'á', 'à', 'ä', 'â', 'ª'),
+            array('A', 'A', 'A', 'A', 'a', 'a', 'a', 'a', 'a'),
+            $cadena
+        );
+
+        //Reemplazamos la E y e
+        $cadena = str_replace(
+            array('É', 'È', 'Ê', 'Ë', 'é', 'è', 'ë', 'ê'),
+            array('E', 'E', 'E', 'E', 'e', 'e', 'e', 'e'),
+            $cadena );
+
+        //Reemplazamos la I y i
+        $cadena = str_replace(
+            array('Í', 'Ì', 'Ï', 'Î', 'í', 'ì', 'ï', 'î'),
+            array('I', 'I', 'I', 'I', 'i', 'i', 'i', 'i'),
+            $cadena );
+
+        //Reemplazamos la O y o
+        $cadena = str_replace(
+            array('Ó', 'Ò', 'Ö', 'Ô', 'ó', 'ò', 'ö', 'ô'),
+            array('O', 'O', 'O', 'O', 'o', 'o', 'o', 'o'),
+            $cadena );
+
+        //Reemplazamos la U y u
+        $cadena = str_replace(
+            array('Ú', 'Ù', 'Û', 'Ü', 'ú', 'ù', 'ü', 'û'),
+            array('U', 'U', 'U', 'U', 'u', 'u', 'u', 'u'),
+            $cadena );
+
+        //Reemplazamos la N, n, C y c
+        $cadena = str_replace(
+            array('Ñ', 'ñ', 'Ç', 'ç'),
+            array('N', 'n', 'C', 'c'),
+            $cadena
+        );
+
+        return $cadena;
+    }
+
+    function cargar_usuarios_chat_de_usuario($id_medico, $id_usuario)
+    {
+        $query = $this->db->consulta($this->querys->loadChat($id_medico, $id_usuario));
+        $this->db->consulta("UPDATE chats SET view_usuario = NULL WHERE id_usuarios = ".$id_usuario." AND id_medicos = ".$id_medico);
+        $cant_usr = $this->db->num_rows($query);
+        $chats = [];
+        if ($cant_usr > 0){
+            while ($usr = $this->db->fetch_array($query))
+            {
+                $chats[] = [
+                    'id_chats' => $usr[0],
+                    'id_medico' => $usr[1],
+                    'id_usuario' => $usr[2],
+                    'mensaje' => $usr[3],
+                    'fecha' =>  $usr[4],
+                    'enviado_por' =>  $usr[6],
+                ];
+            }
+        }
+        return $chats;
+    }
+
+    function send_mensaje($id_medico, $id_usuario, $mensaje, $enviado_por){
+        if ($enviado_por == 'usuario'){
+            $query = $this->db->consulta('
+            INSERT INTO chats (id_chats, id_medicos, id_usuarios, mensaje, fecha, estatus, enviado_por, view_medico, view_usuario) 
+            VALUES  (null, '.$id_medico.', '.$id_usuario.', "'.$mensaje.'", "'.date("Y-m-d").'",1,"'.$enviado_por.'",1,null)');
+        }else{
+            $query = $this->db->consulta('
+            INSERT INTO chats (id_chats, id_medicos, id_usuarios, mensaje, fecha, estatus, enviado_por, view_medico, view_usuario) 
+            VALUES  (null, '.$id_medico.', '.$id_usuario.', "'.$mensaje.'", "'.date("Y-m-d").'",1,"'.$enviado_por.'",null,1)');
+        }
+
+        return true;
+    }
+
 	function ValidaLogueo($usuario, $pass){
 		//Verifico si existe usuario con ese nombre y clave
 		$query = $this->db->consulta($this->querys->ValidaLogueo($this->nombre_tabla, $usuario, base64_encode($pass)));
@@ -126,6 +230,7 @@ class Medicos extends Estructura implements iMedicos{
 		if ($cant_usr == 1){
 			while ($usr = $this->db->fetch_array($query))
 			{
+                $this->db->consulta($this->querys->session_state_change($this->nombre_tabla, $usr[0], 'activo'));
 				//variable para controlar tiempo que esta conectado
 				$ultimo_acceso = date("Y-n-j H:i:s");
 

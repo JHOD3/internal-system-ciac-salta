@@ -1,8 +1,12 @@
 <?php
 require_once ("../engine/config.php");
-requerir_class("tpl","mysql","querys","estructura");
+requerir_class("tpl","mysql","querys","estructura","medicos");
 
 unset($_SESSION["USUARIO"]);
+if(!empty($_SESSION['ID_USUARIO'])) {
+    $obj_usuario = new Medicos();
+    $obj_usuario->logoutSessionState($_SESSION['ID_MEDICO']);
+}
 session_destroy();
 
 $obj_estructura = new Estructura();
