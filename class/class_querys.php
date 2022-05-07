@@ -144,7 +144,7 @@ class Querys implements iQuerys{
                     CONCAT(u.apellidos,' ',u.nombres) as nombre_completo , 
                     u.session_state,
                     COUNT(chats.view_medico) as count,
-                    chats.id_usuarios
+                    chats.id_medicos
                     FROM usuarios as u
                     LEFT JOIN chats ON u.id_usuarios = chats.id_usuarios
                     GROUP BY u.id_usuarios
