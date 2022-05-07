@@ -139,16 +139,30 @@ class Querys implements iQuerys{
 
     function usuariosLogueados()
     {
-        $query =   "SELECT 
+        $query =   "SELECT
                     u.id_usuarios, 
                     CONCAT(u.apellidos,' ',u.nombres) as nombre_completo , 
-                    u.session_state,
-                    COUNT(chats.view_medico) as count,
-                    chats.id_medicos
+                    u.session_state
                     FROM usuarios as u
                     LEFT JOIN chats ON u.id_usuarios = chats.id_usuarios
                     GROUP BY u.id_usuarios
-                    ORDER BY count DESC, u.session_state DESC, nombre_completo ASC";
+                    ORDER BY u.session_state DESC, nombre_completo ASC";
+        return $query;
+    }
+
+    function contarMensajesSinLeerMedico($id_medico, $id_usuario){
+        $query =    "SELECT 
+                    COUNT(view_medico) as count
+                    FROM chats
+                    WHERE id_medicos = ".$id_medico." AND id_usuarios =".$id_usuario;
+        return $query;
+    }
+
+    function contarMensajesSinLeerUsuario($id_medico, $id_usuario){
+        $query =    "SELECT 
+                    COUNT(view_usuario) as count
+                    FROM chats
+                    WHERE id_medicos = ".$id_medico." AND id_usuarios =".$id_usuario;
         return $query;
     }
 
@@ -163,13 +177,11 @@ class Querys implements iQuerys{
         $query =   "SELECT 
                     m.id_medicos, 
                     CONCAT(m.apellidos,' ',m.nombres) as nombre_completo , 
-                    m.session_state,
-                    COUNT(chats.view_usuario) as count,
-                    chats.id_usuarios
+                    m.session_state
                     FROM medicos as m
                     LEFT JOIN chats ON m.id_medicos = chats.id_medicos
                     GROUP BY m.id_medicos
-                    ORDER BY count DESC, m.session_state DESC, nombre_completo ASC";
+                    ORDER BY m.session_state DESC, nombre_completo ASC";
         return $query;
     }
 

@@ -90,13 +90,28 @@ class Usuarios extends Estructura implements iUsuarios{
                     'sistema' => 'sas',
                     "activo" => (!empty($usr[2]))?$usr[2]:false,
                     'id_usuario' => $usr[0],
-                    "count" => $usr[3],
-                    "chat_id_usuario" => $usr[4]
+                    "count" => $this->contarMensajesSinLeerMedico($_SESSION['ID_MEDICO'],$usr[0])
                 ];
 
             }
         }
         return $usuarios;
+    }
+
+    function contarMensajesSinLeerMedico($id_medico, $id_usuario)
+    {
+        $query = $this->db->consulta($this->querys->contarMensajesSinLeerMedico($id_medico, $id_usuario));
+        $cant_usr = $this->db->num_rows($query);
+        $contar = [];
+
+        if ($cant_usr > 0){
+            while ($usr = $this->db->fetch_array($query))
+            {
+                $contar = $usr[0];
+            }
+        }
+
+        return $contar;
     }
 
     function cargar_usuarios_chat_de_usuario($id_medico, $id_usuario)

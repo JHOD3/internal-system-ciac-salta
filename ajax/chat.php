@@ -8,8 +8,6 @@ $input = json_decode(file_get_contents("php://input"), true);
 $query = $input["query"];
 switch ($query){
     case 'user_on':
-            /*$usuario = new Usuarios();
-            $rts = $usuario->cargar_usuarios_activos();*/
             $medicos = new Medicos();
             $rtm = $medicos->cargar_medicos_activos();
             $rtm = (empty($rtm))?false:$rtm;

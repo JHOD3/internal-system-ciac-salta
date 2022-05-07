@@ -118,7 +118,7 @@
     position: absolute;
     width: 20px;
     height: 20px;
-    background: #f44336;
+    background: #6e6e6e;
     margin-top: -25px;
     margin-left: -36px;
     border-radius: 20px;
@@ -145,7 +145,7 @@
 }
 .chat-count {
     position: absolute;
-    background: #ff9800;
+    background: #ff0000;
     color: white;
     border-radius: 100%;
     width: 20px;
@@ -173,6 +173,25 @@
 }
 .chat-body-show{
     display: block !important;
+}
+.chat-header-count-chat-all {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 100%;
+    text-align: center;
+    right: 5px;
+    top: 5px;
+}
+.content-count-all-chat{
+    position: absolute;
+    right: 8px;
+    margin-top: -39px;
+    width: 30px;
+    height: 30px;
+    align-items: end;
+    display: grid;
 }
 .chat-footer{
 

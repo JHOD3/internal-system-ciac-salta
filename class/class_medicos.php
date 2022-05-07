@@ -136,13 +136,29 @@ class Medicos extends Estructura implements iMedicos{
                         "sistema" => 'sam',
                         "activo" => (!empty($usr[2]))?$usr[2]:false,
                         "id_usuario" => $_SESSION['ID_USUARIO'],
-                        "count" => $usr[3],
-                        "chat_id_usuario" => $usr[4]
+                        "count" => $this->contarMensajesSinLeerUsuario($usr[0], $_SESSION['ID_USUARIO'])
                     );
             }
         }
         return $usuarios;
     }
+
+    function contarMensajesSinLeerUsuario($id_medico, $id_usuario)
+    {
+        $query = $this->db->consulta($this->querys->contarMensajesSinLeerUsuario($id_medico, $id_usuario));
+        $cant_usr = $this->db->num_rows($query);
+        $contar = [];
+
+        if ($cant_usr > 0){
+            while ($usr = $this->db->fetch_array($query))
+            {
+                $contar = $usr[0];
+            }
+        }
+
+        return $contar;
+    }
+
     function eliminar_acentos($cadena){
 
         //Reemplazamos la A y a
