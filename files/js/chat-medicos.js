@@ -19,7 +19,7 @@ $(document).ready(function () {
                 if (response != false) {
                     for (let i = 0; i < response.length; i++) {
                         let activo = (response[i].activo == 'activo')?'punto':'punto-i';
-                        let count = (parseInt(response[i].count)!=0)?'<span class="chat-count">'+response[i].count+'</span>':'';
+                        let count = (parseInt(response[i].count)!=0 && response[i].id_usuario == response[i].chat_id_usuario)?'<span class="chat-count">'+response[i].count+'</span>':'';
                         html += '<a class="chat-perfil open-chat" data-nombre="' + response[i].nombre_completo + '" data-id-usuario="' + response[i].id_usuario + '" data-id-medico="' + response[i].id_medico + '">' +
                             '<img src="https://ui-avatars.com/api/?name=' + response[i].nombre_completo + '&amp;rounded=true&amp;background=50C2F7&amp;color=ffffff" width="30" alt="">' +
                             '<span class="chat-tag-sistema-content">' +

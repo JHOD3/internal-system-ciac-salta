@@ -136,7 +136,8 @@ class Medicos extends Estructura implements iMedicos{
                         "sistema" => 'sam',
                         "activo" => (!empty($usr[2]))?$usr[2]:false,
                         "id_usuario" => $_SESSION['ID_USUARIO'],
-                        "count" => $usr[3]
+                        "count" => $usr[3],
+                        "chat_id_usuario" => $usr[4]
                     );
             }
         }

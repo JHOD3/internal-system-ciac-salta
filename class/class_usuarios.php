@@ -90,7 +90,8 @@ class Usuarios extends Estructura implements iUsuarios{
                     'sistema' => 'sas',
                     "activo" => (!empty($usr[2]))?$usr[2]:false,
                     'id_usuario' => $usr[0],
-                    "count" => $usr[3]
+                    "count" => $usr[3],
+                    "chat_id_usuario" => $usr[4]
                 ];
 
             }

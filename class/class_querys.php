@@ -143,11 +143,12 @@ class Querys implements iQuerys{
                     u.id_usuarios, 
                     CONCAT(u.apellidos,' ',u.nombres) as nombre_completo , 
                     u.session_state,
-                    COUNT(chats.view_medico) as count
+                    COUNT(chats.view_medico) as count,
+                    chats.id_usuarios
                     FROM usuarios as u
                     LEFT JOIN chats ON u.id_usuarios = chats.id_usuarios
                     GROUP BY u.id_usuarios
-                    ORDER BY count DESC, u.session_state DESC,  nombre_completo ASC";
+                    ORDER BY count DESC, u.session_state DESC, nombre_completo ASC";
         return $query;
     }
 
@@ -163,11 +164,12 @@ class Querys implements iQuerys{
                     m.id_medicos, 
                     CONCAT(m.apellidos,' ',m.nombres) as nombre_completo , 
                     m.session_state,
-                    COUNT(chats.view_usuario) as count
+                    COUNT(chats.view_usuario) as count,
+                    chats.id_usuarios
                     FROM medicos as m
                     LEFT JOIN chats ON m.id_medicos = chats.id_medicos
                     GROUP BY m.id_medicos
-                    ORDER BY count DESC, m.session_state DESC,  nombre_completo ASC";
+                    ORDER BY count DESC, m.session_state DESC, nombre_completo ASC";
         return $query;
     }
 
