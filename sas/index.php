@@ -288,6 +288,228 @@ if ($_GET['id_medicos']) {
     $dataEST = $obj_estructura->obtTurnosOtorgadosPorEST($d, $h, $_SESSION['ID_USUARIO']);
     $dataENC = $obj_estructura->obtTurnosOtorgadosPorENC($d, $h, $_SESSION['ID_USUARIO']);
     $dataDER = $obj_estructura->obtTurnosOtorgadosPorDER($d, $h, $_SESSION['ID_USUARIO']);
+
+    $dataTOTTable = explode(',[',str_replace(array("]", "'"), '', $dataTOT[0]));
+    $totalTurnosTOT = 0;
+    $Tabla_TOT = '<table class="table table-striped datatableindex" id="table_TOT" width="100" style="display: none">';
+        $Tabla_TOT .= '<thead>';
+            $Tabla_TOT .= '<th>Gestor</th>';
+            $Tabla_TOT .= '<th>Turnos</th>';
+        $Tabla_TOT .= '</thead>';
+        $Tabla_TOT .= '<tbody>';
+            foreach ($dataTOTTable as $key => $TOT){
+                $TOTExplode = explode(',',$TOT);
+                if(!empty($TOTExplode[0])) {
+                    $Tabla_TOT .= '<tr>';
+                        $Tabla_TOT .= '<td>' . $TOTExplode[0] . '</td>';
+                        $Tabla_TOT .= '<td>' . $TOTExplode[1] . '</td>';
+                    $Tabla_TOT .= '</tr>';
+                    $totalTurnosTOT = $totalTurnosTOT + $TOTExplode[1];
+                }
+            }
+        $Tabla_TOT .= '<tbody>';
+        $Tabla_TOT .= '<tfoot>';
+            $Tabla_TOT .= '<tr>';
+                $Tabla_TOT .= '<td><strong>Total Turnos</strong></td>';
+                $Tabla_TOT .= '<td>' . $totalTurnosTOT . '</td>';
+            $Tabla_TOT .= '</tr>';
+        $Tabla_TOT .= '</tfoot>';
+    $Tabla_TOT .= '</table>';
+    $htm_index->Asigna("TOT_TABLE", $Tabla_TOT);
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+    $dataTPDTable = explode(',[',str_replace(array("]", "'"), '', $dataTPD[0]));
+    $totalTurnosTPD = 0;
+    $Tabla_TPD = '<table class="table table-striped datatableindex" id="table_TPD" width="100" style="display: none">';
+        $Tabla_TPD .= '<thead>';
+            $Tabla_TPD .= '<th>DIA</th>';
+            $Tabla_TPD .= '<th>Turnos</th>';
+        $Tabla_TPD .= '</thead>';
+        $Tabla_TPD .= '<tbody>';
+            foreach ($dataTPDTable as $key => $TPD){
+                $TPDExplode = explode(',',$TPD);
+                if(!empty($TPDExplode[0])) {
+                    $Tabla_TPD .= '<tr>';
+                    $Tabla_TPD .= '<td>' . $TPDExplode[0] . '</td>';
+                    $Tabla_TPD .= '<td>' . $TPDExplode[1] . '</td>';
+                    $Tabla_TPD .= '</tr>';
+                    $totalTurnosTPD = $totalTurnosTPD + $TPDExplode[1];
+                }
+            }
+        $Tabla_TPD .= '<tbody>';
+        $Tabla_TPD .= '<tfoot>';
+            $Tabla_TPD .= '<tr>';
+                $Tabla_TPD .= '<td><strong>Total Turnos</strong></td>';
+                $Tabla_TPD .= '<td>' . $totalTurnosTPD . '</td>';
+            $Tabla_TPD .= '</tr>';
+        $Tabla_TPD .= '</tfoot>';
+    $Tabla_TPD .= '</table>';
+    $htm_index->Asigna("TPD_TABLE", $Tabla_TPD);
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+    $dataTPMTable = explode(',[',str_replace(array("]", "'"), '', $dataTPM[0]));
+
+    $totalTurnosTPM = 0;
+    $Tabla_TPM = '<table class="table table-striped datatableindex" id="table_TPM" width="100" style="display: none">';
+        $Tabla_TPM .= '<thead>';
+            $Tabla_TPM .= '<th>DR.</th>';
+            $Tabla_TPM .= '<th>Turnos</th>';
+        $Tabla_TPM .= '</thead>';
+        $Tabla_TPM .= '<tbody>';
+            foreach ($dataTPMTable as $key => $TPM){
+                $TPMExplode = explode(',',$TPM);
+                if (!empty($TPMExplode[0])) {
+                    $Tabla_TPM .= '<tr>';
+                        $Tabla_TPM .= '<td>' . $TPMExplode[0] . '</td>';
+                        $Tabla_TPM .= '<td>' . $TPMExplode[1] . '</td>';
+                    $Tabla_TPM .= '</tr>';
+                    $totalTurnosTPM = $totalTurnosTPM +$TPMExplode[1];
+                }
+
+            }
+        $Tabla_TPM .= '<tbody>';
+        $Tabla_TPM .= '<tfoot>';
+            $Tabla_TPM .= '<tr>';
+                $Tabla_TPM .= '<td><strong>Total Turnos</strong></td>';
+                $Tabla_TPM .= '<td>' . $totalTurnosTPM . '</td>';
+            $Tabla_TPM .= '</tr>';
+        $Tabla_TPM .= '</tfoot>';
+    $Tabla_TPM .= '</table>';
+    $htm_index->Asigna("TPM_TABLE", $Tabla_TPM);
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+    $dataOSTTable = explode(',[',str_replace(array("]", "'"), '', $dataOST[0]));
+
+    $totalTurnosOST = 0;
+    $Tabla_OST = '<table class="table table-striped datatableindex" id="table_OST" width="100" style="display: none">';
+    $Tabla_OST .= '<thead>';
+    $Tabla_OST .= '<th>Obra Social</th>';
+    $Tabla_OST .= '<th>Turnos</th>';
+    $Tabla_OST .= '</thead>';
+    $Tabla_OST .= '<tbody>';
+    foreach ($dataOSTTable as $key => $OST){
+        $OSTExplode = explode(',',$OST);
+        if (!empty($OSTExplode[0])) {
+            $Tabla_OST .= '<tr>';
+            $Tabla_OST .= '<td>' . $OSTExplode[0] . '</td>';
+            $Tabla_OST .= '<td>' . $OSTExplode[1] . '</td>';
+            $Tabla_OST .= '</tr>';
+            $totalTurnosOST = $totalTurnosOST +$OSTExplode[1];
+        }
+
+    }
+    $Tabla_OST .= '<tbody>';
+    $Tabla_OST .= '<tfoot>';
+    $Tabla_OST .= '<tr>';
+    $Tabla_OST .= '<td><strong>Total Turnos</strong></td>';
+    $Tabla_OST .= '<td>' . $totalTurnosOST . '</td>';
+    $Tabla_OST .= '</tr>';
+    $Tabla_OST .= '</tfoot>';
+    $Tabla_OST .= '</table>';
+    $htm_index->Asigna("OST_TABLE", $Tabla_OST);
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+    $dataESTTable = explode(',[',str_replace(array("]", "'"), '', $dataEST[0]));
+
+    $totalTurnosEST = 0;
+    $Tabla_EST = '<table class="table table-striped datatableindex" id="table_EST" width="100" style="display: none">';
+    $Tabla_EST .= '<thead>';
+    $Tabla_EST .= '<th>Estudio</th>';
+    $Tabla_EST .= '<th>Turnos</th>';
+    $Tabla_EST .= '</thead>';
+    $Tabla_EST .= '<tbody>';
+    foreach ($dataESTTable as $key => $EST){
+        $ESTExplode = explode(',',$EST);
+        if (!empty($ESTExplode[0])) {
+            $Tabla_EST .= '<tr>';
+            $Tabla_EST .= '<td>' . $ESTExplode[0] . '</td>';
+            $Tabla_EST .= '<td>' . $ESTExplode[1] . '</td>';
+            $Tabla_EST .= '</tr>';
+            $totalTurnosEST = $totalTurnosEST +$ESTExplode[1];
+        }
+
+    }
+    $Tabla_EST .= '<tbody>';
+    $Tabla_EST .= '<tfoot>';
+    $Tabla_EST .= '<tr>';
+    $Tabla_EST .= '<td><strong>Total Turnos</strong></td>';
+    $Tabla_EST .= '<td>' . $totalTurnosEST . '</td>';
+    $Tabla_EST .= '</tr>';
+    $Tabla_EST .= '</tfoot>';
+    $Tabla_EST .= '</table>';
+    $htm_index->Asigna("EST_TABLE", $Tabla_EST);
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+    $dataENCTable = explode(',[',str_replace(array("]", "'"), '', $dataENC[0]));
+
+    $totalTurnosENC = 0;
+    $Tabla_ENC = '<table class="table table-striped datatableindex" id="table_ENC" width="100" style="display: none">';
+    $Tabla_ENC .= '<thead>';
+    $Tabla_ENC .= '<th>Preguntas</th>';
+    $Tabla_ENC .= '<th>Respuestas</th>';
+    $Tabla_ENC .= '</thead>';
+    $Tabla_ENC .= '<tbody>';
+    foreach ($dataENCTable as $key => $ENC){
+        $ENCExplode = explode(',',$ENC);
+        if (!empty($ENCExplode[0])) {
+            $Tabla_ENC .= '<tr>';
+            $Tabla_ENC .= '<td>' . $ENCExplode[0] . '</td>';
+            $Tabla_ENC .= '<td>' . $ENCExplode[1] . '</td>';
+            $Tabla_ENC .= '</tr>';
+            $totalTurnosENC = $totalTurnosENC +$ENCExplode[1];
+        }
+
+    }
+    $Tabla_ENC .= '<tbody>';
+    $Tabla_ENC .= '<tfoot>';
+    $Tabla_ENC .= '<tr>';
+    $Tabla_ENC .= '<td><strong>Total respuestas</strong></td>';
+    $Tabla_ENC .= '<td>' . $totalTurnosENC . '</td>';
+    $Tabla_ENC .= '</tr>';
+    $Tabla_ENC .= '</tfoot>';
+    $Tabla_ENC .= '</table>';
+    $htm_index->Asigna("ENC_TABLE", $Tabla_ENC);
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+    $dataDERTable = explode(',[',str_replace(array("]", "'"), '', $dataDER[0]));
+
+    $totalTurnosDER = 0;
+    $Tabla_DER = '<table class="table table-striped datatableindex" id="table_DER" width="100" style="display: none">';
+    $Tabla_DER .= '<thead>';
+    $Tabla_DER .= '<th>Dr</th>';
+    $Tabla_DER .= '<th>Respuestas</th>';
+    $Tabla_DER .= '</thead>';
+    $Tabla_DER .= '<tbody>';
+    foreach ($dataDERTable as $key => $DER){
+        $DERExplode = explode(',',$DER);
+        if (!empty($DERExplode[0])) {
+            $Tabla_DER .= '<tr>';
+            $Tabla_DER .= '<td>' . $DERExplode[0].' '.$DERExplode[1]. '</td>';
+            $Tabla_DER .= '<td>' . $DERExplode[2] . '</td>';
+            $Tabla_DER .= '</tr>';
+            $totalTurnosDER = $totalTurnosDER +$DERExplode[2];
+        }
+
+    }
+    $Tabla_DER .= '<tbody>';
+    $Tabla_DER .= '<tfoot>';
+    $Tabla_DER .= '<tr>';
+    $Tabla_DER .= '<td><strong>Total respuestas</strong></td>';
+    $Tabla_DER .= '<td>' . $totalTurnosDER . '</td>';
+    $Tabla_DER .= '</tr>';
+    $Tabla_DER .= '</tfoot>';
+    $Tabla_DER .= '</table>';
+    $htm_index->Asigna("DER_TABLE", $Tabla_DER);
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
+
     $htm_index->Asigna("TOT", $dataTOT[0]);
     $htm_index->Asigna("TPD", $dataTPD[0]);
     $htm_index->Asigna("TPM", $dataTPM[0]);

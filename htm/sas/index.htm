@@ -365,15 +365,28 @@
                             <input type="submit" value="ok" class="btn btn-success" />
                         </form>
 
-            [ESTADISTICAS_GRAPH]
-            
-            [ESTADISTICASM_GRAPH]
+                        [ESTADISTICAS_GRAPH]
+
+                        [ESTADISTICASM_GRAPH]
+
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+                        <link rel="stylesheet" type="text/css" href="[CSS]tables.css" />
+                        <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+                        <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+                        <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
 <script type="text/javascript">
 
 
+
+
     google.charts.load('current', {'packages':['corechart']});
+
+
 
     if ([TOT_NUMROWS] > 0) {
         google.charts.setOnLoadCallback(drawBar1Chart);
@@ -389,6 +402,23 @@
             };
             var chart = new google.visualization.BarChart(document.getElementById('bar1chart'));
             chart.draw(dataBar1, options);
+
+
+            var components = [
+                {type: 'igoogle', datasource: 'https://spreadsheets.google.com/tq?key=pCQbetd-CptHnwJEfo8tALA',
+                    gadget: 'https://www.google.com/ig/modules/pie-chart.xml',
+                    userprefs: {'3d': 1}},
+                {type: 'html', datasource: 'https://spreadsheets.google.com/tq?key=pCQbetd-CptHnwJEfo8tALA'},
+                {type: 'csv', datasource: 'http://ciacsalta.test/tajax/index.php/diagnostico/listado/2022-02-01/2022-05-08/13/0/'},
+                {type: 'htmlcode', datasource: 'https://spreadsheets.google.com/tq?key=pCQbetd-CptHnwJEfo8tALA',
+                    gadget: 'https://www.google.com/ig/modules/pie-chart.xml',
+                    userprefs: {'3d': 1},
+                    style: 'width: 800px; height: 700px; border: 3px solid purple;'}
+            ];
+
+            var container = document.getElementById('bar1chartExport');
+            google.visualization.drawToolbar(container, components);
+
         }
     }
 
@@ -532,24 +562,31 @@
   [dataNDMdiv]
   <div id="tabs-1">
     <div id="bar1chart" style="width: 100%!important; height: [TOT_NUMROWS]px;!important;"></div>
+      [TOT_TABLE]
   </div>
   <div id="tabs-2">
     <div id="linechart" style="width: 100%!important; height: [TPD_NUMROWS]px;!important;"></div>
+      [TPD_TABLE]
   </div>
   <div id="tabs-3">
     <div id="bar2chart" style="width: 100%!important; height: [TPM_NUMROWS]px;!important;"></div>
+      [TPM_TABLE]
   </div>
   <div id="tabs-4">
     <div id="bar3chart" style="width: 100%!important; height: [OST_NUMROWS]px;!important;"></div>
+      [OST_TABLE]
   </div>
   <div id="tabs-5">
     <div id="bar4chart" style="width: 100%!important; height: [EST_NUMROWS]px;!important;"></div>
+      [EST_TABLE]
   </div>
   <div id="tabs-6">
     <div id="bar5chart" style="width: 100%!important; height: [ENC_NUMROWS]px;!important;"></div>
+      [ENC_TABLE]
   </div>
   <div id="tabs-7">
     <div id="bar6chart" style="width: 100%!important; height: [DER_NUMROWS]px;!important;"></div>
+      [DER_TABLE]
   </div>
 </div>
                     </div>
@@ -609,3 +646,166 @@
 <div id="dialog_estado" class="noPrint" title="Se cambiara el estado del registro">
     <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Se cambiara el estado del registro. Desea continuar?</p>
 </div>
+    <script>
+        $('#table_TOT').dataTable({
+            dom:'Bfrtip',
+            showNEntries : false,
+            pageLength: 100,
+            searching: false,
+            buttons: [
+                {
+                    extend: 'excel',
+                    text:'Exportar datos en excel',
+                    title: 'Turnos Otorgados Totales'
+                }
+            ]
+        });
+        $('#table_TPD').dataTable({
+            dom:'Bfrtip',
+            showNEntries : false,
+            pageLength: 100,
+            searching: false,
+            buttons: [
+                {
+                    extend: 'excel',
+                    text:'Exportar datos en excel',
+                    title: 'Turnos Otorgados por dia'
+                }
+            ]
+        });
+        $('#table_TPM').dataTable({
+            dom:'Bfrtip',
+            showNEntries : false,
+            pageLength: 100,
+            searching: false,
+            buttons: [
+                {
+                    extend: 'excel',
+                    text:'Exportar datos en excel',
+                    title: 'Turnos por medico'
+                }
+            ]
+        });
+        $('#table_OST').dataTable({
+            dom:'Bfrtip',
+            showNEntries : false,
+            pageLength: 100,
+            searching: false,
+            buttons: [
+                {
+                    extend: 'excel',
+                    text:'Exportar datos en excel',
+                    title: 'Turnos otorgados por obrasocial'
+                }
+            ]
+        });
+        $('#table_EST').dataTable({
+            dom:'Bfrtip',
+            showNEntries : false,
+            pageLength: 100,
+            searching: false,
+            buttons: [
+                {
+                    extend: 'excel',
+                    text:'Exportar datos en excel',
+                    title: 'Turnos otorgados por estudios realizados'
+                }
+            ]
+        });
+        $('#table_ENC').dataTable({
+            dom:'Bfrtip',
+            showNEntries : false,
+            pageLength: 100,
+            searching: false,
+            buttons: [
+                {
+                    extend: 'excel',
+                    text:'Exportar datos en excel',
+                    title: 'Cuentanos donde nos conociste'
+                }
+            ]
+        });
+        $('#table_DER').dataTable({
+            dom:'Bfrtip',
+            showNEntries : false,
+            pageLength: 100,
+            searching: false,
+            buttons: [
+                {
+                    extend: 'excel',
+                    text:'Exportar datos en excel',
+                    title: 'Derivaciones por medico'
+                }
+            ]
+        });
+    </script>
+    <style>
+
+        #table_TOT + .dataTables_info{
+            display: none !important;
+        }
+        #table_TOT + .dataTables_info + .dataTables_paginate{
+            display: none !important;
+        }
+        #table_TPD + .dataTables_info{
+            display: none !important;
+        }
+        #table_TPD + .dataTables_info + .dataTables_paginate{
+            display: none !important;
+        }
+        #table_TPM + .dataTables_info{
+            display: none !important;
+        }
+        #table_TPM + .dataTables_info + .dataTables_paginate{
+            display: none !important;
+        }
+        #table_OST + .dataTables_info{
+            display: none !important;
+        }
+        #table_OST + .dataTables_info + .dataTables_paginate{
+            display: none !important;
+        }
+        #table_EST + .dataTables_info{
+            display: none !important;
+        }
+        #table_EST + .dataTables_info + .dataTables_paginate{
+            display: none !important;
+        }
+
+        #table_DER + .dataTables_info{
+            display: none !important;
+        }
+        #table_DER + .dataTables_info + .dataTables_paginate{
+            display: none;
+        }
+
+        #table_ENC + .dataTables_info{
+            display: none !important;
+        }
+        #table_ENC + .dataTables_info + .dataTables_paginate{
+            display: none;
+        }
+
+
+        #table_TOT_wrapper{
+            padding: 35px 2px 2px 12px;
+        }
+        #table_TPD_wrapper{
+            padding: 35px 2px 2px 12px;
+        }
+        #table_TPM_wrapper{
+            padding: 35px 2px 2px 12px;
+        }
+        #table_OST_wrapper{
+            padding: 35px 2px 2px 12px;
+        }
+        #table_EST_wrapper{
+            padding: 35px 2px 2px 12px;
+        }
+        #table_DER_wrapper{
+            padding: 35px 2px 2px 12px;
+        }
+        #table_ENC_wrapper{
+            padding: 35px 2px 2px 12px;
+        }
+    </style>

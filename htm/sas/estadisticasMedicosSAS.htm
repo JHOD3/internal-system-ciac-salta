@@ -104,7 +104,7 @@
 
     //google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart3);
-  
+
     function drawChart3(est) {
         if(est){
             graphcount = 10 + (est.length * 41);
@@ -115,13 +115,13 @@
             est=[['Estado', 'Turnos', {role: 'style'}]];
         }
         var data3 = google.visualization.arrayToDataTable(est);
-    
+
         var options3 = {
             title: '',
             legend: { position: 'none' },
             chartArea:{top:10, height:"100%"},
         };
-    
+
         var chart = new google.visualization.BarChart(document.getElementById('curve_chart3'));
         tDisplay = $("#tabsm-3").css("display");
 
@@ -132,7 +132,7 @@
 
     //google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart4);
-  
+
     function drawChart4(est) {
         if(est){
             graphcount = 10 + (est.length * 41);
@@ -143,16 +143,16 @@
             est=[['Estudio', 'Turnos', {role: 'style'}]];
         }
         var data4 = google.visualization.arrayToDataTable(est);
-  
+
         var options4 = {
             title: '',
             legend: { position: 'none' },
             chartArea:{top:10, height:"100%"},
         };
-  
+
         var chart = new google.visualization.BarChart(document.getElementById('curve_chart4'));
         tDisplay = $("#tabsm-4").css("display");
-        
+
         $("#tabsm-4").css('display', 'block');
         alreadyDraw == false ? chart.draw(data4, options4) : chart.draw(data4);
         tDisplay!='block'?$("#tabsm-4").css('display', 'none'):true;
@@ -171,13 +171,13 @@
             est=[['Usuario', 'Turnos', {role: 'style'}]];
         }
         var data5 = google.visualization.arrayToDataTable(est);
-    
+
         var options5 = {
             title: '',
             legend: { position: 'none' },
             chartArea:{top:10, height:"100%"},
         };
-    
+
         var chart = new google.visualization.BarChart(document.getElementById('curve_chart5'));
         tDisplay = $("#tabsm-5").css("display");
 
