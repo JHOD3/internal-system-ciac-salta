@@ -381,11 +381,7 @@
                         <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
 <script type="text/javascript">
 
-
-
-
     google.charts.load('current', {'packages':['corechart']});
-
 
 
     if ([TOT_NUMROWS] > 0) {
@@ -402,23 +398,6 @@
             };
             var chart = new google.visualization.BarChart(document.getElementById('bar1chart'));
             chart.draw(dataBar1, options);
-
-
-            var components = [
-                {type: 'igoogle', datasource: 'https://spreadsheets.google.com/tq?key=pCQbetd-CptHnwJEfo8tALA',
-                    gadget: 'https://www.google.com/ig/modules/pie-chart.xml',
-                    userprefs: {'3d': 1}},
-                {type: 'html', datasource: 'https://spreadsheets.google.com/tq?key=pCQbetd-CptHnwJEfo8tALA'},
-                {type: 'csv', datasource: 'http://ciacsalta.test/tajax/index.php/diagnostico/listado/2022-02-01/2022-05-08/13/0/'},
-                {type: 'htmlcode', datasource: 'https://spreadsheets.google.com/tq?key=pCQbetd-CptHnwJEfo8tALA',
-                    gadget: 'https://www.google.com/ig/modules/pie-chart.xml',
-                    userprefs: {'3d': 1},
-                    style: 'width: 800px; height: 700px; border: 3px solid purple;'}
-            ];
-
-            var container = document.getElementById('bar1chartExport');
-            google.visualization.drawToolbar(container, components);
-
         }
     }
 
