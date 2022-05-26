@@ -113,6 +113,9 @@ class Turnero extends CI_Controller {
             "<td></td>",
             $aData['calendar']
         );
+
+        $aData['medicoSaludo'] = doSaludo($aData['rsMedico']);
+
         $aData['aObrasSociales'] = $this->turnero_model->obtObrasSociales();
         $this->load->view('calendar_view', $aData);
     }

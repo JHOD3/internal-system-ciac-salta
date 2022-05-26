@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:fb="http://www.facebook.com/2008/fbml"><head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html lang="es">
+    <head>
     <title>[TITULO_SITIO]</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link href="[CSS]smoothness/jquery-ui-1.10.1.custom.css" rel="stylesheet" media="screen" />
     <link href="[CSS]reset.css?v=6" rel="stylesheet" media="screen" />
-    <link href="[CSS]style.css?v=6" rel="stylesheet" media="screen" />
+    <link href="[CSS]style.css?v=7" rel="stylesheet" media="screen" />
 
     <link href="[CSS]bootstrap.css" rel="stylesheet">
     <link href="[CSS]bootstrap-responsive.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="[CSS]tables.css" />
+    <link rel="stylesheet" type="text/css" href="[CSS]chat.css?v=3" />
 
     <!-- CSS -->
      <!--<link href="files/css/transdmin.css" rel="stylesheet" type="text/css" media="screen" />
@@ -46,11 +47,12 @@
     <script src="[JS]bootstrap-collapse.js"></script>
     <script src="[JS]bootstrap-carousel.js"></script>
     <script src="[JS]bootstrap-typeahead.js"></script>
-    <script src="[JS]script_gral.js?v=6"></script>
-    <script src="[JS]mi_script_sas.js?v=6"></script>
+    <script src="[JS]script_gral.js?v=8"></script>
+    <script src="[JS]mi_script_sas.js?v=8"></script>
     <script src="[JS]jquery.validate.js?v=6"></script>
 
     <script src="[JS]jquery.maskedinput.min.js?v=6"></script>
+    <script src="[JS]chat-usuarios.js?v=2"></script>
 
    <!-- <script src="files/js/jquery.pnotify.js"></script>
 
@@ -64,6 +66,33 @@
         @import "files/css/demo_table.css";
     </style>-->
 
+    <script type='text/javascript'>
+
+
+        var contadorAfk = 0;
+        $(document).ready(function () {
+            //Cada minuto se lanza la función ctrlTiempo
+            var contadorAfk = setInterval(ctrlTiempo, 60000);
+
+            //Si el usuario mueve el ratón cambiamos la variable a 0.
+            $(this).mousemove(function (e) {
+                contadorAfk = 0;
+            });
+            //Si el usuario presiona alguna tecla cambiamos la variable a 0.
+            $(this).keypress(function (e) {
+                contadorAfk = 0;
+            });
+        });
+
+        function ctrlTiempo() {
+            //Se aumenta en 1 la variable.
+            contadorAfk++;
+            //Se comprueba si ha pasado del tiempo que designemos.
+            if (contadorAfk > 35) { // Más de 30 minutos, lo detectamos como ausente o inactivo.
+                location.href = 'login.php';
+            }
+        }
+    </script>
     <script type="text/javascript">
 
         /*jQuery(function($){
@@ -77,7 +106,7 @@
 
 		$(document).ready(function(){
 
-			$(".eliminar_elto").each(function(){
+            $(".eliminar_elto").each(function(){
 				$(this).remove();
 			})
 
@@ -348,18 +377,35 @@
 	</script>
 </head>
 
-<body>
-    <div id="dieAjaxNovedadesDiv"></div>
-    <!--script type="text/javascript" src="../blab_im_free/bar.php"></script//-->
-	<div id="mensaje_gral" class="oculto noPrint">
-    	<img src="[IMG]loader.gif"><br>
-        Cargando...
-  	</div>
-    <div class="row oculto noPrint">
-        <h1>[TITULO_SITIO]</h1>
-    </div>
-    [CUERPO]
-    <link href="[CSS]multiple-select.css" rel="stylesheet">
-    <script src="[JS]/multiple-select.js"></script>
-</body>
+    <body>
+        <div id="dieAjaxNovedadesDiv"></div>
+        <!--script type="text/javascript" src="../blab_im_free/bar.php"></script//-->
+        <div id="mensaje_gral" class="oculto noPrint">
+            <img src="[IMG]loader.gif"><br>
+            Cargando...
+        </div>
+        <div class="row oculto noPrint">
+            <h1>[TITULO_SITIO]</h1>
+        </div>
+        [CUERPO]
+        <div class="chat-content">
+
+            <div style="align-items: end;display: flex;">
+                <div class="chat">
+                    <div class="chat-header">
+                        Chat CiacSalta
+                        <a href="" class="open-closed">Open</a>
+                        <span class="content-count-all-chat"></span>
+                    </div>
+                    <div class="chat-content-body-footer">
+                        <div class="chat-body chat-all-content-person">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <link href="[CSS]multiple-select.css" rel="stylesheet">
+        <script src="[JS]/multiple-select.js"></script>
+
+    </body>
 </html>

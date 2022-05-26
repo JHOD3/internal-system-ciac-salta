@@ -29,16 +29,15 @@
         <?php if (is_array($aHorarios) and isset($aHorarios[0]) and in_array($aHorarios[0]['id_turnos_tipos'], array(3, 4, 5, 6, 7, 8))): ?>            
             <div class="atencion">
                 <?php if (in_array($aHorarios[0]['id_turnos_tipos'], array(3, 4))): ?>
-                    La atención con <?=doSaludo($rsMedico)?> es por orden de llegada. Elija un día, y dirijase al CIAC dentro del siguiente horario:
+                    <?=str_replace('[medico]',$medicoSaludo,$aHorarios[0]['mensaje'])?>
                     <script> $('#btn-Siguiente').css('display','none');</script>
                     <input type="hidden" id="desde" name="desde" value="<?=$HoraLibre?>"/>
                 <?php elseif (in_array($aHorarios[0]['id_turnos_tipos'], array(5, 6))): ?>
-                    Estimado paciente para reserva de turno con <?=doSaludo($rsMedico)?>,
-                    por favor diríjase a mesa de entrada de lunes a viernes de 07:30 a 21:00 hs.
+                    <?=str_replace('[medico]',$medicoSaludo,$aHorarios[0]['mensaje'])?>
                     <script> $('#btn-Siguiente').css('display','none');</script>
                     <script> $('#btn-Anterior').css('display','none');</script>
                 <?php elseif (in_array($aHorarios[0]['id_turnos_tipos'], array(7, 8))): ?>
-                    Estimado paciente los turnos con <?=doSaludo($rsMedico)?> son asignados vía Whatsapp al 3875125955.					
+                    <?=str_replace('[medico]',$medicoSaludo,$aHorarios[0]['mensaje'])?>
                     <script> $('#btn-Siguiente').css('display','none');</script>
                     <script> $('#btn-Anterior').css('display','none');</script>
                 <?php endif; ?>                
@@ -46,8 +45,8 @@
 					<span>
 						Horario de atención
 						<?=
-						(substr(doSaludo($rsMedico), 0, 2) == 'el' ? 'd' : 'de ').
-						doSaludo($rsMedico)
+						(substr($medicoSaludo, 0, 2) == 'el' ? 'd' : 'de ').
+						$medicoSaludo
 						?>:<br />
 						<?=$vcDiasHorarios?>
 					</span>
@@ -179,7 +178,7 @@ $(document).ready(function(){
             $('#id_obras_sociales_div')
                 .html(
                     '<b>ATENCIÓN</b><br /><strong>'+
-                    '<?=ucwords(doSaludo($rsMedico))?>'+
+                    '<?=ucwords($medicoSaludo)?>'+
                     '</strong> no trabaja con la Obra Social <strong>'+
                     os+
                     '</strong>.<br />'+

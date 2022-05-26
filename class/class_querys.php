@@ -137,6 +137,64 @@ class Querys implements iQuerys{
             return utf8_decode($query);
     }
 
+    function usuariosLogueados()
+    {
+        $query =   "SELECT
+                    u.id_usuarios, 
+                    CONCAT(u.apellidos,' ',u.nombres) as nombre_completo , 
+                    u.session_state
+                    FROM usuarios as u
+                    LEFT JOIN chats ON u.id_usuarios = chats.id_usuarios
+                    GROUP BY u.id_usuarios
+                    ORDER BY u.session_state DESC, nombre_completo ASC";
+        return $query;
+    }
+
+    function contarMensajesSinLeerMedico($id_medico, $id_usuario){
+        $query =    "SELECT 
+                    COUNT(view_medico) as count
+                    FROM chats
+                    WHERE id_medicos = ".$id_medico." AND id_usuarios =".$id_usuario;
+        return $query;
+    }
+
+    function contarMensajesSinLeerUsuario($id_medico, $id_usuario){
+        $query =    "SELECT 
+                    COUNT(view_usuario) as count
+                    FROM chats
+                    WHERE id_medicos = ".$id_medico." AND id_usuarios =".$id_usuario;
+        return $query;
+    }
+
+    function loadChat($id_medico, $id_usuario)
+    {
+        $query = "SELECT * FROM chats WHERE id_usuarios = ".$id_usuario." AND id_medicos = ".$id_medico;
+        return $query;
+    }
+
+    function medicosLogueados()
+    {
+        $query =   "SELECT 
+                    m.id_medicos, 
+                    CONCAT(m.apellidos,' ',m.nombres) as nombre_completo , 
+                    m.session_state
+                    FROM medicos as m
+                    LEFT JOIN chats ON m.id_medicos = chats.id_medicos
+                    GROUP BY m.id_medicos
+                    ORDER BY m.session_state DESC, nombre_completo ASC";
+        return $query;
+    }
+
+    function session_state_change($tabla, $id, $state){
+        if ($state == 'null'){
+            $query = "UPDATE ".$tabla." SET session_state = null WHERE id_".$tabla." = ".$id;
+        }else{
+            $query = "UPDATE ".$tabla." SET session_state = '".$state."' WHERE id_".$tabla." = ".$id;
+        }
+
+        return $query;
+    }
+
 	function CambiarEstado($tabla, $id, $id_estado){
 		$query = "UPDATE ".$tabla." SET id_".$tabla."_estados = $id_estado WHERE id_".$tabla." = $id";
 		return $query;
@@ -226,6 +284,7 @@ class Querys implements iQuerys{
             case "subsectores":
             case "novedades_diarias":
             case "agendas":
+            case "turnos_tipos":
             case "mantenimientos":
             case "usuarios":
             case "notas_impresion":
@@ -409,6 +468,24 @@ SQL;
 				ORDER BY T.desde ASC";
 		return $query;
 	}
+
+    function TurnosReservadosEnMes($init, $end, $id_medico, $id_especialidad){
+        $query = "SELECT T.*, TE.*, P.*, OS.*, TE.nombre AS nombre_estado, OS.nombre AS nombre_os, U.apellidos AS uApellidos, U.usuario AS uUsuario, U.nombres AS uNombres, URec.apellidos AS recApellidos, URec.nombres AS recNombres, URec.usuario AS recUsuario
+				FROM turnos T
+				INNER JOIN turnos_estados TE
+				ON T.id_turnos_estados = TE.id_turnos_estados
+				INNER JOIN pacientes P
+				ON T.id_pacientes = P.id_pacientes
+				LEFT JOIN obras_sociales OS
+				ON P.id_obras_sociales = OS.id_obras_sociales
+                LEFT JOIN usuarios AS U
+	            ON T.id_usuarios = U.id_usuarios
+                LEFT JOIN usuarios AS URec
+	            ON T.id_usuarios_recepcion = URec.id_usuarios
+				WHERE T.id_medicos = $id_medico AND T.id_especialidades = $id_especialidad AND T.fecha >= '".$init."' AND T.fecha <= '".$end."' AND T.estado = 1 AND (T.id_turnos_estados = 1 OR T.id_turnos_estados = 2 OR T.id_turnos_estados = 4 OR T.id_turnos_estados = 7)
+				ORDER BY T.desde ASC";
+        return $query;
+    }
 
 	function GrillaTurnosPasados($id_medico, $id_especialidad, $fecha){
 		$query = "
@@ -1078,27 +1155,24 @@ SQL;
     }
 
     function dataTurnosOtorgadosPorENC($desde, $hasta, $id_usuarios){
-		$query = "
-            SELECT
-            	ep.pregunta,
-            	COUNT(t.id_turnos) AS `count`
-            FROM
-            	turnos AS t
-            INNER JOIN
-            	encuestas_respuestas AS er
-                ON er.id_turnos = t.id_turnos
-            INNER JOIN
-                encuestas_preguntas AS ep
-                ON er.id_encuestas_preguntas = ep.id_encuestas_preguntas
-            WHERE
-                t.id_turnos_estados IN ('2', '7') AND
-                t.estado = 1 AND
-                t.fecha BETWEEN '{$desde}' AND '{$hasta}'
-            GROUP BY
-            	ep.pregunta
-            ORDER BY
-            	COUNT(t.id_turnos) DESC
-        ";
+		$query =    "SELECT
+                        ep.pregunta,
+                        COUNT(t.id_turnos) AS `count`
+                    FROM
+                        turnos AS t
+                    INNER JOIN
+                        encuestas_respuestas AS er
+                            ON er.id_turnos = t.id_turnos
+                    INNER JOIN
+                            encuestas_preguntas AS ep
+                            ON er.id_encuestas_preguntas = ep.id_encuestas_preguntas
+                    WHERE
+                            t.id_turnos_estados IN ('2', '7') AND
+                            t.estado = 1 
+                    GROUP BY
+                        ep.pregunta
+                    ORDER BY
+                        COUNT(t.id_turnos) DESC";
 		return $query;
     }
 

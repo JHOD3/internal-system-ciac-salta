@@ -234,8 +234,8 @@ switch ($tabla){
 		parse_str(stripslashes($datos));
 
 		if (isset($_POST['tipo'])){
-			$trae_orden = 0;
-			$trae_pedido = 0;
+			//$trae_orden = 0;
+			$trae_pedido = substr($trae_pedido,0,1);
 			if (!isset($arancel_diferenciado)) {
 				$arancel_diferenciado = 0;
             }
@@ -319,9 +319,13 @@ switch ($tabla){
 	break;
 	case "medicos_estudios":
 		parse_str(stripslashes($datos));
+        if ($titular == 0){
+            $titular = null;
+        }
 		$asignaciones = "
 					particular = '".$particular."',
-					arancel = '".$arancel."'
+					arancel = '".$arancel."',
+					titular = '".$titular."'
 					";
 
 		$query_string = $obj->querys->Modificaciones($obj->nombre_tabla, $asignaciones, $id);
@@ -448,6 +452,19 @@ switch ($tabla){
 			$rta = false;
 
 	break;
+    case "turnos_tipos":
+        parse_str(stripslashes($datos));
+
+        $asignaciones = " mensaje = '".utf8_decode($mensaje)."'";
+
+        $query_string = $obj->querys->Modificaciones($obj->nombre_tabla, trim($asignaciones), $id);
+
+        if ($obj->db->consulta($query_string))
+            $rta = true;
+        else
+            $rta = false;
+
+        break;
 	case "mantenimientos":
 		parse_str(stripslashes($datos));
 

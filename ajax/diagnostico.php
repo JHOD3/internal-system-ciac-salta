@@ -34,7 +34,8 @@ if ($row_tur = $this_db->fetch_assoc($query_esp)) {
 
 $SQL_med_est = <<<SQL
     SELECT
-        m.*
+        m.*,
+        me.titular
     FROM
         medicos AS m
     INNER JOIN
@@ -159,6 +160,27 @@ $query = $this_db->consulta($SQL_Estudios);
                         }
                         $row_cantidad_default = isset($row['cantidad']) ? $row['cantidad'] : '1';
                         ?>
+                    <tr>
+                        <td colspan="19">
+                            <?php
+                            $query_med = $this_db->consulta(
+                                str_replace(
+                                    "[ID_ESTUDIOS]",
+                                    $row['id_estudios'],
+                                    $SQL_med_est
+                                )
+                            );
+                            $existe=false;
+                            $allMedic = [];
+                            while ($row_med = $this_db->fetch_array($query_med)) {
+                                $allMedic[] = $row_med;
+                                if(!empty($row_med['titular'])){
+                                    $existe=true;
+                                }
+                            }
+                            ?>
+                        </td>
+                    </tr>
                         <tr id="id_medicos_tr_<?=$row['id_estudios']?>">
                             <td>
                                 <input type="hidden" name="id_turnos_estudios[]" value="<?=$row['id_turnos_estudios']?>" />
@@ -167,35 +189,22 @@ $query = $this_db->consulta($SQL_Estudios);
                             <td>
                                 <select class="searchFilter" name="id_medicos[]" style="width:120px;">
                                     <option value="">---</option>
-                                    <?php
-                                    $query_med = $this_db->consulta(
-                                        str_replace(
-                                            "[ID_ESTUDIOS]",
-                                            $row['id_estudios'],
-                                            $SQL_med_est
-                                        )
-                                    );
-                                    ?>
-                                    <?php while ($row_med = $this_db->fetch_array($query_med)): ?>
-                                        <option
-                                            value="<?=$row_med['id_medicos']?>"
-                                            <?php
-                                            if (
-                                                (
-                                                    $row['id_medicos'] != '' and
-                                                    $row_med['id_medicos'] == $row['id_medicos']
-                                                ) or (
-                                                    $row['id_medicos'] == '' and
-                                                    $row_med['id_medicos'] == $row['turnos_id_medicos']
-                                                )
-                                            ):
-                                                ?>
-                                                selected="selected"
-                                                <?php
-                                            endif;
-                                            ?>
-                                        ><?=utf8_encode(doSaludo($row_med, false))?></option>
-                                    <?php endwhile; ?>
+                                    <?php foreach ($allMedic as $row_med): ?>
+                                        <option value="<?=$row_med['id_medicos']?>"
+                                            <?php if($existe == true): ?>
+                                                <?php if(!empty($row_med['titular'])): ?>
+                                                    selected="selected"
+                                                <?php endif;?>
+                                            <?php else:?>
+                                                <?php if (( $row['id_medicos'] != '' and $row_med['id_medicos'] == $row['id_medicos']) or ( $row['id_medicos'] == '' and $row_med['id_medicos'] == $row['turnos_id_medicos'])):?>
+                                                        selected="selected"
+                                                <?php endif;?>
+                                            <?php endif;?>
+
+                                        >
+                                            <?=utf8_encode(doSaludo($row_med, false))?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </td>
                             <td>

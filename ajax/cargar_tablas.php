@@ -96,7 +96,7 @@ switch ($tabla){
 		$aColumns = array('id_medicos_horarios', 'id_medicos', 'id_especialidades',  'id_dias_semana', 'id_plantas', 'desde', 'hasta', 'nro_consultorio', 'duracion_turno');
 	break;
 	case 'medicos_estudios':
-		$aColumns = array('id_medicos_estudios', 'id_medicos','id_estudios', 'particular', 'arancel');
+		$aColumns = array('id_medicos_estudios', 'id_medicos','id_estudios', 'particular', 'arancel', 'titular');
 	break;
 	case 'medicos_obras_sociales':
 		$aColumns = array('id_medicos_obras_sociales', 'id_medicos', 'nombre','arancel');
@@ -123,7 +123,7 @@ switch ($tabla){
 		$aColumns = array('id_dias_semana', 'nombre');
 	break;
 	case "agendas":
-		$aColumns = array('id_agendas','nombre','apellido','rubro','celular','telefono','direccion','id_agendas_tipos');
+		$aColumns = array('id_agendas','nombre','apellido','rubro','celular','telefono','direccion','id_agendas_tipos','estado');
 	break;
 	case "mantenimientos":
     case "mantenimhistoricos":
@@ -156,6 +156,9 @@ switch ($tabla){
 	case "tareas_realizadas":
 		$aColumns = array('id_tareas_realizadas','nombre','descripcion','status','fechahora','id_usuarios');
 	break;
+    case "turnos_tipos":
+        $aColumns = array('id_turnos_tipos','nombre', 'mensaje');
+        break;
 	default:
 		$aColumns = $obj->NombreColumnas();
 }
@@ -323,7 +326,10 @@ switch ($tabla){
     		$sWhere = "WHERE ( id_tareas_pedidos = '".$id_padre."'";
         }
 	break;
-	default:
+    case "turnos_tipos":
+        $sWhere = "WHERE ( id_turnos_tipos NOT IN (1,2,9,10)";
+        break;
+    default:
 		$sWhere = "";
 }
 
@@ -1725,7 +1731,8 @@ if ( $sWhere == "" ){
         $tabla != 'medicosexp' and
         $tabla != 'encuestas' and
         $tabla != 'novedades_diarias' and
-        $tabla != 'especialidades'
+        $tabla != 'especialidades' and
+        $tabla != 'agendas'
     ) {
         $sWhere = "WHERE $pfTable.estado = 1";
     }
@@ -2112,9 +2119,9 @@ if ($cant_registros != 0){
 				$editar = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
 				$eliminar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Eliminar' data-tabla='".$tabla."' class='btn_eliminar'><img src='".URL."files/img/btns/eliminar.png' border='0' ></a>";
 
-				$estado_cambiar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Cambiar Estado' data-estado='0' data-tabla='".$tabla."' class='btn_estado' data-id_padre='".$id_padre."'><img id='estado' src='".URL."files/img/btns/ojo.png' border='0'></a>";
+				$estado_cambiar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Cambiar Estado' data-estado='0' data-tabla='".$tabla."' class='btn_estado' data-id_padre=''><img id='estado' src='".URL."files/img/btns/ojo.png' border='0'></a>";
 
-				$estado_cambiar_2 = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Cambiar Estado' data-estado='1' data-tabla='".$tabla."' class='btn_estado' data-id_padre='".$id_padre."'><img id='estado' src='".URL."files/img/btns/ojo_2.png' border='0'></a>";
+				$estado_cambiar_2 = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Cambiar Estado' data-estado='1' data-tabla='".$tabla."' class='btn_estado' data-id_padre=''><img id='estado' src='".URL."files/img/btns/ojo_2.png' border='0'></a>";
 			}else{
 				$editar = "<a href='#' class='btn_opciones' data-titulo='Editar ".$obj->titulo_tabla_singular."' data-tipo='editar' data-id='".$aRow["id_".$tabla]."' data-tabla='".$tabla."' data-id_padre='".$id_padre."'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
 				$eliminar = "<a href='#' data-id='".$aRow[$aColumns[0]]."' data-titulo='Eliminar' data-tabla='".$tabla."' class='btn_eliminar' data-id_padre='".$id_padre."'><img src='".URL."files/img/btns/eliminar.png' border='0'></a>";
@@ -2283,7 +2290,6 @@ if ($cant_registros != 0){
 						$row[3] = $planes.''.$estudios;
                     }
 				break;
-
 				case "medicos_especialidades":
 					$horarios = "<a class='btn_opciones' href='#' data-id='".$aRow["id_medicos"]."-".$aRow["id_especialidades"]."' data-tipo_btn='tabla_hija' data-hija='medicos_horarios' data-nombre='Horario de Medicos por Especialidad'><img src='".URL."files/img/btns/medicos_horarios.png' border='0'></a>";
 					$editarDuracion = "<a class='btn_opciones' href='#' data-id='".$aRow["id_medicos"]."-".$aRow["id_especialidades"]."' data-tipo='editar' data-tabla='".$tabla."' data-id_padre='".$aRow["id_medicos"]."-".$aRow["id_especialidades"]."' data-nombre='Editar duracion'><img src='".URL."files/img/btns/editar.png' border='0'></a>";
@@ -2303,34 +2309,39 @@ if ($cant_registros != 0){
 						$row[3] = $editarDuracion.''.$horarios.'';
                     }
 				break;
-
 				case "medicos_estudios":
-
+                    $checked = '';
+                    $value = 1;
+                    if(!empty($aRow["titular"])){
+                        $checked = 'checked';
+                        $value = 0;
+                    }
 					$row[0] = $aRow["id_medicos_estudios"];
 					$row[1] = utf8_encode($estudio);
 					$row[2] = '<input type="text" class="particular" id="'.$aRow["id_medicos_estudios"].'" value="'.$aRow["particular"].'" />';
 					$row[3] = '<input type="text" class="arancel" id="'.$aRow["id_medicos_estudios"].'" value="'.$aRow["arancel"].'" />';
-					//$row[2] = $aRow["particular"];
+                    $row[4] = '<input type="checkbox" class="titular" id="'.$aRow["id_medicos_estudios"].'" value="'.$value.'" '.$checked.' />';
+                    //$row[2] = $aRow["particular"];
 					//$row[2] = $mostrar." ".$editar;
                     if ($_SESSION['SUPERUSER'] > 1) {
-                        $row[4] = $eliminar.'';
+                        $row[5] = $eliminar.'';
                     } else {
-                        $row[4] = '';
+                        $row[5] = '';
                     }
 				break;
-
 				case "medicos_obras_sociales":
 
 					$row[0] = $aRow["id_medicos_obras_sociales"];
 					$row[1] = utf8_encode($aRow["nombre"]);
 					$row[2] = '<input type="text" class="arancel" id="'.$aRow["id_medicos_obras_sociales"].'" value="'.$aRow["arancel"].'" />';
+                    $row[3] = '<input type="checkbox" class="arancel-checked" data-id="#'.$aRow["id_medicos_obras_sociales"].'" />';
                     if (
                         $_SESSION['SUPERUSER'] > 1 OR
                         isset($_SESSION['ID_MEDICO'])
                     ) {
-                        $row[3] = $eliminar.'';
+                        $row[4] = $eliminar.'';
                     } else {
-                        $row[3] = '';
+                        $row[4] = '';
                     }
 				break;
 				case 'obras_sociales_planes':
@@ -2354,7 +2365,6 @@ if ($cant_registros != 0){
                         $row[3] = '';
                     }
 				break;
-
 				case "medicos_horarios":
 					$checkbox = "<input type='checkbox' class='seleccion' id='".$aRow[$aColumns[0]]."' />";
 
@@ -2417,11 +2427,9 @@ if ($cant_registros != 0){
 					$row[2] = utf8_encode($aRow['titulo']);
 					$row[3] = utf8_encode($aRow['descripcion']);
 					$row[4] = utf8_encode($usuario);
-                    if ($_SESSION['SUPERUSER'] > 2) {
+                    if (in_array($_SESSION['SUPERUSER'],[0,1,2,3])) {
                         $row[5] = $editar.''.$eliminar.'';
-                    } elseif ($_SESSION['SUPERUSER'] > 1) {
-                        $row[5] = $editar.''.$eliminar.'';
-                    } else {
+                    }else {
                         $row[5] = '';
                     }
 				break;
@@ -2446,7 +2454,8 @@ if ($cant_registros != 0){
 					$row[5] = utf8_encode($aRow['telefono']);
 					$row[6] = utf8_encode($aRow['direccion']);
 					$row[7] = utf8_encode($agenda_tipo);
-                    $row[8] = $editar.''.$eliminar.'';
+                    $row[8] = $aRow["estado"];
+                    $row[9] = ($aRow["estado"] == 0)?'Eliminado' : $editar.''.$eliminar.'';
 				break;
 				case 'mantenimientos':
                 case 'mantenimhistoricos':
@@ -2592,6 +2601,11 @@ if ($cant_registros != 0){
                         $row[6] = $realizar.'';
                     }
 				break;
+                case 'turnos_tipos':
+                    $row[0] = utf8_encode($aRow['nombre']);
+                    $row[1] = utf8_encode($aRow['mensaje']);
+                    $row[2] = $editar;
+                    break;
 
 			}
             if ($tabla != 'usuarios' or $row[0] >= 0) {

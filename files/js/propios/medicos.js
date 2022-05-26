@@ -31,33 +31,7 @@ function TrabajaConOS(id_medico, id_os, id_plan){
 	});
 }
 
-//CREAR AGENDA
-function CrearAgenda(){
-	var id_medico = $("#id_medico").val();
-	var id_especialidad = $("#medicos_especialidades").val();
-	
-	$.ajax({  
-		type: "POST",   
-		url: "../ajax/crear_agenda.php",					
-		data: {id_medico: id_medico, id_especialidad: id_especialidad}, 
-		beforeSend: function() {
-		},
-		success: function(requestData){
-			var rta = requestData;
-			$("#contenedor_agenda").html(rta).fadeIn("slow");
-			$("#btn_bajo_calendario_1").html('<a class="btn_opciones-1 btn" href="#" data-id="'+id_medico+'" data-tipo_btn="tabla_hija" data-hija="medicos_especialidades" data-nombre="Especialidades por Médicos" alt="Especialidades por Médicos" style="padding: 4px 0px 0px 12px;"> Horarios<img src="https://ciacsaltadb.ddns.net/files/img/btns/medicos_especialidades.png" border="0"></a>').fadeIn("slow");
-			$("#btn_bajo_calendario_2").html('<a class="btn_opciones-1 btn" href="#" data-id="'+id_medico+'"  data-tipo_btn="tabla_hija" data-hija="medicos_obras_sociales" data-nombre="Planes de Obras Sociales por Médicos" alt="Planes de Obras Sociales por Médicos" style="padding: 4px 0px 0px 12px;">Obras Sociales<img src="https://ciacsaltadb.ddns.net/files/img/btns/medicos_obras_sociales.png" border="0"></a>').fadeIn("slow");
-			
-			
-		},
-		complete: function(requestData, exito){
-		},
-		error: function (){
-			alert ("error");
-		}
-	});
-	return false;
-};
+
 
 //GRILLA DE TURNOS
 function GrillaInicial(date){
@@ -102,3 +76,34 @@ function GrillaInicial(date){
 	
 	Duplicados(id_medico, id_especialidad, fecha)
 }
+
+//CREAR AGENDA
+function CrearAgenda(fecha = ''){
+	var id_medico = $("#id_medico").val();
+	var id_especialidad = $("#medicos_especialidades").val();
+	var date = new Date();
+	if(fecha == '') {
+		fecha = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+	}
+	$.ajax({
+		type: "POST",
+		url: "../ajax/crear_agenda.php",
+		data: {id_medico: id_medico, id_especialidad: id_especialidad, fecha: fecha },
+		beforeSend: function() {
+		},
+		success: function(requestData){
+			var rta = requestData;
+			$("#contenedor_agenda").html(rta).fadeIn("slow");
+			$("#btn_bajo_calendario_1").html('<a class="btn_opciones-1 btn" href="#" data-id="'+id_medico+'" data-tipo_btn="tabla_hija" data-hija="medicos_especialidades" data-nombre="Especialidades por Mï¿½dicos" alt="Especialidades por Mï¿½dicos" style="padding: 6px 0px 0px 6px;">Horarios<img src="https://ciacsaltadb.ddns.net/files/img/btns/medicos_horarios.png" border="0"></a>').fadeIn("slow");
+			$("#btn_bajo_calendario_2").html('<a class="btn_opciones-1 btn" href="#" data-id="'+id_medico+'"  data-tipo_btn="tabla_hija" data-hija="medicos_obras_sociales" data-nombre="Planes de Obras Sociales por Mï¿½dicos" alt="Planes de Obras Sociales por Mï¿½dicos" style="padding: 6px 0px 0px 6px;">Obras Sociales<img src="https://ciacsaltadb.ddns.net/files/img/btns/medicos_obras_sociales.png" border="0"></a>').fadeIn("slow");
+			$("#btn_bajo_calendario_3").html('<a class="btn_opciones-1 btn" href="#" data-id="'+id_medico+'" data-tipo_btn="tabla_hija" data-hija="medicos_estudios" data-nombre="Especialidades por Mï¿½dicos" alt="Especialidades por Mï¿½dicos" style="padding: 6px 0px 0px 6px;">Estudios<img src="https://ciacsaltadb.ddns.net/files/img/btns/medicos_estudios.png" border="0"></a>').fadeIn("slow");
+			$('#agenda').datepicker("setDate", new Date(fecha) );
+		},
+		complete: function(requestData, exito){
+		},
+		error: function (){
+			alert ("error");
+		}
+	});
+	return false;
+};

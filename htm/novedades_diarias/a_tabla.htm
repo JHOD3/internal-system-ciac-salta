@@ -33,7 +33,8 @@
                   $('#contenedor_listado tbody tr td:last-child a').each(function(index){if ($(this).attr('data-titulo')) {$(this).attr('alt', $(this).attr('data-titulo'));} else if ($(this).attr('data-nombre')) {$(this).attr('alt', $(this).attr('data-nombre'));} else if ($(this).attr('title')) {$(this).attr('alt', $(this).attr('title'));}});
             },
 			"bLengthChange": false,
-			"aoColumns" : [{ sWidth: '20px' },
+			"aoColumns" : [
+                    { sWidth: '20px' },
 					{ sWidth: '300px' },
 					{ sWidth: '300px' },
 					{ sWidth: '300px' },
@@ -75,8 +76,6 @@
             <th>Usuario</th>
             <th>Acci&oacute;n</th>
         </tr>
-    </thead>
-    <thead>
         <tr>
             <th><input type="text" name="tb_id" value="ID" class="search_init" style="width: 100%;" /></th>
             <th><input type="text" name="tb_fechahora" value="Fecha/Hora" class="search_init" style="width: 100%;" /></th>

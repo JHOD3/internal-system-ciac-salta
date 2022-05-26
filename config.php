@@ -13,6 +13,8 @@ define("ANIO", "2014");
 
 define("ID_APP_FACEBOOK", "");
 
+
+
 define("BD_NOMBRE", "ciacsalta");
 define("SERVIDOR", "127.0.0.1");
 define("BD_USUARIO", "root");

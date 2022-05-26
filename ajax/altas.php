@@ -1112,6 +1112,21 @@ SQL;
 			$rta = false;
 
 	break;
+    case "turnos_tipos":
+        parse_str(stripslashes($datos));
+
+        $columnas = "(mensaje)";
+
+        $valores = "('".utf8_decode(upper($mensaje))."')";
+
+        $query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);
+
+        if ($obj->db->consulta($query_string))
+            $rta = $obj->db->ultimo_id_insertado();
+        else
+            $rta = false;
+
+        break;
 	case "mantenimientos":
 		parse_str(stripslashes($datos));
 
@@ -1257,8 +1272,8 @@ SQL;
                     '".utf8_decode($tareas)."',
                     '".utf8_decode($tareas_configuracion)."',
                     '".utf8_decode($tareas_pendientes)."',
-                    '".utf8_decode($cumples)."',
-                    '".utf8_decode($usuarios_permiso)."'
+                    '".utf8_decode($usuarios_permiso)."',
+                    '".utf8_decode($cumples)."'                    
 					)";
 
 		print $query_string = $obj->querys->Alta($obj->nombre_tabla, $columnas, $valores);

@@ -52,15 +52,21 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
         font-weight: bold;
     }
 </style>
-<h1>Prácticas Médicas
-    <?php if (!$isMedico): ?>
-        <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a>
-    <?php endif; ?>
-</h1>
+
 <?=$error_rol?>
 <form id="frmInpSrcFilter" method="post">
     <table id="tblDxI" border="0" cellspacing="0" cellpadding="0" style="width: 100%">
-        <thead>
+        <thead style="position: sticky;background: white;top: 38px;padding-top: 20px">
+
+            <tr>
+                <td colspan="100%">
+                    <h1>Prácticas Médicas
+                        <?php if (!$isMedico): ?>
+                            <a class="dmBtnA" style="font-weight:normal;font-size:14px;" href="../tajax/index.php/<?=$this->router->fetch_class().'/agregar/'?>">Agregar Turnos</a>
+                        <?php endif; ?>
+                    </h1>
+                </td>
+            </tr>
             <tr class="trDate">
                 <td colspan="100%">
                     Desde:
@@ -254,7 +260,13 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                         <option value="2"<?=(isset($sche) and $sche == '2') ? $selected : ''?>>Chequeado</option>
                     </select>
                 </td>
-                <td></td>
+                <td colspan="2">
+                    <select id="fact" name="fact" style="width:40px!important;">
+                        <option value=""<?=(!isset($fact) or !in_array($fact, array('1', '2'))) ? $selected : ''?>>Todo</option>
+                        <option value="1"<?=(isset($fact) and $fact == '1') ? $selected : ''?>>No chequeado</option>
+                        <option value="2"<?=(isset($fact) and $fact == '2') ? $selected : ''?>>Chequeado</option>
+                    </select>
+                </td>
             </tr>
             <tr class="trHead">
                 <td class="dOrder" data-order="1" style="width:36px;" title="Turno">Tu.</td>
@@ -345,13 +357,21 @@ $orderby_order = isset($orderby_order) ? $orderby_order : 'ASC';
                         <?php else: ?>
                             <td><?=$item['checked'] == '1' ? '✓' : '&nbsp;'?></td>
                         <?php endif; ?>
-                        <td>
-                            <?php if($item['facturado'] == '1'): ?>
+
+                        <?php if (isset($fact) and $fact != ''): ?>
+                            <td><input type="checkbox" name="facturado" class="checked"<?=$item['facturado'] == '1' ? ' checked="checked"' : ''?> /></td>
+                        <?php else: ?>
+                            <td><?=$item['facturado'] == '1' ? '✓' : '&nbsp;'?></td>
+                        <?php endif; ?>
+
+
+                        <!--<td>
+                            <?php /*if($item['facturado'] == '1'): */?>
                                 ✓
-                            <?php else: ?>
-                                <input type="checkbox" name="facturado" class="checked"<?=$item['facturado'] == '1' ? ' checked="checked"' : ''?> />
-                            <?php endif; ?>
-                        </td>
+                            <?php /*else: */?>
+                                <input type="checkbox" name="facturado" class="checked"<?/*=$item['facturado'] == '1' ? ' checked="checked"' : ''*/?> />
+                            <?php /*endif; */?>
+                        </td>-->
                         <td<?=$idmer?>"save"></td>
                         <?php if ($SUPERUSER > 1): ?>
                         <td<?=$idmer?>"dele"></td>
@@ -501,7 +521,7 @@ $(document).ready(function(){
         date2 = date2.split('/');
         date2 = date2[2] + '-' + date2[1] + '-' + date2[0];
         var frmData = $('#frmInpSrcFilter').serialize();
-        $('#dateok').parent().parent().html('<div style="white-space: nowrap;"><img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Pr&aacute;cticas M&eacute;dicas</div>');
+        $('#dateok').parent().parent().html('<div style="justify-content: center; display: flex;height: 100vh; width: 100vw;align-items: center;"><img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Pr&aacute;cticas M&eacute;dicas</div>');
         $('tr.inputSearch').html('');
         ajxM = $.ajax({
             type: 'POST',
@@ -709,7 +729,9 @@ $(document).ready(function(){
             data: {id_turnos_estudios: dId},
             context: document.body
         }).done(function(data) {
-            td.html('✓');
+           if ($(this).is(":checked")){
+               td.html('✓');
+           }
         });
     });
     $('body').on('focus',".datepicker", function(){

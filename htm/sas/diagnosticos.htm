@@ -272,8 +272,8 @@ h1{
   	window.onload = HoraActual
     var myWindow;
 </script>
-<section class="bg_negro">
-	<div class="container">
+<section class="bg_negro" style="position: fixed;width: 100%;z-index: 1;">
+	<div class="container" style="padding: 0 0 0 58px;">
     	<div class="row" id="datos_usr">
         	<div class="span6">
         	Bienvenido/a [USUARIO_APELLIDOS], [USUARIO_NOMBRES]
@@ -283,12 +283,15 @@ h1{
             </div>
         </div>
     </div>
-</section>
-[MENU_TABLAS]
-<section id="panel_menu" class="bg_verde"></section>
+    <section id="panel_menu" class="bg_verde"></section>
+    [MENU_TABLAS]
 
-<section id="panel_cuerpo" style="margin: 0;">
-    <div class="container">
+</section>
+
+
+
+<section id="panel_cuerpo" style="margin: 0;padding-top:50px;">
+    <div> <!--class="container"-->
         <div id="diagnosticos_medicos">
             <div style="justify-content: center; display: flex;height: 100vh;align-items: center;">
                 <img alt="" src="../files/img/ajax-loader.gif" /> Cargando las Pr&aacute;cticas M&eacute;dicas

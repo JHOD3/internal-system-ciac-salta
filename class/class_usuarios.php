@@ -71,6 +71,71 @@ class Usuarios extends Estructura implements iUsuarios{
 
 	}
 
+    function logoutSessionState($id_usuario){
+        $this->db->consulta($this->querys->session_state_change($this->nombre_tabla, $id_usuario, 'null'));
+        return true;
+    }
+
+    function cargar_usuarios_activos()
+    {
+        $query = $this->db->consulta($this->querys->usuariosLogueados());
+        $cant_usr = $this->db->num_rows($query);
+        $usuarios = [];
+        if ($cant_usr > 0){
+            while ($usr = $this->db->fetch_array($query))
+            {
+                $usuarios[] = [
+                    'id_medico' => $_SESSION['ID_MEDICO'],
+                    'nombre_completo' => utf8_encode($usr['nombre_completo']),
+                    'sistema' => 'sas',
+                    "activo" => (!empty($usr[2]))?$usr[2]:false,
+                    'id_usuario' => $usr[0],
+                    "count" => $this->contarMensajesSinLeerMedico($_SESSION['ID_MEDICO'],$usr[0])
+                ];
+
+            }
+        }
+        return $usuarios;
+    }
+
+    function contarMensajesSinLeerMedico($id_medico, $id_usuario)
+    {
+        $query = $this->db->consulta($this->querys->contarMensajesSinLeerMedico($id_medico, $id_usuario));
+        $cant_usr = $this->db->num_rows($query);
+        $contar = [];
+
+        if ($cant_usr > 0){
+            while ($usr = $this->db->fetch_array($query))
+            {
+                $contar = $usr[0];
+            }
+        }
+
+        return $contar;
+    }
+
+    function cargar_usuarios_chat_de_usuario($id_medico, $id_usuario)
+    {
+        $query = $this->db->consulta($this->querys->loadChat($id_medico, $id_usuario));
+        $this->db->consulta("UPDATE chats SET view_medico = NULL WHERE id_usuarios = ".$id_usuario." AND id_medicos = ".$id_medico);
+        $cant_usr = $this->db->num_rows($query);
+        $chats = [];
+        if ($cant_usr > 0){
+            while ($usr = $this->db->fetch_array($query))
+            {
+                $chats[] = [
+                    'id_chats' => $usr[0],
+                    'id_medico' => $usr[1],
+                    'id_usuario' => $usr[2],
+                    'mensaje' => $usr[3],
+                    'fecha' =>  $usr[4],
+                    'enviado_por' =>  $usr[6],
+                ];
+            }
+        }
+        return $chats;
+    }
+
 	function ValidaLogueo($usuario, $pass){
 		//Verifico si existe usuario con ese nombre y clave
 		$query = $this->db->consulta($this->querys->ValidaLogueo($this->nombre_tabla, $usuario, base64_encode($pass)));
@@ -80,6 +145,7 @@ class Usuarios extends Estructura implements iUsuarios{
 		if ($cant_usr == 1){
 			while ($usr = $this->db->fetch_array($query))
 			{
+                $this->db->consulta($this->querys->session_state_change($this->nombre_tabla, $usr[0], 'activo'));
                 // #print $_SERVER['HTTP_HOST'];
                 // if (
                 //     $_SERVER['HTTP_HOST'] != 'ciacsaltadb.ddns.net' or

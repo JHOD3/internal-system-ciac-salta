@@ -41,6 +41,18 @@ class Turnos_tipos extends Estructura implements iTurnos_tipos{
 		
 		echo ($htm->Muestra());
 		
-	}	
+	}
+
+    function FormModificacion(){
+        $htm = $this->Html($this->nombre_tabla."/form_modificacion");
+        $row = $this->registro;
+
+        $htm->Asigna("TABLA",$this->nombre_tabla);
+        $htm->AsignaBloque('block_registros',$row);
+
+        CargarVariablesGrales($htm, $tipo = "");
+
+        return  utf8_encode($htm->Muestra());
+    }
 }
 ?>

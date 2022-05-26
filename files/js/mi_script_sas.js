@@ -519,6 +519,37 @@ $(document).on("click", "#btn_agregar_estudio", function(){
 	});
 });
 
+$(document).on("click",'.add-paciente-observacion' ,function(event) {
+	event.preventDefault();
+	var id_padre = $(this).data("id_padre");
+	var tabla = $(this).data("nombre");
+	if (tabla != "mensajes"){
+	IniciarVentana("ventana_menu", "abrir", tabla);
+	$.ajax({
+	type: "POST",
+	url: "{$URL}ajax/admin_tabla.php",
+	data: {tabla: tabla, id_padre: id_padre},
+	beforeSend: function() {
+	$(ventana_menu).html("");
+},
+	success: function(requestData){
+	var rta = requestData;
+	$(ventana_menu).html(rta);
+},
+	complete: function(requestData, exito){
+},
+	error: function (){
+	alert ("error");
+}
+});
+	$(ventana_menu).dialog('option', 'title', 'Administraci\u00f3n de Observaciones de Pacientes');
+	$(ventana_menu).dialog( "open" );
+	$(ventana_menu).focus();
+}else{
+	alert('M\u00f3dulo Inhabilitado.<br /> Temporalmente en Construcci\u00f3n.','ATENCI\u00d3N')
+}
+});
+
 $(document).on("click", "#btn_modificar_estudio", function(){
 	var ids_estudios = "";
 	$(".chosen-choices li.search-choice a").each(function( index ) {
@@ -799,10 +830,8 @@ $(function() {
 			$( "#medicos_especialidad" ).html( ui.item.id_medicos_especialidades );
 			var id_medico = ui.item.id_medicos;
 			var id_medicos_especialidades = ui.item.id_medicos_especialidades;
-            if (console && console.log) console.log('ir a generar el control');
             dataAEnviar = {tipo: "drop", tabla: "medicos_especialidades", valor: id_medico, esp: id_medicos_especialidades};
-            if (console && console.log) console.log(dataAEnviar);
-			$.ajax({
+           $.ajax({
 				type: "POST",
 				url: "../ajax/generar_control.php",
 				data: dataAEnviar,

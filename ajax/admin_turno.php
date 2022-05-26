@@ -138,7 +138,7 @@ switch ($tipo){
 		$rta = $obj_turno->RestablecerOrdenesyPedidos();
 	break;
 	case 'obtener_arancel_estudios':
-		$query_string.= "
+		$query_string = "
 			SELECT te.id_turnos, te.id_estudios, te.trajo_pedido, te.trajo_orden, te.trajo_arancel, te.deja_deposito, te.trajo_arancel_coseguro, e.nombre
 			FROM turnos_estudios AS te
 			INNER JOIN estudios AS e ON e.id_estudios = te.id_estudios

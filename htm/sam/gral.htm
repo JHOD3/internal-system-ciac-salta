@@ -13,7 +13,7 @@
     <link href="[CSS]bootstrap-responsive.css" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="[CSS]tables.css" />
-
+    <link rel="stylesheet" type="text/css" href="[CSS]chat.css?v=3" />
     <!-- CSS -->
      <!--<link href="files/css/transdmin.css" rel="stylesheet" type="text/css" media="screen" />
      <link href="files/css/jquery-impromptu.css" rel="stylesheet" type="text/css" media="screen" />
@@ -49,6 +49,7 @@
     <script src="[JS]bootstrap-typeahead.js"></script>
     <script src="[JS]script_gral.js?v=6"></script>
 	<script src="[JS]mi_script_sam.js?v=6"></script>
+    <script src="[JS]chat-medicos.js?v=2"></script>
 
    <!-- <script src="files/js/jquery.pnotify.js"></script>
 
@@ -436,7 +437,7 @@
 </head>
 
 <body id="sam">
-    <div id="notLayer"></div>
+    <!--<div id="notLayer"></div>-->
     <div id="dieAjaxNovedadesDiv"></div>
 	<!--script type="text/javascript" src="../blab_im_free/bar.php"></script//-->
     <div id="mensaje_gral" class="oculto">
@@ -447,5 +448,21 @@
         <h1>[TITULO_SITIO]</h1>
     </div>
    [CUERPO]
+    <div class="chat-content">
+
+        <div style="align-items: end;display: flex;">
+            <div class="chat">
+                <div class="chat-header">
+                    Chat CiacSalta
+                    <a href="" class="open-closed">Open</a>
+                    <span class="content-count-all-chat"></span>
+                </div>
+                <div class="chat-content-body-footer">
+                    <div class="chat-body chat-all-content-person">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

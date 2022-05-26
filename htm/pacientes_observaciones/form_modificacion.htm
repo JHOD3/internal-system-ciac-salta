@@ -36,8 +36,17 @@
 						var rta = requestData;
 						alert ("Registro Modificado Correctamente.");
 						IniciarVentana("ventana_opciones", "cerrar");
-						TablePacientesObservaciones.fnDraw();
-						$(ventana_opciones).dialog('destroy').remove();
+                        if (typeof TablePacientesObservaciones !== 'undefined') {
+                            TablePacientesObservaciones.fnDraw();
+                        }
+                        if (typeof ventana_menu !== 'undefined') {
+                            $(ventana_menu).dialog('destroy').remove();
+                        }
+
+                        if (typeof ventana_opciones !== 'undefined') {
+                            $(ventana_opciones).dialog('destroy').remove();
+                        }
+
 					},
 					complete: function(requestData, exito){},
 					error: function (){
