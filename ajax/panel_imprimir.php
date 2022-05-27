@@ -71,23 +71,34 @@ SQL;
     });
     $('#postItSend').click(function(event) {
         event.preventDefault();
-        window.print();
+        var div1 = document.getElementById('datos_usr');
+        var div2 = document.getElementById('imprimir-ticke');
+
+        var mywindow = window.open('', '', 'height=600,width=800');
+        mywindow.document.write(div1.outerHTML);
+        mywindow.document.write('<hr>');
+        mywindow.document.write(div2.outerHTML);
+        mywindow.focus();
+        mywindow.print();
+        mywindow.close();
     });
     $('#postItClean').click(function(event) {
         event.preventDefault();
         $('#panelEstudioList').html('');
     });
     </script>
-    <div id="panelEstudioList" style="background-color:#fff;"></div>
-    <textarea></textarea>
-    <img
-        src="../files/img/logo_imprimir.png"
-        style="width:100%; margin:auto; text-align:center; display: inherit; max-width: 600px;"
-        alt=""
-        class="onlyPrint"
-    />
-    <h2 class="onlyPrint" style="font-size:12px; font-family:Arial; text-align:center; font-weight:normal; line-height: normal;">Santiago del Estero 449 &shy; A4400BKI - Salta - Argentina<br />Tel: 4214738 - 4213251<br />administracion@ciacsalta.com.ar<br />Lunes a viernes de 7.30 a 21 hs</h2>
-    <?php
+    <div id="imprimir-ticke">
+        <div id="panelEstudioList" style="background-color:#fff;"></div>
+        <textarea></textarea>
+        <img
+                src="/files/img/logo_imprimir.png"
+                style="width:100%; margin:auto; text-align:center; display: inherit; max-width: 600px;"
+                alt=""
+                class="onlyPrint"
+        />
+        <h2 class="onlyPrint" style="font-size:12px; font-family:Arial; text-align:center; font-weight:normal; line-height: normal;">Santiago del Estero 449 &shy; A4400BKI - Salta - Argentina<br />Tel: 4214738 - 4213251<br />administracion@ciacsalta.com.ar<br />Lunes a viernes de 7.30 a 21 hs</h2>
+    </div>
+        <?php
 /******************************************************************************/
 elseif($_POST['opc'] == 'getEstudio'):
     $query_string = <<<SQL
@@ -184,10 +195,7 @@ textarea {
     color: #2f96b4;
     text-align: right;
 }
-.onlyPrint{
-    display: none;
-    visibility: hidden;
-}
+
 </style>
 <style media="print">
 textarea {
