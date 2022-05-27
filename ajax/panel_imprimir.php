@@ -75,7 +75,7 @@ SQL;
         var div2 = document.getElementById('imprimir-ticke');
 
         var mywindow = window.open('', '', 'height=600,width=800');
-        mywindow.document.write(div1.outerHTML);
+        mywindow.document.write('<div style="font-family: Arial;">'+div1.outerHTML+'</div>');
         mywindow.document.write('<hr>');
         mywindow.document.write(div2.outerHTML);
         mywindow.focus();
@@ -87,7 +87,7 @@ SQL;
         $('#panelEstudioList').html('');
     });
     </script>
-    <div id="imprimir-ticke">
+    <div id="imprimir-ticke" style="font-family: Arial;">
         <div id="panelEstudioList" style="background-color:#fff;"></div>
         <textarea></textarea>
         <img
