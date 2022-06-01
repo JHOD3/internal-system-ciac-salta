@@ -543,13 +543,13 @@ class Medicos extends Estructura implements iMedicos{
                                         $linea.= " <sup>TO</sup>";
                                         $cnct = "<sup>+</sup>";
                                     } elseif ($row['trae_orden'] > 0 and $row['valor_orden'] > 0) {
-                                        $linea.= " <sup>\${$row['valor_orden']}</sup>";
+                                        $linea.= " <sup>\$DD{$row['valor_orden']}</sup>";
                                         $cnct = "<sup>+</sup>";
                                     }
                                     if ($row['trae_pedido'] == 1) {
                                         $linea.= "{$cnct}<sup>DD</sup><br />";
                                     } elseif ($row['trae_pedido'] == 2 and $row['arancel_diferenciado'] > 0) {
-                                        $linea.= "{$cnct}<sup>\$d{$row['arancel_diferenciado']}</sup>";
+                                        $linea.= "{$cnct}<sup>\${$row['arancel_diferenciado']}</sup>";
                                     }
                                 }
                                 if ($row['aviso_demora'] == '1') {
