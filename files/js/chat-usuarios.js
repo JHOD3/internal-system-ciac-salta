@@ -1,3 +1,4 @@
+/*
 $(document).ready(function () {
     let header = {
             'Accept': 'application/json',
@@ -265,3 +266,4 @@ $(document).ready(function () {
             });
     })
 });
+*/

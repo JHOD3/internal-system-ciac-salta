@@ -1,3 +1,4 @@
+/*
 $(document).ready(function () {
     setInterval(() => { loadUserLogueados() }, 3000);
     let loadIntervalV = '';
@@ -263,3 +264,4 @@ $(document).ready(function () {
         });
     })
 });
+*/
