@@ -1,7 +1,7 @@
 setInterval(function(){
     ajxM = $.ajax({
         type: 'POST',
-        url: '../ajax/notificaciones.php',
+        url: '../ajax/notificaciones.php?first=true',
         context: document.body
     }).done(function(data) {
         $('#notLayer').html(data)
