@@ -71,7 +71,7 @@
 
         var contadorAfk = 0;
         $(document).ready(function(){
-            var contadorAfk = setInterval(ctrlTiempo, 1000);
+            var contadorAfk = setInterval(ctrlTiempo, 60000);
         });
         $(document).mousemove(function (e) {
             contadorAfk = 0;
@@ -82,8 +82,7 @@
 
         function ctrlTiempo() {
             //Se aumenta en 1 la variable.
-            contadorAfk++;
-            console.log(contadorAfk);
+            contadorAfk=contadorAfk+60;
             //Se comprueba si ha pasado del tiempo que designemos.
             if (contadorAfk > 1800) { // Más de 30 minutos, lo detectamos como ausente o inactivo.
                 location.href = 'login.php';
