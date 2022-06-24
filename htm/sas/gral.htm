@@ -52,7 +52,7 @@
     <script src="[JS]jquery.validate.js?v=6"></script>
 
     <script src="[JS]jquery.maskedinput.min.js?v=6"></script>
-    <script src="[JS]chat-usuarios.js?v=2"></script>
+<!--    <script src="[JS]chat-usuarios.js?v=2"></script>-->
 
    <!-- <script src="files/js/jquery.pnotify.js"></script>
 
@@ -66,29 +66,29 @@
         @import "files/css/demo_table.css";
     </style>-->
 
-    <script type='text/javascript'>
+<!--    <script type='text/javascript'>-->
 
 
-        var contadorAfk = 0;
-        $(document).ready(function(){
-            var contadorAfk = setInterval(ctrlTiempo, 60000);
-        });
-        $(document).mousemove(function (e) {
-            contadorAfk = 0;
-        });
-        $(this).keypress(function (e) {
-            contadorAfk = 0;
-        });
+<!--        var contadorAfk = 0;-->
+<!--        $(document).ready(function(){-->
+<!--            var contadorAfk = setInterval(ctrlTiempo, 60000);-->
+<!--        });-->
+<!--        $(document).mousemove(function (e) {-->
+<!--            contadorAfk = 0;-->
+<!--        });-->
+<!--        $(this).keypress(function (e) {-->
+<!--            contadorAfk = 0;-->
+<!--        });-->
 
-        function ctrlTiempo() {
-            //Se aumenta en 1 la variable.
-            contadorAfk=contadorAfk+60;
-            //Se comprueba si ha pasado del tiempo que designemos.
-            if (contadorAfk > 1800) { // Más de 30 minutos, lo detectamos como ausente o inactivo.
-                location.href = 'login.php';
-            }
-        }
-    </script>
+<!--        function ctrlTiempo() {-->
+<!--            //Se aumenta en 1 la variable.-->
+<!--            contadorAfk=contadorAfk+60;-->
+<!--            //Se comprueba si ha pasado del tiempo que designemos.-->
+<!--            if (contadorAfk > 1800) { // Más de 30 minutos, lo detectamos como ausente o inactivo.-->
+<!--                location.href = 'login.php';-->
+<!--            }-->
+<!--        }-->
+<!--    </script>-->
     <script type="text/javascript">
 
         /*jQuery(function($){
