@@ -105,7 +105,8 @@ class Diagnostico extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            header('HTTP/1.1 403 Forbidden'); exit;
         }
-        ini_set('memory_limit', '512M');
+        //ini_set('memory_limit', '512M');
+        ini_set('memory_limit', '1024M');
         if (isset($id_usuario)) {
             if ($isMedico) {
                 $this->session->set_userdata(array(
