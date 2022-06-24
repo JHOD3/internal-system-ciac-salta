@@ -9,12 +9,13 @@ $fecha = date('Y-m-d');
 $hora = date('H:i:s', strtotime('-120 second'));
 
 if ($_GET['first'] == true) {
-    $where = "";
+    $where = "tce.hora >= '{$hora}' AND";
     $limit = "LIMIT 3";
 } else {
     $where = "tce.hora >= '{$hora}' AND";
     $limit = "";
 }
+
 
 $sql = "
     SELECT
