@@ -18,9 +18,11 @@
 }
 </style>
 <script>
+
+	let agenda;
 	$(document).ready(function() {
 
-		$( "#agenda" ).datepicker({
+		agenda = $( "#agenda" ).datepicker({
 			beforeShowDay: noExcursion,
 			onSelect: elegir,
 			changeMonth: true,
@@ -28,22 +30,38 @@
 		});
 	});
 
-	$(document).on('click', '.ui-datepicker-next', function () {
+	$(document).one('click', '.ui-datepicker-next', function (e) {
 		var date = $('#agenda').datepicker('getDate');
+		let datos = new Date();
+		let i=datos.getMilliseconds();
 		day  = date.getDate(),
 		month = date.getMonth() + 2,
 		year =  date.getFullYear();
+		if (month == 13){
+			year = year+1;
+			month= 1;
+		}
 		var fecha = year + '-' + month + '-' + day;
 		CrearAgenda(fecha);
+		e.preventDefault();
+		e.stopImmediatePropagation();
 	});
 
-	$(document).on('click', '.ui-datepicker-prev', function () {
+	$(document).one('click', '.ui-datepicker-prev', function (e) {
 		var date = $('#agenda').datepicker('getDate');
+		let datos = new Date();
+		let i=datos.getMilliseconds();
 		day  = date.getDate(),
 		month = date.getMonth(),
 		year =  date.getFullYear();
+		if (month == 0){
+			month = 12;
+			year = year -1;
+		}
 		var fecha = year + '-' + month + '-' + day;
 		CrearAgenda(fecha);
+		e.preventDefault();
+		e.stopImmediatePropagation();
 	});
 
 	function elegir(date){
