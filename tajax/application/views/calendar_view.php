@@ -190,12 +190,14 @@ $(document).ready(function(){
     });
     $('#calendar tr td strong').parent().html($('#calendar tr td strong').html());
     $('#calendar tr td a').each(function(){
+        console.log(1);
         if ($(this).text() == <?=(integer)$day?>) {
             $(this).parent().addClass('slctd');
         }
     });
     $('#calendar table a').click(function(event){
         event.preventDefault();
+        console.log(2);
         $('#divLoading').html('<div class="opacityBackground"><div class="loading"><img src="assets/images/loading.gif" alt="" /></div></div>');
         $.ajax({
             url: $(this).attr('href'),
@@ -214,6 +216,7 @@ $(document).ready(function(){
                 $('#divLoading').html('');
             }
         });
+
     });
     $('#calendar .detail a').click(function(event){
         event.preventDefault();
