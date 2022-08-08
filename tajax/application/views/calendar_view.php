@@ -195,7 +195,7 @@ $(document).ready(function(){
             $(this).parent().addClass('slctd');
         }
     });
-    $('#calendar table tbody td a').click(function(event){
+    $('#calendar tr td a').click(function(event){
         event.preventDefault();
         console.log(2);
         $('#divLoading').html('<div class="opacityBackground"><div class="loading"><img src="assets/images/loading.gif" alt="" /></div></div>');
