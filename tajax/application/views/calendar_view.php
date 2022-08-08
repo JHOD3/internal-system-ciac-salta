@@ -190,6 +190,8 @@ $(document).ready(function(){
     });
     $('#calendar tr td strong').parent().html($('#calendar tr td strong').html());
     $('#calendar tr td a').each(function(){
+        console.log($(this));
+        $(this).addClass('search-day-a');
         if ($(this).text() == <?=(integer)$day?>) {
             $(this).parent().addClass('slctd');
             $(this).parent().addClass('search-day');
