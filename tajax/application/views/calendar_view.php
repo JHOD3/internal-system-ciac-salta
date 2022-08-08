@@ -195,7 +195,15 @@ $(document).ready(function(){
             $(this).parent().addClass('slctd');
         }
     });
-   
+    $('.search-day-a').click(function(event){
+        console.log('si', 1);
+    });
+    $('.search-day-a').on('click', function(event){
+        console.log('si', 2);
+    });
+    $(document).on('click','.search-day-a', function(event){
+        console.log('si', 3);
+    });
     $(document).on('click','search-day-a', function(event){
         event.preventDefault();
         console.log(2);
