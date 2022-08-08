@@ -190,15 +190,13 @@ $(document).ready(function(){
     });
     $('#calendar tr td strong').parent().html($('#calendar tr td strong').html());
     $('#calendar tr td a').each(function(){
-        console.log($(this));
         $(this).addClass('search-day-a');
         if ($(this).text() == <?=(integer)$day?>) {
             $(this).parent().addClass('slctd');
-            $(this).parent().addClass('search-day');
         }
     });
    
-    $(document).on('click','search-day', function(event){
+    $(document).on('click','search-day-a', function(event){
         event.preventDefault();
         console.log(2);
         $('#divLoading').html('<div class="opacityBackground"><div class="loading"><img src="assets/images/loading.gif" alt="" /></div></div>');
