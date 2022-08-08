@@ -622,6 +622,7 @@ SQL;
     public function obtDiagnosticosExport($date1, $date2, $post, $id_usuario = null, $isMedico = false)
     {
         $this->db
+            ->distinct('t.id_turnos')
             ->select("
                 '0' AS orden,
                 CONCAT(TRIM(p.apellidos), ', ', TRIM(p.nombres)) AS pacientes,
